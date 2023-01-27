@@ -1,13 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
+
+import { ThemeProvider, useTheme } from './contexts/theme';
+import { AuthProvider } from './contexts/AuthContext';
+
 import App from './App';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const {theme} = useTheme();
 
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+ReactDOM.render(
+  <React.StrictMode>    
+    <ThemeProvider toggleTheme={function (): void {
+      throw new Error('Function not implemented.');
+    } } theme={theme}>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ThemeProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
