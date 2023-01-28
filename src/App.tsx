@@ -1,19 +1,22 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import GlobalStyles from '../styles/GlobalStyles';
+import GlobalStyles from './styles/GlobalStyles';
+import  { Route, Routes }  from  "react-router-dom" ;
 
 import { useTheme } from './contexts/theme';
-
-import Routes from './routes';
+import LoginAdmin from './pages/LoginAdmin';
 
 
 const App: React.FC = () => {
-    const {theme} = useTheme();
+
+    const { theme } = useTheme();
     
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={ theme }>
             <GlobalStyles />
-            <Routes/>
+            <Routes>
+                <Route path='/loginAdmin'  element={ <LoginAdmin />} />
+            </Routes>
         </ThemeProvider>
     );
 }

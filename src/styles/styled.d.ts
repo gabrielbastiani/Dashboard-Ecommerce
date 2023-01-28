@@ -17,5 +17,5 @@ declare module 'styled-components' {
             info: string;
             warning: string;
         },
-    };
+    }
 }

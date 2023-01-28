@@ -1,12 +1,16 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom'; 
+import { Route, Routes } from 'react-router-dom';
 
-import LoginAdmin from '../pages/LoginAdmin';
+
+import Dashboard from '../pages/Dashboard';
+
 
 const AuthRoutes: React.FC = () => (
-    <Switch>
-        <Route path="/" component={LoginAdmin} />
-    </Switch>
+
+    <Routes>
+        <Route path='/loginadmin' element={<Dashboard />} />
+    </Routes>
+
 );
 
 export default AuthRoutes;

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { redirect } from 'react-router-dom';
 
 type AuthContextData = {
-  user: UserProps | any;
+  user: UserProps;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signInAdmin: (credentials: SignInProps) => Promise<void>;
@@ -40,11 +40,6 @@ export function signOut(){
 }
 
 export function AuthProvider({ children }: AuthProviderProps){
-  const [logged, setLogged] = useState<boolean>(() => {
-    const isLogged = localStorage.getItem('@minha-carteira:logged');
-
-    return !!isLogged;
-});
 
   const [user, setUser] = useState<UserProps>()
   const isAuthenticated = !!user;
@@ -142,7 +137,7 @@ export function AuthProvider({ children }: AuthProviderProps){
     }
   }
 
-  return(
+  return(/* @ts-ignore */
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signInAdmin, signOut }}>
       {children}
     </AuthContext.Provider>

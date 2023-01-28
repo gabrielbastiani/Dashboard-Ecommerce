@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-
 import { AuthContext } from '../contexts/AuthContext';
 
 import App from './app.routes';
