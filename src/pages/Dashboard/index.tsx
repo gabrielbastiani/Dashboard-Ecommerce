@@ -1,9 +1,16 @@
 import React from "react";
-import Layout from "../../components/Layout";
+import { Grid } from "./styles";
+import MainHeader from "../../components/MainHeader";
+import Aside from "../../components/Aside";
+import Content from "../../components/Content";
 
 const Dashboard: React.FC = () => {
     return (
-        <Layout />
+        <Grid>
+            <MainHeader />
+            <Aside />
+            <Content />
+        </Grid>
     )
 }
 

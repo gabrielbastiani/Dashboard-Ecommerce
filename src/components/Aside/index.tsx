@@ -14,7 +14,7 @@ import {
 import { CgProfile } from 'react-icons/cg';
 import logoImgWhite from '../../assets/LogoBuilderWhite.png';
 import logoImgBlack from '../../assets/LogoBuilderBlack.png';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/authcontext';
 import { useTheme } from '../../contexts/theme';
 import {
     Container,
@@ -102,7 +102,7 @@ const Aside: React.FC = () => {
                     Perfil
                 </MenuItemLink>
 
-                <MenuItemButton id="link" onClick={signOut}>
+                <MenuItemButton onClick={signOut}>
                     <MdExitToApp />
                     Sair
                 </MenuItemButton>

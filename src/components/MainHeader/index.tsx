@@ -8,7 +8,7 @@ import {
     Welcome, 
     UserName, 
 }  from './styles';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/authcontext';
 
 
 const MainHeader: React.FC = () => {
@@ -39,7 +39,7 @@ const MainHeader: React.FC = () => {
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>
-                <UserName>{user.nameComplete}</UserName>
+                <UserName>{user?.nameComplete}</UserName>
             </Profile>
         </Container>
     );

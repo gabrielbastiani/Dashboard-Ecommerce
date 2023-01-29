@@ -1,23 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from "react-router-dom";
-
-import { ThemeProvider, useTheme } from './contexts/theme';
-import { AuthProvider } from './contexts/AuthContext';
-
+import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from './contexts/theme';
+import { AuthProvider } from './contexts/authcontext';
 import App from './App';
-// eslint-disable-next-line react-hooks/rules-of-hooks
-/* const { theme } = useTheme(); */
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 ReactDOM.render(
-  <BrowserRouter>
-   {/*  <ThemeProvider toggleTheme={function (): void {
-      throw new Error('Function not implemented.');
-    }} theme={theme}> */}
+  <React.StrictMode>
+    <ThemeProvider>
       <AuthProvider>
-        <App />
+        <BrowserRouter>
+          <ToastContainer autoClose={3000} />
+          <App />
+        </BrowserRouter>
       </AuthProvider>
-    {/* </ThemeProvider> */}
-  </BrowserRouter>,
+    </ThemeProvider>
+  </React.StrictMode>,
   document.getElementById('root')
 );

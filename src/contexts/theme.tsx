@@ -27,13 +27,13 @@ interface ITheme {
     }
 }
 
-/* type Props = {
-    children: JSX.Element;
-} */
+interface PropsChildrens {
+    children: React.ReactNode;
+}
 
 const ThemeContext = createContext<IThemeContext>({} as IThemeContext);
 
-const ThemeProvider: React.FC<IThemeContext> = ({ children }) => {
+const ThemeProvider: React.FC<PropsChildrens> = ({ children }) => {
     const [theme, setTheme] = useState<ITheme>(() => {
         const themeSaved = localStorage.getItem('@lojadashboard:theme');
 
