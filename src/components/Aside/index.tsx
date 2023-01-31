@@ -14,7 +14,7 @@ import {
 import { CgProfile } from 'react-icons/cg';
 import logoImgWhite from '../../assets/LogoBuilderWhite.png';
 import logoImgBlack from '../../assets/LogoBuilderBlack.png';
-import { AuthContext } from '../../contexts/authcontext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/theme';
 import {
     Container,

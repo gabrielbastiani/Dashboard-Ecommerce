@@ -8,7 +8,7 @@ import {
     Welcome, 
     UserName, 
 }  from './styles';
-import { AuthContext } from '../../contexts/authcontext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 const MainHeader: React.FC = () => {

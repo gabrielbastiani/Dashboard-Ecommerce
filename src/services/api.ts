@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { parseCookies } from 'nookies'
 import { AuthTokenError } from './errors/AuthTokenError'
 
-import { signOut } from '../contexts/authcontext'
+import { signOut } from '../contexts/AuthContext'
 
 export function setupAPIClient(ctx = undefined){
   let cookies = parseCookies(ctx);
