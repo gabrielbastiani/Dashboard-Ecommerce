@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthContext } from './contexts/AuthContext';
 
 import Dashboard from './pages/Dashboard';
@@ -10,15 +10,8 @@ const Mainroutes: React.FC = () => {
 
     return (
         <Routes>
-            {isAuthenticated ?
-
-                <Route path="/" element={<Dashboard />} />
-
-                :
-
-                <Route path="/loginAdmin" element={<LoginAdmin />} />
-
-            }
+            <Route path="/" element={ isAuthenticated ? <Dashboard /> : <Navigate to="/loginAdmin" /> } />;
+            <Route path="/loginAdmin" element={<LoginAdmin />} />;
         </Routes>
     );
 }

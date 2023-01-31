@@ -15,7 +15,7 @@ import {
 import { Input } from '../../components/ui/Input';
 import { useTheme } from '../../contexts/theme';
 import { AuthContext } from '../../contexts/AuthContext';
-import { redirect } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 
 
 const LoginAdmin: React.FC = () => {
@@ -59,7 +59,9 @@ const LoginAdmin: React.FC = () => {
 
 		setLoading(false);
 
-		return redirect('/');
+		return (
+		<Link to="/" />
+		)
 
 	}
 

@@ -2,7 +2,7 @@ import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/apiClient';
 import { toast } from 'react-toastify';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import { Navigate, redirect } from "react-router-dom";
+import { Link, Navigate, redirect } from "react-router-dom";
 
 
 type AuthContextData = {
@@ -131,7 +131,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             toast.success('Logado com sucesso!')
 
             //Redirecionar o user para /dashboard
-            return redirect("/");
+            return (
+                <Link to="/" />
+                )
 
 
         } catch (err) {
