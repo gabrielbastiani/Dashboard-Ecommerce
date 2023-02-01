@@ -27,11 +27,14 @@ import {
     ToggleMenu,
     ThemeToggleFooter,
 } from './styles';
+import { useNavigate } from 'react-router-dom';
 
 
 const Aside: React.FC = () => {
     const { signOut } = useContext(AuthContext);
     const { toggleTheme, theme } = useTheme();
+
+    const navigate = useNavigate();
 
     const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState(false);
     const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
@@ -67,9 +70,9 @@ const Aside: React.FC = () => {
             </Header>
 
             <MenuContainer>
-                <MenuItemLink href="/dashboard">
+                <MenuItemLink href="/painel">
                     <MdDashboard />
-                    Dashboard
+                    Painel
                 </MenuItemLink>
 
                 <MenuItemLink href="/pedidos">
@@ -102,7 +105,7 @@ const Aside: React.FC = () => {
                     Perfil
                 </MenuItemLink>
 
-                <MenuItemButton onClick={signOut}>
+                <MenuItemButton onClick={() => [signOut(), navigate("/loginAdmin"), navigate(0)]}>
                     <MdExitToApp />
                     Sair
                 </MenuItemButton>

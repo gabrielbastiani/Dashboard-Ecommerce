@@ -15,7 +15,7 @@ import {
 import { Input } from '../../components/ui/Input';
 import { useTheme } from '../../contexts/theme';
 import { AuthContext } from '../../contexts/AuthContext';
-import { Link, redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const LoginAdmin: React.FC = () => {
@@ -28,40 +28,62 @@ const LoginAdmin: React.FC = () => {
 	const [userValid, setUserValid] = useState<boolean>(false);
 	const captcha = useRef();
 
+	const navigate = useNavigate();
+
+
 	async function handleLogin(event: FormEvent) {
 		event.preventDefault();
+		try {
+			/* @ts-ignore */
+			if (captcha.current?.getValue()) {
+				console.log('Usuario válido!');
+				setUserValid(true);
+			} else {
+				console.log('Por favor, acerte o recaptcha!');
+				toast.error('Por favor, acerte o recaptcha!');
 
-		/* @ts-ignore */
-		if (captcha.current?.getValue()) {
-			console.log('Usuario válido!');
-			setUserValid(true);
-		} else {
-			console.log('Por favor, acerte o recaptcha!');
-			toast.error('Por favor, acerte o recaptcha!');
+				return;
+			}
+			/* @ts-ignore */
+			if (email === '' || password === '') {
+				toast.warning('Preencha os campos! (Email e Senha)')
+				return;
+			}
 
-			return;
+			setLoading(true);
+			
+			let data = {
+				email,
+				password
+			};
+
+			if(!data) {
+				
+				toast.error('Email ou senha errada!');
+
+				setLoading(false);
+
+				return;
+				
+			} else if (data) {
+
+				/* @ts-ignore */
+				await signInAdmin(data);
+
+				setLoading(false);
+
+				navigate("/");
+				navigate(0);
+
+				return;
+				
+				
+			}
+
+
+		} catch (error) {
+			console.log("Erro ao logar");
 		}
-		/* @ts-ignore */
-		if (email === '' || password === '') {
-			toast.warning('Preencha os campos! (Email e Senha)')
-			return;
-		}
-
-		setLoading(true);
-
-		const data = {
-			email,
-			password
-		};
-
-		/* @ts-ignore */
-		await signInAdmin(data);
-
-		setLoading(false);
-
-		return (
-		<Link to="/" />
-		)
 
 	}
 
@@ -113,7 +135,7 @@ const LoginAdmin: React.FC = () => {
 						type="submit"
 						loading={loading}
 					>
-                  Acessar
+						Acessar
 					</Button>
 
 				</Formulario>

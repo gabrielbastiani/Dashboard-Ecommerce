@@ -2,7 +2,6 @@ import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/apiClient';
 import { toast } from 'react-toastify';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import { Link, Navigate, redirect } from "react-router-dom";
 
 
 type AuthContextData = {
@@ -10,7 +9,7 @@ type AuthContextData = {
     isAuthenticated: boolean;
     signIn: (credentials: SignInProps) => Promise<void>;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
-    signOut: () => void;
+    signOut (): void;
 }
 
 type UserProps = {
@@ -29,14 +28,13 @@ type AuthProviderProps = {
 }
 
 
-export const AuthContext = createContext({} as AuthContextData)
+export const AuthContext = createContext({} as AuthContextData);
 
-export function signOut() {
-    
+export const signOut = () => {
     try {
-        destroyCookie(undefined, '@lojabuilder.token')
-        // Rota para redirecionar quando deslogar
-        return redirect("/loginAdmin");
+        destroyCookie(undefined, '@lojabuilder.token');
+        toast.success('Usúario deslogado com sucesso!');
+        console.log('Usúario deslogado com sucesso!');
     } catch {
         toast.error('Erro ao deslogar!');
         console.log('erro ao deslogar');
@@ -94,10 +92,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             toast.success('Logado com sucesso!')
 
-            //Redirecionar o user para /dashboard
-            return redirect("/");
-
-
         } catch (err) {
             toast.error("Erro ao acessar, confirmou seu cadastro em seu email?")
             console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err)
@@ -129,12 +123,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
             api.defaults.headers['Authorization'] = `Bearer ${token}`
 
             toast.success('Logado com sucesso!')
-
-            //Redirecionar o user para /dashboard
-            return (
-                <Link to="/" />
-                )
-
 
         } catch (err) {
             toast.error("Erro ao acessar, confirmou seu cadastro em seu email?")
