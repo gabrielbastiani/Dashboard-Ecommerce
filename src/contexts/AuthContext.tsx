@@ -71,8 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const response = await api.post('/session', {
                 email,
                 password
-            })
-            // console.log(response.data);
+            });
 
             const { id, nameComplete, token } = response.data;
 
