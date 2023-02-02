@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard';
 import Painel from './pages/Painel';
+import Pedidos from './pages/Pedidos';
 
 
 const RoutesAuth: React.FC = () => {
@@ -11,6 +12,7 @@ const RoutesAuth: React.FC = () => {
         <Routes>
             <Route path="/" element={ <Dashboard /> } />
             <Route path='/painel' element={ <Painel /> } />
+            <Route path='/pedidos' element={ <Pedidos /> } />
         </Routes>
     );
 }

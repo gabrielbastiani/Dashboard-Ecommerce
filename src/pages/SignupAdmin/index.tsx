@@ -66,12 +66,12 @@ const SignupAdmin: React.FC = () => {
 
             setLoading(false);
 
-            navigate('/loginAdmin');
+            navigate('/whaitAuthenticatedAdmin');
 
         } catch (err) {
             console.log(err);
             toast.error('Erro ao cadastrar!')
-            navigate('/signupAdmin');
+            navigate(0);
             console.log("Ops erro ao cadastrar!")
         }
 
@@ -89,11 +89,11 @@ const SignupAdmin: React.FC = () => {
     return (
         <ContainerCenter>
 
-            {theme?.title === 'dark' && (
+            {theme.title === 'dark' && (
                 <LogImg src={logoLoginWhite} alt="Logo Builder Seu Negócio Online" />
             )}
 
-            {theme?.title === 'light' && (
+            {theme.title === 'light' && (
                 <LogImg src={logoLoginBlack} alt="Logo Builder Seu Negócio Online" />
             )}
 

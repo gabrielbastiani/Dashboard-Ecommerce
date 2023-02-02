@@ -18,8 +18,6 @@ const Recover: React.FC = () => {
     const { theme } = useTheme();
     let { recovery_id } = useParams();
 
-    console.log(recovery_id)
-
 
     async function handleRecovery(event: FormEvent) {
         event.preventDefault();
