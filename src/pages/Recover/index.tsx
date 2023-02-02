@@ -5,7 +5,7 @@ import { Input } from '../../components/ui/Input/index';
 import { Button } from '../../components/ui/Button/index';
 import { toast } from 'react-toastify';
 import { setupAPIClient } from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTheme } from '../../contexts/theme';
 import { ContLogin, ContainerCenter, Formulario, LogImg, TextLink } from '../LoginAdmin/styles';
 
@@ -16,6 +16,9 @@ const Recover: React.FC = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { theme } = useTheme();
+    let { recovery_id } = useParams();
+
+    console.log(recovery_id)
 
 
     async function handleRecovery(event: FormEvent) {
@@ -29,7 +32,6 @@ const Recover: React.FC = () => {
             }
 
             // AJUSTAR PARAMETRO PARA PEGAR DA QUERY
-            const recovery_id = router.query.recovery_id
 
             const apiClient = setupAPIClient()
 
