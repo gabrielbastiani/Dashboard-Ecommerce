@@ -13,7 +13,7 @@ ReactDOM.render(
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
-          <ToastContainer autoClose={3000} />
+          <ToastContainer autoClose={5000} />
           <App />
         </BrowserRouter>
       </AuthProvider>

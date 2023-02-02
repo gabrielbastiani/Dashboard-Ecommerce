@@ -25,9 +25,10 @@ const LoginAdmin: React.FC = () => {
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [userValid, setUserValid] = useState<boolean>(false);
 	const captcha = useRef();
-
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const navigate = useNavigate();
 
 
@@ -35,7 +36,7 @@ const LoginAdmin: React.FC = () => {
 		event.preventDefault();
 		try {
 			/* @ts-ignore */
-			if (captcha.current?.getValue()) {
+			if (captcha.current.getValue()) {
 				console.log('Usuario válido!');
 				setUserValid(true);
 			} else {
@@ -57,29 +58,13 @@ const LoginAdmin: React.FC = () => {
 				password
 			};
 
-			if(!data) {
-				
-				toast.error('Email ou senha errada!');
+			/* @ts-ignore */
+			await signInAdmin(data);
 
-				setLoading(false);
+			setLoading(false);
 
-				return;
-				
-			} else if (data) {
-
-				/* @ts-ignore */
-				await signInAdmin(data);
-
-				setLoading(false);
-
-				navigate("/");
-				navigate(0);
-
-				return;
-				
-				
-			}
-
+			navigate('/');
+			navigate(0);
 
 		} catch (error) {
 			console.log("Erro ao logar");

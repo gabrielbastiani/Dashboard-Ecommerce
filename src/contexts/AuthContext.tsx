@@ -3,7 +3,6 @@ import { api } from '../services/apiClient';
 import { toast } from 'react-toastify';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
 
-
 type AuthContextData = {
     user: UserProps;
     isAuthenticated: boolean;
