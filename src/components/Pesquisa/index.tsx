@@ -3,7 +3,7 @@ import { PesquisaBox, InputSearch, ButtonSearch } from './styles';
 
 interface SearchRequest {
     valor: string;
-    onChange(): void;
+    onChange: () => void;
     placeholder: string;
     onClick(): void;
 }
