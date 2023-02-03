@@ -5,7 +5,7 @@ import Aside from "../../components/Aside";
 import Content from "../../components/Content";
 
 
-const Pedidos: React.FC = () => {
+const Categorias: React.FC = () => {
     return (
         <Grid>
             <MainHeader />
@@ -15,4 +15,4 @@ const Pedidos: React.FC = () => {
     )
 }
 
-export default Pedidos;
+export default Categorias;
