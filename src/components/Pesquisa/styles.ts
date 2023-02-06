@@ -6,7 +6,7 @@ export const PesquisaBox = styled.div`
 
 export const InputSearch = styled.input`
   padding: 8px 15px;
-  border: 1px solid ${props => props?.theme?.colors?.info};
+  border: 1px solid ${props => props.theme.colors.info};
   font-size: 1rem;
   border-radius: 10px;
   width: 80%;
@@ -22,6 +22,6 @@ export const ButtonSearch = styled.button`
   svg {
     margin-bottom: -7px;
     font-size: 24px;
-    color: ${props => props?.theme?.colors?.info};
+    color: ${props => props.theme.colors.info};
   }
 `;
