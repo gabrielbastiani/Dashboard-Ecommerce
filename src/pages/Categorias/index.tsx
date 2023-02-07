@@ -27,15 +27,23 @@ const Categorias: React.FC = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [results, setResults] = useState<any[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [searchText, setSearchText] = useState();
-    const [list, setList] = useState(results);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [list, setList] = useState();
 
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(4);
     const [pages, setPages] = useState<any[]>([])
     const [currentPage, setCurrentPage] = useState(1);
 
-    console.log("LISTA", list)
+    const [query, setQuery] = useState('')
+
+    const [state, setState] = useState({
+        query: '',
+        list: []
+    })
+
 
     useEffect(() => {
         async function allCategorys() {
@@ -52,7 +60,7 @@ const Categorias: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setResults(data.categorys);
+                setResults(data.search);
 
             } catch (error) {
                 console.error(error);
@@ -69,16 +77,29 @@ const Categorias: React.FC = () => {
     }, []);
 
     /* @ts-ignore */
-    const handleChange = ({ target }) => {
-        if (!target.value) {/* @ts-ignore */
-            setResults(searchText);
+    const handleChange = (e) => {
+        const resultsAll = results.filter(result => {
+            if (e.target.value === "") return results
+            return result.categoryName.toLowerCase().includes(e.target.value.toLowerCase())
+        })
+        setState({
+            query: e.target.value,
+            /* @ts-ignore */
+            list: resultsAll
+        })
+    }
+
+    /* @ts-ignore */
+    /* const handleChange = ({ target }) => {
+        if (!target.value) {
+        setSearchText(list);
 
             return;
         }
 
         const filterCategories = results.filter((filt) => filt.categoryName.toLowerCase().includes(target.value));
         setResults(filterCategories);
-    }
+    } */
 
 
     return (
@@ -89,10 +110,11 @@ const Categorias: React.FC = () => {
                 <Card>
                     <TitleText>Categorias</TitleText>
                     <Pesquisa
+                        valor={state.query}
                         placeholder={"Pesquise aqui pelo nome da categoria..."}
                         /* @ts-ignore */
                         onChange={handleChange}
-                        onClick={() => alert("Pesquisar")}
+
                     />
 
                     <SelectItem onChange={limits}>
@@ -107,13 +129,19 @@ const Categorias: React.FC = () => {
                         </TotalArticles>
                         <ContainerArticlesPages>
 
-                            {list.map((item) => {
+                            {/* {results.map((item) => {
                                 return (
                                     <CategoryBox key={item.id}>
                                         <NameCategory>{item.categoryName}</NameCategory>
                                     </CategoryBox>
                                 )
-                            })}
+                            })} */}
+
+                            <CategoryBox>
+                                {(state.query === '' ? "" : state.list.map(catego => {/* @ts-ignore */
+                                    return <NameCategory key={catego.id}>{catego.categoryName}</NameCategory>
+                                }))}
+                            </CategoryBox>
 
                             {currentPage > 1 && (
                                 <Previus>
