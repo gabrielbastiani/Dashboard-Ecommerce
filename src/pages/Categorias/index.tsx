@@ -27,7 +27,7 @@ const Categorias: React.FC = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [results, setResults] = useState<any[]>([]);
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState();
     const [list, setList] = useState(results);
 
     const [total, setTotal] = useState(0);
@@ -50,9 +50,9 @@ const Categorias: React.FC = () => {
                 for (let i = 1; i <= totalPages; i++) {
                     arrayPages.push(i);
                 }
-                
+
                 setPages(arrayPages);
-                setResults(data.results || []);
+                setResults(data.categorys);
 
             } catch (error) {
                 console.error(error);
@@ -61,32 +61,24 @@ const Categorias: React.FC = () => {
         }
         allCategorys();
     }, [currentPage, limit, total]);
+
     /* @ts-ignore */
     const limits = useCallback((e) => {
         setLimit(e.target.value);
         setCurrentPage(1);
     }, []);
 
+    /* @ts-ignore */
+    const handleChange = ({ target }) => {
+        if (!target.value) {/* @ts-ignore */
+            setResults(searchText);
 
-    useEffect(() => {
-        try {
-            if (searchText === '') {
-                setList([]);
-            } else {
-                setList(
-                    results.filter(
-                        (item) =>
-                            item.categoryName.toLowerCase().indexOf(searchText.toLowerCase()) > -1
-                    )
-                );
-            }
-        } catch (error) {
-            console.error(error);
-            alert('Error call results');
+            return;
         }
-    }, [results, searchText]);
 
-    console.log(searchText)
+        const filterCategories = results.filter((filt) => filt.categoryName.toLowerCase().includes(target.value));
+        setResults(filterCategories);
+    }
 
 
     return (
@@ -97,10 +89,9 @@ const Categorias: React.FC = () => {
                 <Card>
                     <TitleText>Categorias</TitleText>
                     <Pesquisa
-                        valor={searchText}
                         placeholder={"Pesquise aqui pelo nome da categoria..."}
                         /* @ts-ignore */
-                        onChange={(t: any) => setSearchText(t)}
+                        onChange={handleChange}
                         onClick={() => alert("Pesquisar")}
                     />
 
@@ -112,11 +103,11 @@ const Categorias: React.FC = () => {
 
                     <ContainerPagination>
                         <TotalArticles key={total}>
-                            <TextTotal>Total de artigos: {total}</TextTotal>
+                            <TextTotal>Total de categorias: {total}</TextTotal>
                         </TotalArticles>
                         <ContainerArticlesPages>
 
-                            {results.map((item) => {
+                            {list.map((item) => {
                                 return (
                                     <CategoryBox key={item.id}>
                                         <NameCategory>{item.categoryName}</NameCategory>
