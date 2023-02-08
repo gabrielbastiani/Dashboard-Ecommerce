@@ -9,15 +9,16 @@ import {
     SelectItem,
     OptionValue,
     ContainerPagination,
-    TotalArticles,
+    TotalCategorys,
     TextTotal,
-    ContainerArticlesPages,
+    ContainerCategoryPage,
     Previus,
     ButtonPage,
     TextPage,
     Next,
     CategoryBox,
-    NameCategory
+    NameCategory,
+    ContainerCategorys
 } from "./styles";
 import Pesquisa from "../../components/Pesquisa";
 import { setupAPIClient } from '../../services/api';
@@ -25,25 +26,13 @@ import { setupAPIClient } from '../../services/api';
 
 const Categorias: React.FC = () => {
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [results, setResults] = useState<any[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [searchText, setSearchText] = useState();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [list, setList] = useState();
+    const [initialFilter, setInitialFilter] = useState();
+    const [search, setSearch] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(4);
-    const [pages, setPages] = useState<any[]>([])
+    const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-
-    const [query, setQuery] = useState('')
-
-    const [state, setState] = useState({
-        query: '',
-        list: []
-    })
-
 
     useEffect(() => {
         async function allCategorys() {
@@ -60,7 +49,8 @@ const Categorias: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setResults(data.search);
+                setSearch(data.categorys);
+                setInitialFilter(data.categorys);
 
             } catch (error) {
                 console.error(error);
@@ -77,29 +67,16 @@ const Categorias: React.FC = () => {
     }, []);
 
     /* @ts-ignore */
-    const handleChange = (e) => {
-        const resultsAll = results.filter(result => {
-            if (e.target.value === "") return results
-            return result.categoryName.toLowerCase().includes(e.target.value.toLowerCase())
-        })
-        setState({
-            query: e.target.value,
-            /* @ts-ignore */
-            list: resultsAll
-        })
-    }
-
-    /* @ts-ignore */
-    /* const handleChange = ({ target }) => {
-        if (!target.value) {
-        setSearchText(list);
+    const handleChange = ({ target }) => {
+        if (!target.value) {/* @ts-ignore */
+            setSearch(initialFilter);
 
             return;
         }
-
-        const filterCategories = results.filter((filt) => filt.categoryName.toLowerCase().includes(target.value));
-        setResults(filterCategories);
-    } */
+        /* @ts-ignore */
+        const filterCategory = search.filter((filt) => filt.categoryName.toLowerCase().includes(target.value));
+        setSearch(filterCategory);
+    }
 
 
     return (
@@ -110,11 +87,9 @@ const Categorias: React.FC = () => {
                 <Card>
                     <TitleText>Categorias</TitleText>
                     <Pesquisa
-                        valor={state.query}
                         placeholder={"Pesquise aqui pelo nome da categoria..."}
                         /* @ts-ignore */
                         onChange={handleChange}
-
                     />
 
                     <SelectItem onChange={limits}>
@@ -124,24 +99,22 @@ const Categorias: React.FC = () => {
                     </SelectItem>
 
                     <ContainerPagination>
-                        <TotalArticles key={total}>
+                        <TotalCategorys key={total}>
                             <TextTotal>Total de categorias: {total}</TextTotal>
-                        </TotalArticles>
-                        <ContainerArticlesPages>
+                        </TotalCategorys>
+                        <ContainerCategoryPage>
 
-                            {/* {results.map((item) => {
-                                return (
-                                    <CategoryBox key={item.id}>
-                                        <NameCategory>{item.categoryName}</NameCategory>
-                                    </CategoryBox>
-                                )
-                            })} */}
-
-                            <CategoryBox>
-                                {(state.query === '' ? "" : state.list.map(catego => {/* @ts-ignore */
-                                    return <NameCategory key={catego.id}>{catego.categoryName}</NameCategory>
-                                }))}
-                            </CategoryBox>
+                            {search.length !== 0 && (
+                                <ContainerCategorys>
+                                    {search.map((value) => {
+                                        return (
+                                            <CategoryBox key={value.id}>
+                                                <NameCategory>{value.categoryName}</NameCategory>
+                                            </CategoryBox>
+                                        );
+                                    })}
+                                </ContainerCategorys>
+                            )}
 
                             {currentPage > 1 && (
                                 <Previus>
@@ -160,7 +133,7 @@ const Categorias: React.FC = () => {
                                 </TextPage>
                             ))}
 
-                            {currentPage < results.length && (
+                            {currentPage < search.length && (
                                 <Next>
                                     <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
                                         Avançar
@@ -168,7 +141,7 @@ const Categorias: React.FC = () => {
                                 </Next>
                             )}
 
-                        </ContainerArticlesPages>
+                        </ContainerCategoryPage>
                     </ContainerPagination>
                 </Card>
             </Container>

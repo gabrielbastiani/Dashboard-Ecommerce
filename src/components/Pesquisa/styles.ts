@@ -11,17 +11,3 @@ export const InputSearch = styled.input`
   border-radius: 10px;
   width: 80%;
 `;
-
-export const ButtonSearch = styled.button`
-  margin-left: -40px;
-  background-color: transparent;
-  font-size: 1.1rem;
-  border: 0;
-  cursor: pointer;
-
-  svg {
-    margin-bottom: -7px;
-    font-size: 24px;
-    color: ${props => props.theme.colors.info};
-  }
-`;

@@ -43,16 +43,14 @@ export const SelectItem = styled.select`
   height: 40px;
   border-radius: 0.3rem;
   margin-bottom: 1rem;
-  
+
   border: 1px solid ${(props) => props.theme.colors.info};
   padding: 0 0.5rem;
   text-align: center;
   border-radius: 10px;
 `;
 
-export const OptionValue = styled.option`
-    
-`;
+export const OptionValue = styled.option``;
 
 export const ContainerPagination = styled.div`
   display: flex;
@@ -63,11 +61,11 @@ export const ContainerPagination = styled.div`
   }
 `;
 
-export const TotalArticles = styled.div``;
+export const TotalCategorys = styled.div``;
 
 export const TextTotal = styled.span``;
 
-export const ContainerArticlesPages = styled.div``;
+export const ContainerCategoryPage = styled.div``;
 
 export const Previus = styled.div``;
 
@@ -77,10 +75,10 @@ export const TextPage = styled.span``;
 
 export const Next = styled.div``;
 
-export const CategoryBox = styled.div`
+export const CategoryBox = styled.div``;
 
-`;
+export const NameCategory = styled.span``;
 
-export const NameCategory = styled.span`
-    
+export const ContainerCategorys = styled.div`
+  
 `;
