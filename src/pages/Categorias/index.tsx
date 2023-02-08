@@ -5,7 +5,6 @@ import Aside from "../../components/Aside";
 import {
     Container,
     Card,
-    TitleText,
     SelectItem,
     OptionValue,
     ContainerPagination,
@@ -22,6 +21,8 @@ import {
 } from "./styles";
 import Pesquisa from "../../components/Pesquisa";
 import { setupAPIClient } from '../../services/api';
+import Titulos from "../../components/Titulos";
+import TabelaSimples from "../../components/Tabelas";
 
 
 const Categorias: React.FC = () => {
@@ -79,13 +80,55 @@ const Categorias: React.FC = () => {
     }
 
 
+    /* const dados = [
+        {
+            "Categoria": "Acessorios",
+            "Qtd. de Produtos": 15,
+            "botaoDetalhes": "/categoria/acessorios"
+        },
+        {
+            "Categoria": "Computadores",
+            "Qtd. de Produtos": 5,
+            "botaoDetalhes": "/categoria/computadores"
+        },
+        {
+            "Categoria": "Fones de Ouvidos",
+            "Qtd. de Produtos": 7,
+            "botaoDetalhes": "/categoria/fones"
+        },
+        {
+            "Categoria": "Gabinetes",
+            "Qtd. de Produtos": 3,
+            "botaoDetalhes": "/categoria/gabinetes"
+        },
+        {
+            "Categoria": "Processadores",
+            "Qtd. de Produtos": 8,
+            "botaoDetalhes": "/categoria/processadores"
+        }
+    ] */
+
+    /* @ts-ignore */
+    const dados = [];
+    (search || []).forEach((item) => {
+        dados.push({
+            "Categoria": item.categoryName,
+            "Qtd. de Produtos": item.products.length,
+            "botaoDetalhes": `/categoria/${item.id}`
+        });
+    });
+
+
     return (
         <Grid>
             <MainHeader />
             <Aside />
             <Container>
                 <Card>
-                    <TitleText>Categorias</TitleText>
+                    <Titulos
+                        tipo="h1"
+                        titulo="Categorias"
+                    />
                     <Pesquisa
                         placeholder={"Pesquise aqui pelo nome da categoria..."}
                         /* @ts-ignore */
@@ -98,13 +141,19 @@ const Categorias: React.FC = () => {
                         <OptionValue value="999999">Todos as categorias</OptionValue>
                     </SelectItem>
 
+                    <TabelaSimples
+                        cabecalho={["Categoria", "Qtd. de Produtos"]}
+                        /* @ts-ignore */
+                        dados={dados}
+                    />
+
                     <ContainerPagination>
                         <TotalCategorys key={total}>
                             <TextTotal>Total de categorias: {total}</TextTotal>
                         </TotalCategorys>
                         <ContainerCategoryPage>
 
-                            {search.length !== 0 && (
+                            {/* {search.length !== 0 && (
                                 <ContainerCategorys>
                                     {search.map((value) => {
                                         return (
@@ -114,7 +163,7 @@ const Categorias: React.FC = () => {
                                         );
                                     })}
                                 </ContainerCategorys>
-                            )}
+                            )} */}
 
                             {currentPage > 1 && (
                                 <Previus>

@@ -33,11 +33,6 @@ export const Card = styled.div`
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 
-export const TitleText = styled.h1`
-  color: ${(props) => props.theme.colors.white};
-  margin-bottom: 1em;
-`;
-
 export const SelectItem = styled.select`
   width: 14%;
   height: 40px;
