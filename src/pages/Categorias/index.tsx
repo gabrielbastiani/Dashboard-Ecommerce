@@ -79,35 +79,6 @@ const Categorias: React.FC = () => {
         setSearch(filterCategory);
     }
 
-
-    /* const dados = [
-        {
-            "Categoria": "Acessorios",
-            "Qtd. de Produtos": 15,
-            "botaoDetalhes": "/categoria/acessorios"
-        },
-        {
-            "Categoria": "Computadores",
-            "Qtd. de Produtos": 5,
-            "botaoDetalhes": "/categoria/computadores"
-        },
-        {
-            "Categoria": "Fones de Ouvidos",
-            "Qtd. de Produtos": 7,
-            "botaoDetalhes": "/categoria/fones"
-        },
-        {
-            "Categoria": "Gabinetes",
-            "Qtd. de Produtos": 3,
-            "botaoDetalhes": "/categoria/gabinetes"
-        },
-        {
-            "Categoria": "Processadores",
-            "Qtd. de Produtos": 8,
-            "botaoDetalhes": "/categoria/processadores"
-        }
-    ] */
-
     /* @ts-ignore */
     const dados = [];
     (search || []).forEach((item) => {
@@ -135,10 +106,12 @@ const Categorias: React.FC = () => {
                         onChange={handleChange}
                     />
 
+                    <TextTotal>Categorias por página: &nbsp;</TextTotal>
+
                     <SelectItem onChange={limits}>
                         <OptionValue value="4">4</OptionValue>
                         <OptionValue value="8">8</OptionValue>
-                        <OptionValue value="999999">Todos as categorias</OptionValue>
+                        <OptionValue value="999999">Todos categorias</OptionValue>
                     </SelectItem>
 
                     <TabelaSimples
@@ -152,18 +125,6 @@ const Categorias: React.FC = () => {
                             <TextTotal>Total de categorias: {total}</TextTotal>
                         </TotalCategorys>
                         <ContainerCategoryPage>
-
-                            {/* {search.length !== 0 && (
-                                <ContainerCategorys>
-                                    {search.map((value) => {
-                                        return (
-                                            <CategoryBox key={value.id}>
-                                                <NameCategory>{value.categoryName}</NameCategory>
-                                            </CategoryBox>
-                                        );
-                                    })}
-                                </ContainerCategorys>
-                            )} */}
 
                             {currentPage > 1 && (
                                 <Previus>

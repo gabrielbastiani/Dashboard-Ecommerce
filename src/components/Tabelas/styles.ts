@@ -40,6 +40,8 @@ export const CelulaLinha = styled.td`
     padding: 10px;
     font-size: 0.9rem;
     border-bottom: 1px solid ${(props) => props.theme.colors.white};
+    text-align: center;
+    letter-spacing: 0.7px;
 `;
 
 export const CelulaLinha1 = styled.td`
@@ -47,10 +49,11 @@ export const CelulaLinha1 = styled.td`
 `;
 
 export const ButtonDangerSmall = styled.button`
-    font-size: 1rem;
-    padding: 10px 15px;
+    font-size: 0,5rem;
+    padding: 8px 15px;
     margin: 5px;
-    border: 1px solid ${(props) => props.theme.colors.white};
+    border: 1px solid;
+    background-color: ${(props) => props.theme.colors.info};;
     cursor: pointer;
     border-radius: 10px;
     font-weight: bold;
