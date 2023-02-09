@@ -9,6 +9,7 @@ import Categorias from './pages/Categorias';
 import Produtos from './pages/Produtos';
 import Configuracoes from './pages/Configuracoes';
 import Perfil from './pages/Perfil';
+import NovaCategoria from './pages/Categorias/novaCategoria';
 
 
 const RoutesAuth: React.FC = () => {
@@ -20,7 +21,10 @@ const RoutesAuth: React.FC = () => {
             <Route path='/pedidos' element={ <Pedidos /> } />
             <Route path='/clientes' element={ <Clientes /> } />
             <Route path='/painel' element={ <Painel /> } />
+
             <Route path='/categorias' element={ <Categorias /> } />
+            <Route path='/categoria/nova' element={ <NovaCategoria /> } />
+
             <Route path='/produtos' element={ <Produtos /> } />
             <Route path='/configuracoes' element={ <Configuracoes /> } />
             <Route path='/perfil' element={ <Perfil /> } />

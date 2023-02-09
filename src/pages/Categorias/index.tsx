@@ -15,11 +15,15 @@ import {
     ButtonPage,
     TextPage,
     Next,
+    AddButton,
+    SpanText
 } from "./styles";
 import Pesquisa from "../../components/Pesquisa";
 import { setupAPIClient } from '../../services/api';
 import Titulos from "../../components/Titulos";
 import TabelaSimples from "../../components/Tabelas";
+import { Link } from "react-router-dom";
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 
 const Categorias: React.FC = () => {
@@ -102,6 +106,13 @@ const Categorias: React.FC = () => {
                         /* @ts-ignore */
                         onChange={handleChange}
                     />
+
+                    <AddButton>
+                        <AiOutlinePlusCircle />
+                        <Link to="/categoria/nova" >
+                            <SpanText>Nova Categoria</SpanText>
+                        </Link>
+                    </AddButton>
 
                     <TextTotal>Categorias por página: &nbsp;</TextTotal>
 

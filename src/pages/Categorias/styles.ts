@@ -34,10 +34,9 @@ export const Card = styled.div`
 `;
 
 export const SelectItem = styled.select`
-  width: 11%;
   height: 25px;
   border-radius: 0.3rem;
-  margin: 45px 0;
+  margin-bottom: 30px;
   border: 1px solid ${(props) => props.theme.colors.info};
   padding: 0 0.5rem;
   text-align: center;
@@ -119,4 +118,30 @@ export const NameCategory = styled.span`
 
 export const ContainerCategorys = styled.div`
   display: flex;
+`;
+
+export const AddButton = styled.button`
+  background-color: ${(props) => props.theme.colors.warning};
+  padding: 5px 12px;
+  margin: 35px 0;
+  border: 1px solid;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+
+  svg{
+    color: ${(props) => props.theme.colors.white};
+    align-self: center;
+    margin-left: -5px;
+    margin-right: 5px;
+    font-size: 17px;
+  }
+`;
+
+export const SpanText = styled.span`
+  color: ${(props) => props.theme.colors.white};
+  font-size: 0, 2rem;
+  font-weight: bold;
+  text-decoration: underline;
+  letter-spacing: 0.5px;
 `;

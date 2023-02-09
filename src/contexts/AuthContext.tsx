@@ -15,6 +15,7 @@ type UserProps = {
     id: string;
     nameComplete: string;
     email: string;
+    loja_id: string;
 }
 
 type SignInProps = {
@@ -51,12 +52,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (token) {
             api.get('/me').then(response => {
-                const { id, nameComplete, email } = response.data;
+                const { id, nameComplete, email, loja_id } = response.data;
 
                 setUser({
                     id,
                     nameComplete,
-                    email
+                    email,
+                    loja_id
                 })
 
             })
@@ -72,7 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 password
             });
 
-            const { id, nameComplete, token } = response.data;
+            const { id, nameComplete, loja_id, token } = response.data;
 
             setCookie(undefined, '@lojabuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
@@ -83,6 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 id,
                 nameComplete,
                 email,
+                loja_id
             })
 
             //Passar para proximas requisiçoes o nosso token
@@ -104,7 +107,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 password
             })
 
-            const { id, nameComplete, token } = response.data;
+            const { id, nameComplete, loja_id, token } = response.data;
 
             setCookie(undefined, '@lojabuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
@@ -115,6 +118,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 id,
                 nameComplete,
                 email,
+                loja_id
             })
 
             //Passar para proximas requisiçoes o nosso token
