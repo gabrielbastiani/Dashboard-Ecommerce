@@ -15,15 +15,11 @@ import {
     ButtonPage,
     TextPage,
     Next,
-    CategoryBox,
-    NameCategory,
-    ContainerCategorys
 } from "./styles";
 import Pesquisa from "../../components/Pesquisa";
 import { setupAPIClient } from '../../services/api';
 import Titulos from "../../components/Titulos";
 import TabelaSimples from "../../components/Tabelas";
-import Paginacao from "../../components/Paginacao";
 
 
 const Categorias: React.FC = () => {
@@ -121,27 +117,7 @@ const Categorias: React.FC = () => {
                         dados={dados}
                     />
 
-                    <Paginacao
-                        search={search}
-                        name={"categorias"}
-                        total={total}
-                        totalDocs={total}
-                        currentPage={currentPage}
-                        numeroPaginas={pages}
-                        /* @ts-ignore */
-                        onClick={(page) => setCurrentPage(page)}
-                        /* @ts-ignore */
-                        // eslint-disable-next-line react/jsx-no-duplicate-props
-                        onClick={() => setCurrentPage(currentPage - 1)}
-                        /* @ts-ignore */
-                        // eslint-disable-next-line react/jsx-no-duplicate-props
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                        limite={limit}
-                        atual={currentPage}
-                    />
-                    
-
-                    {/* <ContainerPagination>
+                    <ContainerPagination>
                         <TotalCategorys key={total}>
                             <TextTotal>Total de categorias: {total}</TextTotal>
                         </TotalCategorys>
@@ -173,7 +149,7 @@ const Categorias: React.FC = () => {
                             )}
 
                         </ContainerCategoryPage>
-                    </ContainerPagination> */}
+                    </ContainerPagination>
                 </Card>
             </Container>
         </Grid>

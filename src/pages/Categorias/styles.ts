@@ -113,8 +113,6 @@ export const Next = styled.div`
   align-self: center;
 `;
 
-export const CategoryBox = styled.div``;
-
 export const NameCategory = styled.span`
   letter-spacing: 1px;
 `;
