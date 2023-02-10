@@ -129,7 +129,7 @@ export const AddButton = styled.button`
   display: flex;
   align-items: center;
 
-  svg{
+  svg {
     color: ${(props) => props.theme.colors.white};
     align-self: center;
     margin-left: -5px;
@@ -140,8 +140,34 @@ export const AddButton = styled.button`
 
 export const SpanText = styled.span`
   color: ${(props) => props.theme.colors.white};
-  font-size: 0, 2rem;
+  font-size: 0.9rem;
   font-weight: bold;
   text-decoration: underline;
   letter-spacing: 0.5px;
+`;
+
+export const Back = styled.div`
+  display: flex;
+  align-content: center;
+  margin: 0 15px 43px 0;
+
+  a {
+    color: ${(props) => props.theme.colors.white};
+    padding: 0 8px;
+  }
+`;
+
+export const Formulario = styled.form`
+  display: grid;
+  width: 60%;
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+export const Etiqueta = styled.label`
+  color: ${(props) => props.theme.colors.white};
+  font-size: 1.1rem;
+  margin: 0 10px 10px 0;
 `;

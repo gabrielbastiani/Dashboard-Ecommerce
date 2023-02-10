@@ -6,9 +6,17 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { Grid } from '../Dashboard/styles';
 import MainHeader from '../../components/MainHeader';
 import Aside from '../../components/Aside';
-import { Card, Container } from './styles';
+import {
+    Card,
+    Container,
+    Back,
+    Formulario,
+    Etiqueta
+} from './styles';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
+import { Link } from 'react-router-dom';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 
 const NovaCategoria: React.FC = () => {
@@ -102,19 +110,25 @@ const NovaCategoria: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
+                    <Back>
+                        <BsFillArrowLeftSquareFill />
+                        <Link to={'/categorias'}>Voltar</Link>
+                    </Back>
+
                     <Titulos
                         tipo="h1"
                         titulo="Nova Categoria"
                     />
 
-                    <form onSubmit={handleRegister}>
+                    <Formulario onSubmit={handleRegister}>
+                        <Etiqueta>Nome:</Etiqueta>
                         <Input
                             type="text"
                             placeholder="Digite o nome da categoria"
                             value={categoryName}
                             onChange={(e) => setCategoryName(e.target.value)}
                         />
-
+                        <Etiqueta>Código:</Etiqueta>
                         <Input
                             type="text"
                             placeholder="Digite o código"
@@ -125,7 +139,7 @@ const NovaCategoria: React.FC = () => {
                         <Button type="submit">
                             Cadastrar
                         </Button>
-                    </form>
+                    </Formulario>
 
                 </Card>
             </Container>
