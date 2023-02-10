@@ -86,7 +86,7 @@ const Categorias: React.FC = () => {
         dados.push({
             "Categoria": item.categoryName,
             "Qtd. de Produtos": item.products.length,
-            "botaoDetalhes": `/categoria/${item.id}`
+            "botaoDetalhes": `/categoria/${item.categoryName}/${item.codigo}/${item.id}`
         });
     });
 

@@ -10,6 +10,7 @@ import Produtos from './pages/Produtos';
 import Configuracoes from './pages/Configuracoes';
 import Perfil from './pages/Perfil';
 import NovaCategoria from './pages/Categorias/novaCategoria';
+import Categoria from './pages/Categorias/Categoria';
 
 
 const RoutesAuth: React.FC = () => {
@@ -24,6 +25,7 @@ const RoutesAuth: React.FC = () => {
 
             <Route path='/categorias' element={ <Categorias /> } />
             <Route path='/categoria/nova' element={ <NovaCategoria /> } />
+            <Route path='/categoria/:categoryName/:codigo/:category_id' element={ <Categoria /> } />
 
             <Route path='/produtos' element={ <Produtos /> } />
             <Route path='/configuracoes' element={ <Configuracoes /> } />

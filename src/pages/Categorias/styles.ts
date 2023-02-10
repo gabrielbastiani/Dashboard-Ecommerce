@@ -121,7 +121,7 @@ export const ContainerCategorys = styled.div`
 `;
 
 export const AddButton = styled.button`
-  background-color: ${(props) => props.theme.colors.warning};
+  background-color: green;
   padding: 5px 12px;
   margin: 35px 0;
   border: 1px solid;
@@ -144,17 +144,6 @@ export const SpanText = styled.span`
   font-weight: bold;
   text-decoration: underline;
   letter-spacing: 0.5px;
-`;
-
-export const Back = styled.div`
-  display: flex;
-  align-content: center;
-  margin: 0 15px 43px 0;
-
-  a {
-    color: ${(props) => props.theme.colors.white};
-    padding: 0 8px;
-  }
 `;
 
 export const Formulario = styled.form`

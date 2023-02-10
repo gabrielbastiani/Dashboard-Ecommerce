@@ -9,14 +9,12 @@ import Aside from '../../components/Aside';
 import {
     Card,
     Container,
-    Back,
     Formulario,
     Etiqueta
 } from './styles';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
-import { Link } from 'react-router-dom';
-import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
+import Voltar from '../../components/Voltar';
 
 
 const NovaCategoria: React.FC = () => {
@@ -50,70 +48,14 @@ const NovaCategoria: React.FC = () => {
 
     }
 
-    /* renderCabecalho(){
-        const { nome } = this.state;
-        return (
-            <div className="flex">
-                <div className="flex-1 flex">
-                    <Titulo tipo="h1" titulo={nome || "Nova Categoria"} />
-                </div>
-                <div className="flex-1 flex flex-end">
-                    <ButtonSimples onClick={() => this.salvarCategoria()} type="success" label="Salvar" />
-                </div>
-            </div>
-        )
-    }
-
-    onChangeInput = (field, value) => this.setState({ [field]: value }, () => this.validate());
-
-    renderDados(){
-        const { nome, codigo, erros } = this.state;
-        return (
-            <div className="flex-2">
-                <InputSimples
-                    name="nome"
-                    label="Nome:"
-                    value={nome}
-                    erro={erros.nome}
-                    onChange={(ev) => this.onChangeInput("nome", ev.target.value)} />
-                <InputSimples
-                    name="codigo"
-                    label="Código:"
-                    value={codigo}
-                    erro={erros.codigo}
-                    onChange={(ev) => this.onChangeInput("codigo", ev.target.value)} />
-            </div>
-        )
-    }
-
-    render(){
-        return (
-            <div className="Nova-Categoria full-width">
-                <div className="Card">
-                    <Voltar history={this.props.history} />
-                    <AlertGeral aviso={this.state.aviso} />
-                    {this.renderCabecalho()}
-                    <div className="flex horizontal">
-                        {this.renderDados()}
-                        <div className="flex-1"></div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-*/
-
     return (
         <Grid>
             <MainHeader />
             <Aside />
             <Container>
                 <Card>
-                    <Back>
-                        <BsFillArrowLeftSquareFill />
-                        <Link to={'/categorias'}>Voltar</Link>
-                    </Back>
+                    
+                    <Voltar url={'/categorias'}/>
 
                     <Titulos
                         tipo="h1"
@@ -136,7 +78,10 @@ const NovaCategoria: React.FC = () => {
                             onChange={(e) => setCodigo(e.target.value)}
                         />
 
-                        <Button type="submit">
+                        <Button
+                            type="submit"
+                            style={ {backgroundColor: 'green'} }
+                        >
                             Cadastrar
                         </Button>
                     </Formulario>
