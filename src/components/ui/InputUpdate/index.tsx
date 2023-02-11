@@ -13,11 +13,11 @@ import { GiConfirmed } from 'react-icons/gi';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
    dado: any;
-   onSubmit: (param?:any, param2?:any)=> void
+   handleSubmit: (param?:any, param2?:any)=> void;
 }
 
 
-export function InputUpdate({ dado, onSubmit, ...rest }: InputProps) {
+export function InputUpdate({ dado, handleSubmit, ...rest }: InputProps) {
 
    const [showElement, setShowElement] = useState(false);
    
@@ -25,12 +25,17 @@ export function InputUpdate({ dado, onSubmit, ...rest }: InputProps) {
       setShowElement(!showElement)
    }
 
+   function handle () {
+      handleSubmit();
+      showOrHide();
+   }
+
    return (
       <>
          {showElement ?
-            <EditBox onSubmit={onSubmit}>
+            <EditBox>
                <InputText {...rest}></InputText>
-               <ButtonConfirm type="submit"><GiConfirmed /></ButtonConfirm>
+               <ButtonConfirm type="submit" onClick={handle}><GiConfirmed /></ButtonConfirm>
                <ButtonExit onClick={showOrHide}><FaTimesCircle /></ButtonExit>
             </EditBox>
             :

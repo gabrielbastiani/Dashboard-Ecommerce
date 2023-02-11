@@ -55,7 +55,7 @@ export const ButtonConfirm = styled.button`
   }
 `;
 
-export const EditBox = styled.form`
+export const EditBox = styled.div`
   display: flex;
   align-items: center;
 `;

@@ -9,12 +9,13 @@ import Aside from '../../components/Aside';
 import {
     Card,
     Container,
-    Formulario,
-    Etiqueta
+    Etiqueta,
+    Block,
+    BlockTop
 } from './styles';
-import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import Voltar from '../../components/Voltar';
+import { InputPost } from '../../components/ui/InputPost';
 
 
 const NovaCategoria: React.FC = () => {
@@ -24,11 +25,15 @@ const NovaCategoria: React.FC = () => {
     const [categoryName, setCategoryName] = useState('');
     const [codigo, setCodigo] = useState('');
 
-    async function handleRegister(event: FormEvent) {
-        event.preventDefault();
+    async function handleRegisterCategory() {
         try {
-            if (categoryName === '' || codigo === '') {
+            if (categoryName === '') {
                 toast.error('Digite algum nome para sua categoria!')
+                return;
+            }
+
+            if (codigo === '') {
+                toast.error('Digite o codigo para sua categoria!')
                 return;
             }
 
@@ -39,9 +44,10 @@ const NovaCategoria: React.FC = () => {
                 loja_id: user.loja_id
             })
 
-            toast.success('Categoria cadastrada com sucesso!')
+            toast.success('Categoria cadastrada com sucesso!');
             setCategoryName('');
             setCodigo('');
+
         } catch (error) {
             console.log(error)
         }
@@ -54,37 +60,42 @@ const NovaCategoria: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    
-                    <Voltar url={'/categorias'}/>
 
-                    <Titulos
-                        tipo="h1"
-                        titulo="Nova Categoria"
-                    />
+                    <Voltar url={'/categorias'} />
 
-                    <Formulario onSubmit={handleRegister}>
+                    <BlockTop>
+                        <Titulos
+                            tipo="h1"
+                            titulo="Nova Categoria"
+                        />
+                        <Button
+                            type="submit"
+                            style={{ backgroundColor: 'green' }}
+                            onClick={handleRegisterCategory}
+                        >
+                            Salvar
+                        </Button>
+                    </BlockTop>
+
+                    <Block>
                         <Etiqueta>Nome:</Etiqueta>
-                        <Input
+                        <InputPost
                             type="text"
                             placeholder="Digite o nome da categoria"
                             value={categoryName}
                             onChange={(e) => setCategoryName(e.target.value)}
                         />
+                    </Block>
+
+                    <Block>
                         <Etiqueta>Código:</Etiqueta>
-                        <Input
+                        <InputPost
                             type="text"
                             placeholder="Digite o código"
                             value={codigo}
                             onChange={(e) => setCodigo(e.target.value)}
                         />
-
-                        <Button
-                            type="submit"
-                            style={ {backgroundColor: 'green'} }
-                        >
-                            Cadastrar
-                        </Button>
-                    </Formulario>
+                    </Block>
 
                 </Card>
             </Container>

@@ -146,17 +146,19 @@ export const SpanText = styled.span`
   letter-spacing: 0.5px;
 `;
 
-export const Formulario = styled.form`
-  display: grid;
-  width: 60%;
-
-  @media (max-width: 800px) {
-    width: 100%;
-  }
-`;
-
 export const Etiqueta = styled.label`
   color: ${(props) => props.theme.colors.white};
   font-size: 1.1rem;
   margin: 0 10px 10px 0;
+`;
+
+export const Block = styled.div`
+  display: grid;
+  width: 60%;
+`;
+
+export const BlockTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 `;
