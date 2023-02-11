@@ -1,10 +1,17 @@
 import React from 'react';
+import {
+    TextoDadosDiv,
+    Dados
+} from './styles';
 
+interface TextDadosRequest {
+    chave: string;
+    dados: any;
+}
 
-/* @ts-ignore */
-export const TextoDados = ({ chave, valor, vertical = false }) => (
-    <div className={`Texto-Dados flex ${vertical ? "vertical" : "horizontal"}`}>
-        <strong className={`Texto-Dados flex ${!vertical ? "flex-center" : ""}`}>{chave}:&nbsp;</strong>
-        <span>{valor}</span>
-    </div>
+export const TextoDados = ({ chave, dados }: TextDadosRequest) => (
+    <>
+        <TextoDadosDiv>{chave}:&nbsp;&nbsp;</TextoDadosDiv>
+        <Dados>{dados}</Dados>
+    </>
 )

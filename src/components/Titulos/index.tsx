@@ -7,7 +7,7 @@ import {
 
 interface TituloRequest {
     tipo: string;
-    titulo: string;
+    titulo: any;
 }
 
 const Titulos = ({tipo, titulo}: TituloRequest) => {

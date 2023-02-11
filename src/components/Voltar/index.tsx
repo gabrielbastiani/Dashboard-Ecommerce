@@ -10,8 +10,7 @@ interface VoltarRrequest {
 const Voltar = ({ url }: VoltarRrequest) => {
     return (
         <Back>
-            <BsFillArrowLeftSquareFill />
-            <Link to={url}>Voltar</Link>
+            <Link to={url}><BsFillArrowLeftSquareFill />Voltar</Link>
         </Back>
     )
 }

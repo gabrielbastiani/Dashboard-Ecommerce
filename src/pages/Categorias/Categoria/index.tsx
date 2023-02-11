@@ -7,18 +7,19 @@ import Titulos from "../../../components/Titulos";
 import Voltar from "../../../components/Voltar";
 import { toast } from 'react-toastify';
 import { setupAPIClient } from "../../../services/api";
-import { useParams } from "react-router-dom";
-import { TextoDados } from "../../../components/TextoDados";
+import { useNavigate, useParams } from "react-router-dom";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
+import { TextoDados } from "../../../components/TextoDados";
 
 
 const Categoria: React.FC = () => {
 
     let { category_id, categoryName, codigo } = useParams();
+    const navigate = useNavigate();
 
     const [categoryNames, setCategoryNames] = useState(categoryName);
     const [codigos, setCodigos] = useState('');
-    
+
 
     async function updateCategoryName(event: FormEvent) {
         event.preventDefault();
@@ -29,9 +30,13 @@ const Categoria: React.FC = () => {
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames })
+            await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames });
 
             toast.success('Nome da categoria atualizada com sucesso.');
+
+            setTimeout(function () {
+                navigate('/categorias');
+            }, 2500);
 
         } catch (err) {
             toast.error('Ops erro ao atualizar o nome da categoria.');
@@ -50,42 +55,24 @@ const Categoria: React.FC = () => {
                     />
                     <Titulos
                         tipo="h1"
-                        titulo="Categoria"
+                        titulo={categoryName}
                     />
 
                     <TextoDados
-                        chave="Nome"
-                        valor={(
+                        chave={"Nome"}
+                        dados={
                             <InputUpdate
+                                onSubmit={updateCategoryName}
+                                dado={categoryName}
                                 type="text"
                                 /* @ts-ignore */
                                 placeholder={categoryName}
                                 value={categoryNames}
                                 /* @ts-ignore */
                                 onChange={(e) => setCategoryNames(e.target.value)}
-
-        
                             />
-                        )}
+                        }
                     />
-
-
-                    {/* <form onSubmit={updateCategoryName}>
-                        <input
-                            type="text"
-                            placeholder={categoryName}
-                            value={categoryNames}
-                            onChange={(e) => setCategoryNames(e.target.value)}
-                        />
-
-                        <div>
-                            <button
-                                type="submit"
-                            >
-                                Atualizar
-                            </button>
-                        </div>
-                    </form> */}
 
                 </Card>
             </Container>
