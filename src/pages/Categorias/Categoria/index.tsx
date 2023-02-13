@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { TextoDados } from "../../../components/TextoDados";
 import { Button } from "../../../components/ui/Button";
+import { InputSelect } from "../../../components/ui/InputSelect";
 
 
 const Categoria: React.FC = () => {
@@ -30,6 +31,16 @@ const Categoria: React.FC = () => {
     const [codigos, setCodigos] = useState(codigo);
     const [dataCodigo, setDataCodigo] = useState('');
 
+    const [disponibilidades, setDisponibilidades] = useState(false);
+    const [status, setStatus] = useState("");
+
+    console.log(status)
+
+    useEffect(() => {
+        refreshCategory();
+        statusInitial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     async function updateCategoryName() {
         try {
@@ -71,6 +82,21 @@ const Categoria: React.FC = () => {
         }
     }
 
+    async function updateStatus() {
+        try {
+            const apiClient = setupAPIClient();
+    
+            await apiClient.put(`/updateDisponibilidadeCategory?category_id=${category_id}`);
+              
+            toast.success(`Categoria alterada para ${status} com sucesso.`);
+
+            refreshCategory();
+            statusInitial();
+
+        } catch (err) {
+            toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
+        }
+    }
 
     async function refreshCategory() {
         const apiClient = setupAPIClient();
@@ -79,11 +105,17 @@ const Categoria: React.FC = () => {
         setCategoryNames(response?.data?.categoryName);
         setDataName(response?.data?.categoryName);
         setDataCodigo(response?.data?.codigo);
+        setDisponibilidades(response?.data?.disponibilidade);
+
     }
 
-    useEffect(() => {
-        refreshCategory()
-    }, [])
+    function statusInitial() {
+        if (!disponibilidades) {
+            setStatus('Disponivel');
+        } else {
+            setStatus('Indisponivel');
+        }
+    }
 
 
     return (
@@ -140,6 +172,18 @@ const Categoria: React.FC = () => {
                                     /* @ts-ignore */
                                     onChange={(e) => setCodigos(e.target.value)}
                                     handleSubmit={updateCategoryCodigo}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Disponibilidade"}
+                            dados={
+                                <InputSelect
+                                    dado={status}
+                                    handleSubmit={updateStatus}
                                 />
                             }
                         />
