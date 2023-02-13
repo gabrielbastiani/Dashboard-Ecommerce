@@ -9,6 +9,7 @@ import {
 } from "../styles";
 import {
     BlockDados,
+    LinhaDivisoria
 } from "./styles"
 import Titulos from "../../../components/Titulos";
 import Voltar from "../../../components/Voltar";
@@ -31,16 +32,9 @@ const Categoria: React.FC = () => {
     const [codigos, setCodigos] = useState(codigo);
     const [dataCodigo, setDataCodigo] = useState('');
 
-    const [disponibilidades, setDisponibilidades] = useState(false);
+    const [disponibilidades, setDisponibilidades] = useState(Boolean);
     const [status, setStatus] = useState("");
 
-    console.log(status)
-
-    useEffect(() => {
-        refreshCategory();
-        statusInitial();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     async function updateCategoryName() {
         try {
@@ -87,8 +81,13 @@ const Categoria: React.FC = () => {
             const apiClient = setupAPIClient();
     
             await apiClient.put(`/updateDisponibilidadeCategory?category_id=${category_id}`);
-              
-            toast.success(`Categoria alterada para ${status} com sucesso.`);
+
+            if (status === "Indisponivel") {
+                toast.success('Categoria foi habilitada com sucesso');
+                return;
+            } else {
+                toast.warning('Categoria foi desabilitada com sucesso.');
+            }
 
             refreshCategory();
             statusInitial();
@@ -116,6 +115,12 @@ const Categoria: React.FC = () => {
             setStatus('Indisponivel');
         }
     }
+
+    useEffect(() => {
+        refreshCategory();
+        statusInitial();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     return (
@@ -146,7 +151,7 @@ const Categoria: React.FC = () => {
                             chave={"Nome"}
                             dados={
                                 <InputUpdate
-                                    dado={categoryNames || dataName}
+                                    dado={dataName}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={categoryName}
@@ -164,7 +169,7 @@ const Categoria: React.FC = () => {
                             chave={"Código"}
                             dados={
                                 <InputUpdate
-                                    dado={codigos || dataCodigo}
+                                    dado={dataCodigo}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={codigo}
@@ -188,6 +193,7 @@ const Categoria: React.FC = () => {
                             }
                         />
                     </BlockDados>
+                    <LinhaDivisoria />
                 </Card>
             </Container>
         </Grid>

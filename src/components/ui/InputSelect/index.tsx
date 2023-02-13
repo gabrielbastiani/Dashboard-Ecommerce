@@ -31,12 +31,12 @@ export function InputSelect({ dado, handleSubmit }: SelectRequest) {
             {showElement ? 
                 <BoxSelect>
                     <ValueText>{dado}</ValueText>
-                    <DisponivelData type="submit" onClick={handle}><GiConfirmed /></DisponivelData>
+                    <IndisponivelData type="submit" onClick={handle}><FaTimesCircle /></IndisponivelData>
                 </BoxSelect>
              : 
                 <BoxSelect>
                     <ValueText>{dado}</ValueText>
-                    <IndisponivelData type="submit" onClick={handle}><FaTimesCircle /></IndisponivelData>
+                    <DisponivelData type="submit" onClick={handle}><GiConfirmed /></DisponivelData>
                 </BoxSelect>
             }
         </>
