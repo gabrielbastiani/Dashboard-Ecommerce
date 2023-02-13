@@ -12,13 +12,13 @@ interface TituloRequest {
 
 const Titulos = ({tipo, titulo}: TituloRequest) => {
     switch (tipo) {
-        case 'Subtitulo':
+        case 'h4':
             return (<Subtitulo>{titulo}</Subtitulo>);
-        case 'TituloSecundario':
+        case 'h2':
             return (<TituloSecundario>{titulo}</TituloSecundario>);
-        case 'TituloTerciario':
+        case 'h3':
             return (<TituloTerciario>{titulo}</TituloTerciario>);
-        case 'TituloPrincipal':
+        case 'h1':
         default:
             return (<TituloPrincipal>{titulo}</TituloPrincipal>);
     }

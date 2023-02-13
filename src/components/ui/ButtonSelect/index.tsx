@@ -13,7 +13,7 @@ interface SelectRequest {
     handleSubmit: (param?:any, param2?:any)=> void;
 }
 
-export function InputSelect({ dado, handleSubmit }: SelectRequest) {
+export function ButtonSelect({ dado, handleSubmit }: SelectRequest) {
 
     const [showElement, setShowElement] = useState(false);
 
