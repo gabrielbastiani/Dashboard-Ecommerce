@@ -39,8 +39,8 @@ const Categoria: React.FC = () => {
     const [codigos, setCodigos] = useState(codigo);
     const [dataCodigo, setDataCodigo] = useState('');
 
-    const [disponibilidades, setDisponibilidades] = useState(Boolean);
-    const [status, setStatus] = useState("");
+    const [disponibilidades, setDisponibilidades] = useState('');
+
 
     const [search, setSearch] = useState<any[]>([]);
 
@@ -86,16 +86,21 @@ const Categoria: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateDisponibilidadeCategory?category_id=${category_id}`);
-            if (status === "Indisponivel") {
-                toast.success('Categoria foi habilitada com sucesso');
-                return;
-            } else {
-                toast.warning('Categoria foi desabilitada com sucesso.');
-            }
+            
             refreshCategory();
-            statusInitial();
+            /* statusInitial(); */
         } catch (err) {
             toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
+        }
+
+        if (disponibilidades === "Indisponivel") { 
+            toast.success(`A categoria de encontra Disponivel.`);
+            return;
+        }
+
+        if (disponibilidades === "Disponivel") {
+            toast.error(`A categoria de encontra Indisponivel.`);
+            return;
         }
     }
 
@@ -108,19 +113,11 @@ const Categoria: React.FC = () => {
         setDisponibilidades(response?.data?.disponibilidade);
     }
 
-    function statusInitial() {
-        if (!disponibilidades) {
-            setStatus('Disponivel');
-        } else {
-            setStatus('Indisponivel');
-        }
-    }
-
     useEffect(() => {
-        async function categoryAtual() {
+        async function listProductCategory() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/exactCategoryPage?page=${currentPage}&limit=${limit}&category_id=${category_id}`);
+                const { data } = await apiClient.get(`/allProductsPageExact?page=${currentPage}&limit=${limit}&category_id=${category_id}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -131,29 +128,28 @@ const Categoria: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setSearch(data.categorys);
+                setSearch(data.products);
 
             } catch (error) {
                 console.error(error);
-                alert('Error call api list ALL categoyes');
+                alert('Error call api list ALL Products');
             }
         }
-        categoryAtual();
+        listProductCategory();
     }, [category_id, currentPage, limit, total]);
 
     /* @ts-ignore */
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Produto": item.products,
-            "SKU": item.products.length,
+            "Produto": item.nameProduct,
+            "SKU": item.sku,
             "Disponibilidade": item.disponibilidade
         });
     });
 
     useEffect(() => {
         refreshCategory();
-        statusInitial();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -222,7 +218,8 @@ const Categoria: React.FC = () => {
                             chave={"Disponibilidade"}
                             dados={
                                 <ButtonSelect
-                                    dado={status}
+                                     /* @ts-ignore */
+                                    dado={disponibilidades}
                                     handleSubmit={updateStatus}
                                 />
                             }
