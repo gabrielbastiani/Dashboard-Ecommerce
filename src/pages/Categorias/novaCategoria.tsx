@@ -7,7 +7,6 @@ import { Grid } from '../Dashboard/styles';
 import MainHeader from '../../components/MainHeader';
 import Aside from '../../components/Aside';
 import {
-    Card,
     Container,
     Etiqueta,
     Block,
@@ -16,6 +15,7 @@ import {
 import { Button } from '../../components/ui/Button';
 import Voltar from '../../components/Voltar';
 import { InputPost } from '../../components/ui/InputPost';
+import { Card } from '../../components/Content/styles';
 
 
 const NovaCategoria: React.FC = () => {

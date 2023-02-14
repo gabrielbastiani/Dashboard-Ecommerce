@@ -4,11 +4,10 @@ import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
 import {
     Container,
-    Card,
     SelectItem,
     OptionValue,
     ContainerPagination,
-    TotalCategorys,
+    TotalBoxItems,
     TextTotal,
     ContainerCategoryPage,
     Previus,
@@ -24,6 +23,7 @@ import Titulos from "../../components/Titulos";
 import TabelaSimples from "../../components/Tabelas";
 import { Link } from "react-router-dom";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { Card } from "../../components/Content/styles";
 
 
 const Categorias: React.FC = () => {
@@ -85,7 +85,7 @@ const Categorias: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Categoria": item.categoryName,
-            "Qtd. de Produtos": item.products.length,
+            "Qtd. de Produtos": item.products.length || "0",
             "botaoDetalhes": `/categoria/${item.categoryName}/${item.codigo}/${item.id}`
         });
     });
@@ -129,9 +129,9 @@ const Categorias: React.FC = () => {
                     />
 
                     <ContainerPagination>
-                        <TotalCategorys key={total}>
+                        <TotalBoxItems key={total}>
                             <TextTotal>Total de categorias: {total}</TextTotal>
-                        </TotalCategorys>
+                        </TotalBoxItems>
                         <ContainerCategoryPage>
 
                             {currentPage > 1 && (

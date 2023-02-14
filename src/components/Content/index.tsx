@@ -1,11 +1,13 @@
 import React from 'react';
-import { Container } from './styles';
+import { Container, Card } from './styles';
 
 const Content: React.FC = () => {
 
     return (
         <Container>
-            <h1>Content</h1>
+            <Card>
+
+            </Card>
         </Container>
     )
 }

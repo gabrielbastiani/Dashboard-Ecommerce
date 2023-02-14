@@ -8,7 +8,16 @@ import {
     BodyTable,
     CelulaLinha,
     CelulaLinha1,
-    ButtonDangerSmall
+    ButtonDangerSmall,
+    TableResponsive,
+    CabecaResposive,
+    LinhaResponsive,
+    CelulaResponsive,
+    BodyTableResponsive,
+    CelulaLinhaResponsive,
+    CelulaLinha1Responsive,
+    ButtonDangerSmallResponsive,
+    CabecaLinhaResponsive
 } from './styles';
 
 interface TabelaRequest {
@@ -51,6 +60,41 @@ const TabelaSimples = ({ cabecalho, dados }: TabelaRequest) => (
                 }
             </BodyTable>
         </Simples>
+
+        <TableResponsive>
+            <CabecaResposive>
+                <CabecaLinhaResponsive>
+                    {
+                        cabecalho.map((item: any, idx: any) => (<CelulaResponsive key={idx}>{item}</CelulaResponsive>))
+                    }
+                </CabecaLinhaResponsive>
+            </CabecaResposive>
+            <BodyTableResponsive>
+                {
+                    dados.map((linha: any, idx: any) => (
+                        <LinhaResponsive key={idx}>
+                            {
+                                cabecalho.map((item: any, index: any) => (
+                                    <CelulaLinhaResponsive key={index}>{linha[item] || ""}</CelulaLinhaResponsive>
+                                ))
+                            }
+                            {
+                                linha["botaoDetalhes"] && (
+                                    <CelulaLinha1Responsive>
+                                        <Link to={linha["botaoDetalhes"]}>
+                                            <ButtonDangerSmallResponsive>
+                                                DETALHES
+                                            </ButtonDangerSmallResponsive>
+                                        </Link>
+                                    </CelulaLinha1Responsive>
+                                )
+                            }
+                        </LinhaResponsive>
+                    ))
+                }
+            </BodyTableResponsive>
+        </TableResponsive>
+
     </TabelasSimples>
 )
 

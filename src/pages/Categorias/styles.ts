@@ -24,15 +24,6 @@ export const Container = styled.div`
   }
 `;
 
-export const Card = styled.div`
-  margin: 40px 20px;
-  padding: 30px;
-  border-radius: 10px;
-  border: 0;
-  box-shadow: 0 0 5px ${(props) => props.theme.colors.gray};
-  background-color: ${(props) => props.theme.colors.secondary};
-`;
-
 export const SelectItem = styled.select`
   height: 25px;
   border-radius: 0.3rem;
@@ -60,7 +51,7 @@ export const ContainerPagination = styled.div`
   }
 `;
 
-export const TotalCategorys = styled.div`
+export const TotalBoxItems = styled.div`
   margin: 15px 5px;
 `;
 
@@ -161,4 +152,8 @@ export const BlockTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  @media (max-width: 440px) {
+    flex-direction: column;
+  }
 `;

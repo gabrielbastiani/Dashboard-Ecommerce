@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import {
     BlockTop,
     ButtonPage,
-    Card,
     Container,
     ContainerCategoryPage,
     ContainerPagination,
     Next,
+    OptionValue,
     Previus,
+    SelectItem,
     TextPage,
+    TextTotal,
+    TotalBoxItems,
 } from "../styles";
 import {
     BlockDados,
@@ -27,11 +30,17 @@ import { Button } from "../../../components/ui/Button";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
 import TabelaSimples from "../../../components/Tabelas";
+import { useNavigate } from 'react-router-dom';
+import { Avisos } from "../../../components/Avisos";
+import Pesquisa from "../../../components/Pesquisa";
+import { Card } from "../../../components/Content/styles";
 
 
 const Categoria: React.FC = () => {
 
     let { category_id, categoryName, codigo } = useParams();
+
+    const navigate = useNavigate();
 
     const [categoryNames, setCategoryNames] = useState(categoryName);
     const [dataName, setDataName] = useState('');
@@ -40,8 +49,9 @@ const Categoria: React.FC = () => {
     const [dataCodigo, setDataCodigo] = useState('');
 
     const [disponibilidades, setDisponibilidades] = useState('');
+    
 
-
+    const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
@@ -86,14 +96,14 @@ const Categoria: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateDisponibilidadeCategory?category_id=${category_id}`);
-            
+
             refreshCategory();
-            /* statusInitial(); */
+
         } catch (err) {
             toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
         }
 
-        if (disponibilidades === "Indisponivel") { 
+        if (disponibilidades === "Indisponivel") {
             toast.success(`A categoria de encontra Disponivel.`);
             return;
         }
@@ -101,6 +111,18 @@ const Categoria: React.FC = () => {
         if (disponibilidades === "Disponivel") {
             toast.error(`A categoria de encontra Indisponivel.`);
             return;
+        }
+    }
+
+    async function deleteCategory() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.delete(`/deleteCategory?category_id=${category_id}`);
+            toast.success(`Categoria deletada com sucesso.`);
+            refreshCategory();
+            navigate('/categorias');
+        } catch (err) {
+            toast.error('Ops erro ao deletar a categoria.');
         }
     }
 
@@ -129,6 +151,7 @@ const Categoria: React.FC = () => {
 
                 setPages(arrayPages);
                 setSearch(data.products);
+                setInitialFilter(data.products);
 
             } catch (error) {
                 console.error(error);
@@ -139,12 +162,30 @@ const Categoria: React.FC = () => {
     }, [category_id, currentPage, limit, total]);
 
     /* @ts-ignore */
+    const limits = useCallback((e) => {
+        setLimit(e.target.value);
+        setCurrentPage(1);
+    }, []);
+
+    /* @ts-ignore */
+    const handleChange = ({ target }) => {
+        if (!target.value) {/* @ts-ignore */
+            setSearch(initialFilter);
+            return;
+        }
+        /* @ts-ignore */
+        const filterProducts = search.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
+        setSearch(filterProducts);
+    }
+
+    /* @ts-ignore */
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
             "Produto": item.nameProduct,
             "SKU": item.sku,
-            "Disponibilidade": item.disponibilidade
+            "Status": item.disponibilidade,
+            "botaoDetalhes": `/${item.id}`
         });
     });
 
@@ -171,7 +212,7 @@ const Categoria: React.FC = () => {
                         <Button
                             type="submit"
                             style={{ backgroundColor: '#FB451E' }}
-                            onClick={() => alert('delete')}
+                            onClick={deleteCategory}
                         >
                             Remover
                         </Button>
@@ -218,7 +259,7 @@ const Categoria: React.FC = () => {
                             chave={"Disponibilidade"}
                             dados={
                                 <ButtonSelect
-                                     /* @ts-ignore */
+                                    /* @ts-ignore */
                                     dado={disponibilidades}
                                     handleSubmit={updateStatus}
                                 />
@@ -226,47 +267,76 @@ const Categoria: React.FC = () => {
                         />
                     </BlockDados>
 
-                    <DivisorHorizontal />
+                    {search.length > 0 && (
+                        <>
+                            <DivisorHorizontal />
 
-                    <Titulos
-                        tipo="h3"
-                        titulo="Produtos da Categoria"
-                    />
+                            <Titulos
+                                tipo="h3"
+                                titulo="Produtos da Categoria"
+                            />
 
-                    <TabelaSimples
-                        cabecalho={["Produto", "SKU", "Disponibilidade"]}
-                        /* @ts-ignore */
-                        dados={dados}
-                    />
-                    
-                    <ContainerPagination>
-                        <ContainerCategoryPage>
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
+                            <Pesquisa
+                                placeholder={"Pesquise aqui pelo nome do produto..."}
+                                /* @ts-ignore */
+                                onChange={handleChange}
+                            />
 
-                            {pages.map((page) => (
-                                <TextPage
-                                    key={page}
-                                    onClick={() => setCurrentPage(page)}
-                                >
-                                    {page}
-                                </TextPage>
-                            ))}
+                            <br />
 
-                            {currentPage < search.length && (
-                                <Next>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                        Avançar
-                                    </ButtonPage>
-                                </Next>
-                            )}
-                        </ContainerCategoryPage>
-                    </ContainerPagination>
+                            <TextTotal>Produtos por página: &nbsp;</TextTotal>
+
+                            <SelectItem onChange={limits}>
+                                <OptionValue value="4">4</OptionValue>
+                                <OptionValue value="8">8</OptionValue>
+                                <OptionValue value="999999">Todos produtos</OptionValue>
+                            </SelectItem>
+
+                            <TabelaSimples
+                                cabecalho={["Produto", "SKU", "Status"]}
+                                /* @ts-ignore */
+                                dados={dados}
+                            />
+
+                            <ContainerPagination>
+                                <TotalBoxItems key={total}>
+                                    <TextTotal>Total de produtos: {total}</TextTotal>
+                                </TotalBoxItems>
+                                <ContainerCategoryPage>
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
+
+                                    {pages.map((page) => (
+                                        <TextPage
+                                            key={page}
+                                            onClick={() => setCurrentPage(page)}
+                                        >
+                                            {page}
+                                        </TextPage>
+                                    ))}
+
+                                    {currentPage < search.length && (
+                                        <Next>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                Avançar
+                                            </ButtonPage>
+                                        </Next>
+                                    )}
+                                </ContainerCategoryPage>
+                            </ContainerPagination>
+                        </>
+                    )}
+
+                    {search.length < 1 && (
+                        <Avisos
+                            texto="Não há produtos nessa categoria"
+                        />
+                    )}
                 </Card>
             </Container>
         </Grid>

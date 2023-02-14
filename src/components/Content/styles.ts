@@ -23,3 +23,12 @@ export const Container = styled.div`
         background-color: ${props => props?.theme?.colors?.tertiary};
     }
 `;
+
+export const Card = styled.div`
+  margin: 40px 20px;
+  padding: 30px;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 0 5px ${(props) => props.theme.colors.gray};
+  background-color: ${(props) => props.theme.colors.secondary};
+`;
