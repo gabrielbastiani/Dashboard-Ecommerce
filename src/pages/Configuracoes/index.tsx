@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
@@ -10,9 +10,12 @@ import { InputUpdate } from "../../components/ui/InputUpdate";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 import { BlockTop } from "../Categorias/styles";
 import { setupAPIClient } from "../../services/api";
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 const Configuracoes: React.FC = () => {
+
+    const { user } = useContext(AuthContext);
 
     const [logoLoja, setLogoLoja] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -26,24 +29,26 @@ const Configuracoes: React.FC = () => {
     const [cityLoja, setCityLoja] = useState('');
     const [stateLoja, setStateLoja] = useState('');
 
+    
+
 
     useEffect(() => {
         async function loadStore() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get('/allLojasPage?page=$1&limit=5');
+                const response = await apiClient.get(`/userLoja?loja_id=${user.loja_id}`);
 
-                setLogoLoja(data.lojas.logoLoja);
-                setNameLoja(data.lojas.nameLoja);
-                setCnpjLoja(data.lojas.cnpjLoja);
-                setEmailLoja(data.lojas.emailLoja);
-                setPhoneLoja(data.lojas.phoneLoja);
-                setRuaLoja(data.lojas.ruaLoja);
-                setNumeroLoja(data.lojas.numeroLoja);
-                setBairroLoja(data.lojas.bairroLoja);
-                setCepLoja(data.lojas.cepLoja);
-                setCityLoja(data.lojas.cityLoja);
-                setStateLoja(data.lojas.stateLoja);
+                setLogoLoja(response.data.logoLoja);
+                setNameLoja(response.data.nameLoja);
+                setCnpjLoja(response.data.cnpjLoja);
+                setEmailLoja(response.data.emailLoja);
+                setPhoneLoja(response.data.phoneLoja);
+                setRuaLoja(response.data.ruaLoja);
+                setNumeroLoja(response.data.numeroLoja);
+                setBairroLoja(response.data.bairroLoja);
+                setCepLoja(response.data.cepLoja);
+                setCityLoja(response.data.cityLoja);
+                setStateLoja(response.data.stateLoja);
 
             } catch (error) {
                 console.log(error);
@@ -71,16 +76,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Nome da loja"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
                                     dado={nameLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={nameLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setNameLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -89,16 +94,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"CNPJ"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={cnpjLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={cnpjLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setCnpjLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -107,16 +112,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"E-mail"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={emailLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={emailLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setEmailLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -125,16 +130,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Telefone"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={phoneLoja}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={''}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setPhoneLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -145,16 +150,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Endereço"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={ruaLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={ruaLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setRuaLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -163,16 +168,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Número"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={numeroLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={numeroLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setNumeroLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -181,16 +186,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Bairro"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={bairroLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={bairroLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setBairroLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -199,16 +204,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Cidade"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={cityLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={cityLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setCityLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -217,16 +222,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"Estado"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={stateLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={stateLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setStateLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
@@ -235,16 +240,16 @@ const Configuracoes: React.FC = () => {
                     <BlockDados>
                         <TextoDados
                             chave={"CEP"}
-                            dados={/* @ts-ignore */
+                            dados={
                                 <InputUpdate
-                                    dado={''}
+                                    dado={cepLoja}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={''}
+                                    placeholder={cepLoja}
                                     value={''}
                                     /* @ts-ignore */
-                                    onChange={(e) => alert('clicou')}
-                                /* handleSubmit={''} */
+                                    onChange={(e) => setCepLoja(e.target.value)}
+                                    handleSubmit={ () => alert('clicou')}
                                 />
                             }
                         />
