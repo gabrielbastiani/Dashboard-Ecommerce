@@ -134,13 +134,13 @@ export const CelulaResponsive = styled.th`
     color: ${(props) => props.theme.colors.white};
 
     &:nth-child(1) {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-  &:last-child {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-  }
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
   }
 `;
 

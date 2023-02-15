@@ -60,4 +60,6 @@ export const EditBox = styled.div`
   align-items: center;
 `;
 
-export const ValueText = styled.span``;
+export const ValueText = styled.span`
+
+`;
