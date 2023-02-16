@@ -23,7 +23,9 @@ import {
     InputLogo,
     LogoLojaImg,
     SectionDate,
-    GridDate
+    GridDate,
+    BlockLogomarca,
+    TextLogo
 } from "./styles";
 import { InputPost } from "../../components/ui/InputPost";
 
@@ -48,11 +50,10 @@ const Configuracoes: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
 
-    console.log(loja_id)
 
     useEffect(() => {
         async function loadStore() {
-                const apiClient = setupAPIClient();
+            const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get(`/userLoja?loja_id=${user.loja_id}`);
 
@@ -77,9 +78,24 @@ const Configuracoes: React.FC = () => {
     }, [user.loja_id])
 
     async function handleLoja(event: FormEvent) {
-            event.preventDefault();
-            const apiClient = setupAPIClient();
+        event.preventDefault();
+        const apiClient = setupAPIClient();
         try {
+            if (nameLoja === "" ||
+                cnpjLoja === "" ||
+                emailLoja === "" ||
+                phoneLoja === "" ||
+                ruaLoja === "" ||
+                numeroLoja === "" ||
+                bairroLoja === "" ||
+                cepLoja === "" ||
+                cityLoja === "" ||
+                stateLoja === ""
+            ) {
+                toast.error('Não deixe o campo em branco!')
+                return;
+            }
+
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', logoLoja);
@@ -100,40 +116,41 @@ const Configuracoes: React.FC = () => {
 
             toast.success('Loja cadastrada com sucesso.');
 
+            setNameLoja("");
+            setCnpjLoja("");
+            setEmailLoja("");
+            setPhoneLoja("");
+            setRuaLoja("");
+            setNumeroLoja("");
+            setBairroLoja("");
+            setCepLoja("");
+            setCityLoja("");
+            setStateLoja("");
+
+            loadIDloja();
+
         } catch (error) {
             console.log(error);
             toast.error('Erro ao cadastrar a loja.');
         }
+
         setLoading(false);
+
     }
 
-    useEffect(() => {
-        async function loadLoja_ID() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/userLoja?loja_id=${loja_id}`);
-
-                setLoja_id(response.data.loja_id);
-
-                console.log(response.data.loja_id)
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        loadLoja_ID();
-    }, [loja_id])
-
-    async function userLoja() {
-        const apiClient = setupAPIClient();
+    async function loadIDloja() {
         try {
-            const response = await apiClient.get(`/userLoja?loja_id=${loja_id}`);
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/lojaCreateFind');
 
-            const lojaID = response.data.loja_id;
+            const lojaID = response.data.id;
 
-            await apiClient.put(`/lojaidUserUpdate?user_id=${user.id},`, { loja_id: lojaID });
+            await apiClient.put(`/lojaidUserUpdate?user_id=${user.id}`, { loja_id: lojaID });
+
+            navigate(0);
+
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -230,7 +247,6 @@ const Configuracoes: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-
                     {user.loja_id ? (
                         <>
                             <BlockTop>
@@ -466,22 +482,27 @@ const Configuracoes: React.FC = () => {
 
                             <GridDate id="form-loja" onSubmit={handleLoja}>
                                 <SectionDate>
-                                    <EtiquetaLogo>
-                                        <IconSpan>
-                                            <GrUpload size={20} />
-                                        </IconSpan>
-                                        <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="logomarca" />
-                                        {lojaUrl ? (
-                                            <LogoLojaImgUrl
-                                                src={lojaUrl}
-                                                alt="logomarca da loja"
-                                                width={170}
-                                                height={80}
-                                            />
-                                        ) :
-                                            <LogoLojaImg src={"http://localhost:3333/files/" + logoLoja} alt="logomarca da loja" />
-                                        }
-                                    </EtiquetaLogo>
+                                    <BlockLogomarca>
+                                        <EtiquetaLogo>
+                                            <IconSpan>
+                                                <GrUpload size={20} />
+                                            </IconSpan>
+                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="logomarca" />
+                                            {lojaUrl ? (
+                                                <LogoLojaImgUrl
+                                                    src={lojaUrl}
+                                                    alt="logomarca da loja"
+                                                    width={170}
+                                                    height={80}
+                                                />
+                                            ) :
+                                                <>
+                                                    <LogoLojaImg src={"http://localhost:3333/files/" + logoLoja} />
+                                                    <TextLogo>Clique na seta e insira<br /> uma logomarca</TextLogo>
+                                                </>
+                                            }
+                                        </EtiquetaLogo>
+                                    </BlockLogomarca>
 
                                     <Block>
                                         <Etiqueta>Nome da loja:</Etiqueta>

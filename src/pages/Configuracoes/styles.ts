@@ -8,6 +8,19 @@ export const GridDate = styled.form`
   }
 `;
 
+export const BlockLogomarca = styled.div`
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+`;
+
+export const TextLogo = styled.span`
+  text-align: center;
+  font-size: 13px;
+  padding-top: 8px;
+`;
+
 export const SectionDate = styled.div`
   width: 50%;
 
@@ -52,6 +65,8 @@ export const EtiquetaLogo = styled.label`
 
   svg {
     background: ${(props) => props.theme.colors.gray};
+    border-radius: 30%;
+    color: ${(props) => props.theme.colors.info};
   }
 `;
 
