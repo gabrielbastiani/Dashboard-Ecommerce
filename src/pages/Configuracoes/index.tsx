@@ -11,7 +11,7 @@ import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 import { Block, BlockTop, Etiqueta } from "../Categorias/styles";
 import { setupAPIClient } from "../../services/api";
 import { AuthContext } from '../../contexts/AuthContext';
-import { GrUpload } from 'react-icons/gr';
+import { MdFileUpload } from 'react-icons/md';
 import { Button } from "../../components/ui/Button";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
@@ -28,6 +28,8 @@ import {
     TextLogo
 } from "./styles";
 import { InputPost } from "../../components/ui/InputPost";
+import { IMaskInput } from "react-imask";
+
 
 const Configuracoes: React.FC = () => {
 
@@ -49,6 +51,11 @@ const Configuracoes: React.FC = () => {
     const [stateLoja, setStateLoja] = useState('');
 
     const [loading, setLoading] = useState(false);
+
+    function isEmail(emailLoja: string) {
+        // eslint-disable-next-line no-control-regex
+        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emailLoja)
+    }
 
 
     useEffect(() => {
@@ -93,6 +100,13 @@ const Configuracoes: React.FC = () => {
                 stateLoja === ""
             ) {
                 toast.error('Não deixe o campo em branco!')
+                return;
+            }
+
+            if (!isEmail(emailLoja)) {
+
+                toast.error('Por favor digite um email valido!');
+
                 return;
             }
 
@@ -221,6 +235,14 @@ const Configuracoes: React.FC = () => {
                 toast.error('Não deixe o campo em branco!')
                 return;
             }
+
+            if (!isEmail(emailLoja)) {
+
+                toast.error('Por favor digite um email valido!');
+
+                return;
+            }
+            
             await apiClient.put(`/updateAllDateLoja?loja_id=${user.loja_id}`, {
                 nameLoja: nameLoja,
                 cnpjLoja: cnpjLoja,
@@ -240,6 +262,8 @@ const Configuracoes: React.FC = () => {
         }
     }
 
+    
+
 
     return (
         <Grid>
@@ -258,7 +282,7 @@ const Configuracoes: React.FC = () => {
                             <FormUploadLogo onSubmit={handleUpdateLogo}>
                                 <EtiquetaLogo>
                                     <IconSpan>
-                                        <GrUpload size={20} />
+                                        <MdFileUpload size={20} />
                                     </IconSpan>
                                     <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="logomarca" />
                                     {lojaUrl ? (
@@ -485,7 +509,7 @@ const Configuracoes: React.FC = () => {
                                     <BlockLogomarca>
                                         <EtiquetaLogo>
                                             <IconSpan>
-                                                <GrUpload size={20} />
+                                                <MdFileUpload size={30} />
                                             </IconSpan>
                                             <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="logomarca" />
                                             {lojaUrl ? (
@@ -516,8 +540,12 @@ const Configuracoes: React.FC = () => {
                                     <Block>
                                         <Etiqueta>CNPJ:</Etiqueta>
                                         <InputPost
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="99.999.999/9999-99"
                                             type="text"
-                                            placeholder="Digite o CNPJ da loja"
+                                            placeholder="99.999.999/9999-99"
                                             onChange={(e) => setCnpjLoja(e.target.value)}
                                         />
                                     </Block>
@@ -526,7 +554,7 @@ const Configuracoes: React.FC = () => {
                                         <Etiqueta>E-mail:</Etiqueta>
                                         <InputPost
                                             type="text"
-                                            placeholder="Digite o email da loja"
+                                            placeholder="Ex: email@email.com"
                                             onChange={(e) => setEmailLoja(e.target.value)}
                                         />
                                     </Block>
@@ -534,8 +562,12 @@ const Configuracoes: React.FC = () => {
                                     <Block>
                                         <Etiqueta>Telefone:</Etiqueta>
                                         <InputPost
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="(99) 9999-9999"
                                             type="text"
-                                            placeholder="Digite o telefone da loja"
+                                            placeholder="(99) 9999-9999"
                                             onChange={(e) => setPhoneLoja(e.target.value)}
                                         />
                                     </Block>
@@ -590,8 +622,12 @@ const Configuracoes: React.FC = () => {
                                     <Block>
                                         <Etiqueta>CEP:</Etiqueta>
                                         <InputPost
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="99999-999"
                                             type="text"
-                                            placeholder="Digite o CEP da loja"
+                                            placeholder="99999-999"
                                             onChange={(e) => setCepLoja(e.target.value)}
                                         />
                                     </Block>

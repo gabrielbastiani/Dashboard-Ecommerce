@@ -64,9 +64,7 @@ export const EtiquetaLogo = styled.label`
   cursor: pointer;
 
   svg {
-    background: ${(props) => props.theme.colors.gray};
-    border-radius: 30%;
-    color: ${(props) => props.theme.colors.info};
+    color: ${(props) => props.theme.colors.warning};
   }
 `;
 
