@@ -52,11 +52,11 @@ const Configuracoes: React.FC = () => {
 
     useEffect(() => {
         async function loadStore() {
-            try {
                 const apiClient = setupAPIClient();
+            try {
                 const response = await apiClient.get(`/userLoja?loja_id=${user.loja_id}`);
 
-                setLoja_id(response.data.id);
+                setLoja_id(response.data.loja_id);
                 setLogoLoja(response.data.logoLoja);
                 setNameLoja(response.data.nameLoja);
                 setCnpjLoja(response.data.cnpjLoja);
@@ -77,8 +77,8 @@ const Configuracoes: React.FC = () => {
     }, [user.loja_id])
 
     async function handleLoja(event: FormEvent) {
-        event.preventDefault();
-        const apiClient = setupAPIClient();
+            event.preventDefault();
+            const apiClient = setupAPIClient();
         try {
             const data = new FormData();
             /* @ts-ignore */
@@ -95,7 +95,6 @@ const Configuracoes: React.FC = () => {
             data.append('stateLoja', stateLoja);
 
             await apiClient.post(`/loja`, data);
-            userLoja();
 
             setLoading(true);
 
@@ -108,10 +107,31 @@ const Configuracoes: React.FC = () => {
         setLoading(false);
     }
 
+    useEffect(() => {
+        async function loadLoja_ID() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/userLoja?loja_id=${loja_id}`);
+
+                setLoja_id(response.data.loja_id);
+
+                console.log(response.data.loja_id)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadLoja_ID();
+    }, [loja_id])
+
     async function userLoja() {
         const apiClient = setupAPIClient();
         try {
-            await apiClient.put(`/lojaidUserUpdate?user_id=${user.id},`, { loja_id: loja_id });
+            const response = await apiClient.get(`/userLoja?loja_id=${loja_id}`);
+
+            const lojaID = response.data.loja_id;
+
+            await apiClient.put(`/lojaidUserUpdate?user_id=${user.id},`, { loja_id: lojaID });
         } catch (error) {
             console.log(error);
         }
@@ -430,7 +450,6 @@ const Configuracoes: React.FC = () => {
                         </>
                     ) : (
                         <>
-                        <GridDate onSubmit={handleLoja}>
                             <BlockTop>
                                 <Titulos
                                     tipo="h1"
@@ -439,12 +458,13 @@ const Configuracoes: React.FC = () => {
                                 <Button
                                     type="submit"
                                     style={{ backgroundColor: 'green' }}
+                                    form="form-loja"
                                 >
                                     Salvar
                                 </Button>
                             </BlockTop>
 
-                            
+                            <GridDate id="form-loja" onSubmit={handleLoja}>
                                 <SectionDate>
                                     <EtiquetaLogo>
                                         <IconSpan>
