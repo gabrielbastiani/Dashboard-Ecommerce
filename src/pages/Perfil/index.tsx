@@ -21,22 +21,30 @@ const Perfil: React.FC = () => {
 
     const { user } = useContext(AuthContext);
 
-    const [nameCompleto, setNameCompleto] = useState('');
-    const [name, setName] = useState(user.nameComplete);
-    const [emailDate, setEmailDate] = useState();
-    const [email, setEmail] = useState(user.email);
+    const [userNames, setUserNames] = useState(user.nameComplete);
+    const [dataName, setDataName] = useState('');
+
+    const [emails, setEmails] = useState(user.email);
+    const [dataEmail, setDataEmail] = useState('');
+
+    const [showElement, setShowElement] = useState(false);
+
+    const [newPassword, setNewPassword] = useState('');
+    const [password, setPassword] = useState('');
+
+    const [loading, setLoading] = useState(false);
 
 
     async function updateName() {
         try {
             const apiClient = setupAPIClient();
-            if (name === '') {
+            if (userNames === '') {
                 toast.error('Não deixe o nome em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/nameUserUpdate?user_id=${user.id}`, { nameCompleto: name || nameCompleto });
+                await apiClient.put(`/nameUserUpdate?user_id=${user.id}`, { nameComplete: userNames || dataName });
                 toast.success('Nome do usuario atualizado com sucesso.');
-                refreshUser();
+                refreshUserLoad();
             }
         } catch (err) {
             toast.error('Ops erro ao atualizar o nome.');
@@ -46,26 +54,106 @@ const Perfil: React.FC = () => {
     async function updateEmail() {
         try {
             const apiClient = setupAPIClient();
-            if (email === '') {
+            if (emails === '') {
                 toast.error('Não deixe email em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/emailUserUpdate?user_id=${user.email}`, { email: emailDate || email });
+                await apiClient.put(`/emailUserUpdate?user_id=${user.id}`, { email: emails || dataEmail });
                 toast.success('Email do usuario atualizado com sucesso.');
-                refreshUser();
+                refreshUserLoad();
             }
         } catch (err) {
             toast.error('Ops erro ao atualizar o email.');
         }
     }
 
-    async function refreshUser() {
+    useEffect(() => {
+        async function refreshUser() {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/listExactUser?user_id=${user.id}`)
+            setUserNames(response?.data?.nameComplete);
+            setDataName(response?.data?.nameComplete);
+            setDataEmail(response?.data?.email);
+        }
+        refreshUser();
+    }, [user.id])
+
+    async function refreshUserLoad() {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get(`/listExactUser?user_id=${user.id}`);
-        setName(response?.data?.nameCompleto);
-        setNameCompleto(response?.data?.nameCompleto);
-        setEmailDate(response?.data?.email);
+        const response = await apiClient.get(`/listExactUser?user_id=${user.id}`)
+        setUserNames(response?.data?.nameComplete);
+        setDataName(response?.data?.nameComplete);
+        setDataEmail(response?.data?.email);
     }
+
+    async function handleRecovery() {
+        const apiClient = setupAPIClient();
+        try {
+            setLoading(true);
+            await apiClient.post('/recoverDashboard', { email: user.email });
+            setLoading(false);
+
+            showOrHide();
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function deleteRecoverID() {
+        const apiClient = setupAPIClient();
+        try {
+            setLoading(true);
+            const response = await apiClient.get('/recoverFind');
+            const recoverID = response?.data?.id;
+
+            await apiClient.delete(`/deleteRecoverID?recovery_id=${recoverID}`);
+
+            setLoading(false);
+
+            showOrHide();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleRecoveryPassword() {
+        const apiClient = setupAPIClient();
+        try {
+            // eslint-disable-next-line eqeqeq
+            if (newPassword != password) {
+                toast.error('Senhas diferentes')
+                return;
+            }
+            const response = await apiClient.get('/recoverFind');
+            const recoverID = response?.data?.id;
+
+            await apiClient.put(`/recover?recovery_id=${recoverID}`, { password });
+
+            toast.success('Senha atualizada com sucesso.');
+
+            setNewPassword("");
+            setPassword("");
+
+            if (!recoverID) {
+                await apiClient.delete(`/deleteRecoverID?recovery_id=${recoverID}`);
+                return;
+            }
+
+            showOrHide();
+
+        } catch (err) {
+            console.log(err);
+            toast.error('Erro ao atualizar a sua senha');
+        }
+
+    }
+
+    const showOrHide = () => {
+        setShowElement(!showElement);
+    }
+
 
     return (
         <Grid>
@@ -78,13 +166,19 @@ const Perfil: React.FC = () => {
                             tipo="h1"
                             titulo="Perfil"
                         />
-                        <Button
-                            type="submit"
-                            style={{ backgroundColor: 'green' }}
-                            /* onClick={() => alert('clicou')} */
-                        >
-                            Salvar
-                        </Button>
+                        {showElement ?
+                            <Button
+                                type="submit"
+                                style={{ backgroundColor: 'green' }}
+                                onClick={handleRecoveryPassword}
+                            >
+                                Salvar
+                            </Button>
+                            :
+                            <>
+                            </>
+                        }
+
                     </BlockTop>
 
                     <GridDate>
@@ -94,13 +188,13 @@ const Perfil: React.FC = () => {
                                     chave={"Nome"}
                                     dados={
                                         <InputUpdate
-                                            dado={name}
+                                            dado={dataName}
                                             type="text"
                                             /* @ts-ignore */
                                             placeholder={user.nameComplete}
-                                            value={nameCompleto}
+                                            value={userNames}
                                             /* @ts-ignore */
-                                            onChange={ (e) => setName(e.target.value) }
+                                            onChange={(e) => setUserNames(e.target.value)}
                                             handleSubmit={updateName}
                                         />
                                     }
@@ -112,13 +206,13 @@ const Perfil: React.FC = () => {
                                     chave={"E-mail"}
                                     dados={
                                         <InputUpdate
-                                            dado={emailDate}
+                                            dado={dataEmail}
                                             type="text"
                                             /* @ts-ignore */
                                             placeholder={user.email}
-                                            value={email}
+                                            value={emails}
                                             /* @ts-ignore */
-                                            onChange={ (e) => setEmail(e.target.value) }
+                                            onChange={(e) => setEmails(e.target.value)}
                                             handleSubmit={updateEmail}
                                         />
                                     }
@@ -126,25 +220,49 @@ const Perfil: React.FC = () => {
                             </BlockDados>
                         </SectionDate>
 
-                        <SectionDate>
-                            <Block>
-                                <Etiqueta>Nova Senha:</Etiqueta>
-                                <InputPost
-                                    type='password'
-                                    placeholder="Nova senha"
-                                    onChange={() => alert('clicou')}
-                                />
-                            </Block>
+                        {showElement ?
+                            <SectionDate>
+                                <Button
+                                    onClick={deleteRecoverID}
+                                >
+                                    Cancelar redefinição de senha
+                                </Button>
+                                <br />
+                                <br />
+                                <Block>
+                                    <Etiqueta>Nova Senha:</Etiqueta>
+                                    <InputPost
+                                        type='password'
+                                        placeholder="Digite nova senha"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                    />
+                                </Block>
 
-                            <Block>
-                                <Etiqueta>Confirme nova senha:</Etiqueta>
-                                <InputPost
-                                    type='password'
-                                    placeholder='Repetir a nova senha'
-                                    onChange={() => alert('clicou')}
-                                />
-                            </Block>
-                        </SectionDate>
+                                <Block>
+                                    <Etiqueta>Confirme nova senha:</Etiqueta>
+                                    <InputPost
+                                        type='password'
+                                        placeholder='Repetir a nova senha'
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </Block>
+                            </SectionDate>
+                            :
+                            <SectionDate>
+                                <Block>
+                                    <Button
+                                        type="submit"
+                                        /* @ts-ignore */
+                                        loading={loading}
+                                        onClick={handleRecovery}
+                                    >
+                                        Redefinir sua senha
+                                    </Button>
+                                </Block>
+                            </SectionDate>
+                        }
                     </GridDate>
                 </Card>
             </Container>

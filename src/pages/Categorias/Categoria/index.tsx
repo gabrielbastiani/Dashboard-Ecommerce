@@ -126,6 +126,18 @@ const Categoria: React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        async function refreshCategoryLoad() {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
+            setCategoryNames(response?.data?.categoryName);
+            setDataName(response?.data?.categoryName);
+            setDataCodigo(response?.data?.codigo);
+            setDisponibilidades(response?.data?.disponibilidade);
+        }
+        refreshCategoryLoad();
+    },[category_id])
+
     async function refreshCategory() {
         const apiClient = setupAPIClient();
         const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
