@@ -64,7 +64,7 @@ const Categoria: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             if (categoryNames === '') {
-                toast.error('Não deixe em branco!!!');
+                toast.error('Não deixe o nome da categoria em branco!!!');
                 return;
             } else {
                 await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames || dataName });
@@ -80,7 +80,7 @@ const Categoria: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             if (codigos === '') {
-                toast.error('Não deixe em branco!!!');
+                toast.error('Não deixe o codigo em branco!!!');
                 return;
             } else {
                 await apiClient.put(`/categoryCodigoUpdate?category_id=${category_id}`, { codigo: codigos || dataCodigo });

@@ -330,6 +330,10 @@ const Configuracoes: React.FC = () => {
                                     dados={
                                         <InputUpdate
                                             dado={cnpjLoja}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="00.000.000/0000-00"
                                             type="text"
                                             /* @ts-ignore */
                                             placeholder={cnpjLoja}
@@ -366,6 +370,10 @@ const Configuracoes: React.FC = () => {
                                     dados={
                                         <InputUpdate
                                             dado={phoneLoja}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="(00) 0000-0000"
                                             type="text"
                                             /* @ts-ignore */
                                             placeholder={phoneLoja}
@@ -476,6 +484,10 @@ const Configuracoes: React.FC = () => {
                                     dados={
                                         <InputUpdate
                                             dado={cepLoja}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="00000-000"
                                             type="text"
                                             /* @ts-ignore */
                                             placeholder={cepLoja}
@@ -543,9 +555,9 @@ const Configuracoes: React.FC = () => {
                                             /* @ts-ignore */
                                             as={IMaskInput}
                                             /* @ts-ignore */
-                                            mask="99.999.999/9999-99"
+                                            mask="00.000.000/0000-00"
                                             type="text"
-                                            placeholder="99.999.999/9999-99"
+                                            placeholder="00.000.000/0000-00"
                                             onChange={(e) => setCnpjLoja(e.target.value)}
                                         />
                                     </Block>
@@ -565,9 +577,9 @@ const Configuracoes: React.FC = () => {
                                             /* @ts-ignore */
                                             as={IMaskInput}
                                             /* @ts-ignore */
-                                            mask="(99) 9999-9999"
+                                            mask="(00) 0000-0000"
                                             type="text"
-                                            placeholder="(99) 9999-9999"
+                                            placeholder="(00) 0000-0000"
                                             onChange={(e) => setPhoneLoja(e.target.value)}
                                         />
                                     </Block>
@@ -625,9 +637,9 @@ const Configuracoes: React.FC = () => {
                                             /* @ts-ignore */
                                             as={IMaskInput}
                                             /* @ts-ignore */
-                                            mask="99999-999"
+                                            mask="00000-000"
                                             type="text"
-                                            placeholder="99999-999"
+                                            placeholder="00000-000"
                                             onChange={(e) => setCepLoja(e.target.value)}
                                         />
                                     </Block>
