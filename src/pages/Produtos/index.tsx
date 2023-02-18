@@ -1,16 +1,167 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
-import Content from "../../components/Content";
+import { Card, Container } from "../../components/Content/styles";
+import Titulos from "../../components/Titulos";
+import {
+    AddButton,
+    ButtonPage,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    OptionValue,
+    Previus,
+    SelectItem,
+    SpanText,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../Categorias/styles";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import Pesquisa from "../../components/Pesquisa";
+import TabelaSimples from "../../components/Tabelas";
+import { setupAPIClient } from "../../services/api";
 
 
 const Produtos: React.FC = () => {
+
+    const [initialFilter, setInitialFilter] = useState();
+    const [search, setSearch] = useState<any[]>([]);
+
+    const [total, setTotal] = useState(0);
+    const [limit, setLimit] = useState(4);
+    const [pages, setPages] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        async function allProducts() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/allProductsPage?page=${currentPage}&limit=${limit}`);
+
+                setTotal(data.total);
+                const totalPages = Math.ceil(total / limit);
+
+                const arrayPages = [];
+                for (let i = 1; i <= totalPages; i++) {
+                    arrayPages.push(i);
+                }
+
+                setPages(arrayPages);
+                setSearch(data.products);
+                setInitialFilter(data.products);
+
+            } catch (error) {
+                console.error(error);
+                alert('Error call api list ALL products');
+            }
+        }
+        allProducts();
+    }, [currentPage, limit, total]);
+
+    /* @ts-ignore */
+    const limits = useCallback((e) => {
+        setLimit(e.target.value);
+        setCurrentPage(1);
+    }, []);
+
+    /* @ts-ignore */
+    const handleChange = ({ target }) => {
+        if (!target.value) {/* @ts-ignore */
+            setSearch(initialFilter);
+
+            return;
+        }
+        /* @ts-ignore */
+        const filterProducts = search.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
+        setSearch(filterProducts);
+    }
+
+    /* @ts-ignore */
+    const dados = [];
+    (search || []).forEach((item) => {
+        dados.push({
+            "Produto": item.nameProduct,
+            "Categoria": item.category_id,
+            "Status": item.disponibilidade,
+            "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
+        });
+    });
+
     return (
         <Grid>
             <MainHeader />
             <Aside />
-            <Content />
+            <Container>
+                <Card>
+                    <Titulos
+                        tipo="h1"
+                        titulo="Produtos"
+                    />
+
+                    <Pesquisa
+                        placeholder={"Pesquise aqui pelo nome do produto..."}
+                        /* @ts-ignore */
+                        onChange={handleChange}
+                    />
+
+                    <AddButton>
+                        <AiOutlinePlusCircle />
+                        <Link to="/produto/novo" >
+                            <SpanText>Novo Produto</SpanText>
+                        </Link>
+                    </AddButton>
+
+                    <TextTotal>Produtos por página: &nbsp;</TextTotal>
+
+                    <SelectItem onChange={limits}>
+                        <OptionValue value="4">4</OptionValue>
+                        <OptionValue value="8">8</OptionValue>
+                        <OptionValue value="999999">Todos categorias</OptionValue>
+                    </SelectItem>
+
+                    <TabelaSimples
+                        cabecalho={["Produto", "Categoria", "Status"]}
+                        /* @ts-ignore */
+                        dados={dados}
+                    />
+
+                    <ContainerPagination>
+                        <TotalBoxItems key={total}>
+                            <TextTotal>Total de produtos: {total}</TextTotal>
+                        </TotalBoxItems>
+                        <ContainerCategoryPage>
+
+                            {currentPage > 1 && (
+                                <Previus>
+                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                        Voltar
+                                    </ButtonPage>
+                                </Previus>
+                            )}
+
+                            {pages.map((page) => (
+                                <TextPage
+                                    key={page}
+                                    onClick={() => setCurrentPage(page)}
+                                >
+                                    {page}
+                                </TextPage>
+                            ))}
+
+                            {currentPage < search.length && (
+                                <Next>
+                                    <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                        Avançar
+                                    </ButtonPage>
+                                </Next>
+                            )}
+                        </ContainerCategoryPage>
+                    </ContainerPagination>
+                </Card>
+            </Container>
         </Grid>
     )
 }
