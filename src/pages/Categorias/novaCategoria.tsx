@@ -30,7 +30,8 @@ const NovaCategoria: React.FC = () => {
             .replace(/[\u0300-\u036f]/g, "")
             .toLowerCase()
             .replace(/ +/g, "-")
-            .replace(/-{2,}/g, "-");
+            .replace(/-{2,}/g, "-")
+            .replace(/[/]/g, "-");
     }
 
     async function handleRegisterCategory() {
@@ -47,7 +48,7 @@ const NovaCategoria: React.FC = () => {
 
             const apiClient = setupAPIClient();
             await apiClient.post('/category', {
-                categoryName: categoryName,
+                categoryName: categoryName.replace(/[/]/g, "-"),
                 codigo: removerAcentos(codigo),
                 loja_id: user.loja_id
             })
