@@ -35,6 +35,7 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+
     useEffect(() => {
         async function allProducts() {
             try {
@@ -67,6 +68,35 @@ const Produtos: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
+
+    /* const alfabeticaAZ = search.sort((a, z) => {
+        return a.nameProduct.localeCompare(z.nameProduct);
+    });
+
+    const alfabeticaZA = search.sort((a, z) => {
+        return z.nameProduct.localeCompare(a.nameProduct);
+    });
+
+    const precoCrescente = search.sort((n1, n9) => {
+        return n9.preco - n1.preco;
+    });
+
+    const precoDecrescente = search.sort((n1, n9) => {
+        return n1.preco - n9.preco;
+    }); */
+
+
+    switch (search) {
+        case value:
+            
+            break;
+    
+        default:
+           return search
+    }
+
+
+
     /* @ts-ignore */
     const handleChange = ({ target }) => {
         if (!target.value) {/* @ts-ignore */
@@ -84,7 +114,7 @@ const Produtos: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Produto": item.nameProduct,
-            "Categoria": item.category_id,
+            "Categoria": item.categoryName || "SEM CATEGORIA",
             "Status": item.disponibilidade,
             "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
         });
@@ -106,6 +136,15 @@ const Produtos: React.FC = () => {
                         /* @ts-ignore */
                         onChange={handleChange}
                     />
+
+                    {/* <select >
+                        <option onChange={handleOrderClick}>Alfabética A-Z</option>
+                        <option value={alfabeticaZA}>Alfabética Z-A</option>
+                        <option value={precoCrescente}>Preço Menor</option>
+                        <option value={precoDecrescente}>Preço Maior</option>
+                    </select> */}
+
+                    <button onClick={handleOrderClick}>ordenar</button>
 
                     <AddButton>
                         <AiOutlinePlusCircle />
