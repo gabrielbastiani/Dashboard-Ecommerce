@@ -35,6 +35,9 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [order, setOrder] = useState("alfabetica_a-z");
+
+    /* console.log(search) */
 
     useEffect(() => {
         async function allProducts() {
@@ -69,7 +72,9 @@ const Produtos: React.FC = () => {
     }, []);
 
 
-    /* const alfabeticaAZ = search.sort((a, z) => {
+
+
+    const alfabeticaAZ = search.sort((a, z) => {
         return a.nameProduct.localeCompare(z.nameProduct);
     });
 
@@ -83,18 +88,47 @@ const Produtos: React.FC = () => {
 
     const precoDecrescente = search.sort((n1, n9) => {
         return n1.preco - n9.preco;
+    });
+
+
+
+
+    /*  search.sort((a, z) => {
+         return a.nameProduct.localeCompare(z.nameProduct);
+     }); */
+
+    /* search.sort((a, z) => {
+        return z.nameProduct.localeCompare(a.nameProduct);
+    }); */
+
+    /* search.sort((n1, n9) => {
+        return n9.preco - n1.preco;
+    }); */
+
+    /* search.sort((n1, n9) => {
+        return n1.preco - n9.preco;
     }); */
 
 
-    switch (search) {
-        case value:
-            
-            break;
-    
-        default:
-           return search
-    }
 
+    /* const alfabeticaAZ = search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
+
+    const alfabeticaZA = search.sort((a, z) => z.nameProduct.localeCompare(a.nameProduct));
+
+    const precoCrescente = search.sort((n1, n9) => n9.preco - n1.preco);
+
+    const precoDecrescente = search.sort((n1, n9) => n1.preco - n9.preco); */
+
+    /* @ts-ignore */
+    const handleOrder = ({ target }) => {
+        if (!target.value) {/* @ts-ignore */
+            setSearch(initialFilter);
+            return;
+        }
+        /* @ts-ignore */
+        const filterProducts = search.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
+        setSearch(filterProducts);
+    }
 
 
     /* @ts-ignore */
@@ -137,14 +171,16 @@ const Produtos: React.FC = () => {
                         onChange={handleChange}
                     />
 
-                    {/* <select >
-                        <option onChange={handleOrderClick}>Alfabética A-Z</option>
-                        <option value={alfabeticaZA}>Alfabética Z-A</option>
-                        <option value={precoCrescente}>Preço Menor</option>
-                        <option value={precoDecrescente}>Preço Maior</option>
-                    </select> */}
+                    {/* <button onChange={orders}>Ordenar</button> */}
 
-                    <button onClick={handleOrderClick}>ordenar</button>
+                    <select value={order} onChange={''}>
+                        <option value={"alfabeticaAZ"}>Alfabética A-Z</option>
+                        <option value={"alfabeticaZA"}>Alfabética Z-A</option>
+                        <option value={"precoCrescente"}>Preço Menor</option>
+                        <option value={"precoDecrescente"}>Preço Maior</option>
+                    </select>
+
+
 
                     <AddButton>
                         <AiOutlinePlusCircle />
