@@ -9,9 +9,7 @@ import {
     ContainerCategoryPage,
     ContainerPagination,
     Next,
-    OptionValue,
     Previus,
-    SelectItem,
     TextPage,
     TextTotal,
     TotalBoxItems,
@@ -34,6 +32,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avisos } from "../../../components/Avisos";
 import Pesquisa from "../../../components/Pesquisa";
 import { Card } from "../../../components/Content/styles";
+import Select from "../../../components/ui/Select";
 
 
 const Categoria: React.FC = () => {
@@ -298,11 +297,15 @@ const Categoria: React.FC = () => {
 
                             <TextTotal>Produtos por página: &nbsp;</TextTotal>
 
-                            <SelectItem onChange={limits}>
-                                <OptionValue value="4">4</OptionValue>
-                                <OptionValue value="8">8</OptionValue>
-                                <OptionValue value="999999">Todos produtos</OptionValue>
-                            </SelectItem>
+                            <Select
+                                /* @ts-ignore */
+                                onChange={limits}
+                                opcoes={[
+                                    { label: "4", value: "4" },
+                                    { label: "8", value: "8" },
+                                    { label: "Todos produtos", value: "999999" }
+                                ]}
+                            />
 
                             <TabelaSimples
                                 cabecalho={["Produto", "SKU", "Status"]}

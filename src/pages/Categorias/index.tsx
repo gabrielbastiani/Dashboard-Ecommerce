@@ -4,8 +4,6 @@ import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
 import {
     Container,
-    SelectItem,
-    OptionValue,
     ContainerPagination,
     TotalBoxItems,
     TextTotal,
@@ -24,6 +22,7 @@ import TabelaSimples from "../../components/Tabelas";
 import { Link } from "react-router-dom";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Card } from "../../components/Content/styles";
+import Select from "../../components/ui/Select";
 
 
 const Categorias: React.FC = () => {
@@ -116,11 +115,15 @@ const Categorias: React.FC = () => {
 
                     <TextTotal>Categorias por página: &nbsp;</TextTotal>
 
-                    <SelectItem onChange={limits}>
-                        <OptionValue value="4">4</OptionValue>
-                        <OptionValue value="8">8</OptionValue>
-                        <OptionValue value="999999">Todos categorias</OptionValue>
-                    </SelectItem>
+                    <Select
+                        /* @ts-ignore */
+                        onChange={limits}
+                        opcoes={[
+                            { label: "4", value: "4" },
+                            { label: "8", value: "8" },
+                            { label: "Todas categorias", value: "999999" }
+                        ]}
+                    />
 
                     <TabelaSimples
                         cabecalho={["Categoria", "Qtd. de Produtos"]}

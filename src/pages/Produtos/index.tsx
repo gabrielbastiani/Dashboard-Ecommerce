@@ -10,9 +10,7 @@ import {
     ContainerCategoryPage,
     ContainerPagination,
     Next,
-    OptionValue,
     Previus,
-    SelectItem,
     SpanText,
     TextPage,
     TextTotal,
@@ -23,6 +21,7 @@ import { Link } from "react-router-dom";
 import Pesquisa from "../../components/Pesquisa";
 import TabelaSimples from "../../components/Tabelas";
 import { setupAPIClient } from "../../services/api";
+import Select from "../../components/ui/Select";
 
 
 const Produtos: React.FC = () => {
@@ -35,8 +34,15 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [order, setOrder] = useState<any[]>([]);
+    const [order, setOrder] = useState(() => {
+        const orderSaved = localStorage.getItem('@lojasaveorderproduct');
 
+        if (orderSaved) {
+            return String(orderSaved);
+        } else {
+            return "alfabeticaAZ"
+        }
+    });
 
     useEffect(() => {
         async function allProducts() {
@@ -70,65 +76,27 @@ const Produtos: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
-
-
-
-    const alfabeticaAZ = search.sort((a, z) => {
-        return a.nameProduct.localeCompare(z.nameProduct);
-    });
-
-    const alfabeticaZA = search.sort((a, z) => {
-        return z.nameProduct.localeCompare(a.nameProduct);
-    });
-
-    const precoCrescente = search.sort((n1, n9) => {
-        return n9.preco - n1.preco;
-    });
-
-    const precoDecrescente = search.sort((n1, n9) => {
-        return n1.preco - n9.preco;
-    });
-
-
-
-
-    /*  search.sort((a, z) => {
-         return a.nameProduct.localeCompare(z.nameProduct);
-     }); */
-
-    /* search.sort((a, z) => {
-        return z.nameProduct.localeCompare(a.nameProduct);
-    }); */
-
-    /* search.sort((n1, n9) => {
-        return n9.preco - n1.preco;
-    }); */
-
-    /* search.sort((n1, n9) => {
-        return n1.preco - n9.preco;
-    }); */
-
-
-
-    /* const alfabeticaAZ = search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
-
-    const alfabeticaZA = search.sort((a, z) => z.nameProduct.localeCompare(a.nameProduct));
-
-    const precoCrescente = search.sort((n1, n9) => n9.preco - n1.preco);
-
-    const precoDecrescente = search.sort((n1, n9) => n1.preco - n9.preco); */
-
     /* @ts-ignore */
-    const handleOrder = ({ target }) => {
-        if (!target.value) {/* @ts-ignore */
-            setSearch(initialFilter);
-            return;
-        }
-        /* @ts-ignore */
-        const filterProducts = search.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
-        setSearch(filterProducts);
+    switch (order) {/* @ts-ignore */
+        case "alfabeticaAZ":
+            search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
+            localStorage.setItem('@lojasaveorderproduct', String(order));
+            break;/* @ts-ignore */
+        case "alfabeticaZA":
+            search.sort((a, z) => z.nameProduct.localeCompare(a.nameProduct));
+            localStorage.setItem('@lojasaveorderproduct', String(order));
+            break;/* @ts-ignore */
+        case "precoCrescente":
+            search.sort((n1, n9) => n9.preco - n1.preco);
+            localStorage.setItem('@lojasaveorderproduct', String(order));
+            break;/* @ts-ignore */
+        case "precoDecrescente":
+            search.sort((n1, n9) => n1.preco - n9.preco);
+            localStorage.setItem('@lojasaveorderproduct', String(order));
+            break;
+        default:
+            search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
     }
-
 
     /* @ts-ignore */
     const handleChange = ({ target }) => {
@@ -169,18 +137,18 @@ const Produtos: React.FC = () => {
                         /* @ts-ignore */
                         onChange={handleChange}
                     />
-
-                    {/* <button onChange={orders}>Ordenar</button> */}
-
                     
-                    {/* <select value={order} onChange={''}>
-                        <option value={"alfabeticaAZ"}>Alfabética A-Z</option>
-                        <option value={"alfabeticaZA"}>Alfabética Z-A</option>
-                        <option value={"precoCrescente"}>Preço Menor</option>
-                        <option value={"precoDecrescente"}>Preço Maior</option>
-                    </select> */}
-
-
+                    <Select
+                        value={order}
+                        /* @ts-ignore */
+                        onChange={e => setOrder(e.target.value)}
+                        opcoes={[
+                            { label: "Alfabética A-Z", value: "alfabeticaAZ" },
+                            { label: "Alfabética Z-A", value: "alfabeticaZA" },
+                            { label: "Preço Menor", value: "precoDecrescente" },
+                            { label: "Preço Maior", value: "precoCrescente" }
+                        ]}
+                    />
 
                     <AddButton>
                         <AiOutlinePlusCircle />
@@ -191,11 +159,15 @@ const Produtos: React.FC = () => {
 
                     <TextTotal>Produtos por página: &nbsp;</TextTotal>
 
-                    <SelectItem onChange={limits}>
-                        <OptionValue value="4">4</OptionValue>
-                        <OptionValue value="8">8</OptionValue>
-                        <OptionValue value="999999">Todos categorias</OptionValue>
-                    </SelectItem>
+                    <Select
+                        /* @ts-ignore */
+                        onChange={limits}
+                        opcoes={[
+                            { label: "4", value: "4" },
+                            { label: "8", value: "8" },
+                            { label: "Todos produtos", value: "999999" }
+                        ]}
+                    />
 
                     <TabelaSimples
                         cabecalho={["Produto", "Categoria", "Status"]}
