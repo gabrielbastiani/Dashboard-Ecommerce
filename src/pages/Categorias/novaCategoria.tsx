@@ -24,6 +24,7 @@ const NovaCategoria: React.FC = () => {
 
     const [categoryName, setCategoryName] = useState('');
     const [codigo, setCodigo] = useState('');
+    const [lojaID, setLojaID] = useState(user.loja_id);
 
     function removerAcentos(s: any) {
         return s.normalize('NFD')
@@ -37,12 +38,17 @@ const NovaCategoria: React.FC = () => {
     async function handleRegisterCategory() {
         try {
             if (categoryName === '') {
-                toast.error('Digite algum nome para sua categoria!')
+                toast.error('Digite algum nome para sua categoria!');
                 return;
             }
 
             if (codigo === '') {
-                toast.error('Digite o codigo para sua categoria!')
+                toast.error('Digite o codigo para sua categoria!');
+                return;
+            }
+
+            if (lojaID === null) {
+                toast.error('Cadastre os dados da sua loja antes de cadastrar uma categoria!');
                 return;
             }
 
@@ -50,7 +56,7 @@ const NovaCategoria: React.FC = () => {
             await apiClient.post('/category', {
                 categoryName: categoryName.replace(/[/]/g, "-"),
                 codigo: removerAcentos(codigo),
-                loja_id: user.loja_id
+                loja_id: lojaID
             })
 
             toast.success('Categoria cadastrada com sucesso!');

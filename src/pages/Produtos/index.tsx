@@ -35,9 +35,8 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [order, setOrder] = useState("alfabetica_a-z");
+    const [order, setOrder] = useState<any[]>([]);
 
-    /* console.log(search) */
 
     useEffect(() => {
         async function allProducts() {
@@ -148,7 +147,7 @@ const Produtos: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Produto": item.nameProduct,
-            "Categoria": item.categoryName || "SEM CATEGORIA",
+            "Categoria": [item.category.categoryName] || "SEM CATEGORIA",
             "Status": item.disponibilidade,
             "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
         });
@@ -173,12 +172,13 @@ const Produtos: React.FC = () => {
 
                     {/* <button onChange={orders}>Ordenar</button> */}
 
-                    <select value={order} onChange={''}>
+                    
+                    {/* <select value={order} onChange={''}>
                         <option value={"alfabeticaAZ"}>Alfabética A-Z</option>
                         <option value={"alfabeticaZA"}>Alfabética Z-A</option>
                         <option value={"precoCrescente"}>Preço Menor</option>
                         <option value={"precoDecrescente"}>Preço Maior</option>
-                    </select>
+                    </select> */}
 
 
 
