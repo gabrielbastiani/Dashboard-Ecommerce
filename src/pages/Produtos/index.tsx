@@ -14,7 +14,10 @@ import {
     SpanText,
     TextPage,
     TextTotal,
-    TotalBoxItems
+    TotalBoxItems,
+    SectionTop,
+    Block,
+    BlockSection
 } from "../Categorias/styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
@@ -132,23 +135,30 @@ const Produtos: React.FC = () => {
                         titulo="Produtos"
                     />
 
-                    <Pesquisa
-                        placeholder={"Pesquise aqui pelo nome do produto..."}
-                        /* @ts-ignore */
-                        onChange={handleChange}
-                    />
-                    
-                    <Select
-                        value={order}
-                        /* @ts-ignore */
-                        onChange={e => setOrder(e.target.value)}
-                        opcoes={[
-                            { label: "Alfabética A-Z", value: "alfabeticaAZ" },
-                            { label: "Alfabética Z-A", value: "alfabeticaZA" },
-                            { label: "Preço Menor", value: "precoDecrescente" },
-                            { label: "Preço Maior", value: "precoCrescente" }
-                        ]}
-                    />
+                    <SectionTop>
+                        <Block>
+                            <Pesquisa
+                                placeholder={"Pesquise aqui pelo nome do produto..."}
+                                /* @ts-ignore */
+                                onChange={handleChange}
+                            />
+                        </Block>
+
+                        <BlockSection>
+                            <TextTotal>Ordenar por</TextTotal>
+                            <Select
+                                value={order}
+                                /* @ts-ignore */
+                                onChange={e => setOrder(e.target.value)}
+                                opcoes={[
+                                    { label: "Alfabética A-Z", value: "alfabeticaAZ" },
+                                    { label: "Alfabética Z-A", value: "alfabeticaZA" },
+                                    { label: "Preço Menor", value: "precoDecrescente" },
+                                    { label: "Preço Maior", value: "precoCrescente" }
+                                ]}
+                            />
+                        </BlockSection>
+                    </SectionTop>
 
                     <AddButton>
                         <AiOutlinePlusCircle />

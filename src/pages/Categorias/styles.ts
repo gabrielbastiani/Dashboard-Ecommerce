@@ -129,6 +129,11 @@ export const Etiqueta = styled.label`
 export const Block = styled.div`
   display: grid;
   width: 60%;
+
+  @media (max-width: 670px) {
+    flex-direction: column;
+    width: 200%;
+  }
 `;
 
 export const BlockTop = styled.div`
@@ -138,5 +143,24 @@ export const BlockTop = styled.div`
 
   @media (max-width: 440px) {
     flex-direction: column;
+  }
+`;
+
+export const SectionTop = styled.div`
+  display: flex;
+  margin-bottom: -25px;
+
+  @media (max-width: 670px) {
+    flex-direction: column;
+    width: 60%;
+  }
+`;
+
+export const BlockSection = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 670px) {
+    margin-top: 15px;
   }
 `;

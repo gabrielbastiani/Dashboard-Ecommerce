@@ -12,4 +12,11 @@ export const InputText = styled.input`
 `;
 
 export const AreaText = styled.textarea`
+   height: 300px;
+   border: 0;
+   border-radius: 0.5rem;
+   background-color: ${props => props.theme.colors.white};
+   color: ${props => props.theme.colors.black};
+   padding: 1rem;
+   border: 1px solid #ff6700;
 `;
