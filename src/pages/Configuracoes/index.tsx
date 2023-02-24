@@ -262,8 +262,6 @@ const Configuracoes: React.FC = () => {
         }
     }
 
-    
-
 
     return (
         <Grid>
