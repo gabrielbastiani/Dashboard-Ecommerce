@@ -132,7 +132,7 @@ export const Block = styled.div`
 
   @media (max-width: 670px) {
     flex-direction: column;
-    width: 200%;
+    width: 100%;
   }
 `;
 

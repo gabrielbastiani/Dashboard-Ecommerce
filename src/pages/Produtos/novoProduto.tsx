@@ -253,7 +253,7 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>1° Descrição:</Etiqueta>
                                 <TextAreaPost
-                                    style={{ resize: "none", width: "500px" }}
+                                    style={{ resize: "none" }}
                                     placeholder="Digite aqui..."
                                     value={descriptionProduct1}
                                     onChange={(e) => setDescriptionProduct1(e.target.value)}
@@ -273,14 +273,14 @@ const NovoProduto: React.FC = () => {
                                     {showElement1 ?
                                         <Block>
                                             <AddButton
-                                                style={{ backgroundColor: 'red', maxWidth: "350px" }}
+                                                style={{ backgroundColor: 'red' }}
                                             >
                                                 <GrSubtractCircle />
                                                 <SpanText onClick={showOrHide1}>Fechar a opção de segunda descrição</SpanText>
                                             </AddButton>
                                             <Etiqueta>2° Descrição:</Etiqueta>
                                             <TextAreaPost
-                                                style={{ resize: "none", width: "500px" }}
+                                                style={{ resize: "none", width: "120%" }}
                                                 placeholder="Digite aqui..."
                                                 value={descriptionProduct2}
                                                 onChange={(e) => setDescriptionProduct2(e.target.value)}
@@ -299,14 +299,14 @@ const NovoProduto: React.FC = () => {
                                     {showElement2 ?
                                         <Block>
                                             <AddButton
-                                                style={{ backgroundColor: 'red', maxWidth: "350px" }}
+                                                style={{ backgroundColor: 'red' }}
                                             >
                                                 <GrSubtractCircle />
                                                 <SpanText onClick={showOrHide2}>Fechar a opção de terceira descrição</SpanText>
                                             </AddButton>
                                             <Etiqueta>3° Descrição:</Etiqueta>
                                             <TextAreaPost
-                                                style={{ resize: "none", width: "500px" }}
+                                                style={{ resize: "none", width: "120%" }}
                                                 placeholder="Digite aqui..."
                                                 value={descriptionProduct3}
                                                 onChange={(e) => setDescriptionProduct3(e.target.value)}
@@ -325,14 +325,14 @@ const NovoProduto: React.FC = () => {
                                     {showElement3 ?
                                         <Block>
                                             <AddButton
-                                                style={{ backgroundColor: 'red', maxWidth: "350px" }}
+                                                style={{ backgroundColor: 'red' }}
                                             >
                                                 <GrSubtractCircle />
                                                 <SpanText onClick={showOrHide3}>Fechar a opção de quarta descrição</SpanText>
                                             </AddButton>
                                             <Etiqueta>4° Descrição:</Etiqueta>
                                             <TextAreaPost
-                                                style={{ resize: "none", width: "500px" }}
+                                                style={{ resize: "none", width: "120%" }}
                                                 placeholder="Digite aqui..."
                                                 value={descriptionProduct4}
                                                 onChange={(e) => setDescriptionProduct4(e.target.value)}
@@ -351,14 +351,14 @@ const NovoProduto: React.FC = () => {
                                     {showElement4 ?
                                         <Block>
                                             <AddButton
-                                                style={{ backgroundColor: 'red', maxWidth: "350px" }}
+                                                style={{ backgroundColor: 'red' }}
                                             >
                                                 <GrSubtractCircle />
                                                 <SpanText onClick={showOrHide4}>Fechar a opção de quinta descrição</SpanText>
                                             </AddButton>
                                             <Etiqueta>5° Descrição:</Etiqueta>
                                             <TextAreaPost
-                                                style={{ resize: "none", width: "500px" }}
+                                                style={{ resize: "none", width: "120%" }}
                                                 placeholder="Digite aqui..."
                                                 value={descriptionProduct5}
                                                 onChange={(e) => setDescriptionProduct5(e.target.value)}
@@ -377,14 +377,14 @@ const NovoProduto: React.FC = () => {
                                     {showElement5 ?
                                         <Block>
                                             <AddButton
-                                                style={{ backgroundColor: 'red', maxWidth: "350px" }}
+                                                style={{ backgroundColor: 'red' }}
                                             >
                                                 <GrSubtractCircle />
                                                 <SpanText onClick={showOrHide5}>Fechar a opção de sexta descrição</SpanText>
                                             </AddButton>
                                             <Etiqueta>6° Descrição:</Etiqueta>
                                             <TextAreaPost
-                                                style={{ resize: "none", width: "500px" }}
+                                                style={{ resize: "none", width: "120%" }}
                                                 placeholder="Digite aqui..."
                                                 value={descriptionProduct6}
                                                 onChange={(e) => setDescriptionProduct6(e.target.value)}
@@ -423,7 +423,7 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>Peso (Grama):</Etiqueta>
                                 <InputPost
-                                    type="text"
+                                    type="number"
                                     placeholder="Peso em Gramas"
                                     value={peso}
                                     onChange={(e) => setPeso(e.target.value)}
@@ -433,7 +433,7 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>Largura (Cm):</Etiqueta>
                                 <InputPost
-                                    type="text"
+                                    type="number"
                                     placeholder="Largura em CM"
                                     value={largura}
                                     onChange={(e) => setLargura(e.target.value)}
@@ -443,7 +443,7 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>Comprimento (Cm):</Etiqueta>
                                 <InputPost
-                                    type="text"
+                                    type="number"
                                     placeholder="Comprimento em CM"
                                     value={profundidade}
                                     onChange={(e) => setProfundidade(e.target.value)}
@@ -453,7 +453,7 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>Altura (Cm):</Etiqueta>
                                 <InputPost
-                                    type="text"
+                                    type="number"
                                     placeholder="Altura em CM"
                                     value={altura}
                                     onChange={(e) => setAltura(e.target.value)}

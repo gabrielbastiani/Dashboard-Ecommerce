@@ -12,6 +12,7 @@ import Perfil from './pages/Perfil';
 import NovaCategoria from './pages/Categorias/novaCategoria';
 import Categoria from './pages/Categorias/Categoria';
 import NovoProduto from './pages/Produtos/novoProduto';
+import Produto from './pages/Produtos/Produto';
 
 
 const RoutesAuth: React.FC = () => {
@@ -30,6 +31,7 @@ const RoutesAuth: React.FC = () => {
 
             <Route path='/produtos' element={ <Produtos /> } />
             <Route path='/produto/novo' element={ <NovoProduto /> } />
+            <Route path='/produto/:nameProduct/:product_id' element={ <Produto /> } />
 
             <Route path='/configuracoes' element={ <Configuracoes /> } />
 
