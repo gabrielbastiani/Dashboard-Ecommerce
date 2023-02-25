@@ -12,7 +12,7 @@ export const InputText = styled.input`
 `;
 
 export const AreaText = styled.textarea`
-   height: 300px;
+   height: 220px;
    border: 0;
    border-radius: 0.5rem;
    background-color: ${props => props.theme.colors.white};
