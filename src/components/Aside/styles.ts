@@ -37,6 +37,22 @@ export const Container = styled.div<IContainerProps>`
     }
 `;
 
+export const LojaFrontMobile = styled.a`
+    display: none;
+    
+
+    @media(max-width: 485px){        
+        display: block;
+        color: ${(props) => props.theme.colors.white};
+        margin-bottom: 55px;
+
+        svg {
+            margin: 0 10px;
+            color: ${(props) => props.theme.colors.info};
+        }
+    }
+`;
+
 export const LogImg = styled.img`
     height: 40px;
     width: 140px;
@@ -63,12 +79,9 @@ export const Title = styled.h3`
     }
 `;
 
-
 export const MenuContainer = styled.nav`
     display: flex;
     flex-direction: column;
-
-
     margin-top: 50px;
 `;
 
@@ -139,14 +152,16 @@ export const ToggleMenu = styled.button`
         justify-content: center;
         align-items: center;
     }
+
 `;
 
 export const ThemeToggleFooter = styled.footer<IThemeToggleFooterProps>`
     display: none;
     position: absolute;
     bottom: 30px;
+    flex-direction: column;
     
-    @media(max-width: 470px){
+    @media(max-width: 600px){
         display: ${props => props?.menuIsOpen ? 'flex' : 'none'};
     }
 

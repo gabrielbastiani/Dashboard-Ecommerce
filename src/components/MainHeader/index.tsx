@@ -6,9 +6,12 @@ import {
     Container, 
     Profile, 
     Welcome, 
-    UserName, 
+    UserName,
+    LojaFront,
+    ToggleDesktop
 }  from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 
 const MainHeader: React.FC = () => {
@@ -30,12 +33,16 @@ const MainHeader: React.FC = () => {
 
     return (
         <Container>
-            <Toggle
-                labelLeft="Light"
-                labelRight="Dark"
-                checked={darkTheme}
-                onChange={handleChangeTheme}
-            />
+            <LojaFront href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFront>
+            <ToggleDesktop>
+                <Toggle
+                    labelLeft="Light"
+                    labelRight="Dark"
+                    checked={darkTheme}
+                    onChange={handleChangeTheme}
+                />
+            </ToggleDesktop>
+            
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>

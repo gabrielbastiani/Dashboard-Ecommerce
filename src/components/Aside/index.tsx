@@ -26,8 +26,10 @@ import {
     MenuItemButton,
     ToggleMenu,
     ThemeToggleFooter,
+    LojaFrontMobile
 } from './styles';
 import { useNavigate } from 'react-router-dom';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 
 const Aside: React.FC = () => {
@@ -39,17 +41,14 @@ const Aside: React.FC = () => {
     const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState(false);
     const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
 
-
     const handleToggleMenu = () => {
         setToggleMenuIsOpened(!toggleMenuIsOpened);
     }
-
 
     const handleChangeTheme = () => {
         setDarkTheme(!darkTheme);
         toggleTheme();
     }
-
 
     return (
         <Container menuIsOpen={toggleMenuIsOpened}>
@@ -111,7 +110,10 @@ const Aside: React.FC = () => {
                 </MenuItemButton>
             </MenuContainer>
 
+            
+
             <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
+            <LojaFrontMobile href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFrontMobile>
                 <Toggle
                     labelLeft="Light"
                     labelRight="Dark"
