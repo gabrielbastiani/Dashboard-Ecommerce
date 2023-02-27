@@ -14,9 +14,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
-import DescriptionsProductMobile from "../../components/ui/DescriptionsProductMobile";
-import { BlockMobile } from './styles';
-import DescriptionsProductDesktop from "../../components/ui/DescriptionsProductDesktop";
+import DescriptionsProduct from "../../components/ui/DescriptionsProduct";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 
 
@@ -241,29 +239,6 @@ const NovoProduto: React.FC = () => {
                                 />
                             </Block>
 
-                            <BlockMobile>
-                                <DescriptionsProductMobile
-                                    valor1={descriptionProduct1}
-                                    valor2={descriptionProduct2}
-                                    valor3={descriptionProduct3}
-                                    valor4={descriptionProduct4}
-                                    valor5={descriptionProduct5}
-                                    valor6={descriptionProduct6}
-                                    /* @ts-ignore */
-                                    onChange1={(e) => setDescriptionProduct1(e.target.value)}
-                                    /* @ts-ignore */
-                                    onChange2={(e) => setDescriptionProduct2(e.target.value)}
-                                    /* @ts-ignore */
-                                    onChange3={(e) => setDescriptionProduct3(e.target.value)}
-                                    /* @ts-ignore */
-                                    onChange4={(e) => setDescriptionProduct4(e.target.value)}
-                                    /* @ts-ignore */
-                                    onChange5={(e) => setDescriptionProduct5(e.target.value)}
-                                    /* @ts-ignore */
-                                    onChange6={(e) => setDescriptionProduct6(e.target.value)}
-                                />
-                            </BlockMobile>
-
                         </SectionDate>
 
                         <SectionDate>
@@ -332,8 +307,31 @@ const NovoProduto: React.FC = () => {
 
                     <DivisorHorizontal />
 
-                    <DescriptionsProductDesktop
-
+                    <DescriptionsProduct
+                        valor1={descriptionProduct1}
+                        valor2={descriptionProduct2}
+                        valor3={descriptionProduct3}
+                        valor4={descriptionProduct4}
+                        valor5={descriptionProduct5}
+                        valor6={descriptionProduct6}
+                        /* @ts-ignore */
+                        onChange1={(e) => setDescriptionProduct1(e.target.value)}
+                        /* @ts-ignore */
+                        onChange2={(e) => setDescriptionProduct2(e.target.value)}
+                        /* @ts-ignore */
+                        onChange3={(e) => setDescriptionProduct3(e.target.value)}
+                        /* @ts-ignore */
+                        onChange4={(e) => setDescriptionProduct4(e.target.value)}
+                        /* @ts-ignore */
+                        onChange5={(e) => setDescriptionProduct5(e.target.value)}
+                        /* @ts-ignore */
+                        onChange6={(e) => setDescriptionProduct6(e.target.value)}
+                        placeholder1="Digite aqui a 1º descrição"
+                        placeholder2="Digite aqui a 2º descrição"
+                        placeholder3="Digite aqui a 3º descrição"
+                        placeholder4="Digite aqui a 4º descrição"
+                        placeholder5="Digite aqui a 5º descrição"
+                        placeholder6="Digite aqui a 6º descrição"
                     />
 
                 </Card>

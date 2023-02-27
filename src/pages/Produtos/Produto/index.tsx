@@ -16,8 +16,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
-import DescriptionsProductUpdateMobile from "../../../components/ui/DescriptionsProductUpdateMobile";
-import { BlockMobile } from "../styles";
+import UpdateDescriptionsProduct from "../../../components/ui/UpdateDescriptionsProduct";
 
 
 const Produto: React.FC = () => {
@@ -343,36 +342,40 @@ const Produto: React.FC = () => {
                             }
                         />
                     </BlockDados>
-                    
-                    <BlockMobile>
-                        <DescriptionsProductUpdateMobile
-                            valor1={descriptionProducts1}
-                            valor2={descriptionProducts2}
-                            valor3={descriptionProducts3}
-                            valor4={descriptionProducts4}
-                            valor5={descriptionProducts5}
-                            valor6={descriptionProducts6}
-                            /* @ts-ignore */
-                            onChange1={(e) => setDescriptionProducts1(e.target.value)}
-                            /* @ts-ignore */
-                            onChange2={(e) => setDescriptionProducts2(e.target.value)}
-                            /* @ts-ignore */
-                            onChange3={(e) => setDescriptionProducts3(e.target.value)}
-                            /* @ts-ignore */
-                            onChange4={(e) => setDescriptionProducts4(e.target.value)}
-                            /* @ts-ignore */
-                            onChange5={(e) => setDescriptionProducts5(e.target.value)}
-                            /* @ts-ignore */
-                            onChange6={(e) => setDescriptionProducts6(e.target.value)}
-                            handleSubmit1={ updateDescriptions }
-                            handleSubmit2={ updateDescriptions }
-                            handleSubmit3={ updateDescriptions }
-                            handleSubmit4={ updateDescriptions }
-                            handleSubmit5={ updateDescriptions }
-                            handleSubmit6={ updateDescriptions }
-                        />
-                    </BlockMobile>
-                    
+
+                    <UpdateDescriptionsProduct
+                        valor1={descriptionProducts1}
+                        valor2={descriptionProducts2}
+                        valor3={descriptionProducts3}
+                        valor4={descriptionProducts4}
+                        valor5={descriptionProducts5}
+                        valor6={descriptionProducts6}
+                        /* @ts-ignore */
+                        onChange1={(e) => setDescriptionProducts1(e.target.value)}
+                        /* @ts-ignore */
+                        onChange2={(e) => setDescriptionProducts2(e.target.value)}
+                        /* @ts-ignore */
+                        onChange3={(e) => setDescriptionProducts3(e.target.value)}
+                        /* @ts-ignore */
+                        onChange4={(e) => setDescriptionProducts4(e.target.value)}
+                        /* @ts-ignore */
+                        onChange5={(e) => setDescriptionProducts5(e.target.value)}
+                        /* @ts-ignore */
+                        onChange6={(e) => setDescriptionProducts6(e.target.value)}
+                        handleSubmit1={ updateDescriptions }
+                        handleSubmit2={ updateDescriptions }
+                        handleSubmit3={ updateDescriptions }
+                        handleSubmit4={ updateDescriptions }
+                        handleSubmit5={ updateDescriptions }
+                        handleSubmit6={ updateDescriptions }
+                        placeholder1={""}
+                        placeholder2={""}
+                        placeholder3={""}
+                        placeholder4={""}
+                        placeholder5={""}
+                        placeholder6={""}
+                    />
+            
 
                 </Card>
             </Container>
