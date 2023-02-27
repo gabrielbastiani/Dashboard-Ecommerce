@@ -48,7 +48,30 @@ const DescriptionsProductDesktop = (/* {
 
     return (
         <>
-            <TableSection>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {/* <TableSection>
                 <Cabecalho>
                     <TituloTop>
                         1º Descrição
@@ -96,7 +119,7 @@ const DescriptionsProductDesktop = (/* {
                     </TableDescription6>
 
                 </TableAllDescription>
-            </TableSection>
+            </TableSection> */}
 
 
 
