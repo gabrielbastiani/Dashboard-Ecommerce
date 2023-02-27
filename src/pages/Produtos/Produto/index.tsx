@@ -10,6 +10,14 @@ import { Button } from "../../../components/ui/Button";
 import { MdOutlineAssessment } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
+import { BlockDados } from "../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
+import { toast } from "react-toastify";
+import SelectUpdate from "../../../components/ui/SelectUpdate";
+import DescriptionsProductUpdateMobile from "../../../components/ui/DescriptionsProductUpdateMobile";
+import { BlockMobile } from "../styles";
 
 
 const Produto: React.FC = () => {
@@ -65,9 +73,12 @@ const Produto: React.FC = () => {
 
     const [categories, setCategories] = useState([])
     const [categorySelected, setCategorySelected] = useState();
+    const [categoryID, setCategoryID] = useState('');
+    const [categorieName, setCategorieName] = useState('');
 
     const [disponibilidades, setDisponibilidades] = useState('');
 
+    
 
     useEffect(() => {
         async function loadCategorys() {
@@ -106,10 +117,8 @@ const Produto: React.FC = () => {
                     disponibilidade,
                     category_id
                 } = responseProduct.data
-                /* @ts-ignore */
-                let categoryFilter = categories.filter(result => result.id.match(category_id));
 
-                setNameProducts(nameProduct);
+                setDataName(nameProduct);
                 setDescriptionProducts1(descriptionProduct1);
                 setDescriptionProducts2(descriptionProduct2);
                 setDescriptionProducts3(descriptionProduct3);
@@ -125,14 +134,131 @@ const Produto: React.FC = () => {
                 setAlturaCMs(alturaCM);
                 setPromocoes(promocao);
                 setDisponibilidades(disponibilidade);
-                setCategories(categoryFilter);
+                setCategoryID(category_id);
+                setCategorieName(responseProduct.data.category.categoryName);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadProduct();
-    }, [categories, product_id])
+    }, [product_id])
+
+    async function deleteProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
+            toast.success(`Produto deletado com sucesso.`);
+            refreshProduct();
+            navigate('/produtos');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao deletar o produto.');
+        }
+    }
+
+    async function refreshProduct() {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get(`/exactProduct?product_id=${product_id}`);
+        setNameProducts(response?.data?.nameProduct);
+        setDataName(response?.data?.nameProduct);
+        setDisponibilidades(response?.data?.disponibilidade);
+        setDataDescriptionProducts1(response?.data?.descriptionProduct1);
+        setDataDescriptionProducts2(response?.data?.descriptionProduct2);
+        setDataDescriptionProducts3(response?.data?.descriptionProduct3);
+        setDataDescriptionProducts4(response?.data?.descriptionProduct4);
+        setDataDescriptionProducts5(response?.data?.descriptionProduct5);
+        setDataDescriptionProducts6(response?.data?.descriptionProduct6);
+        setDataPrecos(response?.data?.preco);
+        setDataSkus(response?.data?.sku);
+        setDataEstoques(response?.data?.estoque);
+        setDataPesoKGs(response?.data?.pesoKG);
+        setDataLarguraCMs(response?.data?.larguraCM);
+        setDataAlturaCMs(response?.data?.alturaCM);
+        setDataProfundidadeCMs(response?.data?.profundidadeCM);
+        setDataPromocoes(response?.data?.promocao);
+    }
+
+    async function updateNameProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (nameProducts === '') {
+                toast.error('Não deixe o nome do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { nameProduct: nameProducts || dataName });
+                toast.success('Nome da categoria atualizada com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o nome do produto.');
+        }
+    }
+
+    async function updateStatus() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/diponibilidadeProduct?product_id=${product_id}`);
+
+            refreshProduct();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a disponibilidade do produto.');
+        }
+
+        if (disponibilidades === "Indisponivel") {
+            toast.success(`O produto se encontra Disponivel.`);
+            return;
+        }
+
+        if (disponibilidades === "Disponivel") {
+            toast.error(`O produto se encontra Indisponivel.`);
+            return;
+        }
+    }
+
+    function handleChangeCategory(e: any) {
+        setCategorySelected(e.target.value)
+    }
+
+    async function updateCategory() {
+        try {
+            if (categorySelected === "") {
+                toast.error(`Selecione uma nova categoria, ou cancele a atualização apertando no botão vermelho!`);
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateCategory?product_id=${product_id}`, { category_id: categorySelected });
+            toast.success('Categoria atualizada com sucesso.');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a categoria.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
+    }
+
+    async function updateDescriptions() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateAllDescription?product_id=${product_id}`, {
+                descriptionProduct1: descriptionProducts1,
+                descriptionProduct2: descriptionProducts2,
+                descriptionProduct3: descriptionProducts3,
+                descriptionProduct4: descriptionProducts4,
+                descriptionProduct5: descriptionProducts5,
+                descriptionProduct6: descriptionProducts6,
+            });
+            toast.success('Descrição atualizada com sucesso.');
+            refreshProduct();
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a descrição.');
+        }
+    }
 
     return (
         <Grid>
@@ -146,14 +272,14 @@ const Produto: React.FC = () => {
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo="Produto"
+                            titulo={dataName}
                         />
                         <Button
                             type="submit"
-                            style={{ backgroundColor: 'green' }}
-                        /* onClick={''} */
+                            style={{ backgroundColor: '#FB451E' }}
+                            onClick={deleteProduct}
                         >
-                            Salvar
+                            Remover
                         </Button>
                     </BlockTop>
 
@@ -165,6 +291,88 @@ const Produto: React.FC = () => {
                             <SpanText>Ver avaliações</SpanText>
                         </Link>
                     </AddButton>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Nome"}
+                            dados={
+                                <InputUpdate
+                                    dado={dataName}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={nameProduct}
+                                    value={nameProducts}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setNameProducts(e.target.value)}
+                                    handleSubmit={updateNameProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Disponibilidade"}
+                            dados={
+                                <ButtonSelect
+                                    /* @ts-ignore */
+                                    dado={disponibilidades}
+                                    handleSubmit={updateStatus}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Categoria"}
+                            dados={
+                                <SelectUpdate
+                                    dado={categorieName}
+                                    value={categorySelected}
+                                    /* @ts-ignore */
+                                    onChange={handleChangeCategory}
+                                    opcoes={
+                                        [
+                                            { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                            ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                        ]
+                                    }
+                                    handleSubmit={updateCategory}
+                                />
+                            }
+                        />
+                    </BlockDados>
+                    
+                    <BlockMobile>
+                        <DescriptionsProductUpdateMobile
+                            valor1={descriptionProducts1}
+                            valor2={descriptionProducts2}
+                            valor3={descriptionProducts3}
+                            valor4={descriptionProducts4}
+                            valor5={descriptionProducts5}
+                            valor6={descriptionProducts6}
+                            /* @ts-ignore */
+                            onChange1={(e) => setDescriptionProducts1(e.target.value)}
+                            /* @ts-ignore */
+                            onChange2={(e) => setDescriptionProducts2(e.target.value)}
+                            /* @ts-ignore */
+                            onChange3={(e) => setDescriptionProducts3(e.target.value)}
+                            /* @ts-ignore */
+                            onChange4={(e) => setDescriptionProducts4(e.target.value)}
+                            /* @ts-ignore */
+                            onChange5={(e) => setDescriptionProducts5(e.target.value)}
+                            /* @ts-ignore */
+                            onChange6={(e) => setDescriptionProducts6(e.target.value)}
+                            handleSubmit1={ updateDescriptions }
+                            handleSubmit2={ updateDescriptions }
+                            handleSubmit3={ updateDescriptions }
+                            handleSubmit4={ updateDescriptions }
+                            handleSubmit5={ updateDescriptions }
+                            handleSubmit6={ updateDescriptions }
+                        />
+                    </BlockMobile>
+                    
 
                 </Card>
             </Container>

@@ -6,16 +6,18 @@ import { Card, Container } from "../../components/Content/styles";
 import Voltar from "../../components/Voltar";
 import Titulos from "../../components/Titulos";
 import { Button } from "../../components/ui/Button";
-import { AddButton, Block, BlockTop, Etiqueta, SpanText } from "../Categorias/styles";
-import { InputPost, TextAreaPost } from "../../components/ui/InputPost";
+import { Block, BlockTop, Etiqueta } from "../Categorias/styles";
+import { InputPost } from "../../components/ui/InputPost";
 import Select from "../../components/ui/Select";
-import { AiOutlinePlusCircle } from "react-icons/ai";
-import { GrSubtractCircle } from 'react-icons/gr';
 import { SectionDate } from "../Configuracoes/styles";
 import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
+import DescriptionsProductMobile from "../../components/ui/DescriptionsProductMobile";
+import { BlockMobile } from './styles';
+import DescriptionsProductDesktop from "../../components/ui/DescriptionsProductDesktop";
+import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 
 
 const NovoProduto: React.FC = () => {
@@ -40,13 +42,6 @@ const NovoProduto: React.FC = () => {
     const [profundidade, setProfundidade] = useState('');
     const [altura, setAltura] = useState('');
     const [promocao, setPromocao] = useState('');
-
-    const [showElement1, setShowElement1] = useState(false);
-    const [showElement2, setShowElement2] = useState(false);
-    const [showElement3, setShowElement3] = useState(false);
-    const [showElement4, setShowElement4] = useState(false);
-    const [showElement5, setShowElement5] = useState(false);
-    const [showElementDescriptions, setShowElementDescriptions] = useState(false);
 
 
     useEffect(() => {
@@ -126,30 +121,6 @@ const NovoProduto: React.FC = () => {
             console.log(error.response.data);
             toast.error('Ops erro ao cadastrar produto!')
         }
-    }
-
-    const showOrHide1 = () => {
-        setShowElement1(!showElement1);
-    }
-
-    const showOrHide2 = () => {
-        setShowElement2(!showElement2);
-    }
-
-    const showOrHide3 = () => {
-        setShowElement3(!showElement3);
-    }
-
-    const showOrHide4 = () => {
-        setShowElement4(!showElement4);
-    }
-
-    const showOrHide5 = () => {
-        setShowElement5(!showElement5);
-    }
-
-    const showOrHideDescriptions = () => {
-        setShowElementDescriptions(!showElementDescriptions);
     }
 
     function formatPreco() {
@@ -251,166 +222,6 @@ const NovoProduto: React.FC = () => {
                             />
 
                             <Block>
-                                <Etiqueta>1° Descrição:</Etiqueta>
-                                <TextAreaPost
-                                    style={{ resize: "none" }}
-                                    placeholder="Digite aqui..."
-                                    value={descriptionProduct1}
-                                    onChange={(e) => setDescriptionProduct1(e.target.value)}
-                                >
-                                </TextAreaPost>
-                            </Block>
-
-                            {showElementDescriptions ?
-                                <>
-                                    <AddButton
-                                        style={{ backgroundColor: 'red' }}
-                                    >
-                                        <AiOutlinePlusCircle />
-                                        <SpanText onClick={showOrHideDescriptions}>Fechar descrições extras</SpanText>
-                                    </AddButton>
-
-                                    {showElement1 ?
-                                        <Block>
-                                            <AddButton
-                                                style={{ backgroundColor: 'red' }}
-                                            >
-                                                <GrSubtractCircle />
-                                                <SpanText onClick={showOrHide1}>Fechar a opção de segunda descrição</SpanText>
-                                            </AddButton>
-                                            <Etiqueta>2° Descrição:</Etiqueta>
-                                            <TextAreaPost
-                                                style={{ resize: "none", width: "120%" }}
-                                                placeholder="Digite aqui..."
-                                                value={descriptionProduct2}
-                                                onChange={(e) => setDescriptionProduct2(e.target.value)}
-                                            >
-                                            </TextAreaPost>
-                                        </Block>
-                                        :
-                                        <AddButton
-                                            style={{ backgroundColor: '#f6ba24' }}
-                                        >
-                                            <AiOutlinePlusCircle />
-                                            <SpanText onClick={showOrHide1}>Adicionar segunda descrição...</SpanText>
-                                        </AddButton>
-                                    }
-
-                                    {showElement2 ?
-                                        <Block>
-                                            <AddButton
-                                                style={{ backgroundColor: 'red' }}
-                                            >
-                                                <GrSubtractCircle />
-                                                <SpanText onClick={showOrHide2}>Fechar a opção de terceira descrição</SpanText>
-                                            </AddButton>
-                                            <Etiqueta>3° Descrição:</Etiqueta>
-                                            <TextAreaPost
-                                                style={{ resize: "none", width: "120%" }}
-                                                placeholder="Digite aqui..."
-                                                value={descriptionProduct3}
-                                                onChange={(e) => setDescriptionProduct3(e.target.value)}
-                                            >
-                                            </TextAreaPost>
-                                        </Block>
-                                        :
-                                        <AddButton
-                                            style={{ backgroundColor: '#f6ba24' }}
-                                        >
-                                            <AiOutlinePlusCircle />
-                                            <SpanText onClick={showOrHide2}>Adicionar terceira descrição...</SpanText>
-                                        </AddButton>
-                                    }
-
-                                    {showElement3 ?
-                                        <Block>
-                                            <AddButton
-                                                style={{ backgroundColor: 'red' }}
-                                            >
-                                                <GrSubtractCircle />
-                                                <SpanText onClick={showOrHide3}>Fechar a opção de quarta descrição</SpanText>
-                                            </AddButton>
-                                            <Etiqueta>4° Descrição:</Etiqueta>
-                                            <TextAreaPost
-                                                style={{ resize: "none", width: "120%" }}
-                                                placeholder="Digite aqui..."
-                                                value={descriptionProduct4}
-                                                onChange={(e) => setDescriptionProduct4(e.target.value)}
-                                            >
-                                            </TextAreaPost>
-                                        </Block>
-                                        :
-                                        <AddButton
-                                            style={{ backgroundColor: '#f6ba24' }}
-                                        >
-                                            <AiOutlinePlusCircle />
-                                            <SpanText onClick={showOrHide3}>Adicionar quarta descrição...</SpanText>
-                                        </AddButton>
-                                    }
-
-                                    {showElement4 ?
-                                        <Block>
-                                            <AddButton
-                                                style={{ backgroundColor: 'red' }}
-                                            >
-                                                <GrSubtractCircle />
-                                                <SpanText onClick={showOrHide4}>Fechar a opção de quinta descrição</SpanText>
-                                            </AddButton>
-                                            <Etiqueta>5° Descrição:</Etiqueta>
-                                            <TextAreaPost
-                                                style={{ resize: "none", width: "120%" }}
-                                                placeholder="Digite aqui..."
-                                                value={descriptionProduct5}
-                                                onChange={(e) => setDescriptionProduct5(e.target.value)}
-                                            >
-                                            </TextAreaPost>
-                                        </Block>
-                                        :
-                                        <AddButton
-                                            style={{ backgroundColor: '#f6ba24' }}
-                                        >
-                                            <AiOutlinePlusCircle />
-                                            <SpanText onClick={showOrHide4}>Adicionar quinta descrição...</SpanText>
-                                        </AddButton>
-                                    }
-
-                                    {showElement5 ?
-                                        <Block>
-                                            <AddButton
-                                                style={{ backgroundColor: 'red' }}
-                                            >
-                                                <GrSubtractCircle />
-                                                <SpanText onClick={showOrHide5}>Fechar a opção de sexta descrição</SpanText>
-                                            </AddButton>
-                                            <Etiqueta>6° Descrição:</Etiqueta>
-                                            <TextAreaPost
-                                                style={{ resize: "none", width: "120%" }}
-                                                placeholder="Digite aqui..."
-                                                value={descriptionProduct6}
-                                                onChange={(e) => setDescriptionProduct6(e.target.value)}
-                                            >
-                                            </TextAreaPost>
-                                        </Block>
-                                        :
-                                        <AddButton
-                                            style={{ backgroundColor: '#f6ba24' }}
-                                        >
-                                            <AiOutlinePlusCircle />
-                                            <SpanText onClick={showOrHide5}>Adicionar sexta descrição...</SpanText>
-                                        </AddButton>
-                                    }
-                                </>
-                                :
-                                <AddButton>
-                                    <AiOutlinePlusCircle />
-                                    <SpanText onClick={showOrHideDescriptions}>Inserir descrições extras</SpanText>
-                                </AddButton>
-                            }
-
-                        </SectionDate>
-
-                        <SectionDate>
-                            <Block>
                                 <Etiqueta>Estoque:</Etiqueta>
                                 <InputPost
                                     type="number"
@@ -430,6 +241,32 @@ const NovoProduto: React.FC = () => {
                                 />
                             </Block>
 
+                            <BlockMobile>
+                                <DescriptionsProductMobile
+                                    valor1={descriptionProduct1}
+                                    valor2={descriptionProduct2}
+                                    valor3={descriptionProduct3}
+                                    valor4={descriptionProduct4}
+                                    valor5={descriptionProduct5}
+                                    valor6={descriptionProduct6}
+                                    /* @ts-ignore */
+                                    onChange1={(e) => setDescriptionProduct1(e.target.value)}
+                                    /* @ts-ignore */
+                                    onChange2={(e) => setDescriptionProduct2(e.target.value)}
+                                    /* @ts-ignore */
+                                    onChange3={(e) => setDescriptionProduct3(e.target.value)}
+                                    /* @ts-ignore */
+                                    onChange4={(e) => setDescriptionProduct4(e.target.value)}
+                                    /* @ts-ignore */
+                                    onChange5={(e) => setDescriptionProduct5(e.target.value)}
+                                    /* @ts-ignore */
+                                    onChange6={(e) => setDescriptionProduct6(e.target.value)}
+                                />
+                            </BlockMobile>
+
+                        </SectionDate>
+
+                        <SectionDate>
                             <Block>
                                 <Etiqueta>Largura (Cm):</Etiqueta>
                                 <InputPost
@@ -492,6 +329,13 @@ const NovoProduto: React.FC = () => {
 
                         </SectionDate>
                     </GridDate>
+
+                    <DivisorHorizontal />
+
+                    <DescriptionsProductDesktop
+
+                    />
+
                 </Card>
             </Container>
         </Grid>

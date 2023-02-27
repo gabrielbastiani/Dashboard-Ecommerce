@@ -103,12 +103,12 @@ const Categoria: React.FC = () => {
         }
 
         if (disponibilidades === "Indisponivel") {
-            toast.success(`A categoria de encontra Disponivel.`);
+            toast.success(`A categoria se encontra Disponivel.`);
             return;
         }
 
         if (disponibilidades === "Disponivel") {
-            toast.error(`A categoria de encontra Indisponivel.`);
+            toast.error(`A categoria se encontra Indisponivel.`);
             return;
         }
     }
@@ -196,7 +196,7 @@ const Categoria: React.FC = () => {
             "Produto": item.nameProduct,
             "SKU": item.sku,
             "Status": item.disponibilidade,
-            "botaoDetalhes": `/${item.id}`
+            "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
         });
     });
 
