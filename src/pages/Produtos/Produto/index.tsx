@@ -16,7 +16,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
-import UpdateDescriptionsProduct from "../../../components/ui/UpdateDescriptionsProduct";
+import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProductUpdate";
 
 
 const Produto: React.FC = () => {
@@ -343,7 +343,7 @@ const Produto: React.FC = () => {
                         />
                     </BlockDados>
 
-                    <UpdateDescriptionsProduct
+                    <DescriptionsProductUpdate
                         valor1={descriptionProducts1}
                         valor2={descriptionProducts2}
                         valor3={descriptionProducts3}

@@ -43,7 +43,7 @@ interface DescriptionRequest {
     placeholder6: any;
 }
 
-const UpdateDescriptionsProduct = ({
+const DescriptionsProductUpdate = ({
     valor1,
     valor2,
     valor3,
@@ -193,4 +193,4 @@ const UpdateDescriptionsProduct = ({
     )
 }
 
-export default UpdateDescriptionsProduct;
+export default DescriptionsProductUpdate;
