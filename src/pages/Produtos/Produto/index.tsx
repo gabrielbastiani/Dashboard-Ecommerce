@@ -52,7 +52,7 @@ const Produto: React.FC = () => {
     const [skus, setSkus] = useState('');
     const [dataSkus, setDataSkus] = useState('');
 
-    const [estoques, setEstoques] = useState('');
+    const [estoques, setEstoques] = useState(Number);
     const [dataEstoques, setDataEstoques] = useState('');
 
     const [pesoKGs, setPesoKGs] = useState('');
@@ -259,6 +259,165 @@ const Produto: React.FC = () => {
         }
     }
 
+    async function updateSKUProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (skus === '') {
+                toast.error('Não deixe o código do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateSKU?product_id=${product_id}`, { sku: skus });
+                toast.success('Código do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o código do produto.');
+        }
+    }
+
+    async function updateEstoqueProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (Number(estoques) < 0) {
+                toast.error('Não deixe o estoque do produto negativo... minimo de 0.');
+                return;
+            } else {
+                await apiClient.put(`/updateEstoque?product_id=${product_id}`, { estoque: Number(estoques) });
+                toast.success('Estoque do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o estoque do produto.');
+        }
+    }
+
+    async function updatePesoProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (pesoKGs === "") {
+                toast.error('Não deixe o peso do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updatePeso?product_id=${product_id}`, { pesoKG: pesoKGs });
+                toast.success('Peso do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o peso do produto.');
+        }
+    }
+
+    async function updateLarguraProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (larguraCMs === "") {
+                toast.error('Não deixe a largura do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateLargura?product_id=${product_id}`, { larguraCM: larguraCMs });
+                toast.success('Largura do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a largura do produto.');
+        }
+    }
+
+    async function updateProfundidadeProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (profundidadeCMs === "") {
+                toast.error('Não deixe o comprimento do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateProfundidade?product_id=${product_id}`, { profundidadeCM: profundidadeCMs });
+                toast.success('Comprimento do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o comprimento do produto.');
+        }
+    }
+
+    async function updateAlturaProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (alturaCMs === "") {
+                toast.error('Não deixe a altura do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateAltura?product_id=${product_id}`, { alturaCM: alturaCMs });
+                toast.success('Altura do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a altura do produto.');
+        }
+    }
+
+    async function updatePrecoProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (precos === "") {
+                toast.error('Não deixe o preço do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updatePrice?product_id=${product_id}`, { preco: Number(precos.replace(/[^\d]+/g, '')) });
+                toast.success('Preço do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o preço do produto.');
+        }
+    }
+
+    function formatPrecoUpdate() {
+        var elementoUpdate = document.getElementById('valorupdate');
+        /* @ts-ignore */
+        var valorupdate = elementoUpdate.value;
+
+        valorupdate = valorupdate + '';
+        valorupdate = parseInt(valorupdate.replace(/[\D]+/g, ''));
+        valorupdate = valorupdate + '';
+        valorupdate = valorupdate.replace(/([0-9]{2})$/g, ",$1");
+
+        if (valorupdate.length > 6) {
+            valorupdate = valorupdate.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+        }
+        /* @ts-ignore */
+        elementoUpdate.value = valorupdate;
+        /* @ts-ignore */
+        // eslint-disable-next-line eqeqeq
+        if (valorupdate == 'NaN') elementoUpdate.value = '';
+    }
+
+    function formatPromocaoUpdate() {
+        var elementopromocaoupdate = document.getElementById('valorpromocaoupdate');
+        /* @ts-ignore */
+        var valorpromocaoupdate = elementopromocaoupdate.value;
+
+        valorpromocaoupdate = valorpromocaoupdate + '';
+        valorpromocaoupdate = parseInt(valorpromocaoupdate.replace(/[\D]+/g, ''));
+        valorpromocaoupdate = valorpromocaoupdate + '';
+        valorpromocaoupdate = valorpromocaoupdate.replace(/([0-9]{2})$/g, ",$1");
+
+        if (valorpromocaoupdate.length > 6) {
+            valorpromocaoupdate = valorpromocaoupdate.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+        }
+        /* @ts-ignore */
+        elementopromocaoupdate.value = valorpromocaoupdate;
+        /* @ts-ignore */
+        // eslint-disable-next-line eqeqeq
+        if (valorpromocaoupdate == 'NaN') elementopromocaoupdate.value = '';
+    }
+
     return (
         <Grid>
             <MainHeader />
@@ -338,6 +497,158 @@ const Produto: React.FC = () => {
                                         ]
                                     }
                                     handleSubmit={updateCategory}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"SKU"}
+                            dados={
+                                <InputUpdate
+                                    dado={skus}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={skus}
+                                    value={skus}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setSkus(e.target.value)}
+                                    handleSubmit={updateSKUProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Estoque"}
+                            dados={
+                                <InputUpdate
+                                    dado={estoques}
+                                    type="number"
+                                    /* @ts-ignore */
+                                    placeholder={estoques}
+                                    value={estoques}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setEstoques(e.target.value)}
+                                    handleSubmit={updateEstoqueProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Peso (Grama)"}
+                            dados={
+                                <InputUpdate
+                                    dado={pesoKGs}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={pesoKGs}
+                                    value={pesoKGs}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setPesoKGs(e.target.value)}
+                                    handleSubmit={updatePesoProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Largura (Cm)"}
+                            dados={
+                                <InputUpdate
+                                    dado={larguraCMs}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={larguraCMs}
+                                    value={larguraCMs}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setLarguraCMs(e.target.value)}
+                                    handleSubmit={updateLarguraProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Comprimento (Cm)"}
+                            dados={
+                                <InputUpdate
+                                    dado={profundidadeCMs}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={profundidadeCMs}
+                                    value={profundidadeCMs}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setProfundidadeCMs(e.target.value)}
+                                    handleSubmit={updateProfundidadeProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Altura (Cm)"}
+                            dados={
+                                <InputUpdate
+                                    dado={alturaCMs}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={alturaCMs}
+                                    value={alturaCMs}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setAlturaCMs(e.target.value)}
+                                    handleSubmit={updateAlturaProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Preço"}
+                            dados={
+                                <InputUpdate
+                                    id="valorupdate"
+                                    /* @ts-ignore */
+                                    onKeyUp={formatPrecoUpdate}
+                                    maxLength={10}
+                                    dado={precos}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={precos}
+                                    value={precos}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setPrecos(e.target.value)}
+                                    handleSubmit={updatePrecoProduct}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Valor em Promoção"}
+                            dados={
+                                <InputUpdate
+                                    id="valorpromocaoupdate"
+                                    /* @ts-ignore */
+                                    onKeyUp={formatPromocaoUpdate}
+                                    maxLength={10}
+                                    dado={promocoes}
+                                    type="text"
+                                    /* @ts-ignore */
+                                    placeholder={promocoes}
+                                    value={promocoes}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setPromocoes(e.target.value)}
+                                    handleSubmit={''}
                                 />
                             }
                         />
