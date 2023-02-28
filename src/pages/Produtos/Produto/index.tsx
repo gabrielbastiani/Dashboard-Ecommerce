@@ -48,9 +48,7 @@ const Produto: React.FC = () => {
     const [categorySelected, setCategorySelected] = useState();
     const [categorieName, setCategorieName] = useState('');
     const [disponibilidades, setDisponibilidades] = useState('');
-    const [photoPro, setPhotoPro] = useState('');
 
-    console.log("Photo: ", photoPro)
 
     useEffect(() => {
         async function loadCategorys() {
@@ -106,7 +104,6 @@ const Produto: React.FC = () => {
                 setPromocoes(promocao);
                 setDisponibilidades(disponibilidade);
                 setCategorieName(responseProduct.data.category.categoryName);
-                setPhotoPro(responseProduct.data.photoproducts.photo);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -348,35 +345,6 @@ const Produto: React.FC = () => {
         }
     }
 
-    async function handlePhoto(event: FormEvent) {
-        event.preventDefault();
-        try {
-            const data = new FormData();
-
-            /* if (photoPro === null) {
-                toast.error('Carregue uma imagem!')
-                console.log("Carregue uma imagem!");
-                return;
-            } */
-
-            data.append('file', photoPro);
-            /* @ts-ignore */
-            data.append('product_id', product_id);
-
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/photo`, data);
-
-            toast.success('Foto inserida com sucesso');
-
-        } catch (err) {/* @ts-ignore */
-            console.log(err.response.data);
-            toast.error('Ops erro ao inserir a foto!');
-        }
-        /* setTimeout(() => {
-            navigate(0);
-        }, 3000); */
-    }
-
     function formatPrecoUpdate() {
         var elementoUpdate = document.getElementById('valorupdate');
         /* @ts-ignore */
@@ -437,13 +405,6 @@ const Produto: React.FC = () => {
                             onClick={deleteProduct}
                         >
                             Remover
-                        </Button>
-                        <Button
-                            type="submit"
-                            style={{ backgroundColor: 'green' }}
-                            form="form-photo"
-                        >
-                            Salvar Foto
                         </Button>
                     </BlockTop>
 
@@ -666,11 +627,10 @@ const Produto: React.FC = () => {
                         <SectionDate>
 
                             <PhotosProduct
-                                setProductPhoto={photoPro}
-                                /* @ts-ignore */
-                                onSubmitPhoto={handlePhoto}
-                                id={"form-photo"}
+                                product_id={product_id}
                             />
+
+                            
 
                         </SectionDate>
                     </GridDate>
