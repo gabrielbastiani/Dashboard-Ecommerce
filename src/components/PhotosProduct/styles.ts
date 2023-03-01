@@ -1,5 +1,32 @@
 import styled from "styled-components";
 
+export const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  padding: 10px;
+  border-collapse: collapse;
+  height: 350px;
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+`;
+
+export const ClickPhoto = styled.span`
+  width: 170px;
+  height: 120px;
+  text-align: center;
+`;
+
+export const BlockButton = styled.div`
+  margin-top: 10px;
+`;
+
+export const PhotoBlockImg = styled.img`
+  width: 170px;
+  height: 120px;
+`;
+
 export const EtiquetaPhotoProduct = styled.label`
   margin-bottom: 1rem;
   border-radius: 0.3rem;
@@ -34,19 +61,12 @@ export const InputLogo = styled.input`
 
 export const PhotoProductPreview = styled.img`
   width: 170px;
-  height: 80px;
-  margin-bottom: 20px;
+  height: 120px;
 `;
 
 export const PhotoProductImg = styled.img`
   width: 170px;
-  height: 80px;
-
-  @media (max-width: 870px) {
-    margin-left: 84px;
-  }
+  height: 120px;
 `;
 
-export const FormPhotoProduct = styled.form`
-    
-`;
+export const FormPhotoProduct = styled.form``;

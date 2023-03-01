@@ -6,14 +6,17 @@ import {
     InputLogo,
     PhotoProductPreview,
     PhotoProductImg,
-    FormPhotoProduct
+    FormPhotoProduct,
+    GridContainer,
+    ClickPhoto,
+    BlockButton
 } from './styles';
 import { ButtonConfirm, EditBox, ValueText } from "../ui/InputUpdate/styles";
-import { GiConfirmed } from "react-icons/gi";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
+import { Button } from "../ui/Button";
 
 
 interface PhotoProduct {
@@ -26,10 +29,10 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
     const [productPhoto, setProductPhoto] = useState(null);
     const [photoProductUrl, setPhotoProductUrl] = useState('');
+    const [photoInsertUrl, setPhotoInsertUrl] = useState('');
 
-    const [allPhotos, setAllPhotos] = useState([]);
+    const [allPhotos, setAllPhotos] = useState<any[]>([]);
 
-    console.log(allPhotos)
 
     useEffect(() => {
         async function loadAllPhotosProduct() {
@@ -45,6 +48,23 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
         }
         loadAllPhotosProduct();
     }, [product_id])
+
+    function handleFileInput(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return
+        }
+
+        const image = e.target.files[0];
+        if (!image) {
+            return
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setProductPhoto(image);
+            setPhotoInsertUrl(URL.createObjectURL(image));
+        }
+    }
 
     function handleFile(e: ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) {
@@ -92,15 +112,17 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
         }, 3000);
     }
 
-    async function handlePhotoUpdate(event: FormEvent) {
+    async function handlePhotoUpdate(event: FormEvent, id: any) {
         event.preventDefault();
         try {
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', productPhoto);
 
+            /* console.log("ID Update", id) */
+
             const apiClient = setupAPIClient();
-            /* await apiClient.put(`/updatePhoto?photoProduts_id=${photoProduts_id}`, data); */
+            await apiClient.put(`/updatePhoto?photoProduts_id=${id}`, data);
 
             toast.success('Foto atualizada com sucesso');
 
@@ -116,76 +138,69 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
     return (
         <>
-            <div>
-                {allPhotos.map((photos) => {
-                    return (
+            <FormPhotoProduct onSubmit={handlePhoto}>
+                <EtiquetaPhotoProduct>
+                    <IconSpan>
+                        <MdFileUpload size={30} />
+                    </IconSpan>
+                    <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileInput} alt="foto do produto" />
+                    {photoInsertUrl ? (
                         <>
-                            <div>
-
-                                <PhotoProductImg src={"http://localhost:3333/files/" + photos.photo} alt="foto do produto" />
-                            </div>
+                            <PhotoProductPreview
+                                src={photoInsertUrl}
+                                alt="foto do produto"
+                                width={170}
+                                height={120}
+                            />
+                            <BlockButton>
+                                <Button
+                                    type="submit"
+                                    style={{ backgroundColor: 'green' }}
+                                >
+                                    Salvar Imagem</Button>
+                            </BlockButton>
                         </>
-                    )
-                })}
-            </div>
-            {productPhoto ? (
-                <FormPhotoProduct onSubmit={handlePhotoUpdate}>
-                    <EtiquetaPhotoProduct>
-                        <IconSpan>
-                            <MdFileUpload size={30} />
-                        </IconSpan>
-                        <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="foto do produto" />
-                        {photoProductUrl ? (
-                            <>
-                                <PhotoProductPreview
-                                    src={photoProductUrl}
-                                    alt="foto do produto"
-                                    width={170}
-                                    height={80}
-                                />
-                                <EditBox>
-                                    <ValueText style={{ marginBottom: '12px' }}>Editar imagem:</ValueText>
-                                    <ButtonConfirm type="submit"><FaEdit /></ButtonConfirm>
-                                </EditBox>
-                            </>
-                        ) :
-                            <>
-                                <PhotoProductImg src={"http://localhost:3333/files/" + productPhoto} alt="foto do produto" />
-                            </>
-                        }
-                    </EtiquetaPhotoProduct>
-                </FormPhotoProduct>
-            ) :
-                <FormPhotoProduct onSubmit={handlePhoto}>
-                    <EtiquetaPhotoProduct>
-                        <IconSpan>
-                            <MdFileUpload size={30} />
-                        </IconSpan>
-                        <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="foto do produto" />
-                        {photoProductUrl ? (
-                            <>
-                                <PhotoProductPreview
-                                    src={photoProductUrl}
-                                    alt="foto do produto"
-                                    width={170}
-                                    height={80}
-                                />
-                                <EditBox>
-                                    <ValueText style={{ marginBottom: '12px' }}>Salvar imagem:</ValueText>
-                                    <ButtonConfirm type="submit"><GiConfirmed /></ButtonConfirm>
-                                </EditBox>
-                            </>
-                        ) :
-                            <>
-                                <PhotoProductImg src={"http://localhost:3333/files/" + productPhoto} alt="foto do produto" />
-                            </>
-                        }
-                    </EtiquetaPhotoProduct>
-                </FormPhotoProduct>
-            }
+                    ) :
+                        <ClickPhoto>Insira a foto aqui</ClickPhoto>
+                    }
+                </EtiquetaPhotoProduct>
+            </FormPhotoProduct>
+
+
+            {allPhotos.length !== 0 && (
+                <GridContainer>
+                    {allPhotos.map((photos) => {
+                        return (/* @ts-ignore */
+                            <FormPhotoProduct key={photos.id} onSubmit={handlePhotoUpdate}>
+                                <EtiquetaPhotoProduct>
+                                    <IconSpan>
+                                        <MdFileUpload size={30} />
+                                    </IconSpan>
+                                    <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="foto do produto" />
+                                    {photoProductUrl ? (
+                                        <>
+                                            <PhotoProductPreview
+                                                src={photoProductUrl}
+                                                alt="foto do produto"
+                                                width={170}
+                                                height={80}
+                                            />
+                                            <EditBox>
+                                                <ValueText style={{ marginBottom: '12px' }}>Editar imagem:</ValueText>
+                                                <ButtonConfirm type="submit"><FaEdit /></ButtonConfirm>
+                                            </EditBox>
+                                        </>
+                                    ) :
+                                        <PhotoProductImg src={"http://localhost:3333/files/" + photos.photo} alt="foto do produto" />
+                                    }
+                                </EtiquetaPhotoProduct>
+                            </FormPhotoProduct>
+                        )
+                    })}
+                </GridContainer>
+            )}
         </>
     )
-
 }
 
 export default PhotosProduct

@@ -50,6 +50,7 @@ const Produto: React.FC = () => {
     const [disponibilidades, setDisponibilidades] = useState('');
 
 
+
     useEffect(() => {
         async function loadCategorys() {
             const apiClient = setupAPIClient();
@@ -625,16 +626,11 @@ const Produto: React.FC = () => {
                         </SectionDate>
 
                         <SectionDate>
-
                             <PhotosProduct
                                 product_id={product_id}
                             />
-
-                            
-
                         </SectionDate>
                     </GridDate>
-
 
                     <DescriptionsProductUpdate
                         valor1={descriptionProducts1}
