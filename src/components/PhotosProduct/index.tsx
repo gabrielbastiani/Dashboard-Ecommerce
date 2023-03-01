@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { MdFileUpload } from "react-icons/md";
+import { IoIosRemoveCircle } from 'react-icons/io'
 import {
     EtiquetaPhotoProduct,
     IconSpan,
@@ -9,15 +10,20 @@ import {
     FormPhotoProduct,
     GridContainer,
     ClickPhoto,
-    BlockButton
+    BlockButton,
+    IconButton,
+    EtiquetaPhotoProductInsert
 } from './styles';
-import { ButtonConfirm, EditBox, ValueText } from "../ui/InputUpdate/styles";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
 import { Button } from "../ui/Button";
+import Modal from 'react-modal';
+import { ModalDeletePhotoProduct } from '../../components/ModalDeletePhotoProduct/index';
 
+export type DeletePhotoProduct = {
+    id: string;
+}
 
 interface PhotoProduct {
     product_id: any;
@@ -28,10 +34,12 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
     const navigate = useNavigate();
 
     const [productPhoto, setProductPhoto] = useState(null);
-    const [photoProductUrl, setPhotoProductUrl] = useState('');
     const [photoInsertUrl, setPhotoInsertUrl] = useState('');
 
     const [allPhotos, setAllPhotos] = useState<any[]>([]);
+
+    const [modalItem, setModalItem] = useState<DeletePhotoProduct[]>();
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -66,23 +74,6 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
         }
     }
 
-    function handleFile(e: ChangeEvent<HTMLInputElement>) {
-        if (!e.target.files) {
-            return
-        }
-
-        const image = e.target.files[0];
-        if (!image) {
-            return
-        }
-
-        if (image.type === 'image/jpeg' || image.type === 'image/png') {
-            /* @ts-ignore */
-            setProductPhoto(image);
-            setPhotoProductUrl(URL.createObjectURL(image));
-        }
-    }
-
     async function handlePhoto(event: FormEvent) {
         event.preventDefault();
         try {
@@ -112,36 +103,30 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
         }, 3000);
     }
 
-    async function handlePhotoUpdate(event: FormEvent, id: any) {
-        event.preventDefault();
-        try {
-            const data = new FormData();
-            /* @ts-ignore */
-            data.append('file', productPhoto);
-
-            /* console.log("ID Update", id) */
-
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePhoto?photoProduts_id=${id}`, data);
-
-            toast.success('Foto atualizada com sucesso');
-
-        } catch (err) {/* @ts-ignore */
-            console.log(err.response.data);
-            toast.error('Ops erro ao atualizar a foto!');
-        }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
+    function handleCloseModalDelete() {
+        setModalVisible(false);
     }
+
+    async function handleOpenModalDelete(id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/photos', {
+            params: {
+                photoProduct_id: id,
+            }
+        });
+        setModalItem(responseDelete.data);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
 
     return (
         <>
             <FormPhotoProduct onSubmit={handlePhoto}>
-                <EtiquetaPhotoProduct>
+                <EtiquetaPhotoProductInsert>
                     <IconSpan>
-                        <MdFileUpload size={30} />
+                        <MdFileUpload size={35} />
                     </IconSpan>
                     <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileInput} alt="foto do produto" />
                     {photoInsertUrl ? (
@@ -163,41 +148,32 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
                     ) :
                         <ClickPhoto>Insira a foto aqui</ClickPhoto>
                     }
-                </EtiquetaPhotoProduct>
+                </EtiquetaPhotoProductInsert>
             </FormPhotoProduct>
 
 
             {allPhotos.length !== 0 && (
                 <GridContainer>
                     {allPhotos.map((photos) => {
-                        return (/* @ts-ignore */
-                            <FormPhotoProduct key={photos.id} onSubmit={handlePhotoUpdate}>
-                                <EtiquetaPhotoProduct>
-                                    <IconSpan>
-                                        <MdFileUpload size={30} />
-                                    </IconSpan>
-                                    <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="foto do produto" />
-                                    {photoProductUrl ? (
-                                        <>
-                                            <PhotoProductPreview
-                                                src={photoProductUrl}
-                                                alt="foto do produto"
-                                                width={170}
-                                                height={80}
-                                            />
-                                            <EditBox>
-                                                <ValueText style={{ marginBottom: '12px' }}>Editar imagem:</ValueText>
-                                                <ButtonConfirm type="submit"><FaEdit /></ButtonConfirm>
-                                            </EditBox>
-                                        </>
-                                    ) :
-                                        <PhotoProductImg src={"http://localhost:3333/files/" + photos.photo} alt="foto do produto" />
-                                    }
-                                </EtiquetaPhotoProduct>
-                            </FormPhotoProduct>
+                        return (
+                            <EtiquetaPhotoProduct key={photos.id}>
+                                <IconButton onClick={() => handleOpenModalDelete(photos.id)}>
+                                    <IoIosRemoveCircle size={30} />
+                                </IconButton>
+                                <PhotoProductImg src={"http://localhost:3333/files/" + photos.photo} alt="foto do produto" />
+                            </EtiquetaPhotoProduct>
                         )
                     })}
                 </GridContainer>
+            )}
+
+            {modalVisible && (
+                <ModalDeletePhotoProduct
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    photos={modalItem}
+                />
             )}
         </>
     )

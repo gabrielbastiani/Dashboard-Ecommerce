@@ -631,7 +631,8 @@ const Produto: React.FC = () => {
                             />
                         </SectionDate>
                     </GridDate>
-
+                    <br />
+                    <br />
                     <DescriptionsProductUpdate
                         valor1={descriptionProducts1}
                         valor2={descriptionProducts2}
