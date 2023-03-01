@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
@@ -20,6 +20,8 @@ import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProduc
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
+import { ContainerVariacao, ButtonVariacao } from "../styles";
+import NovaVariacao from "../Variacao/novaVariacao";
 
 
 const Produto: React.FC = () => {
@@ -48,8 +50,6 @@ const Produto: React.FC = () => {
     const [categorySelected, setCategorySelected] = useState();
     const [categorieName, setCategorieName] = useState('');
     const [disponibilidades, setDisponibilidades] = useState('');
-
-
 
     useEffect(() => {
         async function loadCategorys() {
@@ -510,7 +510,7 @@ const Produto: React.FC = () => {
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Peso (Grama)"}
+                                    chave={"Peso (Kg)"}
                                     dados={
                                         <InputUpdate
                                             dado={pesoKGs}
@@ -665,9 +665,24 @@ const Produto: React.FC = () => {
                         placeholder5={""}
                         placeholder6={""}
                     />
-
-
                 </Card>
+
+                <ContainerVariacao>
+                    <Card style={{ width: '305px', textAlign: 'center' }} >
+                        <Titulos tipo="h1" titulo="Variações" />
+
+                        <ButtonVariacao
+                            onClick={() => alert('Clicou')}
+                        >
+                            + Nova
+                        </ButtonVariacao>
+                    </Card>
+
+                    <Card style={{ width: '100%' }}>
+                        <NovaVariacao />
+                    </Card>
+                </ContainerVariacao>
+
             </Container>
         </Grid>
     )

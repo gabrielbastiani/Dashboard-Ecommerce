@@ -230,10 +230,10 @@ const NovoProduto: React.FC = () => {
                             </Block>
 
                             <Block>
-                                <Etiqueta>Peso (Grama):</Etiqueta>
+                                <Etiqueta>Peso (Kg):</Etiqueta>
                                 <InputPost
                                     type="number"
-                                    placeholder="Peso em Gramas"
+                                    placeholder="Peso em Kg"
                                     value={peso}
                                     onChange={(e) => setPeso(e.target.value)}
                                 />
