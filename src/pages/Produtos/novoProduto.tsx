@@ -22,6 +22,7 @@ const NovoProduto: React.FC = () => {
 
     const { user } = useContext(AuthContext);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [loja_id, setLoja_id] = useState(user.loja_id);
     const [nameProduct, setNameProduct] = useState('');
     const [categories, setCategories] = useState([]);

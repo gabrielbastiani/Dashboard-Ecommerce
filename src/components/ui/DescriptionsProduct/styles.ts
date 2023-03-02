@@ -57,6 +57,7 @@ export const TextAreaDescription1 = styled.textarea`
   border-right: 1.5px solid ${(props) => props.theme.colors.info};
   border-left: 1.5px solid ${(props) => props.theme.colors.info};
   border-bottom: 1.5px solid ${(props) => props.theme.colors.info};
+  padding: 15px;
 
   &:nth-child(1) {
     border-bottom-left-radius: 10px;
@@ -89,6 +90,7 @@ export const TextAreaDescription2 = styled.textarea`
   border-right: 1.5px solid ${(props) => props.theme.colors.info};
   border-left: 1.5px solid ${(props) => props.theme.colors.info};
   border-bottom: 1.5px solid ${(props) => props.theme.colors.info};
+  padding: 15px;
 
   &:nth-child(1) {
     border-bottom-left-radius: 10px;
@@ -121,6 +123,7 @@ export const TextAreaDescription3 = styled.textarea`
   border-right: 1.5px solid ${(props) => props.theme.colors.info};
   border-left: 1.5px solid ${(props) => props.theme.colors.info};
   border-bottom: 1.5px solid ${(props) => props.theme.colors.info};
+  padding: 15px;
 
   &:nth-child(1) {
     border-bottom-left-radius: 10px;
@@ -153,6 +156,7 @@ export const TextAreaDescription4 = styled.textarea`
   border-right: 1.5px solid ${(props) => props.theme.colors.info};
   border-left: 1.5px solid ${(props) => props.theme.colors.info};
   border-bottom: 1.5px solid ${(props) => props.theme.colors.info};
+  padding: 15px;
 
   &:nth-child(1) {
     border-bottom-left-radius: 10px;
@@ -185,6 +189,7 @@ export const TextAreaDescription5 = styled.textarea`
   border-right: 1.5px solid ${(props) => props.theme.colors.info};
   border-left: 1.5px solid ${(props) => props.theme.colors.info};
   border-bottom: 1.5px solid ${(props) => props.theme.colors.info};
+  padding: 15px;
 
   &:nth-child(1) {
     border-bottom-left-radius: 10px;
@@ -217,6 +222,7 @@ export const TextAreaDescription6 = styled.textarea`
   border-right: 1.5px solid ${(props) => props.theme.colors.info};
   border-left: 1.5px solid ${(props) => props.theme.colors.info};
   border-bottom: 1.5px solid ${(props) => props.theme.colors.info};
+  padding: 15px;
 
   &:nth-child(1) {
     border-bottom-left-radius: 10px;

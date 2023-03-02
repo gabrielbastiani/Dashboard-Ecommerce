@@ -679,7 +679,10 @@ const Produto: React.FC = () => {
                     </Card>
 
                     <Card style={{ width: '100%' }}>
-                        <NovaVariacao />
+                        <NovaVariacao
+                            /* @ts-ignore */
+                            product_id={product_id}
+                        />
                     </Card>
                 </ContainerVariacao>
 
