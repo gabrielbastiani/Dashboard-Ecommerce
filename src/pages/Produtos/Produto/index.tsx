@@ -20,8 +20,10 @@ import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProduc
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao } from "../styles";
-import NovaVariacao from "../Variacao/novaVariacao";
+import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes } from "../styles";
+import NovaVariacao from "../Variacao";
+import VariacaoItems from "../../../components/VariacaoItems";
+import { Avisos } from "../../../components/Avisos";
 
 
 const Produto: React.FC = () => {
@@ -50,6 +52,29 @@ const Produto: React.FC = () => {
     const [categorySelected, setCategorySelected] = useState();
     const [categorieName, setCategorieName] = useState('');
     const [disponibilidades, setDisponibilidades] = useState('');
+
+    const [variacoes, setVariacoes] = useState<any[]>([]);
+
+    const [nameVariacao, setNameVariacao] = useState('');
+    const [descriptionVariacao1, setDescriptionVariacao1] = useState('');
+    const [descriptionVariacao2, setDescriptionVariacao2] = useState('');
+    const [descriptionVariacao3, setDescriptionVariacao3] = useState('');
+    const [descriptionVariacao4, setDescriptionVariacao4] = useState('');
+    const [descriptionVariacao5, setDescriptionVariacao5] = useState('');
+    const [descriptionVariacao6, setDescriptionVariacao6] = useState('');
+    const [precoVariacao, setPrecoVariacao] = useState('');
+    const [skuVariacao, setSkuVariacao] = useState('');
+    const [estoqueVariacao, setEstoqueVariacao] = useState('');
+    const [pesoKgVariacao, setPesoKgVariacao] = useState('');
+    const [larguraCmVariacao, setLarguraCmVariacao] = useState('');
+    const [profundidadeCmVariacao, setProfundidadeCmVariacao] = useState('');
+    const [alturaCmVariacao, setAlturaCmVariacao] = useState('');
+    const [promocaoVariacao, setPromocaoVariacao] = useState('');
+    const [disponibilidadeVariacao, setDisponibilidadeVariacao] = useState('');
+    const [freteGratis, setFreteGratis] = useState('');
+
+    const [showElement, setShowElement] = useState(false);
+    const [showVariacao, setShowVariacao] = useState(false);
 
     useEffect(() => {
         async function loadCategorys() {
@@ -386,6 +411,65 @@ const Produto: React.FC = () => {
         if (valorpromocaoupdate == 'NaN') elementopromocaoupdate.value = '';
     }
 
+    useEffect(() => {
+        async function loadVariacao() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/variacoesProduct?product_id=${product_id}`);
+                setVariacoes(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadVariacao();
+    }, [product_id])
+
+
+    async function loadVariacaoProduct(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/variacoes?variacao_id=${id}`);
+            setNameVariacao(response.data.nameVariacao);
+            setDescriptionVariacao1(response.data.descriptionVariacao1);
+            setDescriptionVariacao2(response.data.descriptionVariacao2);
+            setDescriptionVariacao3(response.data.descriptionVariacao3);
+            setDescriptionVariacao4(response.data.descriptionVariacao4);
+            setDescriptionVariacao5(response.data.descriptionVariacao5);
+            setDescriptionVariacao6(response.data.descriptionVariacao6);
+            setPrecoVariacao(response.data.preco);
+            setSkuVariacao(response.data.skuVariacao);
+            setEstoqueVariacao(response.data.estoqueVariacao);
+            setPesoKgVariacao(response.data.pesoKg);
+            setLarguraCmVariacao(response.data.larguraCm);
+            setProfundidadeCmVariacao(response.data.profundidadeCm);
+            setAlturaCmVariacao(response.data.alturaCm);
+            setPromocaoVariacao(response.data.promocao);
+            setDisponibilidadeVariacao(response.data.disponibilidadeVariacao);
+            setFreteGratis(response.data.freteGratis);
+        } catch (error) {
+            console.log(error);
+        }
+        showOrHideVariacao();
+    }
+
+
+    const showOrHide = () => {
+        setShowElement(!showElement)
+    }
+
+    const renderOk = () => {
+        return <RenderOk>Cancelar cadastro<br /> de variação</RenderOk>
+    }
+
+    const renderNo = () => {
+        return <RenderNo>+ Nova</RenderNo>
+    }
+
+    const showOrHideVariacao = () => {
+        setShowVariacao(!showVariacao)
+    }
+
+
     return (
         <Grid>
             <MainHeader />
@@ -669,26 +753,98 @@ const Produto: React.FC = () => {
 
                 <ContainerVariacao>
                     <Card style={{ width: '305px', textAlign: 'center' }} >
+
                         <Titulos tipo="h1" titulo="Variações" />
 
                         <ButtonVariacao
-                            onClick={() => alert('Clicou')}
+                            onClick={showOrHide}
                         >
-                            + Nova
+                            {showElement && renderOk() || renderNo()}
                         </ButtonVariacao>
+
+                        {variacoes.map((names) => {
+                            return (
+                                <ButtonVariacaoDetalhes key={names.id}
+                                    onClick={() => loadVariacaoProduct(names.id)}
+                                >
+                                    {names.nameVariacao}
+                                </ButtonVariacaoDetalhes>
+                            )
+                        })}
+
                     </Card>
 
                     <Card style={{ width: '100%' }}>
-                        <NovaVariacao
-                            /* @ts-ignore */
-                            product_id={product_id}
-                        />
+                        {showElement ? (
+                            <>
+                                <NovaVariacao
+                                    /* @ts-ignore */
+                                    product_id={product_id}
+                                />
+                            </>
+                        ) :
+                            <>
+                                {variacoes.length < 1 && (
+                                    <Avisos
+                                        texto="Não há variações cadastradas para esse produto..."
+                                    />
+                                )}
+                            </>
+                        }
+
+                        {showVariacao ? (
+                            <>
+                                <VariacaoItems
+                                    nameVariacao={nameVariacao}
+                                    descriptionVariacao1={descriptionVariacao1}
+                                    descriptionVariacao2={descriptionVariacao2}
+                                    descriptionVariacao3={descriptionVariacao3}
+                                    descriptionVariacao4={descriptionVariacao4}
+                                    descriptionVariacao5={descriptionVariacao5}
+                                    descriptionVariacao6={descriptionVariacao6}
+                                    preco={precoVariacao}
+                                    skuVariacao={skuVariacao}
+                                    estoqueVariacao={estoqueVariacao}
+                                    pesoKg={pesoKgVariacao}
+                                    larguraCm={larguraCmVariacao}
+                                    alturaCm={alturaCmVariacao}
+                                    profundidadeCm={profundidadeCmVariacao}
+                                    disponibilidadeVariacao={disponibilidadeVariacao}
+                                    promocao={promocaoVariacao}
+                                    freteGratis={freteGratis}
+                                />
+                            </>
+                        ) :
+                            <></>
+                        }
                     </Card>
                 </ContainerVariacao>
-
             </Container>
         </Grid>
     )
 }
 
 export default Produto;
+
+
+
+
+{/* <VariacaoItems
+    nameVariacao={nameVariacao}
+    descriptionVariacao1={descriptionVariacao1}
+    descriptionVariacao2={descriptionVariacao2}
+    descriptionVariacao3={descriptionVariacao3}
+    descriptionVariacao4={descriptionVariacao4}
+    descriptionVariacao5={descriptionVariacao5}
+    descriptionVariacao6={descriptionVariacao6}
+    preco={precoVariacao}
+    skuVariacao={skuVariacao}
+    estoqueVariacao={estoqueVariacao}
+    pesoKg={pesoKgVariacao}
+    larguraCm={larguraCmVariacao}
+    alturaCm={alturaCmVariacao}
+    profundidadeCm={profundidadeCmVariacao}
+    disponibilidadeVariacao={disponibilidadeVariacao}
+    promocao={promocaoVariacao}
+    freteGratis={freteGratis}
+/> */}

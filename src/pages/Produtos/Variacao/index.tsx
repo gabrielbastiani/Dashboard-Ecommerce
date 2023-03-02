@@ -8,6 +8,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../../services/api";
 import DescriptionsProduct from "../../../components/ui/DescriptionsProduct";
+import { useNavigate } from "react-router-dom";
 
 
 interface VariacaoRequest {
@@ -15,6 +16,8 @@ interface VariacaoRequest {
 }
 
 const NovaVariacao = ({ product_id }: VariacaoRequest) => {
+
+    const navigate = useNavigate();
 
     const { user } = useContext(AuthContext);
 
@@ -70,7 +73,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                 skuVariacao: skuVariacao,
                 estoqueVariacao: Number(estoqueVariacao),
                 pesoKg: pesoKg,
-                larguraCM: larguraCm,
+                larguraCm: larguraCm,
                 profundidadeCm: profundidadeCm,
                 alturaCm: alturaCm,
                 promocao: Number(promocao.replace(/[^\d]+/g, '')),
@@ -100,6 +103,9 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
             console.log(error.response.data);
             toast.error('Ops erro ao cadastrar a variação!')
         }
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
     }
 
     function formatPrecoVariacao() {
@@ -263,7 +269,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                     </Block>
                 </SectionDate>
             </GridDate>
-
+            <br />
             <DescriptionsProduct
                 valor1={descriptionVariacao1}
                 valor2={descriptionVariacao2}

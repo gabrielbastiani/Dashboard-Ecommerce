@@ -26,3 +26,27 @@ export const ButtonVariacao = styled.button`
     filter: brightness(1.08);
   }
 `;
+
+export const RenderOk = styled.span`
+  color: red;
+`;
+
+export const RenderNo = styled.span`
+  
+`;
+
+export const ButtonVariacaoDetalhes = styled.button`
+  background-color: #736e6e;
+  border: 0;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  color: black;
+  font-size: 16px;
+  width: 100%;
+  font-weight: 600;
+  margin-top: 15px;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+`;
