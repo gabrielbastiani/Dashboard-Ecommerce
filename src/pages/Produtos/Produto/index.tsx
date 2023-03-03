@@ -169,7 +169,7 @@ const Produto: React.FC = () => {
                 return;
             } else {
                 await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { nameProduct: nameProducts || dataName });
-                toast.success('Nome da categoria atualizada com sucesso.');
+                toast.success('Nome do produto atualizado com sucesso.');
                 refreshProduct();
             }
         } catch (error) {
@@ -800,6 +800,7 @@ const Produto: React.FC = () => {
 
                                 {!!iDVariacao && (
                                     <VariacaoDetalhes
+                                        variacao_id={iDVariacao}
                                         photoVariacaoID={iDVariacao}
                                         nameVariacao={nameVariacao}
                                         descriptionVariacao1={descriptionVariacao1}
@@ -818,6 +819,18 @@ const Produto: React.FC = () => {
                                         disponibilidadeVariacao={disponibilidadeVariacao}
                                         promocao={promocaoVariacao}
                                         freteGratis={freteGratis}
+                                        /* @ts-ignore */
+                                        setDescriptionVariacao1={(e) => setDescriptionVariacao1(e.target.value)}
+                                        /* @ts-ignore */
+                                        setDescriptionVariacao2={(e) => setDescriptionVariacao2(e.target.value)}
+                                        /* @ts-ignore */
+                                        setDescriptionVariacao3={(e) => setDescriptionVariacao3(e.target.value)}
+                                        /* @ts-ignore */
+                                        setDescriptionVariacao4={(e) => setDescriptionVariacao4(e.target.value)}
+                                        /* @ts-ignore */
+                                        setDescriptionVariacao5={(e) => setDescriptionVariacao5(e.target.value)}
+                                        /* @ts-ignore */
+                                        setDescriptionVariacao6={(e) => setDescriptionVariacao6(e.target.value)}
                                     />
                                 )}
                             </>
