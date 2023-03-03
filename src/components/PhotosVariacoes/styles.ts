@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   grid-gap: 10px;
   padding: 10px;
   border-collapse: collapse;
@@ -26,13 +26,12 @@ export const GridContainer = styled.div`
     }
   
     @media (max-width: 1532px) {
-      grid-template-columns: 200px 200px;
+      grid-template-columns: 200px;
       grid-gap: unset;
       padding: unset;
     }
 
     @media (max-width: 1225px) {
-      grid-template-columns: 200px;
       justify-content: center;
     }
 }

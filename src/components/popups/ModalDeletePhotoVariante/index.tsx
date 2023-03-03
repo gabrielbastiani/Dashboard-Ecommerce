@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeletePhotoProduct } from '../../PhotosProduct';
+import { DeletePhotoVariacao } from '../../PhotosVariacoes';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -8,13 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 
 
-interface ModalPhotoDelete {
+interface ModalPhotoDeleteVariacao {
     isOpen: boolean;
     onRequestClose: () => void;
-    photosVariante: DeletePhotoProduct[];
+    photosVariante: DeletePhotoVariacao[];
 }
 
-export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariante }: ModalPhotoDelete) {
+export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariante }: ModalPhotoDeleteVariacao) {
 
     const navigate = useNavigate();
 
@@ -35,9 +35,9 @@ export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariant
     async function handleDeletePhotoVariante() {
         try {
             const apiClient = setupAPIClient();
-            const photo_id = photosVariante[0].id;
+            const photoVariacao_id = photosVariante[0].id;
 
-            await apiClient.delete(`/deletePhotoVariacao?photovariacao_id=${photo_id}`)
+            await apiClient.delete(`/deletePhotoVariacao?photoVariacao_id=${photoVariacao_id}`)
 
             toast.success('Foto deletada com sucesso');
 
