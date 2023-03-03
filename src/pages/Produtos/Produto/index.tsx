@@ -22,8 +22,8 @@ import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
 import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes } from "../styles";
 import NovaVariacao from "../Variacao";
-import VariacaoItems from "../../../components/VariacaoItems";
 import { Avisos } from "../../../components/Avisos";
+import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
 
 
 const Produto: React.FC = () => {
@@ -54,6 +54,8 @@ const Produto: React.FC = () => {
     const [disponibilidades, setDisponibilidades] = useState('');
 
     const [variacoes, setVariacoes] = useState<any[]>([]);
+
+    const [iDVariacao, setIDVariacao] = useState('');
 
     const [nameVariacao, setNameVariacao] = useState('');
     const [descriptionVariacao1, setDescriptionVariacao1] = useState('');
@@ -426,6 +428,7 @@ const Produto: React.FC = () => {
 
 
     async function loadVariacaoProduct(id: string) {
+        setIDVariacao(id)
         const apiClient = setupAPIClient();
         try {
             const response = await apiClient.get(`/variacoes?variacao_id=${id}`);
@@ -776,12 +779,10 @@ const Produto: React.FC = () => {
 
                     <Card style={{ width: '100%' }}>
                         {showElement ? (
-                            <>
-                                <NovaVariacao
-                                    /* @ts-ignore */
-                                    product_id={product_id}
-                                />
-                            </>
+                            <NovaVariacao
+                                /* @ts-ignore */
+                                product_id={product_id}
+                            />
                         ) :
                             <>
                                 {variacoes.length < 1 && (
@@ -789,33 +790,37 @@ const Produto: React.FC = () => {
                                         texto="Não há variações cadastradas para esse produto..."
                                     />
                                 )}
-                            </>
-                        }
 
-                        {showVariacao ? (
-                            <>
-                                <VariacaoItems
-                                    nameVariacao={nameVariacao}
-                                    descriptionVariacao1={descriptionVariacao1}
-                                    descriptionVariacao2={descriptionVariacao2}
-                                    descriptionVariacao3={descriptionVariacao3}
-                                    descriptionVariacao4={descriptionVariacao4}
-                                    descriptionVariacao5={descriptionVariacao5}
-                                    descriptionVariacao6={descriptionVariacao6}
-                                    preco={precoVariacao}
-                                    skuVariacao={skuVariacao}
-                                    estoqueVariacao={estoqueVariacao}
-                                    pesoKg={pesoKgVariacao}
-                                    larguraCm={larguraCmVariacao}
-                                    alturaCm={alturaCmVariacao}
-                                    profundidadeCm={profundidadeCmVariacao}
-                                    disponibilidadeVariacao={disponibilidadeVariacao}
-                                    promocao={promocaoVariacao}
-                                    freteGratis={freteGratis}
-                                />
+                                {!iDVariacao && variacoes.length >= 1 && (
+                                    <Titulos
+                                        tipo="h3"
+                                        titulo="Cadastre uma variação, ou selecione uma variação existente para ver os detalhes."
+                                    />
+                                )}
+
+                                {!!iDVariacao && (
+                                    <VariacaoDetalhes
+                                        photoVariacaoID={iDVariacao}
+                                        nameVariacao={nameVariacao}
+                                        descriptionVariacao1={descriptionVariacao1}
+                                        descriptionVariacao2={descriptionVariacao2}
+                                        descriptionVariacao3={descriptionVariacao3}
+                                        descriptionVariacao4={descriptionVariacao4}
+                                        descriptionVariacao5={descriptionVariacao5}
+                                        descriptionVariacao6={descriptionVariacao6}
+                                        preco={precoVariacao}
+                                        skuVariacao={skuVariacao}
+                                        estoqueVariacao={estoqueVariacao}
+                                        pesoKg={pesoKgVariacao}
+                                        larguraCm={larguraCmVariacao}
+                                        alturaCm={alturaCmVariacao}
+                                        profundidadeCm={profundidadeCmVariacao}
+                                        disponibilidadeVariacao={disponibilidadeVariacao}
+                                        promocao={promocaoVariacao}
+                                        freteGratis={freteGratis}
+                                    />
+                                )}
                             </>
-                        ) :
-                            <></>
                         }
                     </Card>
                 </ContainerVariacao>
@@ -825,26 +830,3 @@ const Produto: React.FC = () => {
 }
 
 export default Produto;
-
-
-
-
-{/* <VariacaoItems
-    nameVariacao={nameVariacao}
-    descriptionVariacao1={descriptionVariacao1}
-    descriptionVariacao2={descriptionVariacao2}
-    descriptionVariacao3={descriptionVariacao3}
-    descriptionVariacao4={descriptionVariacao4}
-    descriptionVariacao5={descriptionVariacao5}
-    descriptionVariacao6={descriptionVariacao6}
-    preco={precoVariacao}
-    skuVariacao={skuVariacao}
-    estoqueVariacao={estoqueVariacao}
-    pesoKg={pesoKgVariacao}
-    larguraCm={larguraCmVariacao}
-    alturaCm={alturaCmVariacao}
-    profundidadeCm={profundidadeCmVariacao}
-    disponibilidadeVariacao={disponibilidadeVariacao}
-    promocao={promocaoVariacao}
-    freteGratis={freteGratis}
-/> */}
