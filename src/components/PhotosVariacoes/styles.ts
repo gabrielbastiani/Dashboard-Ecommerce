@@ -127,4 +127,4 @@ export const PhotoProductImg = styled.img`
   border-radius: 0.5rem;
 `;
 
-export const FormPhotoProduct = styled.form``;
+export const FormPhotoVariante = styled.form``;

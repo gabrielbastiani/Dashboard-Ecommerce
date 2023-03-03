@@ -7,7 +7,7 @@ import {
     InputLogo,
     PhotoProductPreview,
     PhotoProductImg,
-    FormPhotoProduct,
+    FormPhotoVariante,
     GridContainer,
     ClickPhoto,
     BlockButton,
@@ -19,15 +19,15 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import Modal from 'react-modal';
-import { ModalDeletePhotoProduct } from '../../components/ModalDeletePhotoProduct/index';
+import { ModalDeletePhotoVariante } from '../popups/ModalDeletePhotoVariante/index';
 
 
-export type DeletePhotoProduct = {
+export type DeletePhotoVariacao = {
     id: string;
 }
 
 interface PhotoVariacao {
-    variacao_id: any;
+    variacao_id: string;
 }
 
 const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
@@ -35,27 +35,27 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
     const navigate = useNavigate();
 
     const [photoVariacao, setPhotoVariacao] = useState(null);
-    const [photoInsertUrl, setPhotoInsertUrl] = useState('');
+    const [photoInsertVarianteUrl, setPhotoInsertVarianteUrl] = useState('');
 
-    const [allPhotos, setAllPhotos] = useState<any[]>([]);
+    const [allPhotosVariantes, setAllPhotosVariantes] = useState<any[]>([]);
 
-    const [modalItem, setModalItem] = useState<DeletePhotoProduct[]>();
+    const [modalItem, setModalItem] = useState<DeletePhotoVariacao[]>();
     const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
-        async function loadAllPhotosProduct() {
+        async function loadAllPhotosVariacao() {
             const apiClient = setupAPIClient();
             try {
-                const responseProduct = await apiClient.get(`/variacoes?variacao_id=${variacao_id}`)
+                const responseVariantes = await apiClient.get(`/allPhotosVariacoes?variacao_id=${variacao_id}`);
 
-                setAllPhotos(responseProduct.data);
+                setAllPhotosVariantes(responseVariantes.data);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
-        loadAllPhotosProduct();
+        loadAllPhotosVariacao();
     }, [variacao_id])
 
     function handleFilePhotoVariacao(e: ChangeEvent<HTMLInputElement>) {
@@ -71,7 +71,7 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
         if (image.type === 'image/jpeg' || image.type === 'image/png') {
             /* @ts-ignore */
             setPhotoVariacao(image);
-            setPhotoInsertUrl(URL.createObjectURL(image));
+            setPhotoInsertVarianteUrl(URL.createObjectURL(image));
         }
     }
 
@@ -104,11 +104,11 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
         }, 3000);
     }
 
-    function handleCloseModalDelete() {
+    function handleCloseModalPhotoVariante() {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(id: string) {
+    async function handleOpenModalDeleteVariante(id: string) {
         const apiClient = setupAPIClient();
         const responseDelete = await apiClient.get('/photosVariacao', {
             params: {
@@ -124,16 +124,16 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
 
     return (
         <>
-            <FormPhotoProduct onSubmit={handlePhotoVariacao}>
+            <FormPhotoVariante onSubmit={handlePhotoVariacao}>
                 <EtiquetaPhotoProductInsert>
                     <IconSpan>
                         <MdFileUpload size={35} />
                     </IconSpan>
                     <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFilePhotoVariacao} alt="foto da variacao" />
-                    {photoInsertUrl ? (
+                    {photoInsertVarianteUrl ? (
                         <>
                             <PhotoProductPreview
-                                src={photoInsertUrl}
+                                src={photoInsertVarianteUrl}
                                 alt="foto do produto"
                                 width={170}
                                 height={120}
@@ -150,18 +150,18 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
                         <ClickPhoto>Insira a foto aqui</ClickPhoto>
                     }
                 </EtiquetaPhotoProductInsert>
-            </FormPhotoProduct>
+            </FormPhotoVariante>
 
 
-            {allPhotos.length !== 0 && (
+            {allPhotosVariantes.length !== 0 && (
                 <GridContainer>
-                    {allPhotos.map((photos) => {
+                    {allPhotosVariantes.map((variantePhotos) => {
                         return (
-                            <EtiquetaPhotoProduct key={photos.id}>
-                                <IconButton onClick={() => handleOpenModalDelete(photos.id)}>
+                            <EtiquetaPhotoProduct key={variantePhotos.id}>
+                                <IconButton onClick={() => handleOpenModalDeleteVariante(variantePhotos.id)}>
                                     <IoIosRemoveCircle size={30} />
                                 </IconButton>
-                                <PhotoProductImg src={"http://localhost:3333/files/" + photos.photoVariacao} alt="foto da variacao" />
+                                <PhotoProductImg src={"http://localhost:3333/files/" + variantePhotos.photoVariacao} alt="foto da variacao" />
                             </EtiquetaPhotoProduct>
                         )
                     })}
@@ -169,11 +169,11 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
             )}
 
             {modalVisible && (
-                <ModalDeletePhotoProduct
+                <ModalDeletePhotoVariante
                     isOpen={modalVisible}
-                    onRequestClose={handleCloseModalDelete}
+                    onRequestClose={handleCloseModalPhotoVariante}
                     /* @ts-ignore */
-                    photos={modalItem}
+                    photosVariante={modalItem}
                 />
             )}
         </>

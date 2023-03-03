@@ -1,8 +1,8 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeletePhotoProduct } from '../PhotosProduct';
-import { Button } from '../ui/Button/index';
-import { setupAPIClient } from '../../services/api'
+import { DeletePhotoProduct } from '../../PhotosProduct';
+import { Button } from '../../ui/Button/index';
+import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';

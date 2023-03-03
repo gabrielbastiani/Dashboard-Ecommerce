@@ -6,7 +6,8 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { BlockDados } from "../../Categorias/Categoria/styles";
 import { BlockTop } from "../../Categorias/styles";
-import { GridDate, SectionDate } from "../../Configuracoes/styles";
+import { SectionDate } from "../../Configuracoes/styles";
+import { GridDate } from "../../Perfil/styles";
 
 
 interface ItemsVariacao {

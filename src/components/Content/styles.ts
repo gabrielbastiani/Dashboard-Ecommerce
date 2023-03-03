@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.main`
     grid-area: CT;
     color: ${props => props?.theme?.colors?.white};
     background-color: ${props => props?.theme?.colors?.primary};
@@ -24,7 +24,7 @@ export const Container = styled.div`
     }
 `;
 
-export const Card = styled.div`
+export const Card = styled.section`
   margin: 40px 20px;
   padding: 30px;
   border-radius: 10px;

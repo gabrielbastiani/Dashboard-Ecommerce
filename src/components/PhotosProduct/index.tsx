@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import Modal from 'react-modal';
-import { ModalDeletePhotoProduct } from '../../components/ModalDeletePhotoProduct/index';
+import { ModalDeletePhotoProduct } from '../popups/ModalDeletePhotoProduct/index';
 
 export type DeletePhotoProduct = {
     id: string;

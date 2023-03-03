@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { GridDate, SectionDate } from "../../Configuracoes/styles";
+import { GridDateForm, SectionDate } from "../../Configuracoes/styles";
 import { Block, BlockTop, Etiqueta } from "../../Categorias/styles";
 import { InputPost } from "../../../components/ui/InputPost";
 import { Button } from "../../../components/ui/Button";
@@ -164,7 +164,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                 </Button>
             </BlockTop>
 
-            <GridDate>
+            <GridDateForm>
                 <SectionDate>
                     <Block>
                         <Etiqueta>SKU:</Etiqueta>
@@ -268,7 +268,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                         />
                     </Block>
                 </SectionDate>
-            </GridDate>
+            </GridDateForm>
             <br />
             <DescriptionsProduct
                 valor1={descriptionVariacao1}

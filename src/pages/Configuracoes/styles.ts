@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const GridDate = styled.form`
+export const GridDateForm = styled.form`
   display: flex;
 
   @media (max-width: 860px) {

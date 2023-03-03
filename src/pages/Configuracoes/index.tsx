@@ -23,7 +23,7 @@ import {
     InputLogo,
     LogoLojaImg,
     SectionDate,
-    GridDate,
+    GridDateForm,
     BlockLogomarca,
     TextLogo
 } from "./styles";
@@ -514,7 +514,7 @@ const Configuracoes: React.FC = () => {
                                 </Button>
                             </BlockTop>
 
-                            <GridDate id="form-loja" onSubmit={handleLoja}>
+                            <GridDateForm id="form-loja" onSubmit={handleLoja}>
                                 <SectionDate>
                                     <BlockLogomarca>
                                         <EtiquetaLogo>
@@ -642,7 +642,7 @@ const Configuracoes: React.FC = () => {
                                         />
                                     </Block>
                                 </SectionDate>
-                            </GridDate>
+                            </GridDateForm>
                         </>
                     )}
                 </Card>
