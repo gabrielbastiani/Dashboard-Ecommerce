@@ -10,6 +10,11 @@ export const BlockMobile = styled.div`
 
 export const ContainerVariacao = styled.section`
   display: flex;
+
+  @media (max-width: 1405px) {
+    width: 95%;
+    flex-direction: column;
+  }
 `;
 
 export const ButtonVariacao = styled.button`

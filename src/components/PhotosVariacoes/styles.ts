@@ -4,7 +4,7 @@ export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 10px;
-  padding: 10px;
+  padding: 5px;
   border-collapse: collapse;
   height: 350px;
   position: relative;
@@ -106,6 +106,10 @@ export const IconButton = styled.button`
 
   @media (max-width: 870px) {
     margin-left: 84px;
+
+    svg {
+      margin-right: 74px;
+    }
   }
 `;
 

@@ -6,7 +6,6 @@ const Content: React.FC = () => {
     return (
         <Container>
             <Card>
-
             </Card>
         </Container>
     )

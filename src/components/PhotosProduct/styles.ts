@@ -107,6 +107,10 @@ export const IconButton = styled.button`
 
   @media (max-width: 870px) {
     margin-left: 84px;
+
+    svg {
+      margin-right: 74px;
+    }
   }
 `;
 

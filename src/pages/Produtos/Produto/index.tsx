@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Card, Container } from "../../../components/Content/styles";
+import { CardResponsive, Card, Container } from "../../../components/Content/styles";
 import Voltar from "../../../components/Voltar";
 import { AddButton, BlockTop, SpanText } from "../../Categorias/styles";
 import Titulos from "../../../components/Titulos";
@@ -72,11 +72,9 @@ const Produto: React.FC = () => {
     const [profundidadeCmVariacao, setProfundidadeCmVariacao] = useState('');
     const [alturaCmVariacao, setAlturaCmVariacao] = useState('');
     const [promocaoVariacao, setPromocaoVariacao] = useState('');
-    const [disponibilidadeVariacao, setDisponibilidadeVariacao] = useState('');
-    const [freteGratis, setFreteGratis] = useState('');
 
     const [showElement, setShowElement] = useState(false);
-    const [showVariacao, setShowVariacao] = useState(false);
+
 
     useEffect(() => {
         async function loadCategorys() {
@@ -426,35 +424,30 @@ const Produto: React.FC = () => {
         loadVariacao();
     }, [product_id])
 
-
     async function loadVariacaoProduct(id: string) {
         setIDVariacao(id)
         const apiClient = setupAPIClient();
         try {
             const response = await apiClient.get(`/variacoes?variacao_id=${id}`);
-            setNameVariacao(response.data.nameVariacao);
-            setDescriptionVariacao1(response.data.descriptionVariacao1);
-            setDescriptionVariacao2(response.data.descriptionVariacao2);
-            setDescriptionVariacao3(response.data.descriptionVariacao3);
-            setDescriptionVariacao4(response.data.descriptionVariacao4);
-            setDescriptionVariacao5(response.data.descriptionVariacao5);
-            setDescriptionVariacao6(response.data.descriptionVariacao6);
-            setPrecoVariacao(response.data.preco);
-            setSkuVariacao(response.data.skuVariacao);
-            setEstoqueVariacao(response.data.estoqueVariacao);
-            setPesoKgVariacao(response.data.pesoKg);
-            setLarguraCmVariacao(response.data.larguraCm);
-            setProfundidadeCmVariacao(response.data.profundidadeCm);
-            setAlturaCmVariacao(response.data.alturaCm);
-            setPromocaoVariacao(response.data.promocao);
-            setDisponibilidadeVariacao(response.data.disponibilidadeVariacao);
-            setFreteGratis(response.data.freteGratis);
+            setNameVariacao(response?.data?.nameVariacao);
+            setDescriptionVariacao1(response?.data?.descriptionVariacao1);
+            setDescriptionVariacao2(response?.data?.descriptionVariacao2);
+            setDescriptionVariacao3(response?.data?.descriptionVariacao3);
+            setDescriptionVariacao4(response?.data?.descriptionVariacao4);
+            setDescriptionVariacao5(response?.data?.descriptionVariacao5);
+            setDescriptionVariacao6(response?.data?.descriptionVariacao6);
+            setPrecoVariacao(response?.data?.preco);
+            setSkuVariacao(response?.data?.skuVariacao);
+            setEstoqueVariacao(response?.data?.estoqueVariacao);
+            setPesoKgVariacao(response?.data?.pesoKg);
+            setLarguraCmVariacao(response?.data?.larguraCm);
+            setProfundidadeCmVariacao(response?.data?.profundidadeCm);
+            setAlturaCmVariacao(response?.data?.alturaCm);
+            setPromocaoVariacao(response?.data?.promocao);
         } catch (error) {
             console.log(error);
         }
-        showOrHideVariacao();
     }
-
 
     const showOrHide = () => {
         setShowElement(!showElement)
@@ -466,10 +459,6 @@ const Produto: React.FC = () => {
 
     const renderNo = () => {
         return <RenderNo>+ Nova</RenderNo>
-    }
-
-    const showOrHideVariacao = () => {
-        setShowVariacao(!showVariacao)
     }
 
 
@@ -755,7 +744,7 @@ const Produto: React.FC = () => {
                 </Card>
 
                 <ContainerVariacao>
-                    <Card style={{ width: '305px', textAlign: 'center' }} >
+                    <CardResponsive>
 
                         <Titulos tipo="h1" titulo="Variações" />
 
@@ -775,7 +764,7 @@ const Produto: React.FC = () => {
                             )
                         })}
 
-                    </Card>
+                    </CardResponsive>
 
                     <Card style={{ width: '100%' }}>
                         {showElement ? (
@@ -816,21 +805,7 @@ const Produto: React.FC = () => {
                                         larguraCm={larguraCmVariacao}
                                         alturaCm={alturaCmVariacao}
                                         profundidadeCm={profundidadeCmVariacao}
-                                        disponibilidadeVariacao={disponibilidadeVariacao}
                                         promocao={promocaoVariacao}
-                                        freteGratis={freteGratis}
-                                        /* @ts-ignore */
-                                        setDescriptionVariacao1={(e) => setDescriptionVariacao1(e.target.value)}
-                                        /* @ts-ignore */
-                                        setDescriptionVariacao2={(e) => setDescriptionVariacao2(e.target.value)}
-                                        /* @ts-ignore */
-                                        setDescriptionVariacao3={(e) => setDescriptionVariacao3(e.target.value)}
-                                        /* @ts-ignore */
-                                        setDescriptionVariacao4={(e) => setDescriptionVariacao4(e.target.value)}
-                                        /* @ts-ignore */
-                                        setDescriptionVariacao5={(e) => setDescriptionVariacao5(e.target.value)}
-                                        /* @ts-ignore */
-                                        setDescriptionVariacao6={(e) => setDescriptionVariacao6(e.target.value)}
                                     />
                                 )}
                             </>

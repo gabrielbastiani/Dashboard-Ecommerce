@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PhotosVariacoes from "../../../components/PhotosVariacoes";
 import { TextoDados } from "../../../components/TextoDados";
 import Titulos from "../../../components/Titulos";
@@ -12,6 +12,7 @@ import { BlockTop } from "../../Categorias/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 interface ItemsVariacao {
@@ -31,16 +32,7 @@ interface ItemsVariacao {
     larguraCm: string;
     alturaCm: string;
     profundidadeCm: string;
-    disponibilidadeVariacao: string;
     promocao: string;
-    freteGratis: string;
-
-    setDescriptionVariacao1: () => void;
-    setDescriptionVariacao2: () => void;
-    setDescriptionVariacao3: () => void;
-    setDescriptionVariacao4: () => void;
-    setDescriptionVariacao5: () => void;
-    setDescriptionVariacao6: () => void;
 }
 
 const VariacaoDetalhes = ({
@@ -60,19 +52,12 @@ const VariacaoDetalhes = ({
     larguraCm,
     alturaCm,
     profundidadeCm,
-    disponibilidadeVariacao,
     promocao,
-    freteGratis,
-    setDescriptionVariacao1,
-    setDescriptionVariacao2,
-    setDescriptionVariacao3,
-    setDescriptionVariacao4,
-    setDescriptionVariacao5,
-    setDescriptionVariacao6
 }: ItemsVariacao) => {
 
-    const [nameVariacoes, setNameVariacoes] = useState(nameVariacao);
-    const [dataNameVariacao, setDataNameVariacao] = useState('');
+    const navigate = useNavigate();
+
+    const [nameVariacoes, setNameVariacoes] = useState('');
     const [precoVariacoes, setPrecoVariacoes] = useState('');
     const [skuVariacoes, setSkuVariacoes] = useState('');
     const [estoqueVariacoes, setEstoqueVariacoes] = useState('');
@@ -92,6 +77,71 @@ const VariacaoDetalhes = ({
     const [descriptionVariacoes6, setDescriptionVariacoes6] = useState('');
 
 
+    useEffect(() => {
+        async function loadVariacao() {
+            const apiClient = setupAPIClient();
+            try {
+                const responseVariacao = await apiClient.get(`/exactVariacao?variacao_id=${variacao_id}`);
+                const {
+                    nameVariacao,
+                    descriptionVariacao1,
+                    descriptionVariacao2,
+                    descriptionVariacao3,
+                    descriptionVariacao4,
+                    descriptionVariacao5,
+                    descriptionVariacao6,
+                    preco,
+                    skuVariacao,
+                    estoqueVariacao,
+                    pesoKg,
+                    larguraCm,
+                    alturaCm,
+                    profundidadeCm,
+                    disponibilidadeVariacao,
+                    promocao,
+                    freteGratis
+                } = responseVariacao.data
+
+                setNameVariacoes(nameVariacao);
+                setPrecoVariacoes(preco);
+                setSkuVariacoes(skuVariacao);
+                setEstoqueVariacoes(estoqueVariacao);
+                setPesoKgVariacoes(pesoKg);
+                setLarguraCmVariacoes(larguraCm);
+                setProfundidadeCmVariacoes(profundidadeCm);
+                setAlturaCmVariacoes(alturaCm);
+                setPromocaoVariacoes(promocao);
+                setDisponibilidadeVariacoes(disponibilidadeVariacao);
+                setFretesGratis(freteGratis);
+
+                setDescriptionVariacoes1(descriptionVariacao1);
+                setDescriptionVariacoes2(descriptionVariacao2);
+                setDescriptionVariacoes3(descriptionVariacao3);
+                setDescriptionVariacoes4(descriptionVariacao4);
+                setDescriptionVariacoes5(descriptionVariacao5);
+                setDescriptionVariacoes6(descriptionVariacao6);
+
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        loadVariacao();
+    }, [variacao_id])
+
+    async function deleteVariante() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.delete(`/deleteVariacao?variacao_id=${variacao_id}`);
+            toast.success(`Variação deletada com sucesso.`);
+            refreshVariacao();
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao deletar a variação.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
+    }
 
     async function updateStatus() {
         try {
@@ -119,7 +169,7 @@ const VariacaoDetalhes = ({
     async function updateFrete() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateEntregaVariacao?variacao_id=${variacao_id}`);
+            await apiClient.put(`/freteGratisVariacao?variacao_id=${variacao_id}`);
 
             refreshVariacao();
 
@@ -146,8 +196,8 @@ const VariacaoDetalhes = ({
                 toast.error('Não deixe o nome da variação em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateNameVariacao?variacao_id=${variacao_id}`, { nameVariacao: nameVariacoes || dataNameVariacao });
-                toast.success('Nome da categoria atualizada com sucesso.');
+                await apiClient.put(`/updateNameVariacao?variacao_id=${variacao_id}`, { nameVariacao: nameVariacoes });
+                toast.success('Nome da variação atualizada com sucesso.');
                 refreshVariacao();
             }
         } catch (error) {
@@ -248,8 +298,8 @@ const VariacaoDetalhes = ({
                 toast.error('Não deixe a altura da variação em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateAltura?variacao_id=${variacao_id}`, { alturaCm: alturaCmVariacoes });
-                toast.success('Altura do produto atualizado com sucesso.');
+                await apiClient.put(`/updateAlturaVariacao?variacao_id=${variacao_id}`, { alturaCm: alturaCmVariacoes });
+                toast.success('Altura da variação atualizado com sucesso.');
                 refreshVariacao();
             }
         } catch (error) {
@@ -309,9 +359,24 @@ const VariacaoDetalhes = ({
     async function refreshVariacao() {
         const apiClient = setupAPIClient();
         const response = await apiClient.get(`/exactVariacao?variacao_id=${variacao_id}`);
-        setNameVariacoes(response?.data?.nameProduct);
-        setDataNameVariacao(response?.data?.nameProduct);
-        setDisponibilidadeVariacoes(response?.data?.disponibilidade);
+        setNameVariacoes(response?.data?.nameVariacao);
+        setPrecoVariacoes(response?.data?.preco);
+        setSkuVariacoes(response?.data?.skuVariacao);
+        setEstoqueVariacoes(response?.data?.estoqueVariacao);
+        setPesoKgVariacoes(response?.data?.pesoKg);
+        setLarguraCmVariacoes(response?.data?.larguraCm);
+        setProfundidadeCmVariacoes(response?.data?.profundidadeCm);
+        setAlturaCmVariacoes(response?.data?.alturaCm);
+        setPromocaoVariacoes(response?.data?.promocao);
+        setDisponibilidadeVariacoes(response?.data?.disponibilidadeVariacao);
+        setFretesGratis(response?.data?.freteGratis);
+
+        setDescriptionVariacoes1(response?.data?.descriptionVariacao1);
+        setDescriptionVariacoes2(response?.data?.descriptionVariacao2);
+        setDescriptionVariacoes3(response?.data?.descriptionVariacao3);
+        setDescriptionVariacoes4(response?.data?.descriptionVariacao4);
+        setDescriptionVariacoes5(response?.data?.descriptionVariacao5);
+        setDescriptionVariacoes6(response?.data?.descriptionVariacao6);
     }
 
     function formatPrecoUpdate() {
@@ -359,17 +424,18 @@ const VariacaoDetalhes = ({
             <BlockTop>
                 <Titulos
                     tipo="h3"
-                    titulo={'Variação - ' + nameVariacao}
+                    titulo={'Variação - ' + nameVariacoes}
                 />
                 <Button
                     type="submit"
                     style={{ backgroundColor: '#FB451E' }}
-                /* onClick={''} */
+                    onClick={deleteVariante}
                 >
                     Remover
                 </Button>
             </BlockTop>
-
+            <br />
+            <br />
             <GridDate>
                 <SectionDate>
                     <BlockDados>
@@ -377,7 +443,7 @@ const VariacaoDetalhes = ({
                             chave={"SKU"}
                             dados={
                                 <InputUpdate
-                                    dado={skuVariacao}
+                                    dado={skuVariacoes}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={skuVariacao}
@@ -395,7 +461,7 @@ const VariacaoDetalhes = ({
                             chave={"Nome"}
                             dados={
                                 <InputUpdate
-                                    dado={dataNameVariacao}
+                                    dado={nameVariacoes}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={nameVariacao}
@@ -413,7 +479,7 @@ const VariacaoDetalhes = ({
                             chave={"Estoque"}
                             dados={
                                 <InputUpdate
-                                    dado={estoqueVariacao}
+                                    dado={estoqueVariacoes}
                                     type="number"
                                     /* @ts-ignore */
                                     placeholder={estoqueVariacao}
@@ -431,7 +497,7 @@ const VariacaoDetalhes = ({
                             chave={"Peso (Kg)"}
                             dados={
                                 <InputUpdate
-                                    dado={pesoKg}
+                                    dado={pesoKgVariacoes}
                                     type="number"
                                     /* @ts-ignore */
                                     placeholder={pesoKg}
@@ -449,7 +515,7 @@ const VariacaoDetalhes = ({
                             chave={"Largura (Cm)"}
                             dados={
                                 <InputUpdate
-                                    dado={larguraCm}
+                                    dado={larguraCmVariacoes}
                                     type="number"
                                     /* @ts-ignore */
                                     placeholder={larguraCm}
@@ -467,7 +533,7 @@ const VariacaoDetalhes = ({
                             chave={"Comprimento (Cm)"}
                             dados={
                                 <InputUpdate
-                                    dado={profundidadeCm}
+                                    dado={profundidadeCmVariacoes}
                                     type="number"
                                     /* @ts-ignore */
                                     placeholder={profundidadeCm}
@@ -487,7 +553,7 @@ const VariacaoDetalhes = ({
                             chave={"Altura (Cm)"}
                             dados={
                                 <InputUpdate
-                                    dado={alturaCm}
+                                    dado={alturaCmVariacoes}
                                     type="number"
                                     /* @ts-ignore */
                                     placeholder={alturaCm}
@@ -506,7 +572,7 @@ const VariacaoDetalhes = ({
                             dados={
                                 <ButtonSelect
                                     /* @ts-ignore */
-                                    dado={disponibilidadeVariacao}
+                                    dado={disponibilidadeVariacoes}
                                     handleSubmit={updateStatus}
                                 />
                             }
@@ -519,7 +585,7 @@ const VariacaoDetalhes = ({
                             dados={
                                 <ButtonSelect
                                     /* @ts-ignore */
-                                    dado={freteGratis}
+                                    dado={fretesGratis}
                                     handleSubmit={updateFrete}
                                 />
                             }
@@ -535,7 +601,7 @@ const VariacaoDetalhes = ({
                                     /* @ts-ignore */
                                     onKeyUp={formatPrecoUpdate}
                                     maxLength={10}
-                                    dado={preco}
+                                    dado={precoVariacoes}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={preco}
@@ -550,14 +616,14 @@ const VariacaoDetalhes = ({
 
                     <BlockDados>
                         <TextoDados
-                            chave={"Valor em Promoção"}
+                            chave="Promoção"
                             dados={
                                 <InputUpdate
                                     id="valorpromocaoupdate"
                                     /* @ts-ignore */
                                     onKeyUp={formatPromocaoUpdate}
                                     maxLength={10}
-                                    dado={promocao}
+                                    dado={promocaoVariacoes}
                                     type="text"
                                     /* @ts-ignore */
                                     placeholder={promocao}
@@ -586,6 +652,7 @@ const VariacaoDetalhes = ({
                 valor4={descriptionVariacoes4}
                 valor5={descriptionVariacoes5}
                 valor6={descriptionVariacoes6}
+
                 /* @ts-ignore */
                 onChange1={(e) => setDescriptionVariacoes1(e.target.value)}
                 /* @ts-ignore */
@@ -598,18 +665,20 @@ const VariacaoDetalhes = ({
                 onChange5={(e) => setDescriptionVariacoes5(e.target.value)}
                 /* @ts-ignore */
                 onChange6={(e) => setDescriptionVariacoes6(e.target.value)}
+
                 handleSubmit1={updateDescriptionsVariacao}
                 handleSubmit2={updateDescriptionsVariacao}
                 handleSubmit3={updateDescriptionsVariacao}
                 handleSubmit4={updateDescriptionsVariacao}
                 handleSubmit5={updateDescriptionsVariacao}
                 handleSubmit6={updateDescriptionsVariacao}
-                placeholder1={""}
-                placeholder2={""}
-                placeholder3={""}
-                placeholder4={""}
-                placeholder5={""}
-                placeholder6={""}
+
+                placeholder1={descriptionVariacao1}
+                placeholder2={descriptionVariacao2}
+                placeholder3={descriptionVariacao3}
+                placeholder4={descriptionVariacao4}
+                placeholder5={descriptionVariacao5}
+                placeholder6={descriptionVariacao6}
             />
         </>
     )
