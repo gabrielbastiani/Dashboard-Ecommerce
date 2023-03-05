@@ -27,7 +27,6 @@ type AuthProviderProps = {
     children: ReactNode;
 }
 
-
 export const AuthContext = createContext({} as AuthContextData);
 
 export const signOut = () => {

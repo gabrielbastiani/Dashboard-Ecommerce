@@ -13,7 +13,7 @@ const RaoutesApp: React.FC = () => {
 
     return (
         <Routes>      
-            <Route path="/loginAdmin" element={<LoginAdmin />} />
+            <Route path="/" element={<LoginAdmin />} />
             <Route path="/signupAdmin" element={<SignupAdmin />} />
             <Route path="/recoveryPassword" element={<RecoveryPassword />} />
             <Route path="/recover/:recovery_id" element={<Recover />} />
