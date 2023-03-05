@@ -142,6 +142,9 @@ const Produto: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
+
+            await apiClient.delete(`/deleteVariacao?variacao_id=${product_id}`);
+
             toast.success(`Produto deletado com sucesso.`);
             refreshProduct();
             navigate('/produtos');
@@ -789,6 +792,8 @@ const Produto: React.FC = () => {
 
                                 {!!iDVariacao && (
                                     <VariacaoDetalhes
+                                        /* @ts-ignore */
+                                        productId={product_id}
                                         variacao_id={iDVariacao}
                                         photoVariacaoID={iDVariacao}
                                         nameVariacao={nameVariacao}

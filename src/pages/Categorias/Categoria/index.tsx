@@ -28,18 +28,21 @@ import { Button } from "../../../components/ui/Button";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
 import TabelaSimples from "../../../components/Tabelas";
-import { useNavigate } from 'react-router-dom';
 import { Avisos } from "../../../components/Avisos";
 import Pesquisa from "../../../components/Pesquisa";
 import { Card } from "../../../components/Content/styles";
 import Select from "../../../components/ui/Select";
+import Modal from 'react-modal';
+import { ModalDeleteCategory } from "../../../components/popups/ModalDeleteCategory";
 
+
+export type DeleteCategory = {
+    category_id: string;
+}
 
 const Categoria: React.FC = () => {
 
     let { category_id, categoryName, codigo } = useParams();
-
-    const navigate = useNavigate();
 
     const [categoryNames, setCategoryNames] = useState(categoryName);
     const [dataName, setDataName] = useState('');
@@ -48,7 +51,7 @@ const Categoria: React.FC = () => {
     const [dataCodigo, setDataCodigo] = useState('');
 
     const [disponibilidades, setDisponibilidades] = useState('');
-    
+
 
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
@@ -57,6 +60,9 @@ const Categoria: React.FC = () => {
     const [limit, setLimit] = useState(4);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     async function updateCategoryName() {
@@ -113,18 +119,6 @@ const Categoria: React.FC = () => {
         }
     }
 
-    async function deleteCategory() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.delete(`/deleteCategory?category_id=${category_id}`);
-            toast.success(`Categoria deletada com sucesso.`);
-            refreshCategory();
-            navigate('/categorias');
-        } catch (err) {
-            toast.error('Ops erro ao deletar a categoria.');
-        }
-    }
-
     useEffect(() => {
         async function refreshCategoryLoad() {
             const apiClient = setupAPIClient();
@@ -135,7 +129,7 @@ const Categoria: React.FC = () => {
             setDisponibilidades(response?.data?.disponibilidade);
         }
         refreshCategoryLoad();
-    },[category_id])
+    }, [category_id])
 
     async function refreshCategory() {
         const apiClient = setupAPIClient();
@@ -160,12 +154,12 @@ const Categoria: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages);
-                setSearch(data.products);
-                setInitialFilter(data.products);
+                setPages(arrayPages || []);
+                setSearch(data.products || []);
+                setInitialFilter(data.products || []);
 
-            } catch (error) {
-                console.error(error);
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
                 alert('Error call api list ALL Products');
             }
         }
@@ -205,156 +199,185 @@ const Categoria: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(category_id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/exactCategory', {
+            params: {
+                category_id: category_id,
+            }
+        });
+        setModalItem(responseDelete.data);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+
 
     return (
-        <Grid>
-            <MainHeader />
-            <Aside />
-            <Container>
-                <Card>
-                    <Voltar
-                        url="/categorias"
-                    />
-                    <BlockTop>
-                        <Titulos
-                            tipo="h1"
-                            titulo={dataName}
+        <>
+            <Grid>
+                <MainHeader />
+                <Aside />
+                <Container>
+                    <Card>
+                        <Voltar
+                            url="/categorias"
                         />
-                        <Button
-                            type="submit"
-                            style={{ backgroundColor: '#FB451E' }}
-                            onClick={deleteCategory}
-                        >
-                            Remover
-                        </Button>
-                    </BlockTop>
-
-                    <BlockDados>
-                        <TextoDados
-                            chave={"Nome"}
-                            dados={
-                                <InputUpdate
-                                    dado={dataName}
-                                    type="text"
-                                    /* @ts-ignore */
-                                    placeholder={categoryName}
-                                    value={categoryNames}
-                                    /* @ts-ignore */
-                                    onChange={(e) => setCategoryNames(e.target.value)}
-                                    handleSubmit={updateCategoryName}
-                                />
-                            }
-                        />
-                    </BlockDados>
-
-                    <BlockDados>
-                        <TextoDados
-                            chave={"Código"}
-                            dados={
-                                <InputUpdate
-                                    dado={dataCodigo}
-                                    type="text"
-                                    /* @ts-ignore */
-                                    placeholder={codigo}
-                                    value={codigos}
-                                    /* @ts-ignore */
-                                    onChange={(e) => setCodigos(e.target.value)}
-                                    handleSubmit={updateCategoryCodigo}
-                                />
-                            }
-                        />
-                    </BlockDados>
-
-                    <BlockDados>
-                        <TextoDados
-                            chave={"Disponibilidade"}
-                            dados={
-                                <ButtonSelect
-                                    /* @ts-ignore */
-                                    dado={disponibilidades}
-                                    handleSubmit={updateStatus}
-                                />
-                            }
-                        />
-                    </BlockDados>
-
-                    {search.length > 0 && (
-                        <>
-                            <DivisorHorizontal />
-
+                        <BlockTop>
                             <Titulos
-                                tipo="h3"
-                                titulo="Produtos da Categoria"
+                                tipo="h1"
+                                titulo={dataName}
                             />
-
-                            <Pesquisa
-                                placeholder={"Pesquise aqui pelo nome do produto..."}
+                            <Button
+                                type="submit"
+                                style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onChange={handleChange}
+                                onClick={ () => handleOpenModalDelete(category_id)}
+                            >
+                                Remover
+                            </Button>
+                        </BlockTop>
+
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Nome"}
+                                dados={
+                                    <InputUpdate
+                                        dado={dataName}
+                                        type="text"
+                                        /* @ts-ignore */
+                                        placeholder={categoryName}
+                                        value={categoryNames}
+                                        /* @ts-ignore */
+                                        onChange={(e) => setCategoryNames(e.target.value)}
+                                        handleSubmit={updateCategoryName}
+                                    />
+                                }
                             />
+                        </BlockDados>
 
-                            <br />
-
-                            <TextTotal>Produtos por página: &nbsp;</TextTotal>
-
-                            <Select
-                                /* @ts-ignore */
-                                onChange={limits}
-                                opcoes={[
-                                    { label: "4", value: "4" },
-                                    { label: "8", value: "8" },
-                                    { label: "Todos produtos", value: "999999" }
-                                ]}
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Código"}
+                                dados={
+                                    <InputUpdate
+                                        dado={dataCodigo}
+                                        type="text"
+                                        /* @ts-ignore */
+                                        placeholder={codigo}
+                                        value={codigos}
+                                        /* @ts-ignore */
+                                        onChange={(e) => setCodigos(e.target.value)}
+                                        handleSubmit={updateCategoryCodigo}
+                                    />
+                                }
                             />
+                        </BlockDados>
 
-                            <TabelaSimples
-                                cabecalho={["Produto", "SKU", "Status"]}
-                                /* @ts-ignore */
-                                dados={dados}
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Disponibilidade"}
+                                dados={
+                                    <ButtonSelect
+                                        /* @ts-ignore */
+                                        dado={disponibilidades}
+                                        handleSubmit={updateStatus}
+                                    />
+                                }
                             />
+                        </BlockDados>
 
-                            <ContainerPagination>
-                                <TotalBoxItems key={total}>
-                                    <TextTotal>Total de produtos: {total}</TextTotal>
-                                </TotalBoxItems>
-                                <ContainerCategoryPage>
-                                    {currentPage > 1 && (
-                                        <Previus>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                Voltar
-                                            </ButtonPage>
-                                        </Previus>
-                                    )}
+                        {search.length > 0 && (
+                            <>
+                                <DivisorHorizontal />
 
-                                    {pages.map((page) => (
-                                        <TextPage
-                                            key={page}
-                                            onClick={() => setCurrentPage(page)}
-                                        >
-                                            {page}
-                                        </TextPage>
-                                    ))}
+                                <Titulos
+                                    tipo="h3"
+                                    titulo="Produtos da Categoria"
+                                />
 
-                                    {currentPage < search.length && (
-                                        <Next>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                                Avançar
-                                            </ButtonPage>
-                                        </Next>
-                                    )}
-                                </ContainerCategoryPage>
-                            </ContainerPagination>
-                        </>
-                    )}
+                                <Pesquisa
+                                    placeholder={"Pesquise aqui pelo nome do produto..."}
+                                    /* @ts-ignore */
+                                    onChange={handleChange}
+                                />
 
-                    {search.length < 1 && (
-                        <Avisos
-                            texto="Não há produtos nessa categoria"
-                        />
-                    )}
-                </Card>
-            </Container>
-        </Grid>
+                                <br />
+
+                                <TextTotal>Produtos por página: &nbsp;</TextTotal>
+
+                                <Select
+                                    /* @ts-ignore */
+                                    onChange={limits}
+                                    opcoes={[
+                                        { label: "4", value: "4" },
+                                        { label: "8", value: "8" },
+                                        { label: "Todos produtos", value: "999999" }
+                                    ]}
+                                />
+
+                                <TabelaSimples
+                                    cabecalho={["Produto", "SKU", "Status"]}
+                                    /* @ts-ignore */
+                                    dados={dados}
+                                />
+
+                                <ContainerPagination>
+                                    <TotalBoxItems key={total}>
+                                        <TextTotal>Total de produtos: {total}</TextTotal>
+                                    </TotalBoxItems>
+                                    <ContainerCategoryPage>
+                                        {currentPage > 1 && (
+                                            <Previus>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                    Voltar
+                                                </ButtonPage>
+                                            </Previus>
+                                        )}
+
+                                        {pages.map((page) => (
+                                            <TextPage
+                                                key={page}
+                                                onClick={() => setCurrentPage(page)}
+                                            >
+                                                {page}
+                                            </TextPage>
+                                        ))}
+
+                                        {currentPage < search.length && (
+                                            <Next>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                    Avançar
+                                                </ButtonPage>
+                                            </Next>
+                                        )}
+                                    </ContainerCategoryPage>
+                                </ContainerPagination>
+                            </>
+                        )}
+
+                        {search.length < 1 && (
+                            <Avisos
+                                texto="Não há produtos nessa categoria"
+                            />
+                        )}
+                    </Card>
+                </Container>
+            </Grid>
+
+            {modalVisible && (
+                <ModalDeleteCategory
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    category={modalItem}
+                />
+            )}
+        </>
     )
 }
 

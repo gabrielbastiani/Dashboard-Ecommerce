@@ -28,9 +28,10 @@ export type DeletePhotoVariacao = {
 
 interface PhotoVariacao {
     variacao_id: string;
+    product_id: string;
 }
 
-const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
+const PhotosVariacoes = ({ variacao_id, product_id }: PhotoVariacao) => {
 
     const navigate = useNavigate();
 
@@ -89,6 +90,7 @@ const PhotosVariacoes = ({ variacao_id }: PhotoVariacao) => {
             data.append('file', photoVariacao);
             /* @ts-ignore */
             data.append('variacao_id', variacao_id);
+            data.append('product_id', product_id);
 
             const apiClient = setupAPIClient();
             await apiClient.post(`/photoVariante`, data);

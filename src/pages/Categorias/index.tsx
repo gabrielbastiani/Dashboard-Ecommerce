@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Card } from "../../components/Content/styles";
 import Select from "../../components/ui/Select";
+import { Avisos } from "../../components/Avisos";
 
 
 const Categorias: React.FC = () => {
@@ -100,11 +101,16 @@ const Categorias: React.FC = () => {
                         tipo="h1"
                         titulo="Categorias"
                     />
-                    <Pesquisa
-                        placeholder={"Pesquise aqui pelo nome da categoria..."}
-                        /* @ts-ignore */
-                        onChange={handleChange}
-                    />
+
+                    {dados.length < 1 ? (
+                        null
+                    ) :
+                        <Pesquisa
+                            placeholder={"Pesquise aqui pelo nome da categoria..."}
+                            /* @ts-ignore */
+                            onChange={handleChange}
+                        />
+                    }
 
                     <AddButton>
                         <AiOutlinePlusCircle />
@@ -113,60 +119,70 @@ const Categorias: React.FC = () => {
                         </Link>
                     </AddButton>
 
-                    <TextTotal>Categorias por página: &nbsp;</TextTotal>
+                    {dados.length < 1 ? (
+                        <>
+                            <Avisos
+                                texto="Não há categorias cadastradas na loja..."
+                            />
+                        </>
+                    ) :
+                        <>
+                            <TextTotal>Categorias por página: &nbsp;</TextTotal>
 
-                    <Select
-                        /* @ts-ignore */
-                        onChange={limits}
-                        opcoes={[
-                            { label: "4", value: "4" },
-                            { label: "8", value: "8" },
-                            { label: "Todas categorias", value: "999999" }
-                        ]}
-                    />
+                            <Select
+                                /* @ts-ignore */
+                                onChange={limits}
+                                opcoes={[
+                                    { label: "4", value: "4" },
+                                    { label: "8", value: "8" },
+                                    { label: "Todas categorias", value: "999999" }
+                                ]}
+                            />
 
-                    <TabelaSimples
-                        cabecalho={["Categoria", "Qtd. de Produtos"]}
-                        /* @ts-ignore */
-                        dados={dados}
-                    />
+                            <TabelaSimples
+                                cabecalho={["Categoria", "Qtd. de Produtos"]}
+                                /* @ts-ignore */
+                                dados={dados}
+                            />
 
-                    <ContainerPagination>
-                        <TotalBoxItems key={total}>
-                            <TextTotal>Total de categorias: {total}</TextTotal>
-                        </TotalBoxItems>
-                        <ContainerCategoryPage>
+                            <ContainerPagination>
+                                <TotalBoxItems key={total}>
+                                    <TextTotal>Total de categorias: {total}</TextTotal>
+                                </TotalBoxItems>
+                                <ContainerCategoryPage>
 
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
 
-                            {pages.map((page) => (
-                                <TextPage
-                                    key={page}
-                                    onClick={() => setCurrentPage(page)}
-                                >
-                                    {page}
-                                </TextPage>
-                            ))}
+                                    {pages.map((page) => (
+                                        <TextPage
+                                            key={page}
+                                            onClick={() => setCurrentPage(page)}
+                                        >
+                                            {page}
+                                        </TextPage>
+                                    ))}
 
-                            {currentPage < search.length && (
-                                <Next>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                        Avançar
-                                    </ButtonPage>
-                                </Next>
-                            )}
+                                    {currentPage < search.length && (
+                                        <Next>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                Avançar
+                                            </ButtonPage>
+                                        </Next>
+                                    )}
 
-                        </ContainerCategoryPage>
-                    </ContainerPagination>
+                                </ContainerCategoryPage>
+                            </ContainerPagination>
+                        </>
+                    }
                 </Card>
-            </Container>
-        </Grid>
+            </Container >
+        </Grid >
     )
 }
 

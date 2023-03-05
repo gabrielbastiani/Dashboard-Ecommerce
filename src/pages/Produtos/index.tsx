@@ -25,6 +25,7 @@ import Pesquisa from "../../components/Pesquisa";
 import TabelaSimples from "../../components/Tabelas";
 import { setupAPIClient } from "../../services/api";
 import Select from "../../components/ui/Select";
+import { Avisos } from "../../components/Avisos";
 
 
 const Produtos: React.FC = () => {
@@ -61,12 +62,12 @@ const Produtos: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages);
-                setSearch(data.products);
-                setInitialFilter(data.products);
+                setPages(arrayPages || []);
+                setSearch(data.products || []);
+                setInitialFilter(data.products || []);
 
-            } catch (error) {
-                console.error(error);
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
                 alert('Error call api list ALL products');
             }
         }
@@ -135,30 +136,34 @@ const Produtos: React.FC = () => {
                         titulo="Produtos"
                     />
 
-                    <SectionTop>
-                        <Block>
-                            <Pesquisa
-                                placeholder={"Pesquise aqui pelo nome do produto..."}
-                                /* @ts-ignore */
-                                onChange={handleChange}
-                            />
-                        </Block>
+                    {dados.length < 1 ? (
+                        null
+                    ) :
+                        <SectionTop>
+                            <Block>
+                                <Pesquisa
+                                    placeholder={"Pesquise aqui pelo nome do produto..."}
+                                    /* @ts-ignore */
+                                    onChange={handleChange}
+                                />
+                            </Block>
 
-                        <BlockSection>
-                            <TextTotal>Ordenar por</TextTotal>
-                            <Select
-                                value={order}
-                                /* @ts-ignore */
-                                onChange={e => setOrder(e.target.value)}
-                                opcoes={[
-                                    { label: "Alfabética A-Z", value: "alfabeticaAZ" },
-                                    { label: "Alfabética Z-A", value: "alfabeticaZA" },
-                                    { label: "Preço Menor", value: "precoDecrescente" },
-                                    { label: "Preço Maior", value: "precoCrescente" }
-                                ]}
-                            />
-                        </BlockSection>
-                    </SectionTop>
+                            <BlockSection>
+                                <TextTotal>Ordenar por</TextTotal>
+                                <Select
+                                    value={order}
+                                    /* @ts-ignore */
+                                    onChange={e => setOrder(e.target.value)}
+                                    opcoes={[
+                                        { label: "Alfabética A-Z", value: "alfabeticaAZ" },
+                                        { label: "Alfabética Z-A", value: "alfabeticaZA" },
+                                        { label: "Preço Menor", value: "precoDecrescente" },
+                                        { label: "Preço Maior", value: "precoCrescente" }
+                                    ]}
+                                />
+                            </BlockSection>
+                        </SectionTop>
+                    }
 
                     <AddButton>
                         <AiOutlinePlusCircle />
@@ -167,56 +172,63 @@ const Produtos: React.FC = () => {
                         </Link>
                     </AddButton>
 
-                    <TextTotal>Produtos por página: &nbsp;</TextTotal>
+                    {dados.length < 1 ? (
+                        <Avisos
+                            texto="Não há produtos cadastrados na loja ainda..."
+                        />
+                    ) :
+                        <>
+                            <TextTotal>Produtos por página: &nbsp;</TextTotal>
 
-                    <Select
-                        /* @ts-ignore */
-                        onChange={limits}
-                        opcoes={[
-                            { label: "4", value: "4" },
-                            { label: "8", value: "8" },
-                            { label: "Todos produtos", value: "999999" }
-                        ]}
-                    />
+                            <Select
+                                /* @ts-ignore */
+                                onChange={limits}
+                                opcoes={[
+                                    { label: "4", value: "4" },
+                                    { label: "8", value: "8" },
+                                    { label: "Todos produtos", value: "999999" }
+                                ]}
+                            />
+                            <TabelaSimples
+                                cabecalho={["Produto", "Categoria", "Status"]}
+                                /* @ts-ignore */
+                                dados={dados}
+                            />
 
-                    <TabelaSimples
-                        cabecalho={["Produto", "Categoria", "Status"]}
-                        /* @ts-ignore */
-                        dados={dados}
-                    />
+                            <ContainerPagination>
+                                <TotalBoxItems key={total}>
+                                    <TextTotal>Total de produtos: {total}</TextTotal>
+                                </TotalBoxItems>
+                                <ContainerCategoryPage>
 
-                    <ContainerPagination>
-                        <TotalBoxItems key={total}>
-                            <TextTotal>Total de produtos: {total}</TextTotal>
-                        </TotalBoxItems>
-                        <ContainerCategoryPage>
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
 
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
+                                    {pages.map((page) => (
+                                        <TextPage
+                                            key={page}
+                                            onClick={() => setCurrentPage(page)}
+                                        >
+                                            {page}
+                                        </TextPage>
+                                    ))}
 
-                            {pages.map((page) => (
-                                <TextPage
-                                    key={page}
-                                    onClick={() => setCurrentPage(page)}
-                                >
-                                    {page}
-                                </TextPage>
-                            ))}
-
-                            {currentPage < search.length && (
-                                <Next>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                        Avançar
-                                    </ButtonPage>
-                                </Next>
-                            )}
-                        </ContainerCategoryPage>
-                    </ContainerPagination>
+                                    {currentPage < search.length && (
+                                        <Next>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                Avançar
+                                            </ButtonPage>
+                                        </Next>
+                                    )}
+                                </ContainerCategoryPage>
+                            </ContainerPagination>
+                        </>
+                    }
                 </Card>
             </Container>
         </Grid>

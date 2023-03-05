@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 
 interface ItemsVariacao {
+    productId: string;
     variacao_id: string;
     photoVariacaoID: string;
     nameVariacao: string;
@@ -37,6 +38,7 @@ interface ItemsVariacao {
 
 const VariacaoDetalhes = ({
     variacao_id,
+    productId,
     photoVariacaoID,
     nameVariacao,
     descriptionVariacao1,
@@ -130,7 +132,7 @@ const VariacaoDetalhes = ({
 
     async function deleteVariante() {
         try {
-            const apiClient = setupAPIClient();
+            const apiClient = setupAPIClient();/* @ts-ignore */
             await apiClient.delete(`/deleteVariacao?variacao_id=${variacao_id}`);
             toast.success(`Variação deletada com sucesso.`);
             refreshVariacao();
@@ -640,6 +642,7 @@ const VariacaoDetalhes = ({
                 <SectionDate>
                     <PhotosVariacoes
                         variacao_id={photoVariacaoID}
+                        product_id={productId}
                     />
                 </SectionDate>
             </GridDate>

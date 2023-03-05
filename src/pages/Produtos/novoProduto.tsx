@@ -70,11 +70,15 @@ const NovoProduto: React.FC = () => {
                 peso === '' ||
                 largura === '' ||
                 profundidade === '' ||
-                altura === '' ||
-                loja_id === ''
+                altura === '' 
             ) {
                 toast.error('Preencha todos os campos')
                 return
+            }
+
+            if (loja_id === null) {
+                toast.error('Cadastre os dados da sua loja antes de cadastrar um produto');
+                return;
             }
 
             const apiClient = setupAPIClient();
