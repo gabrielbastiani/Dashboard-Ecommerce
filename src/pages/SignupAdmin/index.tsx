@@ -142,7 +142,7 @@ const SignupAdmin: React.FC = () => {
 
                 </Formulario>
 
-                <a href="/loginAdmin">
+                <a href="/">
                     <TextLink>Já possui uma conta? Faça login!</TextLink>
                 </a>
 
