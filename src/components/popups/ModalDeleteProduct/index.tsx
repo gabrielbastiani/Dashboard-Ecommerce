@@ -6,6 +6,7 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
+import { useState } from 'react';
 
 
 interface ModalDeleteProductRequest {
@@ -31,27 +32,44 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
         }
     };
 
+    const [showElement, setShowElement] = useState(false);
+
+    const showOrHide = () => {
+        setShowElement(!showElement)
+    }
+
 
     async function handleDeleteProduct() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
             const product_id = product.id;
+            /* @ts-ignore */
+            /* if (product.variacoes.length >= 1 || product.photoproducts.length >= 1) {
+                toast.warning(`ATENÇÃO: Delete as imagens desse produto, e as variações antes de poder deletar por completo.`);
+                return
+            } */
 
-            await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
-            toast.success(`Produto deletado com sucesso.`);
-            
+            await apiClient.delete(`/deleteAllPhotos?product_id=${product_id}`);
+            /* await apiClient.delete(`/deleteProduct?product_id=${product_id}`); */
+            /* toast.success(`Produto deletado com sucesso.`); */
+
             navigate('/produtos');
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao deletar o produto!');
+            /* toast.error('Ops erro ao deletar o produto!'); */
         }
         setTimeout(() => {
             navigate(0);
         }, 3000);
+    }
+
+    function handleDeleteAndShow() {
+        showOrHide();
+        handleDeleteProduct();
     }
 
 
@@ -70,18 +88,38 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
                 <FiX size={45} color="#f34748" />
             </ButtonClose>
 
-            <ContainerContent>
-                <TextModal>Deseja mesmo deletar esse produto?</TextModal>
+            {showElement ? (
+                <ContainerContent>
+                    <TextModal>Deletar todas as variações e as imagens das variações</TextModal>
 
-                <ContainerButton>
-                    <Button
-                        style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteProduct()}
+                    <ContainerButton>
+                        <Button
+                            style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
+                            onClick={showOrHide}
+                        >
+                            Sim
+                        </Button>
+                    </ContainerButton>
+                </ContainerContent>
+            ) :
+                <ContainerContent>
+
+                    <TextModal
+                        style={{ textAlign: 'center' }}
                     >
-                        Deletar
-                    </Button>
-                </ContainerButton>
-            </ContainerContent>
+                        Deseja mesmo deletar esse produto? <br />Para isso, será deletada todas as imagens e as variações desse produto
+                    </TextModal>
+
+                    <ContainerButton>
+                        <Button
+                            style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
+                            onClick={handleDeleteAndShow}
+                        >
+                            Sim e continuar
+                        </Button>
+                    </ContainerButton>
+                </ContainerContent>
+            }
         </Modal>
     )
 }

@@ -37,7 +37,7 @@ export function ModalDeletePhotoProduct({ isOpen, onRequestClose, photos }: Moda
             const apiClient = setupAPIClient();
             const photo_id = photos[0].id;
 
-            await apiClient.delete(`/deletePhoto?photoProduts_id=${photo_id}`)
+            await apiClient.delete(`/deletePhoto?photoProduts_id=${photo_id}`);
 
             toast.success('Foto deletada com sucesso');
 
