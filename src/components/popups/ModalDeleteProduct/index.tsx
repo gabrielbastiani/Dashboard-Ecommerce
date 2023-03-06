@@ -32,7 +32,7 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
     };
 
 
-    async function handleProduct() {
+    async function handleDeleteProduct() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
@@ -76,7 +76,7 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleProduct()}
+                        onClick={() => handleDeleteProduct()}
                     >
                         Deletar
                     </Button>

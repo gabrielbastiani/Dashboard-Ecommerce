@@ -81,7 +81,7 @@ const Produto: React.FC = () => {
 
     const [showElement, setShowElement] = useState(false);
 
-    const [modalItem, setModalItem] = useState<DeleteProduct[]>();
+    const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -461,9 +461,9 @@ const Produto: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete() {
+    async function handleOpenModalDelete(product_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/allProduct', {
+        const responseDelete = await apiClient.get('/exactProduct', {
             params: {
                 product_id: product_id,
             }
@@ -492,8 +492,8 @@ const Produto: React.FC = () => {
                             />
                             <Button
                                 type="submit"
-                                style={{ backgroundColor: '#FB451E' }}
-                                onClick={handleOpenModalDelete}
+                                style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
+                                onClick={ () => handleOpenModalDelete(product_id)}
                             >
                                 Remover
                             </Button>
