@@ -24,7 +24,13 @@ import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDe
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
+import Modal from 'react-modal';
+import { ModalDeleteProduct } from '../../../components/popups/ModalDeleteProduct';
 
+
+export type DeleteProduct = {
+    product_id: string;
+}
 
 const Produto: React.FC = () => {
 
@@ -74,6 +80,9 @@ const Produto: React.FC = () => {
     const [promocaoVariacao, setPromocaoVariacao] = useState('');
 
     const [showElement, setShowElement] = useState(false);
+
+    const [modalItem, setModalItem] = useState<DeleteProduct[]>();
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -137,22 +146,6 @@ const Produto: React.FC = () => {
         }
         loadProduct();
     }, [product_id])
-
-    async function deleteProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
-
-            await apiClient.delete(`/deleteVariacao?variacao_id=${product_id}`);
-
-            toast.success(`Produto deletado com sucesso.`);
-            refreshProduct();
-            navigate('/produtos');
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao deletar o produto.');
-        }
-    }
 
     async function refreshProduct() {
         const apiClient = setupAPIClient();
@@ -464,361 +457,390 @@ const Produto: React.FC = () => {
         return <RenderNo>+ Nova</RenderNo>
     }
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete() {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/allProduct', {
+            params: {
+                product_id: product_id,
+            }
+        });
+        setModalItem(responseDelete.data);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+
 
     return (
-        <Grid>
-            <MainHeader />
-            <Aside />
-            <Container>
-                <Card>
+        <>
+            <Grid>
+                <MainHeader />
+                <Aside />
+                <Container>
+                    <Card>
 
-                    <Voltar url={'/produtos'} />
+                        <Voltar url={'/produtos'} />
 
-                    <BlockTop>
-                        <Titulos
-                            tipo="h1"
-                            titulo={dataName}
+                        <BlockTop>
+                            <Titulos
+                                tipo="h1"
+                                titulo={dataName}
+                            />
+                            <Button
+                                type="submit"
+                                style={{ backgroundColor: '#FB451E' }}
+                                onClick={handleOpenModalDelete}
+                            >
+                                Remover
+                            </Button>
+                        </BlockTop>
+
+                        <AddButton
+                            style={{ backgroundColor: '#f6ba24' }}
+                        >
+                            <MdOutlineAssessment />
+                            <Link to="/produto/avaliacao" >
+                                <SpanText>Ver avaliações</SpanText>
+                            </Link>
+                        </AddButton>
+
+                        <GridDate>
+                            <SectionDate>
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Nome"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={dataName}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={nameProduct}
+                                                value={nameProducts}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setNameProducts(e.target.value)}
+                                                handleSubmit={updateNameProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Disponibilidade"}
+                                        dados={
+                                            <ButtonSelect
+                                                /* @ts-ignore */
+                                                dado={disponibilidades}
+                                                handleSubmit={updateStatus}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Categoria"}
+                                        dados={
+                                            <SelectUpdate
+                                                dado={categorieName}
+                                                value={categorySelected}
+                                                /* @ts-ignore */
+                                                onChange={handleChangeCategory}
+                                                opcoes={
+                                                    [
+                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                    ]
+                                                }
+                                                handleSubmit={updateCategory}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"SKU"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={skus}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={skus}
+                                                value={skus}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setSkus(e.target.value)}
+                                                handleSubmit={updateSKUProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Estoque"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={estoques}
+                                                type="number"
+                                                /* @ts-ignore */
+                                                placeholder={estoques}
+                                                value={estoques}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setEstoques(e.target.value)}
+                                                handleSubmit={updateEstoqueProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Peso (Kg)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={pesoKGs}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={pesoKGs}
+                                                value={pesoKGs}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setPesoKGs(e.target.value)}
+                                                handleSubmit={updatePesoProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Largura (Cm)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={larguraCMs}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={larguraCMs}
+                                                value={larguraCMs}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setLarguraCMs(e.target.value)}
+                                                handleSubmit={updateLarguraProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Comprimento (Cm)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={profundidadeCMs}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={profundidadeCMs}
+                                                value={profundidadeCMs}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setProfundidadeCMs(e.target.value)}
+                                                handleSubmit={updateProfundidadeProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Altura (Cm)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={alturaCMs}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={alturaCMs}
+                                                value={alturaCMs}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setAlturaCMs(e.target.value)}
+                                                handleSubmit={updateAlturaProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Preço"}
+                                        dados={
+                                            <InputUpdate
+                                                id="valorupdate"
+                                                /* @ts-ignore */
+                                                onKeyUp={formatPrecoUpdate}
+                                                maxLength={10}
+                                                dado={precos}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={precos}
+                                                value={precos}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setPrecos(e.target.value)}
+                                                handleSubmit={updatePrecoProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Valor em Promoção"}
+                                        dados={
+                                            <InputUpdate
+                                                id="valorpromocaoupdate"
+                                                /* @ts-ignore */
+                                                onKeyUp={formatPromocaoUpdate}
+                                                maxLength={10}
+                                                dado={promocoes}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={promocoes}
+                                                value={promocoes}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setPromocoes(e.target.value)}
+                                                handleSubmit={updatePromocaoProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+                            </SectionDate>
+
+                            <SectionDate>
+                                <PhotosProduct
+                                    product_id={product_id}
+                                />
+                            </SectionDate>
+                        </GridDate>
+                        <br />
+                        <br />
+                        <DescriptionsProductUpdate
+                            valor1={descriptionProducts1}
+                            valor2={descriptionProducts2}
+                            valor3={descriptionProducts3}
+                            valor4={descriptionProducts4}
+                            valor5={descriptionProducts5}
+                            valor6={descriptionProducts6}
+                            /* @ts-ignore */
+                            onChange1={(e) => setDescriptionProducts1(e.target.value)}
+                            /* @ts-ignore */
+                            onChange2={(e) => setDescriptionProducts2(e.target.value)}
+                            /* @ts-ignore */
+                            onChange3={(e) => setDescriptionProducts3(e.target.value)}
+                            /* @ts-ignore */
+                            onChange4={(e) => setDescriptionProducts4(e.target.value)}
+                            /* @ts-ignore */
+                            onChange5={(e) => setDescriptionProducts5(e.target.value)}
+                            /* @ts-ignore */
+                            onChange6={(e) => setDescriptionProducts6(e.target.value)}
+                            handleSubmit1={updateDescriptions}
+                            handleSubmit2={updateDescriptions}
+                            handleSubmit3={updateDescriptions}
+                            handleSubmit4={updateDescriptions}
+                            handleSubmit5={updateDescriptions}
+                            handleSubmit6={updateDescriptions}
+                            placeholder1={""}
+                            placeholder2={""}
+                            placeholder3={""}
+                            placeholder4={""}
+                            placeholder5={""}
+                            placeholder6={""}
                         />
-                        <Button
-                            type="submit"
-                            style={{ backgroundColor: '#FB451E' }}
-                            onClick={deleteProduct}
-                        >
-                            Remover
-                        </Button>
-                    </BlockTop>
-
-                    <AddButton
-                        style={{ backgroundColor: '#f6ba24' }}
-                    >
-                        <MdOutlineAssessment />
-                        <Link to="/produto/avaliacao" >
-                            <SpanText>Ver avaliações</SpanText>
-                        </Link>
-                    </AddButton>
-
-                    <GridDate>
-                        <SectionDate>
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Nome"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={dataName}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={nameProduct}
-                                            value={nameProducts}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setNameProducts(e.target.value)}
-                                            handleSubmit={updateNameProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Disponibilidade"}
-                                    dados={
-                                        <ButtonSelect
-                                            /* @ts-ignore */
-                                            dado={disponibilidades}
-                                            handleSubmit={updateStatus}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Categoria"}
-                                    dados={
-                                        <SelectUpdate
-                                            dado={categorieName}
-                                            value={categorySelected}
-                                            /* @ts-ignore */
-                                            onChange={handleChangeCategory}
-                                            opcoes={
-                                                [
-                                                    { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
-                                                ]
-                                            }
-                                            handleSubmit={updateCategory}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"SKU"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={skus}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={skus}
-                                            value={skus}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setSkus(e.target.value)}
-                                            handleSubmit={updateSKUProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Estoque"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={estoques}
-                                            type="number"
-                                            /* @ts-ignore */
-                                            placeholder={estoques}
-                                            value={estoques}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setEstoques(e.target.value)}
-                                            handleSubmit={updateEstoqueProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Peso (Kg)"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={pesoKGs}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={pesoKGs}
-                                            value={pesoKGs}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setPesoKGs(e.target.value)}
-                                            handleSubmit={updatePesoProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Largura (Cm)"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={larguraCMs}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={larguraCMs}
-                                            value={larguraCMs}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setLarguraCMs(e.target.value)}
-                                            handleSubmit={updateLarguraProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Comprimento (Cm)"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={profundidadeCMs}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={profundidadeCMs}
-                                            value={profundidadeCMs}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setProfundidadeCMs(e.target.value)}
-                                            handleSubmit={updateProfundidadeProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Altura (Cm)"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={alturaCMs}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={alturaCMs}
-                                            value={alturaCMs}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setAlturaCMs(e.target.value)}
-                                            handleSubmit={updateAlturaProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Preço"}
-                                    dados={
-                                        <InputUpdate
-                                            id="valorupdate"
-                                            /* @ts-ignore */
-                                            onKeyUp={formatPrecoUpdate}
-                                            maxLength={10}
-                                            dado={precos}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={precos}
-                                            value={precos}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setPrecos(e.target.value)}
-                                            handleSubmit={updatePrecoProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Valor em Promoção"}
-                                    dados={
-                                        <InputUpdate
-                                            id="valorpromocaoupdate"
-                                            /* @ts-ignore */
-                                            onKeyUp={formatPromocaoUpdate}
-                                            maxLength={10}
-                                            dado={promocoes}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={promocoes}
-                                            value={promocoes}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setPromocoes(e.target.value)}
-                                            handleSubmit={updatePromocaoProduct}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-                        </SectionDate>
-
-                        <SectionDate>
-                            <PhotosProduct
-                                product_id={product_id}
-                            />
-                        </SectionDate>
-                    </GridDate>
-                    <br />
-                    <br />
-                    <DescriptionsProductUpdate
-                        valor1={descriptionProducts1}
-                        valor2={descriptionProducts2}
-                        valor3={descriptionProducts3}
-                        valor4={descriptionProducts4}
-                        valor5={descriptionProducts5}
-                        valor6={descriptionProducts6}
-                        /* @ts-ignore */
-                        onChange1={(e) => setDescriptionProducts1(e.target.value)}
-                        /* @ts-ignore */
-                        onChange2={(e) => setDescriptionProducts2(e.target.value)}
-                        /* @ts-ignore */
-                        onChange3={(e) => setDescriptionProducts3(e.target.value)}
-                        /* @ts-ignore */
-                        onChange4={(e) => setDescriptionProducts4(e.target.value)}
-                        /* @ts-ignore */
-                        onChange5={(e) => setDescriptionProducts5(e.target.value)}
-                        /* @ts-ignore */
-                        onChange6={(e) => setDescriptionProducts6(e.target.value)}
-                        handleSubmit1={updateDescriptions}
-                        handleSubmit2={updateDescriptions}
-                        handleSubmit3={updateDescriptions}
-                        handleSubmit4={updateDescriptions}
-                        handleSubmit5={updateDescriptions}
-                        handleSubmit6={updateDescriptions}
-                        placeholder1={""}
-                        placeholder2={""}
-                        placeholder3={""}
-                        placeholder4={""}
-                        placeholder5={""}
-                        placeholder6={""}
-                    />
-                </Card>
-
-                <ContainerVariacao>
-                    <CardResponsive>
-
-                        <Titulos tipo="h1" titulo="Variações" />
-
-                        <ButtonVariacao
-                            onClick={showOrHide}
-                        >
-                            {showElement && renderOk() || renderNo()}
-                        </ButtonVariacao>
-
-                        {variacoes.map((names) => {
-                            return (
-                                <ButtonVariacaoDetalhes key={names.id}
-                                    onClick={() => loadVariacaoProduct(names.id)}
-                                >
-                                    {names.nameVariacao}
-                                </ButtonVariacaoDetalhes>
-                            )
-                        })}
-
-                    </CardResponsive>
-
-                    <Card style={{ width: '100%' }}>
-                        {showElement ? (
-                            <NovaVariacao
-                                /* @ts-ignore */
-                                product_id={product_id}
-                            />
-                        ) :
-                            <>
-                                {variacoes.length < 1 && (
-                                    <Avisos
-                                        texto="Não há variações cadastradas para esse produto..."
-                                    />
-                                )}
-
-                                {!iDVariacao && variacoes.length >= 1 && (
-                                    <Titulos
-                                        tipo="h3"
-                                        titulo="Cadastre uma variação, ou selecione uma variação existente para ver os detalhes."
-                                    />
-                                )}
-
-                                {!!iDVariacao && (
-                                    <VariacaoDetalhes
-                                        /* @ts-ignore */
-                                        productId={product_id}
-                                        variacao_id={iDVariacao}
-                                        photoVariacaoID={iDVariacao}
-                                        nameVariacao={nameVariacao}
-                                        descriptionVariacao1={descriptionVariacao1}
-                                        descriptionVariacao2={descriptionVariacao2}
-                                        descriptionVariacao3={descriptionVariacao3}
-                                        descriptionVariacao4={descriptionVariacao4}
-                                        descriptionVariacao5={descriptionVariacao5}
-                                        descriptionVariacao6={descriptionVariacao6}
-                                        preco={precoVariacao}
-                                        skuVariacao={skuVariacao}
-                                        estoqueVariacao={estoqueVariacao}
-                                        pesoKg={pesoKgVariacao}
-                                        larguraCm={larguraCmVariacao}
-                                        alturaCm={alturaCmVariacao}
-                                        profundidadeCm={profundidadeCmVariacao}
-                                        promocao={promocaoVariacao}
-                                    />
-                                )}
-                            </>
-                        }
                     </Card>
-                </ContainerVariacao>
-            </Container>
-        </Grid>
+
+                    <ContainerVariacao>
+                        <CardResponsive>
+
+                            <Titulos tipo="h1" titulo="Variações" />
+
+                            <ButtonVariacao
+                                onClick={showOrHide}
+                            >
+                                {showElement && renderOk() || renderNo()}
+                            </ButtonVariacao>
+
+                            {variacoes.map((names) => {
+                                return (
+                                    <ButtonVariacaoDetalhes key={names.id}
+                                        onClick={() => loadVariacaoProduct(names.id)}
+                                    >
+                                        {names.nameVariacao}
+                                    </ButtonVariacaoDetalhes>
+                                )
+                            })}
+
+                        </CardResponsive>
+
+                        <Card style={{ width: '100%' }}>
+                            {showElement ? (
+                                <NovaVariacao
+                                    /* @ts-ignore */
+                                    product_id={product_id}
+                                />
+                            ) :
+                                <>
+                                    {variacoes.length < 1 && (
+                                        <Avisos
+                                            texto="Não há variações cadastradas para esse produto..."
+                                        />
+                                    )}
+
+                                    {!iDVariacao && variacoes.length >= 1 && (
+                                        <Titulos
+                                            tipo="h3"
+                                            titulo="Cadastre uma variação, ou selecione uma variação existente para ver os detalhes."
+                                        />
+                                    )}
+
+                                    {!!iDVariacao && (
+                                        <VariacaoDetalhes
+                                            /* @ts-ignore */
+                                            productId={product_id}
+                                            variacao_id={iDVariacao}
+                                            photoVariacaoID={iDVariacao}
+                                            nameVariacao={nameVariacao}
+                                            descriptionVariacao1={descriptionVariacao1}
+                                            descriptionVariacao2={descriptionVariacao2}
+                                            descriptionVariacao3={descriptionVariacao3}
+                                            descriptionVariacao4={descriptionVariacao4}
+                                            descriptionVariacao5={descriptionVariacao5}
+                                            descriptionVariacao6={descriptionVariacao6}
+                                            preco={precoVariacao}
+                                            skuVariacao={skuVariacao}
+                                            estoqueVariacao={estoqueVariacao}
+                                            pesoKg={pesoKgVariacao}
+                                            larguraCm={larguraCmVariacao}
+                                            alturaCm={alturaCmVariacao}
+                                            profundidadeCm={profundidadeCmVariacao}
+                                            promocao={promocaoVariacao}
+                                        />
+                                    )}
+                                </>
+                            }
+                        </Card>
+                    </ContainerVariacao>
+                </Container>
+            </Grid>
+
+            {modalVisible && (
+                <ModalDeleteProduct
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    product={modalItem}
+                />
+                )
+            })
+        </>
     )
 }
 
