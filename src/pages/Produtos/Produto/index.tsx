@@ -29,7 +29,6 @@ import { ModalDeleteProduct } from '../../../components/popups/ModalDeleteProduc
 
 
 export type DeleteProduct = {
-    variacoes: any;
     product_id: string;
 }
 
@@ -839,8 +838,7 @@ const Produto: React.FC = () => {
                     /* @ts-ignore */
                     product={modalItem}
                 />
-                )
-            })
+            )}
         </>
     )
 }

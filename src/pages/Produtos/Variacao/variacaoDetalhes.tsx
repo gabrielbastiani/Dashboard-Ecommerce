@@ -13,7 +13,13 @@ import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Modal from 'react-modal';
+import { ModalDeleteVariacao } from '../../../components/popups/ModalDeleteVariacao';
 
+
+export type DeleteVariacao = {
+    variacao_id: string;
+}
 
 interface ItemsVariacao {
     productId: string;
@@ -78,6 +84,9 @@ const VariacaoDetalhes = ({
     const [descriptionVariacoes5, setDescriptionVariacoes5] = useState('');
     const [descriptionVariacoes6, setDescriptionVariacoes6] = useState('');
 
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     useEffect(() => {
         async function loadVariacao() {
@@ -129,21 +138,6 @@ const VariacaoDetalhes = ({
         }
         loadVariacao();
     }, [variacao_id])
-
-    async function deleteVariante() {
-        try {
-            const apiClient = setupAPIClient();/* @ts-ignore */
-            await apiClient.delete(`/deleteVariacao?variacao_id=${variacao_id}`);
-            toast.success(`Variação deletada com sucesso.`);
-            refreshVariacao();
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao deletar a variação.');
-        }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
-    }
 
     async function updateStatus() {
         try {
@@ -421,6 +415,24 @@ const VariacaoDetalhes = ({
         if (valorpromocaoupdate == 'NaN') elementopromocaoupdate.value = '';
     }
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleDeleteVariacao(variacao_id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/exactVariacao', {
+            params: {
+                variacao_id: variacao_id,
+            }
+        });
+        setModalItem(responseDelete.data);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+
+
     return (
         <>
             <BlockTop>
@@ -431,7 +443,7 @@ const VariacaoDetalhes = ({
                 <Button
                     type="submit"
                     style={{ backgroundColor: '#FB451E' }}
-                    onClick={deleteVariante}
+                    onClick={ () => handleDeleteVariacao(variacao_id) }
                 >
                     Remover
                 </Button>
@@ -683,6 +695,15 @@ const VariacaoDetalhes = ({
                 placeholder5={descriptionVariacao5}
                 placeholder6={descriptionVariacao6}
             />
+
+            {modalVisible && (
+                <ModalDeleteVariacao
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    variacao={modalItem}
+                />
+            )}
         </>
     )
 }
