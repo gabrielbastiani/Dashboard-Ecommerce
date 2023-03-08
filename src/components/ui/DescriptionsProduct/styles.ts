@@ -46,6 +46,7 @@ export const TituloTop = styled.button`
     border-top-right-radius: 0px;
   }
   }
+
 `;
 
 export const TextAreaDescription1 = styled.textarea`
