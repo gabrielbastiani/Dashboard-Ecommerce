@@ -96,7 +96,6 @@ export const IconSpan = styled.span`
 `;
 
 export const IconButton = styled.button`
-  z-index: 1;
   opacity: 0.7;
   transition: all 0.9s;
   background: transparent;

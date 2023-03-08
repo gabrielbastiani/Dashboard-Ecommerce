@@ -13,6 +13,8 @@ import NovaCategoria from './pages/Categorias/novaCategoria';
 import Categoria from './pages/Categorias/Categoria';
 import NovoProduto from './pages/Produtos/novoProduto';
 import Produto from './pages/Produtos/Produto';
+import Avaliacoes from './pages/Avaliacoes';
+import Avaliacao from './pages/Avaliacoes/Avaliacao';
 
 
 const RoutesAuth: React.FC = () => {
@@ -32,6 +34,9 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produtos' element={ <Produtos /> } />
             <Route path='/produto/novo' element={ <NovoProduto /> } />
             <Route path='/produto/:nameProduct/:product_id' element={ <Produto /> } />
+
+            <Route path='/produto/avaliacoes/:nameProduct/:product_id' element={ <Avaliacoes /> } />
+            <Route path='/avaliacao/:nameProduct/:pontuacao/:product_id/:avaliacao_id' element={ <Avaliacao /> } />
 
             <Route path='/configuracoes' element={ <Configuracoes /> } />
 

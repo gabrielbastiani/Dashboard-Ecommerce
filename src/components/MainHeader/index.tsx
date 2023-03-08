@@ -46,7 +46,7 @@ const MainHeader: React.FC = () => {
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>
-                <UserName>{user?.nameComplete}</UserName>
+                <UserName href='/perfil'>{user?.nameComplete}</UserName>
             </Profile>
         </Container>
     );

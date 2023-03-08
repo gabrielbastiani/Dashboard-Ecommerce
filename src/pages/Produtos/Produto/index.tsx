@@ -503,7 +503,7 @@ const Produto: React.FC = () => {
                             style={{ backgroundColor: '#f6ba24' }}
                         >
                             <MdOutlineAssessment />
-                            <Link to="/produto/avaliacao" >
+                            <Link to={"/produto/avaliacoes/" + nameProduct + '/' + product_id} >
                                 <SpanText>Ver avaliações</SpanText>
                             </Link>
                         </AddButton>
