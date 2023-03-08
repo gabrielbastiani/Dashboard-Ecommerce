@@ -21,7 +21,7 @@ const RoutesAuth: React.FC = () => {
 
     return (
         <Routes>
-            <Route path='/dashboard' element={ <Dashboard /> } />
+            <Route path='/' element={ <Dashboard /> } />
             <Route path='/painel' element={ <Painel /> } />
             <Route path='/pedidos' element={ <Pedidos /> } />
             <Route path='/clientes' element={ <Clientes /> } />

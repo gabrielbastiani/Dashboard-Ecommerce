@@ -68,10 +68,10 @@ const SignupAdmin: React.FC = () => {
 
             navigate('/whaitAuthenticatedAdmin');
 
-        } catch (err) {
-            console.log(err);
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
             toast.error('Erro ao cadastrar!')
-            navigate(0);
+            /* navigate(0); */
             console.log("Ops erro ao cadastrar!")
         }
 
@@ -142,7 +142,7 @@ const SignupAdmin: React.FC = () => {
 
                 </Formulario>
 
-                <a href="/">
+                <a href="/loginAdmin">
                     <TextLink>Já possui uma conta? Faça login!</TextLink>
                 </a>
 

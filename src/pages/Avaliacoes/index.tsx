@@ -11,6 +11,7 @@ import { setupAPIClient } from "../../services/api";
 import { Avisos } from "../../components/Avisos";
 import Select from "../../components/ui/Select";
 import TabelaSimples from "../../components/Tabelas";
+import moment from 'moment';
 
 
 const Avaliacoes: React.FC = () => {
@@ -60,7 +61,7 @@ const Avaliacoes: React.FC = () => {
     (avaliations || []).forEach((item) => {
         dados.push({
             "Cliente": item.clientName,
-            "Data da avaliação": item.created_at,
+            "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "botaoDetalhes": `/avaliacao/${nameProduct}/${item.pontuacao}/${product_id}/${item.id}`
         });
     });

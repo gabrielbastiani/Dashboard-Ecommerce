@@ -8,7 +8,7 @@ type AuthContextData = {
     isAuthenticated: boolean;
     signIn: (credentials: SignInProps) => Promise<void>;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
-    signOut (): void;
+    signOut(): void;
 }
 
 type UserProps = {
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setCookie(undefined, '@lojabuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
                 path: "/" // Quais caminhos terao acesso ao cookie
-              })
+            })
 
             setUser({
                 id,
@@ -98,7 +98,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
-
     async function signInAdmin({ email, password }: SignInProps) {
         try {
             const response = await api.post('/sessionAdmin', {
@@ -111,7 +110,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setCookie(undefined, '@lojabuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
                 path: "/" // Quais caminhos terao acesso ao cookie
-              })
+            })
 
             setUser({
                 id,

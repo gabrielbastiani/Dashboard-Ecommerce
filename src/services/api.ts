@@ -22,7 +22,7 @@ export function setupAPIClient(ctx = undefined){
       // eslint-disable-next-line valid-typeof
       if(typeof window !== undefined){
         // Chamar a funçao para deslogar o usuario
-        signOut()
+        signOut();
       }else{
         return Promise.reject(new AuthTokenError())
       }

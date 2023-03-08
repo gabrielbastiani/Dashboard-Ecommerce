@@ -63,7 +63,7 @@ const LoginAdmin: React.FC = () => {
 
 			setLoading(false);
 
-			navigate('/dashboard');
+			navigate('/');
 			navigate(0);
 
 		} catch (error) {
