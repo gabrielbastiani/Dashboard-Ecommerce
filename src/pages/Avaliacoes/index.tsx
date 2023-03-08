@@ -62,7 +62,7 @@ const Avaliacoes: React.FC = () => {
         dados.push({
             "Cliente": item.clientName,
             "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/avaliacao/${nameProduct}/${item.pontuacao}/${product_id}/${item.id}`
+            "botaoDetalhes": `/avaliacao/${nameProduct}/${item.id}`
         });
     });
 
@@ -90,7 +90,7 @@ const Avaliacoes: React.FC = () => {
                         </>
                     ) :
                         <>
-                            <TextTotal>Categorias por página: &nbsp;</TextTotal>
+                            <TextTotal>Avaliações por página: &nbsp;</TextTotal>
 
                             <Select
                                 /* @ts-ignore */

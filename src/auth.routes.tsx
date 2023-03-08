@@ -36,7 +36,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/:nameProduct/:product_id' element={ <Produto /> } />
 
             <Route path='/produto/avaliacoes/:nameProduct/:product_id' element={ <Avaliacoes /> } />
-            <Route path='/avaliacao/:nameProduct/:pontuacao/:product_id/:avaliacao_id' element={ <Avaliacao /> } />
+            <Route path='/avaliacao/:nameProduct/:avaliacao_id' element={ <Avaliacao /> } />
 
             <Route path='/configuracoes' element={ <Configuracoes /> } />
 
