@@ -73,7 +73,7 @@ const Clientes: React.FC = () => {
             "Cliente": item.nameComplete,
             "E-mail": item.email,
             "Telefone": item.phone,
-            "CPF/CNPJ": item.cpfOrCnpj,
+            "CPF/CNPJ": item.cpf || item.cnpj,
             "botaoDetalhes": `/cliente/${item.nameComplete}/${item.id}`
         });
     });

@@ -25,7 +25,8 @@ const Cliente: React.FC = () => {
     let { nameComplete, user_id } = useParams();
 
     const [nameCompletes, setNameCompletes] = useState(nameComplete);
-    const [cpfcnpjs, setCpfcnpjs] = useState('');
+    const [cpfs, setCpfs] = useState('');
+    const [cnpjs, setCnpjs] = useState('');
     const [inscricaoEstaduals, setInscricaoEstaduals] = useState('');
     const [phones, setPhones] = useState('');
     const [emails, setEmails] = useState('');
@@ -39,6 +40,11 @@ const Cliente: React.FC = () => {
     const [generos, setGeneros] = useState('');
     const [newslatters, setNewslatters] = useState(false);
 
+    function isEmail(emails: string) {
+        // eslint-disable-next-line no-control-regex
+        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
+    }
+
 
     async function refreshUser() {
         const apiClient = setupAPIClient();
@@ -46,7 +52,8 @@ const Cliente: React.FC = () => {
         const response = await apiClient.get(`/listExactUser?user_id=${user_id}`);
 
         setNameCompletes(response.data.nameComplete);
-        setCpfcnpjs(response.data.cpfOrCnpj);
+        setCpfs(response.data.cpf);
+        setCnpjs(response.data.cnpj)
         setInscricaoEstaduals(response.data.inscricaoEstadual);
         setPhones(response.data.phone);
         setEmails(response.data.email);
@@ -70,7 +77,8 @@ const Cliente: React.FC = () => {
                 const {
                     nameComplete,
                     email,
-                    cpfOrCnpj,
+                    cpf,
+                    cnpj,
                     inscricaoEstadual,
                     phone,
                     dataNascimento,
@@ -85,7 +93,8 @@ const Cliente: React.FC = () => {
                 } = response.data;
 
                 setNameCompletes(nameComplete);
-                setCpfcnpjs(cpfOrCnpj);
+                setCnpjs(cnpj);
+                setCpfs(cpf);
                 setInscricaoEstaduals(inscricaoEstadual);
                 setPhones(phone);
                 setEmails(email);
@@ -123,20 +132,125 @@ const Cliente: React.FC = () => {
         }
     }
 
-    async function updateCpfOrCnpj() {
+    async function updateCpf() {
         try {
             const apiClient = setupAPIClient();
-            if (cpfcnpjs === '') {
-                toast.error('Não deixe o CPF/CNPJ em branco!!!');
+            if (cpfs === '') {
+                toast.error('Não deixe o CPF em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/cpfOrConpjUserUpdate?user_id=${user_id}`, { cpfOrCnpj: cpfcnpjs });
-                toast.success('CPF/CNPJ atualizado com sucesso.');
+                await apiClient.put(`/cpfUserUpdate?user_id=${user_id}`, { cpf: cpfs });
+                toast.success('CPF atualizado com sucesso.');
                 refreshUser();
             }
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar o CPF/CNPJ.');
+            toast.error('Ops erro ao atualizar o CPF.');
+        }
+    }
+
+    async function updateCnpj() {
+        try {
+            const apiClient = setupAPIClient();
+            if (cnpjs === '') {
+                toast.error('Não deixe o CNPJ em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/cnpjUserUpdate?user_id=${user_id}`, { cnpj: cnpjs });
+                toast.success('CNPJ atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o CNPJ.');
+        }
+    }
+
+    async function updatePhone() {
+        try {
+            const apiClient = setupAPIClient();
+            if (phones === '') {
+                toast.error('Não deixe o telefone em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/phoneUserUpdate?user_id=${user_id}`, { phone: phones });
+                toast.success('Telefone atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o telefone.');
+        }
+    }
+
+    async function updateInscricaoEstadual() {
+        try {
+            const apiClient = setupAPIClient();
+            if (inscricaoEstaduals === '') {
+                toast.error('Não deixe a inscrição estadual em branco, caro seja isento, escreva a palavra ISENTO nesse campo!!!');
+                return;
+            } else {
+                await apiClient.put(`/inscricaoEstadualUserUpdate?user_id=${user_id}`, { inscricaoEstadual: inscricaoEstaduals });
+                toast.success('Inscrição estadual atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a inscrição estadual.');
+        }
+    }
+
+    async function updateEmail() {
+        try {
+            const apiClient = setupAPIClient();
+            if (!isEmail(emails)) {
+                toast.error('Por favor digite um email valido!');
+                return;
+            }
+            if (emails === '') {
+                toast.error('Não deixe o email em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/emailUserUpdate?user_id=${user_id}`, { email: emails });
+                toast.success('Email atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o email.');
+        }
+    }
+
+    async function updateDataNascimento() {
+        try {
+            const apiClient = setupAPIClient();
+            if (dataNascimentos === '') {
+                toast.error('Não deixe a data de nascimento em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/dataDeNascimentoUserUpdate?user_id=${user_id}`, { dataNascimento: dataNascimentos });
+                toast.success('Data de nascimento atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a data de nascimento.');
+        }
+    }
+
+    async function updateNews() {
+        try {
+            const apiClient = setupAPIClient();
+
+                
+            
+                await apiClient.put(`/newslatterUserUpdate?user_id=${user_id}`, { newslatter: newslatters });
+                toast.success('Data de nascimento atualizado com sucesso.');
+                refreshUser();
+            
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a data de nascimento.');
         }
     }
 
@@ -187,44 +301,75 @@ const Cliente: React.FC = () => {
                                 </BlockDados>
 
                                 <BlockDados>
-                                    <TextoDados
-                                        chave={"CPF"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={cpfcnpjs}
-                                                /* @ts-ignore */
-                                                as={IMaskInput}
-                                                /* @ts-ignore */
-                                                mask="000.000.000-00"
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={cpfcnpjs}
-                                                value={cpfcnpjs}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setCpfcnpjs(e.target.value)}
-                                                handleSubmit={updateCpfOrCnpj}
-                                            />
-                                        }
-                                    />
+                                    {cpfs ? (
+                                        <TextoDados
+                                            chave={"CPF"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={cpfs}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="000.000.000-00"
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={cpfs}
+                                                    value={cpfs}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setCpfs(e.target.value)}
+                                                    handleSubmit={updateCpf}
+                                                />
+                                            }
+                                        />
+                                    ) :
+                                        null
+                                    }
+
+                                    {cnpjs ? (
+                                        <TextoDados
+                                            chave={"CNPJ"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={cnpjs}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00.000.000/0000-00"
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={cnpjs}
+                                                    value={cnpjs}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setCnpjs(e.target.value)}
+                                                    handleSubmit={updateCnpj}
+                                                />
+                                            }
+                                        />
+                                    ) :
+                                        null
+                                    }
+
                                 </BlockDados>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Inscrição estadual"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={inscricaoEstaduals}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={inscricaoEstaduals}
-                                                value={inscricaoEstaduals}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setInscricaoEstaduals(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
+                                {cnpjs ? (
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Inscrição estadual"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={inscricaoEstaduals}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={inscricaoEstaduals}
+                                                    value={inscricaoEstaduals}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setInscricaoEstaduals(e.target.value)}
+                                                    handleSubmit={updateInscricaoEstadual}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+                                ) : null}
 
                                 <BlockDados>
                                     <TextoDados
@@ -232,13 +377,17 @@ const Cliente: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 dado={phones}
-                                                type="number"
+                                                type="text"
+                                                /* @ts-ignore */
+                                                as={IMaskInput}
+                                                /* @ts-ignore */
+                                                mask="(00) 0000-0000"
                                                 /* @ts-ignore */
                                                 placeholder={phones}
                                                 value={phones}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPhones(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updatePhone}
                                             />
                                         }
                                     />
@@ -256,29 +405,37 @@ const Cliente: React.FC = () => {
                                                 value={emails}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setEmails(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateEmail}
                                             />
                                         }
                                     />
                                 </BlockDados>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Data de nascimento"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={dataNascimentos}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={dataNascimentos}
-                                                value={dataNascimentos}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setDataNascimentos(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
+                                {cnpjs ? (
+                                    null
+                                ) :
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Data de nascimento"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={dataNascimentos}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00/00/0000"
+                                                    /* @ts-ignore */
+                                                    placeholder={dataNascimentos}
+                                                    value={dataNascimentos}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setDataNascimentos(e.target.value)}
+                                                    handleSubmit={updateDataNascimento}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+                                }
 
                                 <BlockDados>
                                     <TextoDados
@@ -295,28 +452,32 @@ const Cliente: React.FC = () => {
                             </SectionDate>
 
                             <SectionDate>
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Gênero"}
-                                        dados={
-                                            <SelectUpdate
-                                                dado={generos}
-                                                value={generos}
-                                                /* @ts-ignore */
-                                                onChange={''}
-                                                opcoes={
-                                                    [
-                                                        { label: "Selecionar...", value: "" },
-                                                        { label: "Masculino", value: "Masculino" },
-                                                        { label: "Feminino", value: "Feminino" },
-                                                        { label: "Outro", value: "Outro" },
-                                                    ]
-                                                }
-                                                handleSubmit={() => alert('clicou')}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
+                                {cnpjs ? (
+                                    null
+                                ) :
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Gênero"}
+                                            dados={
+                                                <SelectUpdate
+                                                    dado={generos}
+                                                    value={generos}
+                                                    /* @ts-ignore */
+                                                    onChange={''}
+                                                    opcoes={
+                                                        [
+                                                            { label: "Selecionar...", value: "" },
+                                                            { label: "Masculino", value: "Masculino" },
+                                                            { label: "Feminino", value: "Feminino" },
+                                                            { label: "Outro", value: "Outro" },
+                                                        ]
+                                                    }
+                                                    handleSubmit={() => alert('clicou')}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+                                }
 
                                 <BlockDados>
                                     <TextoDados
