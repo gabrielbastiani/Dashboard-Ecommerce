@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteCategory } from '../../../pages/Categorias/Categoria';
+import { DeleteCliente } from '../../../pages/Clientes/Cliente'; 
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -8,13 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 
 
-interface ModalPhotoDeleteCategory {
+interface ModalDeleteClientes {
     isOpen: boolean;
     onRequestClose: () => void;
-    category: DeleteCategory;
+    cliente: DeleteCliente;
 }
 
-export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalPhotoDeleteCategory) {
+export function ModalDeleteCliente({ isOpen, onRequestClose, cliente }: ModalDeleteClientes) {
 
     const navigate = useNavigate();
 
@@ -32,22 +32,22 @@ export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalP
     };
 
 
-    async function handleDeleteCategory() {
+    async function handleDeleteCliente() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const category_id = category.id;
+            const user_id = cliente.id;
 
-            await apiClient.delete(`/deleteCategory?category_id=${category_id}`);
-            toast.success(`Categoria deletada com sucesso.`);
+            await apiClient.delete(`/deleteUser?user_id=${user_id}`);
+            toast.success(`Cliente deletado com sucesso.`);
             
-            navigate('/categorias');
+            navigate('/clientes');
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao deletar a categoria!');
+            toast.error('Ops erro ao deletar o cliente!');
         }
         setTimeout(() => {
             navigate(0);
@@ -71,12 +71,12 @@ export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalP
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa categoria?</TextModal>
+                <TextModal>Deseja mesmo deletar esse cliente?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteCategory()}
+                        onClick={() => handleDeleteCliente()}
                     >
                         Deletar
                     </Button>

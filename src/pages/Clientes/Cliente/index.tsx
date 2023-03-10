@@ -4,12 +4,12 @@ import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import Titulos from "../../../components/Titulos";
 import Voltar from "../../../components/Voltar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { TextoDados } from "../../../components/TextoDados";
 import { Button } from "../../../components/ui/Button";
 import { Card, Container } from "../../../components/Content/styles";
-import { BlockTop } from "../../Categorias/styles";
+import { BlockTop, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
 import { BlockDados } from "../../Categorias/Categoria/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
@@ -18,9 +18,18 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { IMaskInput } from "react-imask";
+import Modal from 'react-modal';
+import { ModalDeleteCliente } from "../../../components/popups/ModalDeleteCliente";
+import TabelaSimples from "../../../components/Tabelas";
 
+
+export type DeleteCliente = {
+    user_id: string;
+}
 
 const Cliente: React.FC = () => {
+
+    const navigate = useNavigate();
 
     let { nameComplete, user_id } = useParams();
 
@@ -35,16 +44,20 @@ const Cliente: React.FC = () => {
     const [numeros, setNumeros] = useState('');
     const [bairros, setBairros] = useState('');
     const [cidades, setCidades] = useState('');
-    const [estados, setEstados] = useState('');
+    const [estados, setEstados] = useState([]);
+    const [estadoSelected, setEstadoSelected] = useState();
     const [ceps, setCeps] = useState('');
-    const [generos, setGeneros] = useState('');
-    const [newslatters, setNewslatters] = useState(false);
+    const [generos, setGeneros] = useState([]);
+    const [generoSelected, setGeneroSelected] = useState();
+    const [newslatters, setNewslatters] = useState('');
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     function isEmail(emails: string) {
         // eslint-disable-next-line no-control-regex
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
     }
-
 
     async function refreshUser() {
         const apiClient = setupAPIClient();
@@ -241,18 +254,171 @@ const Cliente: React.FC = () => {
     async function updateNews() {
         try {
             const apiClient = setupAPIClient();
+            await apiClient.put(`/newslatter?user_id=${user_id}`);
 
-                
-            
-                await apiClient.put(`/newslatterUserUpdate?user_id=${user_id}`, { newslatter: newslatters });
-                toast.success('Data de nascimento atualizado com sucesso.');
-                refreshUser();
-            
+            refreshUser();
+
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a data de nascimento.');
+            toast.error('Ops erro ao atualizar o preferencia pela newslatters.');
+        }
+
+        if (newslatters === "Nao") {
+            toast.success(`A preferencia pela newslatters mudou para SIM.`);
+            return;
+        }
+
+        if (newslatters === "Sim") {
+            toast.error(`A preferencia pela newslatters mudou para NÃO.`);
+            return;
         }
     }
+
+    function handleChangeGenero(e: any) {
+        setGeneroSelected(e.target.value)
+    }
+
+    async function updateGenero() {
+        try {
+            if (generoSelected === "") {
+                toast.error(`Selecione o genero, ou cancele a atualização apertando no botão vermelho!`);
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/generoUserUpdate?user_id=${user_id}`, { genero: generoSelected });
+            toast.success('Genero atualizado com sucesso.');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o genero.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 2000);
+    }
+
+    async function updateEndereco() {
+        try {
+            const apiClient = setupAPIClient();
+            if (locals === '') {
+                toast.error('Não deixe o endereço em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/ruaUserUpdate?user_id=${user_id}`, { local: locals });
+                toast.success('Endereço atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o endereço.');
+        }
+    }
+
+    async function updateNumero() {
+        try {
+            const apiClient = setupAPIClient();
+            if (numeros === '') {
+                toast.error('Não deixe o número em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/numeroUserUpdate?user_id=${user_id}`, { numero: numeros });
+                toast.success('Número atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o número.');
+        }
+    }
+
+    async function updateBairro() {
+        try {
+            const apiClient = setupAPIClient();
+            if (bairros === '') {
+                toast.error('Não deixe o bairro em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/bairroUserUpdate?user_id=${user_id}`, { bairro: bairros });
+                toast.success('Bairro atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o bairro.');
+        }
+    }
+
+    async function updateCidade() {
+        try {
+            const apiClient = setupAPIClient();
+            if (cidades === '') {
+                toast.error('Não deixe a cidade em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/cityUserUpdate?user_id=${user_id}`, { cidade: cidades });
+                toast.success('Cidade atualizada com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a cidade.');
+        }
+    }
+
+    function handleChangeEstado(e: any) {
+        setEstadoSelected(e.target.value)
+    }
+
+    async function updateEstado() {
+        try {
+            if (estadoSelected === "") {
+                toast.error(`Selecione o estado, ou cancele a atualização apertando no botão vermelho!`);
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/estadoUserUpdate?user_id=${user_id}`, { estado: estadoSelected });
+            toast.success('Estado atualizado com sucesso.');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o estado.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 2000);
+    }
+
+    async function updateCep() {
+        try {
+            const apiClient = setupAPIClient();
+            if (ceps === '') {
+                toast.error('Não deixe o CEP em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/cepUserUpdate?user_id=${user_id}`, { CEP: ceps });
+                toast.success('CEP atualizado com sucesso.');
+                refreshUser();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o CEP.');
+        }
+    }
+
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(user_id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/listExactUser', {
+            params: {
+                user_id: user_id,
+            }
+        });
+        setModalItem(responseDelete.data);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
 
     return (
@@ -274,7 +440,7 @@ const Cliente: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={() => alert('clicou')}
+                                onClick={() => handleOpenModalDelete(user_id)}
                             >
                                 Remover
                             </Button>
@@ -444,7 +610,7 @@ const Cliente: React.FC = () => {
                                             <ButtonSelect
                                                 /* @ts-ignore */
                                                 dado={newslatters}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateNews}
                                             />
                                         }
                                     />
@@ -461,9 +627,9 @@ const Cliente: React.FC = () => {
                                             dados={
                                                 <SelectUpdate
                                                     dado={generos}
-                                                    value={generos}
+                                                    value={generoSelected}
                                                     /* @ts-ignore */
-                                                    onChange={''}
+                                                    onChange={handleChangeGenero}
                                                     opcoes={
                                                         [
                                                             { label: "Selecionar...", value: "" },
@@ -472,7 +638,7 @@ const Cliente: React.FC = () => {
                                                             { label: "Outro", value: "Outro" },
                                                         ]
                                                     }
-                                                    handleSubmit={() => alert('clicou')}
+                                                    handleSubmit={updateGenero}
                                                 />
                                             }
                                         />
@@ -491,7 +657,7 @@ const Cliente: React.FC = () => {
                                                 value={locals}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setLocals(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateEndereco}
                                             />
                                         }
                                     />
@@ -506,10 +672,10 @@ const Cliente: React.FC = () => {
                                                 type="text"
                                                 /* @ts-ignore */
                                                 placeholder={numeros}
-                                                value={''}
+                                                value={numeros}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setNumeros(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateNumero}
                                             />
                                         }
                                     />
@@ -524,10 +690,10 @@ const Cliente: React.FC = () => {
                                                 type="text"
                                                 /* @ts-ignore */
                                                 placeholder={bairros}
-                                                value={''}
+                                                value={bairros}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setBairros(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateBairro}
                                             />
                                         }
                                     />
@@ -545,7 +711,7 @@ const Cliente: React.FC = () => {
                                                 value={cidades}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setCidades(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateCidade}
                                             />
                                         }
                                     />
@@ -557,9 +723,9 @@ const Cliente: React.FC = () => {
                                         dados={
                                             <SelectUpdate
                                                 dado={estados}
-                                                value={estados}
+                                                value={estadoSelected}
                                                 /* @ts-ignore */
-                                                onChange={''}
+                                                onChange={handleChangeEstado}
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },
@@ -592,7 +758,7 @@ const Cliente: React.FC = () => {
                                                         { label: "Tocantins", value: "Tocantins" }
                                                     ]
                                                 }
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateEstado}
                                             />
                                         }
                                     />
@@ -606,11 +772,15 @@ const Cliente: React.FC = () => {
                                                 dado={ceps}
                                                 type="text"
                                                 /* @ts-ignore */
+                                                as={IMaskInput}
+                                                /* @ts-ignore */
+                                                mask="00000-000"
+                                                /* @ts-ignore */
                                                 placeholder={ceps}
                                                 value={ceps}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setCeps(e.target.value)}
-                                                handleSubmit={() => alert('clicou')}
+                                                handleSubmit={updateCep}
                                             />
                                         }
                                     />
@@ -618,8 +788,64 @@ const Cliente: React.FC = () => {
                             </SectionDate>
                         </GridDate>
                     </Card>
+
+                    <Card>
+                        <Titulos
+                            tipo="h2"
+                            titulo="Pedidos feitos"
+                        />
+
+                        {/* <TabelaSimples
+                            cabecalho={["ID", "Valor Total", "Data", "Status"]}
+                            
+                            dados={''}
+                        /> */}
+
+                        {/* <ContainerPagination>
+                            <TotalBoxItems key={total}>
+                                <TextTotal>Total de pedidos: {total}</TextTotal>
+                            </TotalBoxItems>
+                            <ContainerCategoryPage>
+
+                                {currentPage > 1 && (
+                                    <Previus>
+                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                            Voltar
+                                        </ButtonPage>
+                                    </Previus>
+                                )}
+
+                                {pages.map((page) => (
+                                    <TextPage
+                                        key={page}
+                                        onClick={() => setCurrentPage(page)}
+                                    >
+                                        {page}
+                                    </TextPage>
+                                ))}
+
+                                {currentPage < search.length && (
+                                    <Next>
+                                        <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                            Avançar
+                                        </ButtonPage>
+                                    </Next>
+                                )}
+
+                            </ContainerCategoryPage>
+                        </ContainerPagination> */}
+                    </Card>
                 </Container>
             </Grid>
+
+            {modalVisible && (
+                <ModalDeleteCliente
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    cliente={modalItem}
+                />
+            )}
         </>
     )
 }
