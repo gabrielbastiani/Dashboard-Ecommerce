@@ -38,6 +38,7 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+
     const [order, setOrder] = useState(() => {
         const orderSaved = localStorage.getItem('@lojasaveorderproduct');
 

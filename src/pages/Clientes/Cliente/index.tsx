@@ -21,6 +21,7 @@ import { IMaskInput } from "react-imask";
 import Modal from 'react-modal';
 import { ModalDeleteCliente } from "../../../components/popups/ModalDeleteCliente";
 import TabelaSimples from "../../../components/Tabelas";
+import moment from 'moment';
 
 
 export type DeleteCliente = {
@@ -54,10 +55,42 @@ const Cliente: React.FC = () => {
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [search, setSearch] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
+    const [limit, setLimit] = useState(4);
+    const [pages, setPages] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+
     function isEmail(emails: string) {
         // eslint-disable-next-line no-control-regex
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
     }
+
+    useEffect(() => {
+        async function allClientes() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/allPedidosPageUser?page=${currentPage}&limit=${limit}&user_id=${user_id}`);
+
+                setTotal(data.total);
+                const totalPages = Math.ceil(total / limit);
+
+                const arrayPages = [];
+                for (let i = 1; i <= totalPages; i++) {
+                    arrayPages.push(i);
+                }
+
+                setPages(arrayPages);
+                setSearch(data.pedidos);
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+                alert('Error call api list ALL pedidos');
+            }
+        }
+        allClientes();
+    }, [currentPage, limit, total, user_id]);
 
     async function refreshUser() {
         const apiClient = setupAPIClient();
@@ -402,6 +435,18 @@ const Cliente: React.FC = () => {
             toast.error('Ops erro ao atualizar o CEP.');
         }
     }
+
+    /* @ts-ignore */
+    const dados = [];
+    (search || []).forEach((item) => {
+        dados.push({
+            "ID": [item.id],/* @ts-ignore */
+            "Valor Total": [item.carrinhos[0].valorPagamento].toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
+            "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "Status": [item.pagamentos[0].status],
+            "botaoDetalhes": `/pedido/${item.id}`
+        });
+    });
 
     function handleCloseModalDelete() {
         setModalVisible(false);
@@ -795,13 +840,13 @@ const Cliente: React.FC = () => {
                             titulo="Pedidos feitos"
                         />
 
-                        {/* <TabelaSimples
+                        <TabelaSimples
                             cabecalho={["ID", "Valor Total", "Data", "Status"]}
-                            
-                            dados={''}
-                        /> */}
+                            /* @ts-ignore */
+                            dados={dados}
+                        />
 
-                        {/* <ContainerPagination>
+                        <ContainerPagination>
                             <TotalBoxItems key={total}>
                                 <TextTotal>Total de pedidos: {total}</TextTotal>
                             </TotalBoxItems>
@@ -833,7 +878,7 @@ const Cliente: React.FC = () => {
                                 )}
 
                             </ContainerCategoryPage>
-                        </ContainerPagination> */}
+                        </ContainerPagination>
                     </Card>
                 </Container>
             </Grid>

@@ -16,6 +16,7 @@ import Produto from './pages/Produtos/Produto';
 import Avaliacoes from './pages/Avaliacoes';
 import Avaliacao from './pages/Avaliacoes/Avaliacao';
 import Cliente from './pages/Clientes/Cliente';
+import Pedido from './pages/Pedidos/Pedido';
 
 
 const RoutesAuth: React.FC = () => {
@@ -24,8 +25,11 @@ const RoutesAuth: React.FC = () => {
         <Routes>
             <Route path='/' element={ <Dashboard /> } />
             <Route path='/painel' element={ <Painel /> } />
-            <Route path='/pedidos' element={ <Pedidos /> } />
             <Route path='/painel' element={ <Painel /> } />
+            
+
+            <Route path='/pedidos' element={ <Pedidos /> } />
+            <Route path='/pedido/:pedido_id' element={ <Pedido /> } />
 
             <Route path='/clientes' element={ <Clientes /> } />
             <Route path='/cliente/:nameComplete/:user_id' element={ <Cliente /> } />
