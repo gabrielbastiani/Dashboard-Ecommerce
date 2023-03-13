@@ -436,6 +436,14 @@ const Cliente: React.FC = () => {
         }
     }
 
+    console.log(search.map((item) => {
+        return (
+            <>
+                {[item.pagamento.status]}
+            </>
+        )
+    }))
+
     /* @ts-ignore */
     const dados = [];
     (search || []).forEach((item) => {
@@ -443,7 +451,7 @@ const Cliente: React.FC = () => {
             "ID": [item.id],/* @ts-ignore */
             "Valor Total": [item.carrinhos[0].valorPagamento].toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Status": [item.pagamentos[0].status],
+            "Status": [item.pagamento.status] || "Iniciado",
             "botaoDetalhes": `/pedido/${item.id}`
         });
     });
