@@ -40,7 +40,7 @@ const Avaliacoes: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setAvaliations(data.allAvaliacao);
+                setAvaliations(data.allAvaliacao || []);
 
             } catch (error) {
                 console.error(error);

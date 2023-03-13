@@ -67,7 +67,7 @@ const Produtos: React.FC = () => {
 
                 setPages(arrayPages || []);
                 setSearch(data.products || []);
-                setInitialFilter(data.products || []);
+                setInitialFilter(data.products);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);

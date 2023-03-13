@@ -24,6 +24,7 @@ const NovaCategoria: React.FC = () => {
 
     const [categoryName, setCategoryName] = useState('');
     const [codigo, setCodigo] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [lojaID, setLojaID] = useState(user.loja_id);
 
     function removerAcentos(s: any) {

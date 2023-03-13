@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Aside from "../../../components/Aside";
 import { Card } from "../../../components/Content/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -30,8 +30,6 @@ export type CancelPedido = {
 const Pedido: React.FC = () => {
 
     let { pedido_id } = useParams();
-
-    const navigate = useNavigate();
 
     const [names, setNames] = useState('');
     const [datePedidos, setDatePedidos] = useState();
@@ -75,24 +73,24 @@ const Pedido: React.FC = () => {
             try {
                 const response = await apiClient.get(`/exactPedidoUser?pedido_id=${pedido_id}`);
 
-                setNames(response.data.user.nameComplete);
-                setDatePedidos(response.data.created_at);
-                setCpfs(response.data.pagamentos[0].cpfPagamento);
-                setPhones(response.data.user.phone);
-                setDataNascimentos(response.data.pagamentos[0].dataDeNascimento);
-                setEnderecos(response.data.pagamentos[0].ruaPagamento);
-                setNumeros(response.data.pagamentos[0].numeroPagamento);
-                setBairros(response.data.pagamentos[0].bairroPagamento);
-                setCidades(response.data.pagamentos[0].cityPagamento);
-                setEstados(response.data.pagamentos[0].statePagamento);
-                setCeps(response.data.pagamentos[0].cepPagamento);
-                setTaxaEntregas(response.data.carrinhos[0].custoEntrega);
-                setValorDoPedidos(response.data.carrinhos[0].valorPagamento);
-                setValorTotals(response.data.pagamentos[0].valor);
-                setFormaDePagamentos(response.data.pagamentos[0].formaDePagamento);
-                setCodigoRastreios(response.data.entregas[0].codigoRastreamento);
-                setPagamentos(response.data.pagamentos[0].status);
-                setStatusPedido(response.data.cancelado);
+                setNames(response.data.user.nameComplete || "");
+                setDatePedidos(response.data.created_at || "");
+                setCpfs(response.data.pagamentos[0].cpfPagamento || "");
+                setPhones(response.data.user.phone || "");
+                setDataNascimentos(response.data.pagamentos[0].dataDeNascimento || "");
+                setEnderecos(response.data.pagamentos[0].ruaPagamento || "");
+                setNumeros(response.data.pagamentos[0].numeroPagamento || "");
+                setBairros(response.data.pagamentos[0].bairroPagamento || "");
+                setCidades(response.data.pagamentos[0].cityPagamento || "");
+                setEstados(response.data.pagamentos[0].statePagamento || "");
+                setCeps(response.data.pagamentos[0].cepPagamento || "");
+                setTaxaEntregas(response.data.carrinhos[0].custoEntrega || "");
+                setValorDoPedidos(response.data.carrinhos[0].valorPagamento || "");
+                setValorTotals(response.data.pagamentos[0].valor || "");
+                setFormaDePagamentos(response.data.pagamentos[0].formaDePagamento || "");
+                setCodigoRastreios(response.data.entregas[0].codigoRastreamento || "");
+                setPagamentos(response.data.pagamentos[0].status || "");
+                setStatusPedido(response.data.cancelado || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -130,9 +128,6 @@ const Pedido: React.FC = () => {
         }
     }
 
-
-    console.log(search)
-
     const mentirinha = [{
         produto: "Produto Principal M",
         precoUnd: "R$158,66",
@@ -164,7 +159,7 @@ const Pedido: React.FC = () => {
             }
         });
         setModalItem(responseCancel.data);
-        setCancelados(responseCancel.data.cancelado);
+        setCancelados(responseCancel.data.cancelado || "");
         setModalVisible(true);
     }
 

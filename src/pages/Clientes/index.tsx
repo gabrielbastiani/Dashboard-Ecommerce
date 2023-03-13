@@ -36,8 +36,8 @@ const Clientes: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages);
-                setSearch(data.users);
+                setPages(arrayPages || []);
+                setSearch(data.users || []);
                 setInitialFilter(data.users);
 
             } catch (error) {

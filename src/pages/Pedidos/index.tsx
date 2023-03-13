@@ -26,7 +26,7 @@ const Pedidos: React.FC = () => {
 
 
     useEffect(() => {
-        async function allClientes() {
+        async function loadPedidos() {
             try {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/allPedidosPage?page=${currentPage}&limit=${limit}`);
@@ -39,16 +39,16 @@ const Pedidos: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages);
-                setSearch(data.pedidos);
-                setInitialFilter(data.pedidos);
+                setPages(arrayPages || []);
+                setSearch(data.pedidosAll || []);
+                setInitialFilter(data.pedidosAll);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
                 alert('Error call api list ALL pedidos');
             }
         }
-        allClientes();
+        loadPedidos();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */

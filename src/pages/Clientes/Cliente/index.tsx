@@ -82,8 +82,8 @@ const Cliente: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages);
-                setSearch(data.pedidos);
+                setPages(arrayPages || []);
+                setSearch(data.pedidos || []);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);

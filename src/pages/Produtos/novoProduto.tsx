@@ -48,7 +48,7 @@ const NovoProduto: React.FC = () => {
             const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get('/allCategorys');
-                setCategories(response.data);
+                setCategories(response.data || []);
             } catch (error) {
                 console.log(error);
             }

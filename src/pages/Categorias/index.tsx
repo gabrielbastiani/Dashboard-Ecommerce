@@ -50,8 +50,8 @@ const Categorias: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages);
-                setSearch(data.categorys);
+                setPages(arrayPages || []);
+                setSearch(data.categorys || []);
                 setInitialFilter(data.categorys);
 
             } catch (error) {

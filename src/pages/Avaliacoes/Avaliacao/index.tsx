@@ -39,10 +39,10 @@ const Avaliacao: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const response = await apiClient.get(`/avaliacaoDados?avaliacao_id=${avaliacao_id}`);
 
-                setClientName(response.data.clientName);
-                setPontuacao(response.data.pontuacao);
-                setDescription(response.data.description);
-                setProduct_id(response.data.product_id);
+                setClientName(response.data.clientName || "");
+                setPontuacao(response.data.pontuacao || "");
+                setDescription(response.data.descriptionv);
+                setProduct_id(response.data.product_id || "");
 
             } catch (error) {
                 console.log(error);
@@ -62,7 +62,7 @@ const Avaliacao: React.FC = () => {
                 avaliacao_id: avaliacao_id,
             }
         });
-        setModalItem(responseDelete.data);
+        setModalItem(responseDelete.data || "");
         setModalVisible(true);
     }
 

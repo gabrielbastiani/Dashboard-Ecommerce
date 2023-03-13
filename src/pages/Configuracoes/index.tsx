@@ -36,6 +36,7 @@ const Configuracoes: React.FC = () => {
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [loja_id, setLoja_id] = useState('');
     const [logoLoja, setLogoLoja] = useState(null);
     const [lojaUrl, setLojaUrl] = useState('');
@@ -64,18 +65,18 @@ const Configuracoes: React.FC = () => {
             try {
                 const response = await apiClient.get(`/userLoja?loja_id=${user.loja_id}`);
 
-                setLoja_id(response.data.loja_id);
-                setLogoLoja(response.data.logoLoja);
-                setNameLoja(response.data.nameLoja);
-                setCnpjLoja(response.data.cnpjLoja);
-                setEmailLoja(response.data.emailLoja);
-                setPhoneLoja(response.data.phoneLoja);
-                setRuaLoja(response.data.ruaLoja);
-                setNumeroLoja(response.data.numeroLoja);
-                setBairroLoja(response.data.bairroLoja);
-                setCepLoja(response.data.cepLoja);
-                setCityLoja(response.data.cityLoja);
-                setStateLoja(response.data.stateLoja);
+                setLoja_id(response.data.loja_id || "");
+                setLogoLoja(response.data.logoLoja || "");
+                setNameLoja(response.data.nameLoja || "");
+                setCnpjLoja(response.data.cnpjLoja || "");
+                setEmailLoja(response.data.emailLoja || "");
+                setPhoneLoja(response.data.phoneLoja || "");
+                setRuaLoja(response.data.ruaLoja || "");
+                setNumeroLoja(response.data.numeroLoja || "");
+                setBairroLoja(response.data.bairroLoja || "");
+                setCepLoja(response.data.cepLoja || "");
+                setCityLoja(response.data.cityLoja || "");
+                setStateLoja(response.data.stateLoja || "");
 
             } catch (error) {
                 console.log(error);

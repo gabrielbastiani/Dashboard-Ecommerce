@@ -12,7 +12,6 @@ import { BlockTop } from "../../Categorias/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { ModalDeleteVariacao } from '../../../components/popups/ModalDeleteVariacao';
 
@@ -62,8 +61,6 @@ const VariacaoDetalhes = ({
     profundidadeCm,
     promocao,
 }: ItemsVariacao) => {
-
-    const navigate = useNavigate();
 
     const [nameVariacoes, setNameVariacoes] = useState('');
     const [precoVariacoes, setPrecoVariacoes] = useState('');

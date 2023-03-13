@@ -123,10 +123,10 @@ const Categoria: React.FC = () => {
         async function refreshCategoryLoad() {
             const apiClient = setupAPIClient();
             const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
-            setCategoryNames(response?.data?.categoryName);
-            setDataName(response?.data?.categoryName);
-            setDataCodigo(response?.data?.codigo);
-            setDisponibilidades(response?.data?.disponibilidade);
+            setCategoryNames(response?.data?.categoryName || "");
+            setDataName(response?.data?.categoryName || "");
+            setDataCodigo(response?.data?.codigo || "");
+            setDisponibilidades(response?.data?.disponibilidade || "");
         }
         refreshCategoryLoad();
     }, [category_id])
@@ -156,7 +156,7 @@ const Categoria: React.FC = () => {
 
                 setPages(arrayPages || []);
                 setSearch(data.products || []);
-                setInitialFilter(data.products || []);
+                setInitialFilter(data.products);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -210,7 +210,7 @@ const Categoria: React.FC = () => {
                 category_id: category_id,
             }
         });
-        setModalItem(responseDelete.data);
+        setModalItem(responseDelete.data || "");
         setModalVisible(true);
     }
 
