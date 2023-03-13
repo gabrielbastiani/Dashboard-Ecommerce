@@ -49,6 +49,8 @@ const Produtos: React.FC = () => {
         }
     });
 
+    console.log(search)
+
     useEffect(() => {
         async function allProducts() {
             try {

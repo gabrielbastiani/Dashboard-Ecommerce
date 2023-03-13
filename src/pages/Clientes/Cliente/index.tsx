@@ -22,6 +22,7 @@ import Modal from 'react-modal';
 import { ModalDeleteCliente } from "../../../components/popups/ModalDeleteCliente";
 import TabelaSimples from "../../../components/Tabelas";
 import moment from 'moment';
+import { Avisos } from "../../../components/Avisos";
 
 
 export type DeleteCliente = {
@@ -848,45 +849,54 @@ const Cliente: React.FC = () => {
                             titulo="Pedidos feitos"
                         />
 
-                        <TabelaSimples
-                            cabecalho={["ID", "Valor Total", "Data", "Status"]}
-                            /* @ts-ignore */
-                            dados={dados}
-                        />
+                        {dados.length < 1 ? (
+                            <Avisos
+                                texto="Esse cliente não tem pedidos na loja ainda..."
+                            />
+                        ) :
+                            <>
+                                <TabelaSimples
+                                    cabecalho={["ID", "Valor Total", "Data", "Status"]}
+                                    /* @ts-ignore */
+                                    dados={dados}
+                                />
 
-                        <ContainerPagination>
-                            <TotalBoxItems key={total}>
-                                <TextTotal>Total de pedidos: {total}</TextTotal>
-                            </TotalBoxItems>
-                            <ContainerCategoryPage>
+                                <ContainerPagination>
+                                    <TotalBoxItems key={total}>
+                                        <TextTotal>Total de pedidos: {total}</TextTotal>
+                                    </TotalBoxItems>
+                                    <ContainerCategoryPage>
 
-                                {currentPage > 1 && (
-                                    <Previus>
-                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                            Voltar
-                                        </ButtonPage>
-                                    </Previus>
-                                )}
+                                        {currentPage > 1 && (
+                                            <Previus>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                    Voltar
+                                                </ButtonPage>
+                                            </Previus>
+                                        )}
 
-                                {pages.map((page) => (
-                                    <TextPage
-                                        key={page}
-                                        onClick={() => setCurrentPage(page)}
-                                    >
-                                        {page}
-                                    </TextPage>
-                                ))}
+                                        {pages.map((page) => (
+                                            <TextPage
+                                                key={page}
+                                                onClick={() => setCurrentPage(page)}
+                                            >
+                                                {page}
+                                            </TextPage>
+                                        ))}
 
-                                {currentPage < search.length && (
-                                    <Next>
-                                        <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                            Avançar
-                                        </ButtonPage>
-                                    </Next>
-                                )}
+                                        {currentPage < search.length && (
+                                            <Next>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                    Avançar
+                                                </ButtonPage>
+                                            </Next>
+                                        )}
+                                    </ContainerCategoryPage>
+                                </ContainerPagination>
+                            </>
+                        }
 
-                            </ContainerCategoryPage>
-                        </ContainerPagination>
+
                     </Card>
                 </Container>
             </Grid>

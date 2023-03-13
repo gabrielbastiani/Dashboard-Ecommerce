@@ -11,6 +11,7 @@ import { setupAPIClient } from "../../services/api";
 import Select from "../../components/ui/Select";
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
+import { Avisos } from "../../components/Avisos";
 
 
 const Pedidos: React.FC = () => {
@@ -73,7 +74,7 @@ const Pedidos: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Cliente": [item.user.nameComplete],/* @ts-ignore */
-            "Valor Total": [item.carrinhos[0].valorPagamento].toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
+            "Valor Total": [item.carrinhos[0].valorPagamento].toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "Status": [item.pagamentos[0].status],
             "botaoDetalhes": `/pedido/${item.id}`
@@ -94,63 +95,76 @@ const Pedidos: React.FC = () => {
                         />
                     </BlockTop>
 
-                    <Pesquisa
-                        placeholder={"Pesquise aqui pelo nome do cliente..."}
-                        /* @ts-ignore */
-                        onChange={handleChange}
-                    />
+                    {dados.length < 1 ? (
+                        null
+                    ) :
+                        <Pesquisa
+                            placeholder={"Pesquise aqui pelo nome do cliente..."}
+                            /* @ts-ignore */
+                            onChange={handleChange}
+                        />
+                    }
                     <br />
                     <br />
-                    <TextTotal>Pedidos por página: &nbsp;</TextTotal>
 
-                    <Select
-                        /* @ts-ignore */
-                        onChange={limits}
-                        opcoes={[
-                            { label: "4", value: "4" },
-                            { label: "8", value: "8" },
-                            { label: "Todos pedidos", value: "999999" }
-                        ]}
-                    />
+                    {dados.length < 1 ? (
+                        <Avisos
+                            texto="Não há pedidos na loja ainda..."
+                        />
+                    ) :
+                        <>
+                            <TextTotal>Pedidos por página: &nbsp;</TextTotal>
 
-                    <TabelaSimples
-                        cabecalho={["Cliente", "Valor Total", "Data", "Status"]}
-                        /* @ts-ignore */
-                        dados={dados}
-                    />
+                            <Select
+                                /* @ts-ignore */
+                                onChange={limits}
+                                opcoes={[
+                                    { label: "4", value: "4" },
+                                    { label: "8", value: "8" },
+                                    { label: "Todos pedidos", value: "999999" }
+                                ]}
+                            />
 
-                    <ContainerPagination>
-                        <TotalBoxItems key={total}>
-                            <TextTotal>Total de pedidos: {total}</TextTotal>
-                        </TotalBoxItems>
-                        <ContainerCategoryPage>
+                            <TabelaSimples
+                                cabecalho={["Cliente", "Valor Total", "Data", "Status"]}
+                                /* @ts-ignore */
+                                dados={dados}
+                            />
 
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
+                            <ContainerPagination>
+                                <TotalBoxItems key={total}>
+                                    <TextTotal>Total de pedidos: {total}</TextTotal>
+                                </TotalBoxItems>
+                                <ContainerCategoryPage>
 
-                            {pages.map((page) => (
-                                <TextPage
-                                    key={page}
-                                    onClick={() => setCurrentPage(page)}
-                                >
-                                    {page}
-                                </TextPage>
-                            ))}
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
 
-                            {currentPage < search.length && (
-                                <Next>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                        Avançar
-                                    </ButtonPage>
-                                </Next>
-                            )}
-                        </ContainerCategoryPage>
-                    </ContainerPagination>
+                                    {pages.map((page) => (
+                                        <TextPage
+                                            key={page}
+                                            onClick={() => setCurrentPage(page)}
+                                        >
+                                            {page}
+                                        </TextPage>
+                                    ))}
+
+                                    {currentPage < search.length && (
+                                        <Next>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                Avançar
+                                            </ButtonPage>
+                                        </Next>
+                                    )}
+                                </ContainerCategoryPage>
+                            </ContainerPagination>
+                        </>
+                    }
                 </Card>
             </Container>
         </Grid>
