@@ -546,7 +546,7 @@ const Produto: React.FC = () => {
                                         chave={"Categoria"}
                                         dados={
                                             <SelectUpdate
-                                                dado={categorieName}
+                                                dado={categorieName || "SEM CATEGORIA"}
                                                 value={categorySelected}
                                                 /* @ts-ignore */
                                                 onChange={handleChangeCategory}

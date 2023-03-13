@@ -38,6 +38,7 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const categoyNo: string = "SEM CATEGORIA";
 
     const [order, setOrder] = useState(() => {
         const orderSaved = localStorage.getItem('@lojasaveorderproduct');
@@ -49,7 +50,7 @@ const Produtos: React.FC = () => {
         }
     });
 
-    console.log(search)
+    /* console.log(search[0].category.categoryName) */
 
     useEffect(() => {
         async function allProducts() {
@@ -121,8 +122,8 @@ const Produtos: React.FC = () => {
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Produto": item.nameProduct,
-            "Categoria": [item.category.categoryName] || "SEM CATEGORIA",
+            "Produto": item.nameProduct,/* @ts-ignore */
+            "Categoria": item.category.categoryName || item.nameProduct,
             "Status": item.disponibilidade,
             "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
         });
