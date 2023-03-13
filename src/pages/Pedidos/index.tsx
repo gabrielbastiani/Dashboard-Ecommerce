@@ -106,7 +106,6 @@ const Pedidos: React.FC = () => {
                     }
                     <br />
                     <br />
-
                     {dados.length < 1 ? (
                         <Avisos
                             texto="Não há pedidos na loja ainda..."

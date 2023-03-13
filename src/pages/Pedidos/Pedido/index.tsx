@@ -18,9 +18,14 @@ import TabelaSimples from "../../../components/Tabelas";
 import { ContainerPedido, BoxButton, BolckStatus, Status } from "./styles";
 import { InputPost } from "../../../components/ui/InputPost";
 import { BsPlus } from "react-icons/bs";
+import Modal from 'react-modal';
+import { ModalCancelarPedido } from "../../../components/popups/ModalCancelarPedido";
 
 
-
+export type CancelPedido = {
+    pedido_id: string;
+    cancelados: string;
+}
 
 const Pedido: React.FC = () => {
 
@@ -50,9 +55,19 @@ const Pedido: React.FC = () => {
     const [codigoRastreios, setCodigoRastreios] = useState('');
     const [pagamentos, setPagamentos] = useState('');
 
+    const [cancelados, setCancelados] = useState('');
+    const [statusPedido, setStatusPedido] = useState('');
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+
     const [search, setSearch] = useState<any[]>([]);
 
+    const cancelNo = String("Cancelado");
+    const cancelYes = String("Valido");
+    const statusAtual = String(statusPedido);
 
+   
 
     useEffect(() => {
         async function loadPedido() {
@@ -77,6 +92,7 @@ const Pedido: React.FC = () => {
                 setFormaDePagamentos(response.data.pagamentos[0].formaDePagamento);
                 setCodigoRastreios(response.data.entregas[0].codigoRastreamento);
                 setPagamentos(response.data.pagamentos[0].status);
+                setStatusPedido(response.data.cancelado);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -84,6 +100,35 @@ const Pedido: React.FC = () => {
         }
         loadPedido()
     }, [pedido_id])
+
+    async function refreshPedido() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/exactPedidoUser?pedido_id=${pedido_id}`);
+
+            setNames(response.data.user.nameComplete);
+            setDatePedidos(response.data.created_at);
+            setCpfs(response.data.pagamentos[0].cpfPagamento);
+            setPhones(response.data.user.phone);
+            setDataNascimentos(response.data.pagamentos[0].dataDeNascimento);
+            setEnderecos(response.data.pagamentos[0].ruaPagamento);
+            setNumeros(response.data.pagamentos[0].numeroPagamento);
+            setBairros(response.data.pagamentos[0].bairroPagamento);
+            setCidades(response.data.pagamentos[0].cityPagamento);
+            setEstados(response.data.pagamentos[0].statePagamento);
+            setCeps(response.data.pagamentos[0].cepPagamento);
+            setTaxaEntregas(response.data.carrinhos[0].custoEntrega);
+            setValorDoPedidos(response.data.carrinhos[0].valorPagamento);
+            setValorTotals(response.data.pagamentos[0].valor);
+            setFormaDePagamentos(response.data.pagamentos[0].formaDePagamento);
+            setCodigoRastreios(response.data.entregas[0].codigoRastreamento);
+            setPagamentos(response.data.pagamentos[0].status);
+            setStatusPedido(response.data.cancelado);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
 
     console.log(search)
@@ -106,6 +151,25 @@ const Pedido: React.FC = () => {
         });
     });
 
+    function handleCloseModaCancel() {
+        setModalVisible(false);
+        refreshPedido();
+    }
+
+    async function handleOpenModalCancel(pedido_id: string) {
+        const apiClient = setupAPIClient();
+        const responseCancel = await apiClient.get('/exactPedidoUser', {
+            params: {
+                pedido_id: pedido_id,
+            }
+        });
+        setModalItem(responseCancel.data);
+        setCancelados(responseCancel.data.cancelado);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+
 
     return (
         <>
@@ -122,14 +186,32 @@ const Pedido: React.FC = () => {
                                 tipo="h1"
                                 titulo={"Pedido - " + names + ' - ' + moment(datePedidos).format('DD/MM/YYYY - HH:mm')}
                             />
-                            <Button
-                                type="submit"
-                                style={{ backgroundColor: '#FB451E' }}
-                                /* @ts-ignore */
-                                onClick={() => handleOpenModalCancel(pedido_id)}
-                            >
-                                Cancelar Pedido
-                            </Button>
+                            {cancelNo === statusAtual && (
+                                <>
+                                    <Button
+                                        type="submit"
+                                        style={{ backgroundColor: 'green' }}
+                                        /* @ts-ignore */
+                                        onClick={() => handleOpenModalCancel(pedido_id)}
+                                    >
+                                        Ativar Pedido
+                                    </Button>
+                                </>
+                            )}
+
+                            {cancelYes === statusAtual && (
+                                <>
+                                    <Button
+                                        type="submit"
+                                        style={{ backgroundColor: '#FB451E' }}
+                                        /* @ts-ignore */
+                                        onClick={() => handleOpenModalCancel(pedido_id)}
+                                    >
+                                        Cancelar Pedido
+                                    </Button>
+                                </>
+                            )}
+
                         </BlockTop>
                         <br />
                         <br />
@@ -338,6 +420,17 @@ const Pedido: React.FC = () => {
                     </ContainerPedido>
                 </Container>
             </Grid>
+
+            {modalVisible && (
+                <ModalCancelarPedido
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModaCancel}
+                    /* @ts-ignore */
+                    pedido={modalItem}
+                    /* @ts-ignore */
+                    cancelado={cancelados}
+                />
+            )}
         </>
     )
 }
