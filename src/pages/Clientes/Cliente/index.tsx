@@ -850,9 +850,18 @@ const Cliente: React.FC = () => {
                         />
 
                         {dados.length < 1 ? (
-                            <Avisos
-                                texto="Esse cliente não tem pedidos na loja ainda..."
-                            />
+                            <>
+                                <Avisos
+                                    texto="Esse cliente não tem pedidos aqui..."
+                                />
+                                {currentPage > 1 && (
+                                    <Previus>
+                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                            Voltar
+                                        </ButtonPage>
+                                    </Previus>
+                                )}
+                            </>
                         ) :
                             <>
                                 <TabelaSimples
@@ -866,14 +875,6 @@ const Cliente: React.FC = () => {
                                         <TextTotal>Total de pedidos: {total}</TextTotal>
                                     </TotalBoxItems>
                                     <ContainerCategoryPage>
-
-                                        {currentPage > 1 && (
-                                            <Previus>
-                                                <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                    Voltar
-                                                </ButtonPage>
-                                            </Previus>
-                                        )}
 
                                         {pages.map((page) => (
                                             <TextPage

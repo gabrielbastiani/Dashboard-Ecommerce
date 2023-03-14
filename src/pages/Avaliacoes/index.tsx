@@ -85,8 +85,15 @@ const Avaliacoes: React.FC = () => {
                     {dados.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há avaliações nesse produto ainda..."
+                                texto="Não há avaliações aqui..."
                             />
+                            {currentPage > 1 && (
+                                <Previus>
+                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                        Voltar
+                                    </ButtonPage>
+                                </Previus>
+                            )}
                         </>
                     ) :
                         <>
@@ -113,14 +120,6 @@ const Avaliacoes: React.FC = () => {
                                     <TextTotal>Total de avaliações: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
-
-                                    {currentPage > 1 && (
-                                        <Previus>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                Voltar
-                                            </ButtonPage>
-                                        </Previus>
-                                    )}
 
                                     {pages.map((page) => (
                                         <TextPage

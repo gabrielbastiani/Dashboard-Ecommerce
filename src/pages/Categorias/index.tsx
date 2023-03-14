@@ -122,8 +122,15 @@ const Categorias: React.FC = () => {
                     {dados.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há categorias cadastradas na loja..."
+                                texto="Não há categorias cadastradas aqui..."
                             />
+                            {currentPage > 1 && (
+                                <Previus>
+                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                        Voltar
+                                    </ButtonPage>
+                                </Previus>
+                            )}
                         </>
                     ) :
                         <>
@@ -150,14 +157,6 @@ const Categorias: React.FC = () => {
                                     <TextTotal>Total de categorias: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
-
-                                    {currentPage > 1 && (
-                                        <Previus>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                Voltar
-                                            </ButtonPage>
-                                        </Previus>
-                                    )}
 
                                     {pages.map((page) => (
                                         <TextPage

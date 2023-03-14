@@ -106,9 +106,18 @@ const Pedidos: React.FC = () => {
                     <br />
                     <br />
                     {dados.length < 1 ? (
-                        <Avisos
-                            texto="Não há pedidos na loja ainda..."
-                        />
+                        <>
+                            <Avisos
+                                texto="Não há pedidos aqui..."
+                            />
+                            {currentPage > 1 && (
+                                <Previus>
+                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                        Voltar
+                                    </ButtonPage>
+                                </Previus>
+                            )}
+                        </>
                     ) :
                         <>
                             <TextTotal>Pedidos por página: &nbsp;</TextTotal>
@@ -134,14 +143,6 @@ const Pedidos: React.FC = () => {
                                     <TextTotal>Total de pedidos: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
-
-                                    {currentPage > 1 && (
-                                        <Previus>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                Voltar
-                                            </ButtonPage>
-                                        </Previus>
-                                    )}
 
                                     {pages.map((page) => (
                                         <TextPage

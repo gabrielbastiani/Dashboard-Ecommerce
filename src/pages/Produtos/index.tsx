@@ -174,9 +174,18 @@ const Produtos: React.FC = () => {
                     </AddButton>
 
                     {dados.length < 1 ? (
-                        <Avisos
-                            texto="Não há produtos cadastrados na loja ainda..."
-                        />
+                        <>
+                            <Avisos
+                                texto="Não há produtos cadastrados aqui..."
+                            />
+                            {currentPage > 1 && (
+                                <Previus>
+                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                        Voltar
+                                    </ButtonPage>
+                                </Previus>
+                            )}
+                        </>
                     ) :
                         <>
                             <TextTotal>Produtos por página: &nbsp;</TextTotal>
@@ -202,14 +211,6 @@ const Produtos: React.FC = () => {
                                     <TextTotal>Total de produtos: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
-
-                                    {currentPage > 1 && (
-                                        <Previus>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                Voltar
-                                            </ButtonPage>
-                                        </Previus>
-                                    )}
 
                                     {pages.map((page) => (
                                         <TextPage
