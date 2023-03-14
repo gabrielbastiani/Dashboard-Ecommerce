@@ -91,6 +91,12 @@ const Categorias: React.FC = () => {
     });
 
 
+    console.log("TOTAL DE ITEMS: ", total)
+    console.log("LIMITE DE ITEMS POR PÁGINA: ", limit)
+    console.log("PAGINA ATUAL ", currentPage)
+    console.log("ARRAY DOS ITEMS ", search.length)
+
+
     return (
         <Grid>
             <MainHeader />
@@ -175,7 +181,7 @@ const Categorias: React.FC = () => {
                                             </ButtonPage>
                                         </Next>
                                     )}
-
+                                    
                                 </ContainerCategoryPage>
                             </ContainerPagination>
                         </>
