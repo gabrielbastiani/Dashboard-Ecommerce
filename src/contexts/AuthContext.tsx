@@ -6,7 +6,6 @@ import { destroyCookie, parseCookies, setCookie } from 'nookies';
 type AuthContextData = {
     user: UserProps;
     isAuthenticated: boolean;
-    signIn: (credentials: SignInProps) => Promise<void>;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
     signOut(): void;
 }
@@ -66,38 +65,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     }, [])
 
-    async function signIn({ email, password }: SignInProps) {
-        try {
-            const response = await api.post('/session', {
-                email,
-                password
-            });
-
-            const { id, nameComplete, loja_id, token } = response.data;
-
-            setCookie(undefined, '@lojabuilder.token', token, {
-                maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
-                path: "/" // Quais caminhos terao acesso ao cookie
-            })
-
-            setUser({
-                id,
-                nameComplete,
-                email,
-                loja_id
-            })
-
-            //Passar para proximas requisiçoes o nosso token
-            api.defaults.headers['Authorization'] = `Bearer ${token}`
-
-            toast.success('Logado com sucesso!')
-
-        } catch (err) {
-            toast.error("Erro ao acessar, confirmou seu cadastro em seu email?")
-            console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err)
-        }
-    }
-
     async function signInAdmin({ email, password }: SignInProps) {
         try {
             const response = await api.post('/sessionAdmin', {
@@ -131,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     return (/* @ts-ignore */
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, signInAdmin, signOut }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signInAdmin, signOut }}>
             {children}
         </AuthContext.Provider>
     )
