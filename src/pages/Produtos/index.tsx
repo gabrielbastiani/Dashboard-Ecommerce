@@ -38,8 +38,6 @@ const Produtos: React.FC = () => {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const categoyNo: string = "SEM CATEGORIA";
-
     const [order, setOrder] = useState(() => {
         const orderSaved = localStorage.getItem('@lojasaveorderproduct');
 
@@ -49,8 +47,6 @@ const Produtos: React.FC = () => {
             return "alfabeticaAZ"
         }
     });
-
-    /* console.log(search[0].category.categoryName) */
 
     useEffect(() => {
         async function allProducts() {
@@ -123,11 +119,12 @@ const Produtos: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Produto": item.nameProduct,/* @ts-ignore */
-            "Categoria": item.category.categoryName || item.nameProduct,
+            "Categoria": item.category ? item.category.categoryName : "Sem Categoria",
             "Status": item.disponibilidade,
             "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
         });
     });
+
 
     return (
         <Grid>
@@ -193,6 +190,7 @@ const Produtos: React.FC = () => {
                                     { label: "Todos produtos", value: "999999" }
                                 ]}
                             />
+
                             <TabelaSimples
                                 cabecalho={["Produto", "Categoria", "Status"]}
                                 /* @ts-ignore */
