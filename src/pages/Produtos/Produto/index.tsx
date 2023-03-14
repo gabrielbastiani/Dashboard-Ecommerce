@@ -367,46 +367,6 @@ const Produto: React.FC = () => {
         }
     }
 
-    function formatPrecoUpdate() {
-        var elementoUpdate = document.getElementById('valorupdate');
-        /* @ts-ignore */
-        var valorupdate = elementoUpdate.value;
-
-        valorupdate = valorupdate + '';
-        valorupdate = parseInt(valorupdate.replace(/[\D]+/g, ''));
-        valorupdate = valorupdate + '';
-        valorupdate = valorupdate.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorupdate.length > 6) {
-            valorupdate = valorupdate.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementoUpdate.value = valorupdate;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorupdate == 'NaN') elementoUpdate.value = '';
-    }
-
-    function formatPromocaoUpdate() {
-        var elementopromocaoupdate = document.getElementById('valorpromocaoupdate');
-        /* @ts-ignore */
-        var valorpromocaoupdate = elementopromocaoupdate.value;
-
-        valorpromocaoupdate = valorpromocaoupdate + '';
-        valorpromocaoupdate = parseInt(valorpromocaoupdate.replace(/[\D]+/g, ''));
-        valorpromocaoupdate = valorpromocaoupdate + '';
-        valorpromocaoupdate = valorpromocaoupdate.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorpromocaoupdate.length > 6) {
-            valorpromocaoupdate = valorpromocaoupdate.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementopromocaoupdate.value = valorpromocaoupdate;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorpromocaoupdate == 'NaN') elementopromocaoupdate.value = '';
-    }
-
     useEffect(() => {
         async function loadVariacao() {
             const apiClient = setupAPIClient();
@@ -675,14 +635,12 @@ const Produto: React.FC = () => {
                                         chave={"Preço"}
                                         dados={
                                             <InputUpdate
-                                                id="valorupdate"
                                                 /* @ts-ignore */
-                                                onKeyUp={formatPrecoUpdate}
-                                                maxLength={10}
-                                                dado={precos}
+                                                dado={precos.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                                 type="text"
                                                 /* @ts-ignore */
                                                 placeholder={precos}
+                                                /* @ts-ignore */
                                                 value={precos}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPrecos(e.target.value)}
@@ -697,14 +655,12 @@ const Produto: React.FC = () => {
                                         chave={"Valor em Promoção"}
                                         dados={
                                             <InputUpdate
-                                                id="valorpromocaoupdate"
                                                 /* @ts-ignore */
-                                                onKeyUp={formatPromocaoUpdate}
-                                                maxLength={10}
-                                                dado={promocoes}
+                                                dado={promocoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={promocoes}
+                                                placeholder={promocoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                /* @ts-ignore */
                                                 value={promocoes}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPromocoes(e.target.value)}

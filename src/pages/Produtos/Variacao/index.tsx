@@ -107,46 +107,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
             navigate(0);
         }, 3000);
     }
-
-    function formatPrecoVariacao() {
-        var elementoVariacao = document.getElementById('valorVariacao');
-        /* @ts-ignore */
-        var valorVariacao = elementoVariacao.value;
-
-        valorVariacao = valorVariacao + '';
-        valorVariacao = parseInt(valorVariacao.replace(/[\D]+/g, ''));
-        valorVariacao = valorVariacao + '';
-        valorVariacao = valorVariacao.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorVariacao.length > 6) {
-            valorVariacao = valorVariacao.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementoVariacao.value = valorVariacao;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorVariacao == 'NaN') elementoVariacao.value = '';
-    }
-
-    function formatPromocaoVariacao() {
-        var elementoPromocaoVariacao = document.getElementById('valorPromocaoVariacao');
-        /* @ts-ignore */
-        var valorPromocaoVariacao = elementoPromocaoVariacao.value;
-
-        valorPromocaoVariacao = valorPromocaoVariacao + '';
-        valorPromocaoVariacao = parseInt(valorPromocaoVariacao.replace(/[\D]+/g, ''));
-        valorPromocaoVariacao = valorPromocaoVariacao + '';
-        valorPromocaoVariacao = valorPromocaoVariacao.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorPromocaoVariacao.length > 6) {
-            valorPromocaoVariacao = valorPromocaoVariacao.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementoPromocaoVariacao.value = valorPromocaoVariacao;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorPromocaoVariacao == 'NaN') elementoPromocaoVariacao.value = '';
-    }
+    
 
     return (
         <>
@@ -241,13 +202,9 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                     <Block>
                         <Etiqueta>Preço:</Etiqueta>
                         <InputPost
-                            style={{ maxWidth: "170px" }}
-                            id="valorVariacao"
-                            type="text"
-                            /* @ts-ignore */
-                            onKeyUp={formatPrecoVariacao}
+                            style={{ maxWidth: "310px" }}
                             maxLength={10}
-                            placeholder="R$00.000,00"
+                            placeholder="Digite aqui o valor sem pontos e sem virgulas"
                             value={preco}/* @ts-ignore */
                             onChange={(e) => setPreco(e.target.value)}
                         />
@@ -256,13 +213,9 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                     <Block>
                         <Etiqueta>Valor em Promoção:</Etiqueta>
                         <InputPost
-                            style={{ maxWidth: "170px" }}
-                            id="valorPromocaoVariacao"
-                            type="text"
-                            /* @ts-ignore */
-                            onKeyUp={formatPromocaoVariacao}
+                            style={{ maxWidth: "310px" }}
                             maxLength={10}
-                            placeholder="R$00.000,00"
+                            placeholder="Digite aqui o valor sem pontos e sem virgulas"
                             value={promocao}/* @ts-ignore */
                             onChange={(e) => setPromocao(e.target.value)}
                         />

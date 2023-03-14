@@ -10,7 +10,6 @@ import TabelaSimples from "../../components/Tabelas";
 import { setupAPIClient } from "../../services/api";
 import Select from "../../components/ui/Select";
 import moment from 'moment';
-import NumberFormat from 'react-number-format';
 import { Avisos } from "../../components/Avisos";
 
 

@@ -608,14 +608,11 @@ const VariacaoDetalhes = ({
                             chave={"Preço"}
                             dados={
                                 <InputUpdate
-                                    id="valorupdate"
-                                    /* @ts-ignore */
-                                    onKeyUp={formatPrecoUpdate}
-                                    maxLength={10}
-                                    dado={precoVariacoes}
+                                    maxLength={10}/* @ts-ignore */
+                                    dado={precoVariacoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={preco}
+                                    placeholder={precoVariacoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                     value={precoVariacoes}
                                     /* @ts-ignore */
                                     onChange={(e) => setPrecoVariacoes(e.target.value)}
@@ -630,14 +627,11 @@ const VariacaoDetalhes = ({
                             chave="Promoção"
                             dados={
                                 <InputUpdate
-                                    id="valorpromocaoupdate"
-                                    /* @ts-ignore */
-                                    onKeyUp={formatPromocaoUpdate}
-                                    maxLength={10}
-                                    dado={promocaoVariacoes}
+                                    maxLength={10}/* @ts-ignore */
+                                    dado={promocaoVariacoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                     type="text"
                                     /* @ts-ignore */
-                                    placeholder={promocao}
+                                    placeholder={promocaoVariacoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                     value={promocaoVariacoes}
                                     /* @ts-ignore */
                                     onChange={(e) => setPromocaoVariacoes(e.target.value)}

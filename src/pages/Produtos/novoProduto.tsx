@@ -126,46 +126,6 @@ const NovoProduto: React.FC = () => {
         }
     }
 
-    function formatPreco() {
-        var elemento = document.getElementById('valor');
-        /* @ts-ignore */
-        var valor = elemento.value;
-
-        valor = valor + '';
-        valor = parseInt(valor.replace(/[\D]+/g, ''));
-        valor = valor + '';
-        valor = valor.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valor.length > 6) {
-            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elemento.value = valor;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valor == 'NaN') elemento.value = '';
-    }
-
-    function formatPromocao() {
-        var elementoPromocao = document.getElementById('valorPromocao');
-        /* @ts-ignore */
-        var valorPromocao = elementoPromocao.value;
-
-        valorPromocao = valorPromocao + '';
-        valorPromocao = parseInt(valorPromocao.replace(/[\D]+/g, ''));
-        valorPromocao = valorPromocao + '';
-        valorPromocao = valorPromocao.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorPromocao.length > 6) {
-            valorPromocao = valorPromocao.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementoPromocao.value = valorPromocao;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorPromocao == 'NaN') elementoPromocao.value = '';
-    }
-
     return (
         <Grid>
             <MainHeader />
@@ -280,13 +240,9 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>Preço:</Etiqueta>
                                 <InputPost
-                                    style={{ maxWidth: "170px" }}
-                                    id="valor"
-                                    type="text"
-                                    /* @ts-ignore */
-                                    onKeyUp={formatPreco}
+                                    style={{ maxWidth: "310px" }}
                                     maxLength={10}
-                                    placeholder="R$00.000,00"
+                                    placeholder="Digite aqui o valor sem pontos e sem virgulas"/* @ts-ignore */
                                     value={preco}/* @ts-ignore */
                                     onChange={(e) => setPreco(e.target.value)}
                                 />
@@ -295,13 +251,9 @@ const NovoProduto: React.FC = () => {
                             <Block>
                                 <Etiqueta>Valor em Promoção:</Etiqueta>
                                 <InputPost
-                                    style={{ maxWidth: "170px" }}
-                                    id="valorPromocao"
-                                    type="text"
-                                    /* @ts-ignore */
-                                    onKeyUp={formatPromocao}
+                                    style={{ maxWidth: "310px" }}
                                     maxLength={10}
-                                    placeholder="R$00.000,00"
+                                    placeholder="Digite aqui o valor sem pontos e sem virgulas"
                                     value={promocao}/* @ts-ignore */
                                     onChange={(e) => setPromocao(e.target.value)}
                                 />
