@@ -19,6 +19,7 @@ const Titulos = ({tipo, titulo}: TituloRequest) => {
         case 'h3':
             return (<TituloTerciario>{titulo}</TituloTerciario>);
         case 'h1':
+            return (<TituloPrincipal>{titulo}</TituloPrincipal>);
         default:
             return (<TituloPrincipal>{titulo}</TituloPrincipal>);
     }
