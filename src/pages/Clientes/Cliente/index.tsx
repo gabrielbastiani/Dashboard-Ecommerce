@@ -14,7 +14,6 @@ import { BlockDados } from "../../Categorias/Categoria/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
-import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { IMaskInput } from "react-imask";
@@ -23,6 +22,7 @@ import { ModalDeleteCliente } from "../../../components/popups/ModalDeleteClient
 import TabelaSimples from "../../../components/Tabelas";
 import moment from 'moment';
 import { Avisos } from "../../../components/Avisos";
+import { InputCheck } from './styles';
 
 
 export type DeleteCliente = {
@@ -51,7 +51,18 @@ const Cliente: React.FC = () => {
     const [ceps, setCeps] = useState('');
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
-    const [newslatters, setNewslatters] = useState('');
+
+    const [newslatters, setNewslatters] = useState();
+    const [check, setCheck] = useState(false);
+
+    const handleChecked = (e: any) => {
+        setCheck(e.target.checked);
+        setTimeout(() => {
+            updateNews();
+        }, 2000);
+    };
+
+    console.log(newslatters)
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -288,23 +299,14 @@ const Cliente: React.FC = () => {
     async function updateNews() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/newslatter?user_id=${user_id}`);
+            await apiClient.put(`/newslatterUserUpdate?user_id=${user_id}`, {newslatter: newslatters});
 
+            toast.success('Newslatters atualizado com sucesso.');
             refreshUser();
 
         } catch (error) {
             console.log(error);
             toast.error('Ops erro ao atualizar o preferencia pela newslatters.');
-        }
-
-        if (newslatters === "Nao") {
-            toast.success(`A preferencia pela newslatters mudou para SIM.`);
-            return;
-        }
-
-        if (newslatters === "Sim") {
-            toast.error(`A preferencia pela newslatters mudou para NÃO.`);
-            return;
         }
     }
 
@@ -653,10 +655,12 @@ const Cliente: React.FC = () => {
                                     <TextoDados
                                         chave={"Newslatters"}
                                         dados={
-                                            <ButtonSelect
-                                                /* @ts-ignore */
-                                                dado={newslatters}
-                                                handleSubmit={updateNews}
+                                            <InputCheck
+                                                type="checkbox"
+                                                value={newslatters}
+                                                onClick={handleChecked}
+                                                onChange={(e) => setNewslatters(check ? "Nao" : "Sim")}
+                                                checked={check}
                                             />
                                         }
                                     />
