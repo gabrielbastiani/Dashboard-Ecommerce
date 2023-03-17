@@ -22,7 +22,7 @@ import { ModalDeleteCliente } from "../../../components/popups/ModalDeleteClient
 import TabelaSimples from "../../../components/Tabelas";
 import moment from 'moment';
 import { Avisos } from "../../../components/Avisos";
-import { InputCheck } from './styles';
+import { InputCheck } from "./styles";
 
 
 export type DeleteCliente = {
@@ -52,17 +52,13 @@ const Cliente: React.FC = () => {
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
 
-    const [newslatters, setNewslatters] = useState();
+    const [newslatters, setNewslatters] = useState("Nao");
     const [check, setCheck] = useState(false);
 
     const handleChecked = (e: any) => {
         setCheck(e.target.checked);
-        setTimeout(() => {
-            updateNews();
-        }, 2000);
+        updateNews();
     };
-
-    console.log(newslatters)
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -299,14 +295,22 @@ const Cliente: React.FC = () => {
     async function updateNews() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/newslatterUserUpdate?user_id=${user_id}`, {newslatter: newslatters});
+            await apiClient.put(`/newslatterUserUpdate?user_id=${user_id}`, { newslatter: newslatters });
 
-            toast.success('Newslatters atualizado com sucesso.');
             refreshUser();
 
         } catch (error) {
             console.log(error);
             toast.error('Ops erro ao atualizar o preferencia pela newslatters.');
+        }
+        if (newslatters === "Nao") {
+            toast.success(`A preferencia da Newslatters foi ativada.`);
+            return;
+        }
+
+        if (newslatters === "Sim") {
+            toast.error(`A preferencia da Newslatters foi desativada.`);
+            return;
         }
     }
 
