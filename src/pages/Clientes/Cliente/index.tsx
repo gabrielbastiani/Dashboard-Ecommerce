@@ -437,14 +437,6 @@ const Cliente: React.FC = () => {
         }
     }
 
-    console.log(search.map((item) => {
-        return (
-            <>
-                {[item.pagamento.status]}
-            </>
-        )
-    }))
-
     /* @ts-ignore */
     const dados = [];
     (search || []).forEach((item) => {
