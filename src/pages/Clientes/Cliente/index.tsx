@@ -657,7 +657,7 @@ const Cliente: React.FC = () => {
 
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Newslatters"}
+                                        chave={"Newslatters?"}
                                         dados={
                                             <InputCheck
                                                 type="checkbox"
@@ -668,6 +668,7 @@ const Cliente: React.FC = () => {
                                             />
                                         }
                                     />
+                                    &ensp;{newslatters}
                                 </BlockDados>
                             </SectionDate>
 
