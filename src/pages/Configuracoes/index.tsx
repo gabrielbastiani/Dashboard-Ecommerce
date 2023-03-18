@@ -29,6 +29,8 @@ import {
 } from "./styles";
 import { InputPost } from "../../components/ui/InputPost";
 import { IMaskInput } from "react-imask";
+import SelectUpdate from "../../components/ui/SelectUpdate";
+import Select from "../../components/ui/Select";
 
 
 const Configuracoes: React.FC = () => {
@@ -49,7 +51,15 @@ const Configuracoes: React.FC = () => {
     const [bairroLoja, setBairroLoja] = useState('');
     const [cepLoja, setCepLoja] = useState('');
     const [cityLoja, setCityLoja] = useState('');
-    const [stateLoja, setStateLoja] = useState('');
+    const [stateLoja, setStateLoja] = useState([]);
+    const [stateLojaSelected, setStateLojaSelected] = useState();
+
+    function handleChangeEstado(e: any) {
+        setStateLojaSelected(e.target.value)
+    }
+
+    console.log(stateLoja)
+    console.log(stateLojaSelected)
 
     const [loading, setLoading] = useState(false);
 
@@ -83,7 +93,7 @@ const Configuracoes: React.FC = () => {
             }
         }
         loadStore();
-    }, [user.loja_id])
+    }, [user.loja_id]);
 
     async function handleLoja(event: FormEvent) {
         event.preventDefault();
@@ -97,8 +107,7 @@ const Configuracoes: React.FC = () => {
                 numeroLoja === "" ||
                 bairroLoja === "" ||
                 cepLoja === "" ||
-                cityLoja === "" ||
-                stateLoja === ""
+                cityLoja === ""
             ) {
                 toast.error('Não deixe o campo em branco!')
                 return;
@@ -122,8 +131,8 @@ const Configuracoes: React.FC = () => {
             data.append('numeroLoja', numeroLoja);
             data.append('bairroLoja', bairroLoja);
             data.append('cepLoja', cepLoja);
-            data.append('cityLoja', cityLoja);
-            data.append('stateLoja', stateLoja);
+            data.append('cityLoja', cityLoja);/* @ts-ignore */
+            data.append('stateLoja', stateLojaSelected);
 
             await apiClient.post(`/loja`, data);
 
@@ -140,7 +149,6 @@ const Configuracoes: React.FC = () => {
             setBairroLoja("");
             setCepLoja("");
             setCityLoja("");
-            setStateLoja("");
 
             loadIDloja();
 
@@ -230,20 +238,17 @@ const Configuracoes: React.FC = () => {
                 numeroLoja === "" ||
                 bairroLoja === "" ||
                 cepLoja === "" ||
-                cityLoja === "" ||
-                stateLoja === ""
+                cityLoja === ""
             ) {
                 toast.error('Não deixe o campo em branco!')
                 return;
             }
 
             if (!isEmail(emailLoja)) {
-
                 toast.error('Por favor digite um email valido!');
-
                 return;
             }
-            
+
             await apiClient.put(`/updateAllDateLoja?loja_id=${user.loja_id}`, {
                 nameLoja: nameLoja,
                 cnpjLoja: cnpjLoja,
@@ -254,13 +259,30 @@ const Configuracoes: React.FC = () => {
                 bairroLoja: bairroLoja,
                 cepLoja: cepLoja,
                 cityLoja: cityLoja,
-                stateLoja: stateLoja
             });
             toast.success('Dado da loja atualizado com sucesso.');
         } catch (error) {
             console.log(error);
             toast.error('Ops erro ao atualizar o dado!')
         }
+    }
+
+    async function updateEstado() {
+        try {
+            if (stateLojaSelected === "") {
+                toast.error(`Selecione o estado, ou cancele a atualização apertando no botão vermelho!`);
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/estadoLojaUpdate?loja_id=${user.loja_id}`, { stateLoja: stateLojaSelected });
+            toast.success('Estado atualizado com sucesso.');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o estado.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 2000);
     }
 
 
@@ -463,15 +485,44 @@ const Configuracoes: React.FC = () => {
                                 <TextoDados
                                     chave={"Estado"}
                                     dados={
-                                        <InputUpdate
+                                        <SelectUpdate
                                             dado={stateLoja}
-                                            type="text"
+                                            value={stateLojaSelected}
                                             /* @ts-ignore */
-                                            placeholder={stateLoja}
-                                            value={stateLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setStateLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                            onChange={handleChangeEstado}
+                                            opcoes={
+                                                [
+                                                    { label: "Selecionar...", value: "" },
+                                                    { label: "Acre", value: "Acre" },
+                                                    { label: "Alagoas", value: "Alagoas" },
+                                                    { label: "Amapá", value: "Amapá" },
+                                                    { label: "Amazonas", value: "Amazonas" },
+                                                    { label: "Bahia", value: "Bahia" },
+                                                    { label: "Ceara", value: "Ceara" },
+                                                    { label: "Distrito Federal", value: "Distrito Federal" },
+                                                    { label: "Espírito Santo", value: "Espírito Santo" },
+                                                    { label: "Goiás", value: "Goiás" },
+                                                    { label: "Maranhão", value: "Maranhão" },
+                                                    { label: "Mato Grosso", value: "Mato Grosso" },
+                                                    { label: "Mato Grosso do Sul", value: "Mato Grosso do Sul" },
+                                                    { label: "Minas Gerais", value: "Minas Gerais" },
+                                                    { label: "Pará", value: "Pará" },
+                                                    { label: "Paraíba", value: "Paraíba" },
+                                                    { label: "Paraná", value: "Paraná" },
+                                                    { label: "Pernambuco", value: "Pernambuco" },
+                                                    { label: "Piauí", value: "Piauí" },
+                                                    { label: "Rio de Janeiro", value: "Rio de Janeiro" },
+                                                    { label: "Rio Grande do Norte", value: "Rio Grande do Norte" },
+                                                    { label: "Rio Grande do Sul", value: "Rio Grande do Sul" },
+                                                    { label: "Rondônia", value: "Rondônia" },
+                                                    { label: "Roraima", value: "Roraima" },
+                                                    { label: "Santa Catarina", value: "Santa Catarina" },
+                                                    { label: "São Paulo", value: "São Paulo" },
+                                                    { label: "Sergipe", value: "Sergipe" },
+                                                    { label: "Tocantins", value: "Tocantins" }
+                                                ]
+                                            }
+                                            handleSubmit={updateEstado}
                                         />
                                     }
                                 />
@@ -623,10 +674,41 @@ const Configuracoes: React.FC = () => {
 
                                     <Block>
                                         <Etiqueta>Estado:</Etiqueta>
-                                        <InputPost
-                                            type="text"
-                                            placeholder="Digite o estado da loja"
-                                            onChange={(e) => setStateLoja(e.target.value)}
+                                        <Select
+                                            value={stateLojaSelected}
+                                            opcoes={
+                                                [
+                                                    { label: "Selecionar...", value: "" },
+                                                    { label: "Acre", value: "Acre" },
+                                                    { label: "Alagoas", value: "Alagoas" },
+                                                    { label: "Amapá", value: "Amapá" },
+                                                    { label: "Amazonas", value: "Amazonas" },
+                                                    { label: "Bahia", value: "Bahia" },
+                                                    { label: "Ceara", value: "Ceara" },
+                                                    { label: "Distrito Federal", value: "Distrito Federal" },
+                                                    { label: "Espírito Santo", value: "Espírito Santo" },
+                                                    { label: "Goiás", value: "Goiás" },
+                                                    { label: "Maranhão", value: "Maranhão" },
+                                                    { label: "Mato Grosso", value: "Mato Grosso" },
+                                                    { label: "Mato Grosso do Sul", value: "Mato Grosso do Sul" },
+                                                    { label: "Minas Gerais", value: "Minas Gerais" },
+                                                    { label: "Pará", value: "Pará" },
+                                                    { label: "Paraíba", value: "Paraíba" },
+                                                    { label: "Paraná", value: "Paraná" },
+                                                    { label: "Pernambuco", value: "Pernambuco" },
+                                                    { label: "Piauí", value: "Piauí" },
+                                                    { label: "Rio de Janeiro", value: "Rio de Janeiro" },
+                                                    { label: "Rio Grande do Norte", value: "Rio Grande do Norte" },
+                                                    { label: "Rio Grande do Sul", value: "Rio Grande do Sul" },
+                                                    { label: "Rondônia", value: "Rondônia" },
+                                                    { label: "Roraima", value: "Roraima" },
+                                                    { label: "Santa Catarina", value: "Santa Catarina" },
+                                                    { label: "São Paulo", value: "São Paulo" },
+                                                    { label: "Sergipe", value: "Sergipe" },
+                                                    { label: "Tocantins", value: "Tocantins" }
+                                                ]
+                                            }/* @ts-ignore */
+                                            onChange={handleChangeEstado}
                                         />
                                     </Block>
 
