@@ -33,7 +33,7 @@ const MainHeader: React.FC = () => {
 
     return (
         <Container>
-            <LojaFront href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFront>
+            <LojaFront href='http://localhost:3001'><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFront>
             <ToggleDesktop>
                 <Toggle
                     labelLeft="Light"
