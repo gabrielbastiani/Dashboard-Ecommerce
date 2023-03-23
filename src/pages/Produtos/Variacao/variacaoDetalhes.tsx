@@ -372,46 +372,6 @@ const VariacaoDetalhes = ({
         setDescriptionVariacoes6(response?.data?.descriptionVariacao6);
     }
 
-    function formatPrecoUpdate() {
-        var elementoUpdate = document.getElementById('valorupdate');
-        /* @ts-ignore */
-        var valorupdate = elementoUpdate.value;
-
-        valorupdate = valorupdate + '';
-        valorupdate = parseInt(valorupdate.replace(/[\D]+/g, ''));
-        valorupdate = valorupdate + '';
-        valorupdate = valorupdate.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorupdate.length > 6) {
-            valorupdate = valorupdate.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementoUpdate.value = valorupdate;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorupdate == 'NaN') elementoUpdate.value = '';
-    }
-
-    function formatPromocaoUpdate() {
-        var elementopromocaoupdate = document.getElementById('valorpromocaoupdate');
-        /* @ts-ignore */
-        var valorpromocaoupdate = elementopromocaoupdate.value;
-
-        valorpromocaoupdate = valorpromocaoupdate + '';
-        valorpromocaoupdate = parseInt(valorpromocaoupdate.replace(/[\D]+/g, ''));
-        valorpromocaoupdate = valorpromocaoupdate + '';
-        valorpromocaoupdate = valorpromocaoupdate.replace(/([0-9]{2})$/g, ",$1");
-
-        if (valorpromocaoupdate.length > 6) {
-            valorpromocaoupdate = valorpromocaoupdate.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        /* @ts-ignore */
-        elementopromocaoupdate.value = valorpromocaoupdate;
-        /* @ts-ignore */
-        // eslint-disable-next-line eqeqeq
-        if (valorpromocaoupdate == 'NaN') elementopromocaoupdate.value = '';
-    }
-
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
