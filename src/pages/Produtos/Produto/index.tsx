@@ -58,6 +58,8 @@ const Produto: React.FC = () => {
     const [categorySelected, setCategorySelected] = useState();
     const [categorieName, setCategorieName] = useState('');
     const [disponibilidades, setDisponibilidades] = useState('');
+    const [destaques, setDestaques] = useState('');
+    const [ofertas, setOfertas] = useState('');
 
     const [variacoes, setVariacoes] = useState<any[]>([]);
 
@@ -119,7 +121,9 @@ const Produto: React.FC = () => {
                     profundidadeCM,
                     alturaCM,
                     promocao,
-                    disponibilidade
+                    disponibilidade,
+                    produtoDestaque,
+                    produtoOferta
                 } = responseProduct.data
 
                 setDataName(nameProduct);
@@ -138,6 +142,8 @@ const Produto: React.FC = () => {
                 setAlturaCMs(alturaCM);
                 setPromocoes(promocao);
                 setDisponibilidades(disponibilidade);
+                setDestaques(produtoDestaque);
+                setOfertas(produtoOferta);
                 setCategorieName(responseProduct.data.category.categoryName);
 
             } catch (error) {/* @ts-ignore */
@@ -152,7 +158,24 @@ const Produto: React.FC = () => {
         const response = await apiClient.get(`/exactProduct?product_id=${product_id}`);
         setNameProducts(response?.data?.nameProduct);
         setDataName(response?.data?.nameProduct);
+        setDescriptionProducts1(response?.data?.descriptionProduct1);
+        setDescriptionProducts2(response?.data?.descriptionProduct2);
+        setDescriptionProducts3(response?.data?.descriptionProduct3);
+        setDescriptionProducts4(response?.data?.descriptionProduct4);
+        setDescriptionProducts5(response?.data?.descriptionProduct5);
+        setDescriptionProducts6(response?.data?.descriptionProduct6);
+        setPrecos(response?.data?.preco);
+        setSkus(response?.data?.sku);
+        setEstoques(response?.data?.estoque);
+        setPesoKGs(response?.data?.pesoKG);
+        setLarguraCMs(response?.data?.larguraCM);
+        setProfundidadeCMs(response?.data?.profundidadeCM);
+        setAlturaCMs(response?.data?.alturaCM);
+        setPromocoes(response?.data?.promocao);
         setDisponibilidades(response?.data?.disponibilidade);
+        setDestaques(response?.data?.produtoDestaque);
+        setOfertas(response?.data?.produtoOferta);
+        setCategorieName(response?.data?.category?.categoryName);
     }
 
     async function updateNameProduct() {
@@ -191,6 +214,52 @@ const Produto: React.FC = () => {
 
         if (disponibilidades === "Disponivel") {
             toast.error(`O produto se encontra Indisponivel.`);
+            return;
+        }
+    }
+
+    async function updateDestaque() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/destaque?product_id=${product_id}`);
+
+            refreshProduct();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar produto destaque.');
+        }
+
+        if (destaques === "Nao") {
+            toast.success(`Esse produto é um destaque na loja.`);
+            return;
+        }
+
+        if (destaques === "Sim") {
+            toast.error(`Esse produto não está como destaque na loja.`);
+            return;
+        }
+    }
+
+    async function updateOferta() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/oferta?product_id=${product_id}`);
+
+            refreshProduct();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar produto oferta.');
+        }
+
+        if (ofertas === "Nao") {
+            toast.success(`Esse produto esta agora como oferta na loja.`);
+            return;
+        }
+
+        if (ofertas === "Sim") {
+            toast.error(`Esse produto não está agora como oferta na loja.`);
             return;
         }
     }
@@ -453,7 +522,7 @@ const Produto: React.FC = () => {
                             <Button
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                onClick={ () => handleOpenModalDelete(product_id)}
+                                onClick={() => handleOpenModalDelete(product_id)}
                             >
                                 Remover
                             </Button>
@@ -652,7 +721,7 @@ const Produto: React.FC = () => {
 
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Valor em Promoção"}
+                                        chave={"Valor em promoção"}
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
@@ -665,6 +734,32 @@ const Produto: React.FC = () => {
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPromocoes(e.target.value)}
                                                 handleSubmit={updatePromocaoProduct}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Produto em destaque? "}
+                                        dados={
+                                            <ButtonSelect
+                                                /* @ts-ignore */
+                                                dado={destaques}
+                                                handleSubmit={updateDestaque}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Produto em oferta? "}
+                                        dados={
+                                            <ButtonSelect
+                                                /* @ts-ignore */
+                                                dado={ofertas}
+                                                handleSubmit={updateOferta}
                                             />
                                         }
                                     />

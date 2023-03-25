@@ -29,7 +29,7 @@ import {
     LojaFrontMobile
 } from './styles';
 import { useNavigate } from 'react-router-dom';
-import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
+import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
 
 
 const Aside: React.FC = () => {
@@ -92,6 +92,11 @@ const Aside: React.FC = () => {
                 <MenuItemLink href="/produtos">
                     <MdOutlineProductionQuantityLimits />
                     Produtos
+                </MenuItemLink>
+
+                <MenuItemLink style={{ cursor: 'pointer' }} >
+                    <BsImages />
+                    Banners
                 </MenuItemLink>
 
                 <MenuItemLink href="/configuracoes">

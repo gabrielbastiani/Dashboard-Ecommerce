@@ -73,6 +73,8 @@ const VariacaoDetalhes = ({
     const [promocaoVariacoes, setPromocaoVariacoes] = useState('');
     const [disponibilidadeVariacoes, setDisponibilidadeVariacoes] = useState('');
     const [fretesGratis, setFretesGratis] = useState('');
+    const [variacaoDestaques, setVariacaDestaques] = useState('');
+    const [variacaoOfertas, setVariacaoOfertas] = useState('');
 
     const [descriptionVariacoes1, setDescriptionVariacoes1] = useState('');
     const [descriptionVariacoes2, setDescriptionVariacoes2] = useState('');
@@ -107,7 +109,9 @@ const VariacaoDetalhes = ({
                     profundidadeCm,
                     disponibilidadeVariacao,
                     promocao,
-                    freteGratis
+                    freteGratis,
+                    variacaoDestaque,
+                    variacaoOferta
                 } = responseVariacao.data
 
                 setNameVariacoes(nameVariacao);
@@ -121,6 +125,8 @@ const VariacaoDetalhes = ({
                 setPromocaoVariacoes(promocao);
                 setDisponibilidadeVariacoes(disponibilidadeVariacao);
                 setFretesGratis(freteGratis);
+                setVariacaDestaques(variacaoDestaque);
+                setVariacaoOfertas(variacaoOferta);
 
                 setDescriptionVariacoes1(descriptionVariacao1);
                 setDescriptionVariacoes2(descriptionVariacao2);
@@ -178,6 +184,52 @@ const VariacaoDetalhes = ({
 
         if (fretesGratis === "Sim") {
             toast.error(`O produto não esta como frete grátis.`);
+            return;
+        }
+    }
+
+    async function updateDestaqueVariacao() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/destaqueVariacao?variacao_id=${variacao_id}`);
+
+            refreshVariacao();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar variação destaque.');
+        }
+
+        if (variacaoDestaques === "Nao") {
+            toast.success(`Essa variação é um destaque na loja.`);
+            return;
+        }
+
+        if (variacaoDestaques === "Sim") {
+            toast.error(`Essa variação não está como destaque na loja.`);
+            return;
+        }
+    }
+
+    async function updateOfertaVariacao() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/ofertaVariacao?variacao_id=${variacao_id}`);
+
+            refreshVariacao();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar variação de oferta.');
+        }
+
+        if (variacaoOfertas === "Nao") {
+            toast.success(`Essa variação é uma oferta na loja.`);
+            return;
+        }
+
+        if (variacaoOfertas === "Sim") {
+            toast.error(`Essa variação não está como oferta na loja.`);
             return;
         }
     }
@@ -363,6 +415,8 @@ const VariacaoDetalhes = ({
         setPromocaoVariacoes(response?.data?.promocao);
         setDisponibilidadeVariacoes(response?.data?.disponibilidadeVariacao);
         setFretesGratis(response?.data?.freteGratis);
+        setVariacaDestaques(response?.data?.variacaoDestaque);
+        setVariacaoOfertas(response?.data?.variacaoOferta);
 
         setDescriptionVariacoes1(response?.data?.descriptionVariacao1);
         setDescriptionVariacoes2(response?.data?.descriptionVariacao2);
@@ -400,7 +454,7 @@ const VariacaoDetalhes = ({
                 <Button
                     type="submit"
                     style={{ backgroundColor: '#FB451E' }}
-                    onClick={ () => handleDeleteVariacao(variacao_id) }
+                    onClick={() => handleDeleteVariacao(variacao_id)}
                 >
                     Remover
                 </Button>
@@ -516,6 +570,19 @@ const VariacaoDetalhes = ({
                             }
                         />
                     </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Destaque? "}
+                            dados={
+                                <ButtonSelect
+                                    /* @ts-ignore */
+                                    dado={variacaoDestaques}
+                                    handleSubmit={updateDestaqueVariacao}
+                                />
+                            }
+                        />
+                    </BlockDados>
                 </SectionDate>
 
                 <SectionDate>
@@ -552,7 +619,7 @@ const VariacaoDetalhes = ({
 
                     <BlockDados>
                         <TextoDados
-                            chave={"Frete Grátis?"}
+                            chave={"Frete grátis?"}
                             dados={
                                 <ButtonSelect
                                     /* @ts-ignore */
@@ -596,6 +663,19 @@ const VariacaoDetalhes = ({
                                     /* @ts-ignore */
                                     onChange={(e) => setPromocaoVariacoes(e.target.value)}
                                     handleSubmit={updatePromocaoVariacao}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Oferta? "}
+                            dados={
+                                <ButtonSelect
+                                    /* @ts-ignore */
+                                    dado={variacaoOfertas}
+                                    handleSubmit={updateOfertaVariacao}
                                 />
                             }
                         />
