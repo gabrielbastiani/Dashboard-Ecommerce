@@ -13,7 +13,8 @@ import {
     TextPage,
     Next,
     AddButton,
-    SpanText
+    SpanText,
+    ImgBanner
 } from "./styles";
 import { setupAPIClient } from '../../../services/api';
 import Titulos from "../../../components/Titulos";
@@ -23,6 +24,7 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Card } from "../../../components/Content/styles";
 import Select from "../../../components/ui/Select";
 import { Avisos } from "../../../components/Avisos";
+import moment from 'moment';
 
 
 const BannerInPage: React.FC = () => {
@@ -35,10 +37,10 @@ const BannerInPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        async function allBannersHome() {
+        async function allBannerInPage() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageListBannerHome?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageListBannerInPage?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -49,13 +51,13 @@ const BannerInPage: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.bannerHome || []);
+                setSearch(data.bannerInPages || []);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
-        allBannersHome();
+        allBannerInPage();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -68,10 +70,10 @@ const BannerInPage: React.FC = () => {
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Imagem": item.categoryName,
-            "Contém Link de destino?": item.products.length || "0",
-            "Data do Banner": item,
-            "botaoDetalhes": `/bannerhome/${item.categoryName}/${item.codigo}/${item.id}`
+            "Imagem": <ImgBanner src={"http://localhost:3333/files/" + item.bannerPage} alt="banner home loja virtual" />,
+            "Link de destino?": item.url ? "Sim" : "Não",
+            "Data do Banner": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "botaoDetalhes": `/banners/editarBannerInPage/${item.id}`
         });
     });
 
@@ -84,13 +86,13 @@ const BannerInPage: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Banners na Home"
+                        titulo="Banners em Páginas"
                     />
 
                     <AddButton>
                         <AiOutlinePlusCircle />
-                        <Link to="/banners/bannerHome/novo" >
-                            <SpanText>Novo Banner em Páginas</SpanText>
+                        <Link to="/banners/bannerInPage/novo" >
+                            <SpanText>Novo Banner para Páginas</SpanText>
                         </Link>
                     </AddButton>
 
@@ -117,12 +119,12 @@ const BannerInPage: React.FC = () => {
                                 opcoes={[
                                     { label: "4", value: "4" },
                                     { label: "8", value: "8" },
-                                    { label: "Todas categorias", value: "999999" }
+                                    { label: "Todos banners", value: "999999" }
                                 ]}
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Contém Link de destino?", "Data do Banner"]}
+                                cabecalho={["Imagem", "Link de destino?", "Data do Banner"]}
                                 /* @ts-ignore */
                                 dados={dados}
                             />

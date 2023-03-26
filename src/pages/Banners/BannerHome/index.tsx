@@ -13,7 +13,8 @@ import {
     TextPage,
     Next,
     AddButton,
-    SpanText
+    SpanText,
+    ImgBanner
 } from "./styles";
 import { setupAPIClient } from '../../../services/api';
 import Titulos from "../../../components/Titulos";
@@ -23,6 +24,7 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Card } from "../../../components/Content/styles";
 import Select from "../../../components/ui/Select";
 import { Avisos } from "../../../components/Avisos";
+import moment from 'moment';
 
 
 const BannerHome: React.FC = () => {
@@ -68,10 +70,10 @@ const BannerHome: React.FC = () => {
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Imagem": item.categoryName,
-            "Contém Link de destino?": item.products.length || "0",
-            "Data do Banner": item,
-            "botaoDetalhes": `/bannerhome/${item.categoryName}/${item.codigo}/${item.id}`
+            "Imagem": <ImgBanner src={"http://localhost:3333/files/" + item.banner} alt="banner home loja virtual" />,
+            "Link de destino?": item.url ? "Sim" : "Não",
+            "Data do Banner": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "botaoDetalhes": `/banners/editarBannerHome/${item.id}`
         });
     });
 
@@ -117,12 +119,12 @@ const BannerHome: React.FC = () => {
                                 opcoes={[
                                     { label: "4", value: "4" },
                                     { label: "8", value: "8" },
-                                    { label: "Todas categorias", value: "999999" }
+                                    { label: "Todos banners", value: "999999" }
                                 ]}
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Contém Link de destino?", "Data do Banner"]}
+                                cabecalho={["Imagem", "Link de destino?", "Data do Banner"]}
                                 /* @ts-ignore */
                                 dados={dados}
                             />

@@ -105,6 +105,27 @@ export const MenuItemLink = styled.a`
     }
 `;
 
+export const SubMenuItemLink = styled.a`
+    color: ${props => props?.theme?.colors?.white};
+    text-decoration: none;
+    font-size: 14px;
+
+    margin: 5px 18px 5px;
+    display: flex;
+    align-items: center;
+
+    transition: opacity .3s;
+
+    &:hover {
+        opacity: .7;
+    }
+
+    > svg {
+        font-size: 16px;
+        margin-right: 5px;
+    }
+`;
+
 export const MenuItemButton = styled.button`
     cursor: pointer;
     font-size: 16px;

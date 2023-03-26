@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Card } from '../../../../components/Content/styles';
 import Voltar from '../../../../components/Voltar';
 import { Button } from '../../../../components/ui/Button';
@@ -11,14 +11,72 @@ import {
     Container,
     Etiqueta,
     Block,
-    BlockTop
+    BlockTop,
+    FormBanner,
+    EtiquetaBannerInsert,
+    IconSpan,
+    InputBanner,
+    BannerPreview,
+    ClickBanner
 } from '../styles';
-
+import { toast } from 'react-toastify';
+import { setupAPIClient } from '../../../../services/api';
+import { MdFileUpload } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 
 const NovoBannerInPage: React.FC = () => {
 
+    const navigate = useNavigate();
 
+    const [banner, setBanner] = useState(null);
+    const [bannerInsertUrl, setBannerInsertUrl] = useState('');
+    const [url, setUrl] = useState('');
+
+    function handleFileInput(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return
+        }
+
+        const image = e.target.files[0];
+        if (!image) {
+            return
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setBanner(image);
+            setBannerInsertUrl(URL.createObjectURL(image));
+        }
+    }
+
+    async function handleBanner(event: FormEvent) {
+        event.preventDefault();
+        try {
+            const data = new FormData();
+
+            if (banner === null) {
+                toast.error('Carregue uma imagem!')
+                console.log("Carregue uma imagem!");
+                return;
+            }
+
+            data.append('file', banner);
+            data.append('url', url);
+
+            const apiClient = setupAPIClient();
+            await apiClient.post(`/createBannerInPage`, data);
+
+            toast.success('Banner inserido com sucesso');
+
+        } catch (err) {/* @ts-ignore */
+            console.log(err.response.data);
+            toast.error('Ops erro ao inserir o banner!');
+        }
+        setTimeout(() => {
+            navigate('/banners/bannerInPage');
+        }, 2000);
+    }
 
 
     return (
@@ -26,19 +84,18 @@ const NovoBannerInPage: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
-                <Card>
-
-                    <Voltar url={'/banners/bannerHome'} />
+                <Card style={{ height: '850px' }}>
+                    <Voltar url={'/banners/bannerInPage'} />
 
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo="Novo Banner para Home"
+                            titulo="Novo Banner para Páginas"
                         />
                         <Button
                             type="submit"
                             style={{ backgroundColor: 'green' }}
-                            onClick={() => alert('clicou')}
+                            form="form-bannerInPage"
                         >
                             Salvar
                         </Button>
@@ -49,11 +106,31 @@ const NovoBannerInPage: React.FC = () => {
                         <InputPost
                             type="text"
                             placeholder="Insira um link para destino..."
-                            value={''}
-                            onChange={(/* e */) => alert('clicou')}
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
                         />
                     </Block>
 
+                    <FormBanner id="form-bannerInPage" onSubmit={handleBanner}>
+                        <EtiquetaBannerInsert>
+                            <IconSpan>
+                                <MdFileUpload size={55} />
+                            </IconSpan>
+                            <InputBanner type="file" accept="image/png, image/jpeg" onChange={handleFileInput} alt="banner loja" />
+                            {bannerInsertUrl ? (
+                                <>
+                                    <BannerPreview
+                                        src={bannerInsertUrl}
+                                        alt="banner loja"
+                                        width={800}
+                                        height={520}
+                                    />
+                                </>
+                            ) :
+                                <ClickBanner>Clique aqui e Insira o banner</ClickBanner>
+                            }
+                        </EtiquetaBannerInsert>
+                    </FormBanner>
                 </Card>
             </Container>
         </Grid>

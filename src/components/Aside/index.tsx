@@ -10,6 +10,7 @@ import {
     MdOutlineCategory,
     MdOutlineProductionQuantityLimits,
     MdSettingsSuggest,
+    MdPlayArrow
 } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import logoImgWhite from '../../assets/LogoBuilderWhite.png';
@@ -26,20 +27,28 @@ import {
     MenuItemButton,
     ToggleMenu,
     ThemeToggleFooter,
-    LojaFrontMobile
+    LojaFrontMobile,
+    SubMenuItemLink
 } from './styles';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
 
 
 const Aside: React.FC = () => {
-    const { signOut } = useContext(AuthContext);
-    const { toggleTheme, theme } = useTheme();
 
     const navigate = useNavigate();
 
+    const { signOut } = useContext(AuthContext);
+    const { toggleTheme, theme } = useTheme();
+
     const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState(false);
     const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
+
+    const [submenu, setSubmenu] = useState(false);
+
+    const handleSubMenu = () => {
+        setSubmenu(!submenu);
+    }
 
     const handleToggleMenu = () => {
         setToggleMenuIsOpened(!toggleMenuIsOpened);
@@ -94,10 +103,31 @@ const Aside: React.FC = () => {
                     Produtos
                 </MenuItemLink>
 
-                <MenuItemLink style={{ cursor: 'pointer' }} >
+                <MenuItemLink onClick={handleSubMenu} style={{ cursor: 'pointer' }} >
                     <BsImages />
                     Banners
                 </MenuItemLink>
+
+                {submenu ?
+                    <>
+                        <SubMenuItemLink href='/banners/bannerHome' >
+                            <MdPlayArrow />
+                            Banners na Home
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/banners/bannerInPage' >
+                            <MdPlayArrow />
+                            Banners nas págianas
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/banners/bannerMosaico' >
+                            <MdPlayArrow />
+                            Mosaicos de banners
+                        </SubMenuItemLink>
+                    </>
+                    :
+                    null
+                }
 
                 <MenuItemLink href="/configuracoes">
                     <MdSettingsSuggest />
@@ -115,10 +145,10 @@ const Aside: React.FC = () => {
                 </MenuItemButton>
             </MenuContainer>
 
-            
+
 
             <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
-            <LojaFrontMobile href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFrontMobile>
+                <LojaFrontMobile href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFrontMobile>
                 <Toggle
                     labelLeft="Light"
                     labelRight="Dark"

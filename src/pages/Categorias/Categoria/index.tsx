@@ -236,7 +236,7 @@ const Categoria: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={ () => handleOpenModalDelete(category_id)}
+                                onClick={() => handleOpenModalDelete(category_id)}
                             >
                                 Remover
                             </Button>
