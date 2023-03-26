@@ -71,8 +71,9 @@ const BannerHome: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Imagem": <ImgBanner src={"http://localhost:3333/files/" + item.banner} alt="banner home loja virtual" />,
-            "Link de destino?": item.url ? "Sim" : "Não",
+            "Link de destino?": item.url ? "Existe Link" : "Não Existe Link",
             "Data do Banner": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "Banner Ativo?": item.active === "Sim" ? "ATIVADO" : "DESATIVADO",
             "botaoDetalhes": `/banners/editarBannerHome/${item.id}`
         });
     });
@@ -124,7 +125,7 @@ const BannerHome: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Link de destino?", "Data do Banner"]}
+                                cabecalho={["Imagem", "Link de destino?", "Banner Ativo?", "Data do Banner"]}
                                 /* @ts-ignore */
                                 dados={dados}
                             />

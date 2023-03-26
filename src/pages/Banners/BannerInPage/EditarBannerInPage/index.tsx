@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { BlockDados } from "../../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../../components/TextoDados";
 import { InputUpdate } from "../../../../components/ui/InputUpdate";
+import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
 
 
 export type DeleteBannerInPage = {
@@ -29,6 +30,7 @@ const EditarBannerInPage: React.FC = () => {
 
     const [bannerInPage, setBannerInPage] = useState('');
     const [urls, setUrls] = useState('');
+    const [active, setActive] = useState('');
 
     const [banner, setBanner] = useState(null);
     const [bannerInsertUrl, setBannerInsertUrl] = useState('');
@@ -45,6 +47,7 @@ const EditarBannerInPage: React.FC = () => {
 
                 setBannerInPage(response.data.bannerPage);
                 setUrls(response.data.url);
+                setActive(response.data.active);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data)
@@ -96,6 +99,38 @@ const EditarBannerInPage: React.FC = () => {
             console.log(err.response.data);
             toast.error('Ops erro ao inserir o banner!');
         }
+    }
+
+    async function updateActive() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusBannerInPage?bannerInPage_id=${bannerInPage_id}`);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar status do banner.');
+        }
+
+        if (active === "Nao") {
+            toast.success(`Esse banner está ativo na loja.`);
+
+            setTimeout(() => {
+                navigate('/banners/bannerInPage');
+            }, 3000);
+
+            return;
+        }
+
+        if (active === "Sim") {
+            toast.error(`Esse banner está desativado na loja.`);
+
+            setTimeout(() => {
+                navigate('/banners/bannerInPage');
+            }, 3000);
+
+            return;
+        }
+
     }
 
     async function updateLinkBanner() {
@@ -150,6 +185,19 @@ const EditarBannerInPage: React.FC = () => {
                                 Remover
                             </Button>
                         </BlockTop>
+
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Banner ativo na loja? "}
+                                dados={
+                                    <ButtonSelect
+                                        /* @ts-ignore */
+                                        dado={active}
+                                        handleSubmit={updateActive}
+                                    />
+                                }
+                            />
+                        </BlockDados>
 
                         <BlockDados>
                             <TextoDados
