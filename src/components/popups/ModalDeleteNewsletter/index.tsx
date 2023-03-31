@@ -5,7 +5,7 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteNews } from '../../../pages/Newsletters';
+import { DeleteNews } from '../../../pages/Newsletters/Newsletter';
 
 
 interface DeleteNewsletter {

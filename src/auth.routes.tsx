@@ -27,6 +27,7 @@ import BannerMosaico from './pages/Banners/BannerMosaico';
 import NovoBannerMosaico from './pages/Banners/BannerMosaico/NovoBannerMosaico';
 import EditarBannerMosaico from './pages/Banners/BannerMosaico/EditarBannerMosaico';
 import Newsletters from './pages/Newsletters';
+import Newsletter from './pages/Newsletters/Newsletter';
 
 
 const RoutesAuth: React.FC = () => {
@@ -66,6 +67,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/banners/editarBannerMosaico/:bannerMosaico_id' element={<EditarBannerMosaico />} />
 
             <Route path='/newsletters' element={<Newsletters />} />
+            <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
 
             <Route path='/configuracoes' element={<Configuracoes />} />
 

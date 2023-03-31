@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import Modal from 'react-modal';
 import { setupAPIClient } from "../../services/api";
 import moment from "moment";
 import { Grid } from "../Dashboard/styles";
@@ -16,12 +15,7 @@ import { Button } from "../../components/ui/Button";
 import { BlockExport, ButtonExit } from './styles';
 import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
-import { ModalDeleteNewsletter } from "../../components/popups/ModalDeleteNewsletter";
 
-
-export type DeleteNews = {
-    newsletter_id: string;
-}
 
 const Newsletters: React.FC = () => {
 
@@ -35,9 +29,6 @@ const Newsletters: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
     const [showElement, setShowElement] = useState(false);
-
-    const [modalItem, setModalItem] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
 
     const showOrHide = () => {
         setShowElement(!showElement)
@@ -93,7 +84,7 @@ const Newsletters: React.FC = () => {
             "Nome": item.name,
             "E-mail": item.email,
             "Data de Cadastro": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": () => handleOpenModalDelete(item.id)
+            "botaoDetalhes": `/newsletter/${item.id}`
         });
     });
 
@@ -125,22 +116,6 @@ const Newsletters: React.FC = () => {
         }
     }
 
-    function handleCloseModalDelete() {
-        setModalVisible(false);
-    }
-
-    async function handleOpenModalDelete(newsletter_id: string) {
-        const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/listExactNewsletter', {
-            params: {
-                newsletter_id: newsletter_id,
-            }
-        });
-        setModalItem(responseDelete.data || "");
-        setModalVisible(true);
-    }
-
-    Modal.setAppElement('body');
 
     return (
         <>
@@ -187,7 +162,7 @@ const Newsletters: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={handleExportNewsletter}
+                                            onClick={ () => handleExportNewsletter}
                                         >
                                             Gerar arquivo para exportar newsletters
                                         </Button>
@@ -260,15 +235,6 @@ const Newsletters: React.FC = () => {
                     </Card>
                 </Container >
             </Grid >
-
-            {modalVisible && (
-                <ModalDeleteNewsletter
-                    isOpen={modalVisible}
-                    onRequestClose={handleCloseModalDelete}
-                    /* @ts-ignore */
-                    newsletter={modalItem}
-                />
-            )}
         </>
     )
 }
