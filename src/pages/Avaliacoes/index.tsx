@@ -113,6 +113,7 @@ const Avaliacoes: React.FC = () => {
                                 cabecalho={["Cliente", "Data da avaliação"]}
                                 /* @ts-ignore */
                                 dados={dados}
+                                textbutton={"Detalhes"}
                             />
 
                             <ContainerPagination>

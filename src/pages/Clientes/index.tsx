@@ -134,6 +134,7 @@ const Clientes: React.FC = () => {
                                 cabecalho={["Cliente", "E-mail", "Telefone", "CPF/CNPJ"]}
                                 /* @ts-ignore */
                                 dados={dados}
+                                textbutton={"Detalhes"}
                             />
 
                             <ContainerPagination>

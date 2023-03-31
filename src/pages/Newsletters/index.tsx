@@ -165,8 +165,6 @@ const Newsletters: React.FC = () => {
                         </BlockExport>
                     }
 
-
-
                     {dados.length < 1 ? (
                         <>
                             <Avisos

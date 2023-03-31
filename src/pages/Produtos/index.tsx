@@ -204,6 +204,7 @@ const Produtos: React.FC = () => {
                                 cabecalho={["Produto", "Categoria", "Status"]}
                                 /* @ts-ignore */
                                 dados={dados}
+                                textbutton={"Detalhes"}
                             />
 
                             <ContainerPagination>

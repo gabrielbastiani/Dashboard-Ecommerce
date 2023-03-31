@@ -309,6 +309,7 @@ const Pedido: React.FC = () => {
                                     cabecalho={["Produto", "Preço Und.", "Quantidade", "Preço Total"]}
                                     /* @ts-ignore */
                                     dados={dados}
+                                    textbutton={"Detalhes"}
                                 />
                                 <br />
                                 <br />

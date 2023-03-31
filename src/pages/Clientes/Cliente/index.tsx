@@ -869,6 +869,7 @@ const Cliente: React.FC = () => {
                                     cabecalho={["ID", "Valor Total", "Data", "Status"]}
                                     /* @ts-ignore */
                                     dados={dados}
+                                    textbutton={"Detalhes"}
                                 />
 
                                 <ContainerPagination>

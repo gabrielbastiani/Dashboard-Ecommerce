@@ -128,6 +128,7 @@ const BannerMosaico: React.FC = () => {
                                 cabecalho={["Imagem", "Link de destino?", "Banner Ativo?", "Data do Banner"]}
                                 /* @ts-ignore */
                                 dados={dados}
+                                textbutton={"Detalhes"}
                             />
 
                             <ContainerPagination>

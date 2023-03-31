@@ -324,6 +324,7 @@ const Categoria: React.FC = () => {
                                     cabecalho={["Produto", "SKU", "Status"]}
                                     /* @ts-ignore */
                                     dados={dados}
+                                    textbutton={"Detalhes"}
                                 />
 
                                 <ContainerPagination>
