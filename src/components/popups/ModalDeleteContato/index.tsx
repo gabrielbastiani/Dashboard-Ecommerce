@@ -4,17 +4,17 @@ import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { DeleteBanner } from '../../../pages/Banners/BannerHome/EditarBannerHome';
-import { ButtonClose, ContainerButton, ContainerContent, TextModal } from '../ModalDeleteBannerHome/styles';
+import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
+import { DeleteNews } from '../../../pages/Newsletters/Newsletter';
 
 
-interface ModalDeleteBannerInPageRequest {
+interface DeleteNewsletter {
     isOpen: boolean;
     onRequestClose: () => void;
-    bannerId: DeleteBanner;
+    newsletter: DeleteNews;
 }
 
-export function ModalDeleteBannerInPage({ isOpen, onRequestClose, bannerId }: ModalDeleteBannerInPageRequest) {
+export function ModalDeleteNewsletter({ isOpen, onRequestClose, newsletter }: DeleteNewsletter) {
 
     const navigate = useNavigate();
 
@@ -32,22 +32,22 @@ export function ModalDeleteBannerInPage({ isOpen, onRequestClose, bannerId }: Mo
     };
 
 
-    async function handleDeleteBanner() {
+    async function handleDeleteNews() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const bannerHome_id = bannerId.id;
+            const newsletter_id = newsletter.id;
 
-            await apiClient.delete(`/deleteBannerHome?bannerHome_id=${bannerHome_id}`);
-            toast.success(`Banner deletado com sucesso.`);
-
-            navigate('/banners/bannerHome');
+            await apiClient.delete(`/deleteNewsletter?newsletter_id=${newsletter_id}`);
+            toast.success(`Newsletter deletada com sucesso.`);
+            
+            navigate('/newsletters');
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao deletar o banner!');
+            toast.error('Ops erro ao deletar a newsletter!');
         }
         setTimeout(() => {
             navigate(0);
@@ -71,13 +71,12 @@ export function ModalDeleteBannerInPage({ isOpen, onRequestClose, bannerId }: Mo
             </ButtonClose>
 
             <ContainerContent>
-
-                <TextModal>Deseja mesmo deletar esse banner?</TextModal>
+                <TextModal>Deseja mesmo deletar essa newsletter?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteBanner()}
+                        onClick={() => handleDeleteNews()}
                     >
                         Deletar
                     </Button>

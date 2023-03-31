@@ -28,6 +28,8 @@ import NovoBannerMosaico from './pages/Banners/BannerMosaico/NovoBannerMosaico';
 import EditarBannerMosaico from './pages/Banners/BannerMosaico/EditarBannerMosaico';
 import Newsletters from './pages/Newsletters';
 import Newsletter from './pages/Newsletters/Newsletter';
+import Contatos from './pages/Contatos';
+import Contato from './pages/Contatos/Contato';
 
 
 const RoutesAuth: React.FC = () => {
@@ -68,6 +70,9 @@ const RoutesAuth: React.FC = () => {
 
             <Route path='/newsletters' element={<Newsletters />} />
             <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
+
+            <Route path='/contatos' element={<Contatos />} />
+            <Route path='/contato/:contato_id' element={<Contato />} />
 
             <Route path='/configuracoes' element={<Configuracoes />} />
 

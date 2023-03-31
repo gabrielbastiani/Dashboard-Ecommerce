@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
 
 
-const Newsletters: React.FC = () => {
+const Contatos: React.FC = () => {
 
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
@@ -35,10 +35,10 @@ const Newsletters: React.FC = () => {
     }
 
     useEffect(() => {
-        async function allNewsletters() {
+        async function allContatos() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageNewsletter?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageContato?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -49,14 +49,14 @@ const Newsletters: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.news || []);
-                setInitialFilter(data.news);
+                setSearch(data.contatos || []);
+                setInitialFilter(data.contatos);
 
             } catch (error) {
                 console.error(error);
             }
         }
-        allNewsletters();
+        allContatos();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -73,8 +73,8 @@ const Newsletters: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterNews = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
-        setSearch(filterNews);
+        const filterContatos = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
+        setSearch(filterContatos);
     }
 
     /* @ts-ignore */
@@ -84,16 +84,16 @@ const Newsletters: React.FC = () => {
             "Nome": item.name,
             "E-mail": item.email,
             "Data de Cadastro": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/newsletter/${item.id}`
+            "botaoDetalhes": `/contato/${item.id}`
         });
     });
 
-    async function handleExportNewsletter() {
+    async function handleExportContatos() {
         try {
             setLoading(true);
             const apiClient = setupAPIClient();
-            await apiClient.get('/exportNews');
-            toast.success('Lista de newsletters gerada com sucesso!');
+            await apiClient.get('/exportContatos');
+            toast.success('Lista de contatos gerada com sucesso!');
             setLoading(false);
 
             showOrHide();
@@ -102,12 +102,12 @@ const Newsletters: React.FC = () => {
         }
     }
 
-    async function handleExportNewslatterEmail() {
+    async function handleExportContatoEmail() {
         try {
             setLoading(true);
             const apiClient = setupAPIClient();
-            await apiClient.get('/sendEmailNewsletters');
-            toast.success('Lista de newsletters exportada para seu EMAIL com sucesso!');
+            await apiClient.get('/sendEmailContatos');
+            toast.success('Lista de contatos exportada para seu EMAIL com sucesso!');
             setLoading(false);
 
             showOrHide();
@@ -126,7 +126,7 @@ const Newsletters: React.FC = () => {
                     <Card>
                         <Titulos
                             tipo="h1"
-                            titulo="Newsletters"
+                            titulo="Contatos"
                         />
 
                         {dados.length < 1 ? (
@@ -149,7 +149,7 @@ const Newsletters: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={handleExportNewslatterEmail}
+                                            onClick={handleExportContatoEmail}
                                         >
                                             Exportar arquivo para o seu email
                                         </Button>
@@ -162,9 +162,9 @@ const Newsletters: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={ () => handleExportNewsletter}
+                                            onClick={() => handleExportContatos}
                                         >
-                                            Gerar arquivo para exportar newsletters
+                                            Gerar arquivo para exportar contatos
                                         </Button>
                                     </BlockExport>
                                 }
@@ -174,7 +174,7 @@ const Newsletters: React.FC = () => {
                         {dados.length < 1 ? (
                             <>
                                 <Avisos
-                                    texto="Não há newsletters cadastradas aqui..."
+                                    texto="Não há contatos cadastradas aqui..."
                                 />
                                 {currentPage > 1 && (
                                     <Previus>
@@ -186,7 +186,7 @@ const Newsletters: React.FC = () => {
                             </>
                         ) :
                             <>
-                                <TextTotal>Newsletters por página: &nbsp;</TextTotal>
+                                <TextTotal>Contatos por página: &nbsp;</TextTotal>
 
                                 <Select
                                     /* @ts-ignore */
@@ -194,7 +194,7 @@ const Newsletters: React.FC = () => {
                                     opcoes={[
                                         { label: "15", value: "15" },
                                         { label: "30", value: "30" },
-                                        { label: "Todas newsletters", value: "99999999" }
+                                        { label: "Todas contatos", value: "99999999" }
                                     ]}
                                 />
 
@@ -202,12 +202,12 @@ const Newsletters: React.FC = () => {
                                     cabecalho={["Nome", "E-mail", "Data de Cadastro"]}
                                     /* @ts-ignore */
                                     dados={dados}
-                                    textbutton={"Deletar"}
+                                    textbutton={"Detalhes"}
                                 />
 
                                 <ContainerPagination>
                                     <TotalBoxItems key={total}>
-                                        <TextTotal>Total de newsletters: {total}</TextTotal>
+                                        <TextTotal>Total de contatos: {total}</TextTotal>
                                     </TotalBoxItems>
                                     <ContainerCategoryPage>
 
@@ -239,4 +239,4 @@ const Newsletters: React.FC = () => {
     )
 }
 
-export default Newsletters;
+export default Contatos;
