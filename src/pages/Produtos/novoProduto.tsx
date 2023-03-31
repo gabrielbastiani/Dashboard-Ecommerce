@@ -16,9 +16,12 @@ import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
 import DescriptionsProduct from "../../components/ui/DescriptionsProduct";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
+import { useNavigate } from "react-router-dom";
 
 
 const NovoProduto: React.FC = () => {
+
+    const navigate = useNavigate();
 
     const { user } = useContext(AuthContext);
 
@@ -119,6 +122,8 @@ const NovoProduto: React.FC = () => {
             setProfundidade('');
             setAltura('');
             setPromocao('');
+
+            navigate('/produtos');
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

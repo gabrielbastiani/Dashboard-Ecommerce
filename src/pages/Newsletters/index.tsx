@@ -139,30 +139,36 @@ const Newsletters: React.FC = () => {
                         />
                     }
 
-                    {showElement ?
-                        <BlockExport>
-                            <Button
-                                type="submit"
-                                /* @ts-ignore */
-                                loading={loading}
-                                onClick={handleExportNewslatterEmail}
-                            >
-                                Exportar arquivo para o seu email
-                            </Button>
-                            <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
-                        </BlockExport>
-                        :
-                        <BlockExport>
-                            <Button
-                                style={{ backgroundColor: 'green' }}
-                                type="submit"
-                                /* @ts-ignore */
-                                loading={loading}
-                                onClick={handleExportNewsletter}
-                            >
-                                Gerar arquivo para exportar newsletters
-                            </Button>
-                        </BlockExport>
+                    {dados.length < 1 ? (
+                        null
+                    ) :
+                        <>
+                            {showElement ?
+                                <BlockExport>
+                                    <Button
+                                        type="submit"
+                                        /* @ts-ignore */
+                                        loading={loading}
+                                        onClick={handleExportNewslatterEmail}
+                                    >
+                                        Exportar arquivo para o seu email
+                                    </Button>
+                                    <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
+                                </BlockExport>
+                                :
+                                <BlockExport>
+                                    <Button
+                                        style={{ backgroundColor: 'green' }}
+                                        type="submit"
+                                        /* @ts-ignore */
+                                        loading={loading}
+                                        onClick={handleExportNewsletter}
+                                    >
+                                        Gerar arquivo para exportar newsletters
+                                    </Button>
+                                </BlockExport>
+                            }
+                        </>
                     }
 
                     {dados.length < 1 ? (
