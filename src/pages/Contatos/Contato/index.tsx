@@ -15,6 +15,8 @@ import { BlockDados } from '../../Categorias/Categoria/styles';
 import { TextoDados } from '../../../components/TextoDados';
 import { GridDate } from '../../Perfil/styles';
 import { SectionDate } from '../../Configuracoes/styles';
+import { Mensagem, LabelMensagem, SendEmail } from './styles';
+import { RiMailSendLine } from 'react-icons/ri';
 
 
 export type DeleteContato = {
@@ -112,7 +114,11 @@ const Contato: React.FC = () => {
                                 <BlockDados>
                                     <TextoDados
                                         chave={'E-mail'}
-                                        dados={email}
+                                        dados={
+                                            <SendEmail href={`mailto:${email}?subject=${name} falo da loja virtual Builder Seu Negócio Online`}>
+                                                {email} <RiMailSendLine color='red' size={25} />
+                                            </SendEmail>
+                                        }
                                     />
                                 </BlockDados>
 
@@ -139,11 +145,12 @@ const Contato: React.FC = () => {
                             </SectionDate>
 
                             <SectionDate>
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={'Mensagem'}
-                                        dados={mensagem}
-                                    />
+                                <BlockDados style={{ flexDirection: 'column' }}>
+                                    <LabelMensagem>Mensagem:</LabelMensagem>
+                                    <br />
+                                    <Mensagem
+                                        value={mensagem}
+                                    ></Mensagem>
                                 </BlockDados>
                             </SectionDate>
                         </GridDate>
