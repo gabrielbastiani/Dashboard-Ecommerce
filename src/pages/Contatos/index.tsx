@@ -162,7 +162,7 @@ const Contatos: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={() => handleExportContatos}
+                                            onClick={handleExportContatos}
                                         >
                                             Gerar arquivo para exportar contatos
                                         </Button>

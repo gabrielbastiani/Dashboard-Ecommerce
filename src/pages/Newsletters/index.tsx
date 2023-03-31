@@ -162,7 +162,7 @@ const Newsletters: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={ () => handleExportNewsletter}
+                                            onClick={handleExportNewsletter}
                                         >
                                             Gerar arquivo para exportar newsletters
                                         </Button>
