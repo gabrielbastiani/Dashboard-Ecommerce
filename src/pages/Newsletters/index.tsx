@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import Modal from 'react-modal';
 import { setupAPIClient } from "../../services/api";
 import moment from "moment";
 import { Grid } from "../Dashboard/styles";
@@ -15,7 +16,12 @@ import { Button } from "../../components/ui/Button";
 import { BlockExport, ButtonExit } from './styles';
 import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
+import { ModalDeleteNewsletter } from "../../components/popups/ModalDeleteNewsletter";
 
+
+export type DeleteNews = {
+    newsletter_id: string;
+}
 
 const Newsletters: React.FC = () => {
 
@@ -29,6 +35,9 @@ const Newsletters: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
     const [showElement, setShowElement] = useState(false);
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     const showOrHide = () => {
         setShowElement(!showElement)
@@ -84,7 +93,7 @@ const Newsletters: React.FC = () => {
             "Nome": item.name,
             "E-mail": item.email,
             "Data de Cadastro": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/newsletter/${item.id}`
+            "botaoDetalhes": () => handleOpenModalDelete(item.id)
         });
     });
 
@@ -116,125 +125,151 @@ const Newsletters: React.FC = () => {
         }
     }
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
 
+    async function handleOpenModalDelete(newsletter_id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/listExactNewsletter', {
+            params: {
+                newsletter_id: newsletter_id,
+            }
+        });
+        setModalItem(responseDelete.data || "");
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
     return (
-        <Grid>
-            <MainHeader />
-            <Aside />
-            <Container>
-                <Card>
-                    <Titulos
-                        tipo="h1"
-                        titulo="Newsletters"
-                    />
-
-                    {dados.length < 1 ? (
-                        null
-                    ) :
-                        <Pesquisa
-                            placeholder={"Pesquise aqui pelo nome da pessoa..."}
-                            /* @ts-ignore */
-                            onChange={handleChange}
+        <>
+            <Grid>
+                <MainHeader />
+                <Aside />
+                <Container>
+                    <Card>
+                        <Titulos
+                            tipo="h1"
+                            titulo="Newsletters"
                         />
-                    }
 
-                    {dados.length < 1 ? (
-                        null
-                    ) :
-                        <>
-                            {showElement ?
-                                <BlockExport>
-                                    <Button
-                                        type="submit"
-                                        /* @ts-ignore */
-                                        loading={loading}
-                                        onClick={handleExportNewslatterEmail}
-                                    >
-                                        Exportar arquivo para o seu email
-                                    </Button>
-                                    <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
-                                </BlockExport>
-                                :
-                                <BlockExport>
-                                    <Button
-                                        style={{ backgroundColor: 'green' }}
-                                        type="submit"
-                                        /* @ts-ignore */
-                                        loading={loading}
-                                        onClick={handleExportNewsletter}
-                                    >
-                                        Gerar arquivo para exportar newsletters
-                                    </Button>
-                                </BlockExport>
-                            }
-                        </>
-                    }
-
-                    {dados.length < 1 ? (
-                        <>
-                            <Avisos
-                                texto="Não há newsletters cadastradas aqui..."
-                            />
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
-                        </>
-                    ) :
-                        <>
-                            <TextTotal>Newsletters por página: &nbsp;</TextTotal>
-
-                            <Select
+                        {dados.length < 1 ? (
+                            null
+                        ) :
+                            <Pesquisa
+                                placeholder={"Pesquise aqui pelo nome da pessoa..."}
                                 /* @ts-ignore */
-                                onChange={limits}
-                                opcoes={[
-                                    { label: "4", value: "4" },
-                                    { label: "8", value: "8" },
-                                    { label: "Todas newsletters", value: "999999" }
-                                ]}
+                                onChange={handleChange}
                             />
+                        }
 
-                            <TabelaSimples
-                                cabecalho={["Nome", "E-mail", "Data de Cadastro"]}
-                                /* @ts-ignore */
-                                dados={dados}
-                                textbutton={"Deletar"}
-                            />
-
-                            <ContainerPagination>
-                                <TotalBoxItems key={total}>
-                                    <TextTotal>Total de categorias: {total}</TextTotal>
-                                </TotalBoxItems>
-                                <ContainerCategoryPage>
-
-                                    {pages.map((page) => (
-                                        <TextPage
-                                            key={page}
-                                            onClick={() => setCurrentPage(page)}
+                        {dados.length < 1 ? (
+                            null
+                        ) :
+                            <>
+                                {showElement ?
+                                    <BlockExport>
+                                        <Button
+                                            type="submit"
+                                            /* @ts-ignore */
+                                            loading={loading}
+                                            onClick={handleExportNewslatterEmail}
                                         >
-                                            {page}
-                                        </TextPage>
-                                    ))}
+                                            Exportar arquivo para o seu email
+                                        </Button>
+                                        <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
+                                    </BlockExport>
+                                    :
+                                    <BlockExport>
+                                        <Button
+                                            style={{ backgroundColor: 'green' }}
+                                            type="submit"
+                                            /* @ts-ignore */
+                                            loading={loading}
+                                            onClick={handleExportNewsletter}
+                                        >
+                                            Gerar arquivo para exportar newsletters
+                                        </Button>
+                                    </BlockExport>
+                                }
+                            </>
+                        }
 
-                                    {currentPage < search.length && (
-                                        <Next>
-                                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                                Avançar
-                                            </ButtonPage>
-                                        </Next>
-                                    )}
+                        {dados.length < 1 ? (
+                            <>
+                                <Avisos
+                                    texto="Não há newsletters cadastradas aqui..."
+                                />
+                                {currentPage > 1 && (
+                                    <Previus>
+                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                            Voltar
+                                        </ButtonPage>
+                                    </Previus>
+                                )}
+                            </>
+                        ) :
+                            <>
+                                <TextTotal>Newsletters por página: &nbsp;</TextTotal>
 
-                                </ContainerCategoryPage>
-                            </ContainerPagination>
-                        </>
-                    }
-                </Card>
-            </Container >
-        </Grid >
+                                <Select
+                                    /* @ts-ignore */
+                                    onChange={limits}
+                                    opcoes={[
+                                        { label: "4", value: "4" },
+                                        { label: "8", value: "8" },
+                                        { label: "Todas newsletters", value: "999999" }
+                                    ]}
+                                />
+
+                                <TabelaSimples
+                                    cabecalho={["Nome", "E-mail", "Data de Cadastro"]}
+                                    /* @ts-ignore */
+                                    dados={dados}
+                                    textbutton={"Deletar"}
+                                />
+
+                                <ContainerPagination>
+                                    <TotalBoxItems key={total}>
+                                        <TextTotal>Total de categorias: {total}</TextTotal>
+                                    </TotalBoxItems>
+                                    <ContainerCategoryPage>
+
+                                        {pages.map((page) => (
+                                            <TextPage
+                                                key={page}
+                                                onClick={() => setCurrentPage(page)}
+                                            >
+                                                {page}
+                                            </TextPage>
+                                        ))}
+
+                                        {currentPage < search.length && (
+                                            <Next>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                    Avançar
+                                                </ButtonPage>
+                                            </Next>
+                                        )}
+
+                                    </ContainerCategoryPage>
+                                </ContainerPagination>
+                            </>
+                        }
+                    </Card>
+                </Container >
+            </Grid >
+
+            {modalVisible && (
+                <ModalDeleteNewsletter
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    newsletter={modalItem}
+                />
+            )}
+        </>
     )
 }
 
