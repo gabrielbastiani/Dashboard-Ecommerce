@@ -10,8 +10,10 @@ import {
     MdOutlineCategory,
     MdOutlineProductionQuantityLimits,
     MdSettingsSuggest,
-    MdPlayArrow
+    MdPlayArrow,
+    MdContactMail
 } from 'react-icons/md';
+import { BsNewspaper } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import logoImgWhite from '../../assets/LogoBuilderWhite.png';
 import logoImgBlack from '../../assets/LogoBuilderBlack.png';
@@ -129,6 +131,16 @@ const Aside: React.FC = () => {
                     null
                 }
 
+                <MenuItemLink href="/newsletters">
+                    <BsNewspaper />
+                    Newsletters
+                </MenuItemLink>
+
+                <MenuItemLink href="/contatos">
+                    <MdContactMail />
+                    Contatos
+                </MenuItemLink>
+
                 <MenuItemLink href="/configuracoes">
                     <MdSettingsSuggest />
                     Configurações
@@ -144,8 +156,6 @@ const Aside: React.FC = () => {
                     Sair
                 </MenuItemButton>
             </MenuContainer>
-
-
 
             <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
                 <LojaFrontMobile href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFrontMobile>

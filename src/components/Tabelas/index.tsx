@@ -23,9 +23,10 @@ import {
 interface TabelaRequest {
     cabecalho: any;
     dados: any;
+    textbutton: string;
 }
 
-const TabelaSimples = ({ cabecalho, dados }: TabelaRequest) => (
+const TabelaSimples = ({ cabecalho, dados, textbutton }: TabelaRequest) => (
     <TabelasSimples>
         <Simples>
             <Cabeca>
@@ -49,7 +50,7 @@ const TabelaSimples = ({ cabecalho, dados }: TabelaRequest) => (
                                     <CelulaLinha1>
                                         <Link to={linha["botaoDetalhes"]}>
                                             <ButtonDangerSmall>
-                                                DETALHES
+                                                {textbutton}
                                             </ButtonDangerSmall>
                                         </Link>
                                     </CelulaLinha1>
