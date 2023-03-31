@@ -5,16 +5,16 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteNews } from '../../../pages/Newsletters/Newsletter';
+import { DeleteContato } from '../../../pages/Contatos/Contato';
 
 
 interface DeleteNewsletter {
     isOpen: boolean;
     onRequestClose: () => void;
-    newsletter: DeleteNews;
+    contato: DeleteContato;
 }
 
-export function ModalDeleteNewsletter({ isOpen, onRequestClose, newsletter }: DeleteNewsletter) {
+export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteNewsletter) {
 
     const navigate = useNavigate();
 
@@ -36,18 +36,18 @@ export function ModalDeleteNewsletter({ isOpen, onRequestClose, newsletter }: De
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const newsletter_id = newsletter.id;
+            const contato_id = contato.id;
 
-            await apiClient.delete(`/deleteNewsletter?newsletter_id=${newsletter_id}`);
-            toast.success(`Newsletter deletada com sucesso.`);
+            await apiClient.delete(`/deleteContato?contato_id=${contato_id}`);
+            toast.success(`Contato deletada com sucesso.`);
             
-            navigate('/newsletters');
+            navigate('/contatos');
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao deletar a newsletter!');
+            toast.error('Ops erro ao deletar a contato!');
         }
         setTimeout(() => {
             navigate(0);
@@ -71,7 +71,7 @@ export function ModalDeleteNewsletter({ isOpen, onRequestClose, newsletter }: De
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa newsletter?</TextModal>
+                <TextModal>Deseja mesmo deletar essa contato?</TextModal>
 
                 <ContainerButton>
                     <Button
