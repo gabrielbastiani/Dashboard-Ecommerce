@@ -85,6 +85,7 @@ const Categorias: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Categoria": item.categoryName,
+            "Ordem": String(item.order),
             "Qtd. de Produtos": item.products.length || "0",
             "botaoDetalhes": `/categoria/${item.categoryName}/${item.codigo}/${item.id}`
         });
@@ -147,7 +148,7 @@ const Categorias: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Categoria", "Qtd. de Produtos"]}
+                                cabecalho={["Categoria", "Ordem", "Qtd. de Produtos"]}
                                 /* @ts-ignore */
                                 dados={dados}
                                 textbutton={"Detalhes"}

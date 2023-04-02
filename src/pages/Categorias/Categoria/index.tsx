@@ -48,6 +48,7 @@ const Categoria: React.FC = () => {
     const [dataName, setDataName] = useState('');
 
     const [codigos, setCodigos] = useState(codigo);
+    const [order, setOrder] = useState(Number);
     const [dataCodigo, setDataCodigo] = useState('');
 
     const [disponibilidades, setDisponibilidades] = useState('');
@@ -97,6 +98,22 @@ const Categoria: React.FC = () => {
         }
     }
 
+    async function updateOrderCategory() {
+        try {
+            const apiClient = setupAPIClient();
+            if (order === null) {
+                toast.error('Não deixe a ordem em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateOrderCategory?category_id=${category_id}`, { order: Number(order) });
+                toast.success('Ordem atualizada com sucesso.');
+                refreshCategory();
+            }
+        } catch (err) {
+            toast.error('Ops erro ao atualizar a ordem da categoria.');
+        }
+    }
+
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
@@ -126,6 +143,7 @@ const Categoria: React.FC = () => {
             setCategoryNames(response?.data?.categoryName || "");
             setDataName(response?.data?.categoryName || "");
             setDataCodigo(response?.data?.codigo || "");
+            setOrder(response?.data?.order);
             setDisponibilidades(response?.data?.disponibilidade || "");
         }
         refreshCategoryLoad();
@@ -134,10 +152,11 @@ const Categoria: React.FC = () => {
     async function refreshCategory() {
         const apiClient = setupAPIClient();
         const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
-        setCategoryNames(response?.data?.categoryName);
-        setDataName(response?.data?.categoryName);
-        setDataCodigo(response?.data?.codigo);
-        setDisponibilidades(response?.data?.disponibilidade);
+        setCategoryNames(response?.data?.categoryName || "");
+        setDataName(response?.data?.categoryName || "");
+        setDataCodigo(response?.data?.codigo || "");
+        setOrder(response?.data?.order);
+        setDisponibilidades(response?.data?.disponibilidade || "");
     }
 
     useEffect(() => {
@@ -255,6 +274,24 @@ const Categoria: React.FC = () => {
                                         /* @ts-ignore */
                                         onChange={(e) => setCategoryNames(e.target.value)}
                                         handleSubmit={updateCategoryName}
+                                    />
+                                }
+                            />
+                        </BlockDados>
+
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Ordem"}
+                                dados={
+                                    <InputUpdate
+                                        dado={order}
+                                        type="number"
+                                        /* @ts-ignore */
+                                        placeholder={order}
+                                        value={order}
+                                        /* @ts-ignore */
+                                        onChange={(e) => setOrder(e.target.value)}
+                                        handleSubmit={updateOrderCategory}
                                     />
                                 }
                             />
