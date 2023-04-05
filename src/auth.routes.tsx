@@ -30,6 +30,7 @@ import Newsletters from './pages/Newsletters';
 import Newsletter from './pages/Newsletters/Newsletter';
 import Contatos from './pages/Contatos';
 import Contato from './pages/Contatos/Contato';
+import Rede from './pages/Configuracoes/Rede';
 
 
 const RoutesAuth: React.FC = () => {
@@ -75,6 +76,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/contato/:contato_id' element={<Contato />} />
 
             <Route path='/configuracoes' element={<Configuracoes />} />
+            <Route path='/rede/:redesocial_id' element={<Rede />} />
 
             <Route path='/perfil' element={<Perfil />} />
         </Routes>

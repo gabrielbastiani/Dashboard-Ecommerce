@@ -39,6 +39,23 @@ export const LogoLojaImgUrl = styled.img`
   margin-bottom: 20px;
 `;
 
+export const PreviewImageRede = styled.img`
+  width: 170px;
+  height: 100px;
+  margin-bottom: 20px;
+  object-fit: contain;
+`;
+
+export const RedeLojaImg = styled.img`
+  width: 170px;
+  height: 100px;
+  object-fit: contain;
+
+  @media (max-width: 870px) {
+    margin-left: 84px;
+  }
+`;
+
 export const LogoLojaImg = styled.img`
   width: 170px;
   height: 80px;
@@ -84,4 +101,11 @@ export const IconSpan = styled.span`
 
 export const InputLogo = styled.input`
   display: none;
+`;
+
+export const ImgRedes = styled.img`
+  width: 150px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 0.5rem;
 `;

@@ -25,12 +25,17 @@ import {
     SectionDate,
     GridDateForm,
     BlockLogomarca,
-    TextLogo
+    TextLogo,
+    PreviewImageRede,
+    RedeLojaImg,
+    ImgRedes
 } from "./styles";
 import { InputPost } from "../../components/ui/InputPost";
 import { IMaskInput } from "react-imask";
 import SelectUpdate from "../../components/ui/SelectUpdate";
 import Select from "../../components/ui/Select";
+import { GridDate } from "../Perfil/styles";
+import TabelaSimples from "../../components/Tabelas";
 
 
 const Configuracoes: React.FC = () => {
@@ -54,6 +59,16 @@ const Configuracoes: React.FC = () => {
     const [cityLoja, setCityLoja] = useState('');
     const [stateLoja, setStateLoja] = useState([]);
     const [stateLojaSelected, setStateLojaSelected] = useState();
+
+    const [nameRede, setNameRede] = useState('');
+    const [redeImage, setRedeImage] = useState(null);
+    const [redeImageUrl, setRedeImageUrl] = useState('');
+    const [redeLink, setRedeLink] = useState('');
+    const [redeOrder, setRedeOrder] = useState(Number);
+    const [redePosicaoSelected, setRedePosicaoSelected] = useState();
+
+    const [redesSocias, setRedesSocias] = useState<any[]>([]);
+
 
     function handleChangeEstado(e: any) {
         setStateLojaSelected(e.target.value)
@@ -286,6 +301,98 @@ const Configuracoes: React.FC = () => {
         }, 2000);
     }
 
+    // -------- REDE SOCIAL ------------ //
+
+    useEffect(() => {
+        async function loadRedesSociais() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/listAllRedesSociais`);
+
+                setRedesSocias(response.data || []);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadRedesSociais();
+    }, []);
+
+    function handleChangePosicao(e: any) {
+        setRedePosicaoSelected(e.target.value)
+    }
+
+    async function handleRedeSocial(event: FormEvent) {
+        event.preventDefault();
+        const apiClient = setupAPIClient();
+        try {
+            if (nameRede === "" || redeLink === "") {
+                toast.error('Não deixe o link em branco!')
+                return;
+            }
+
+            const data = new FormData();
+            /* @ts-ignore */
+            data.append('file', redeImage);
+            data.append('redeName', nameRede);
+            data.append('link', redeLink);/* @ts-ignore */
+            data.append('order', Number(redeOrder));/* @ts-ignore */
+            data.append('posicao', redePosicaoSelected);
+            data.append('loja_id', user.loja_id);
+
+            await apiClient.post(`/createRedeSocialLoja`, data);
+
+            setLoading(true);
+
+            toast.success('Rede Social cadastrada com sucesso.');
+
+            setNameRede("");
+            setRedeLink("");
+
+            setTimeout(() => {
+                navigate(0);
+            }, 2000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao cadastrar a rede social.');
+        }
+
+        setLoading(false);
+
+    }
+
+    function handleFileRede(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return
+        }
+
+        const image = e.target.files[0]
+        if (!image) {
+            return
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setRedeImage(image)
+            setRedeImageUrl(URL.createObjectURL(image))
+        }
+
+    }
+
+    /* @ts-ignore */
+    const dados = [];
+    (redesSocias || []).forEach((item) => {
+        dados.push({
+            "Imagem": <ImgRedes src={"http://localhost:3333/files/" + item.imageRede} alt={item.redeName} />,
+            "Rede Social": item.redeName,
+            "Ordem": String(item.order),
+            "Posição no Site": item.posicao,
+            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
+            "botaoDetalhes": `/rede/${item.id}`
+        });
+    });
+
 
     return (
         <Grid>
@@ -328,250 +435,355 @@ const Configuracoes: React.FC = () => {
                                 </EtiquetaLogo>
                             </FormUploadLogo>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Nome da loja"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={nameLoja}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={nameLoja}
-                                            value={nameLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setNameLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                            <GridDate>
+                                <SectionDate>
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Nome da loja"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={nameLoja}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={nameLoja}
+                                                    value={nameLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setNameLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </BlockDados>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"CNPJ"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={cnpjLoja}
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="00.000.000/0000-00"
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={cnpjLoja}
-                                            value={cnpjLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setCnpjLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"CNPJ"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={cnpjLoja}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00.000.000/0000-00"
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={cnpjLoja}
+                                                    value={cnpjLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setCnpjLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </BlockDados>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"E-mail"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={emailLoja}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={emailLoja}
-                                            value={emailLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setEmailLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"E-mail"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={emailLoja}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={emailLoja}
+                                                    value={emailLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setEmailLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </BlockDados>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Telefone"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={phoneLoja}
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="(00) 0000-0000"
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={phoneLoja}
-                                            value={phoneLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setPhoneLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Telefone"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={phoneLoja}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="(00) 0000-0000"
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={phoneLoja}
+                                                    value={phoneLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setPhoneLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </BlockDados>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Celular"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={cell}
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="(00) 0000-0000"
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={cell}
-                                            value={cell}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setCell(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Celular"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={cell}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="(00) 0000-0000"
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={cell}
+                                                    value={cell}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setCell(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </BlockDados>
+
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Endereço"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={ruaLoja}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={ruaLoja}
+                                                    value={ruaLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setRuaLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+
+                                </SectionDate>
+
+                                <SectionDate>
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Número"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={numeroLoja}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={numeroLoja}
+                                                    value={numeroLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setNumeroLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Bairro"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={bairroLoja}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={bairroLoja}
+                                                    value={bairroLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setBairroLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Cidade"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={cityLoja}
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={cityLoja}
+                                                    value={cityLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setCityLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"Estado"}
+                                            dados={
+                                                <SelectUpdate
+                                                    dado={stateLoja}
+                                                    value={stateLojaSelected}
+                                                    /* @ts-ignore */
+                                                    onChange={handleChangeEstado}
+                                                    opcoes={
+                                                        [
+                                                            { label: "Selecionar...", value: "" },
+                                                            { label: "Acre", value: "Acre" },
+                                                            { label: "Alagoas", value: "Alagoas" },
+                                                            { label: "Amapá", value: "Amapá" },
+                                                            { label: "Amazonas", value: "Amazonas" },
+                                                            { label: "Bahia", value: "Bahia" },
+                                                            { label: "Ceara", value: "Ceara" },
+                                                            { label: "Distrito Federal", value: "Distrito Federal" },
+                                                            { label: "Espírito Santo", value: "Espírito Santo" },
+                                                            { label: "Goiás", value: "Goiás" },
+                                                            { label: "Maranhão", value: "Maranhão" },
+                                                            { label: "Mato Grosso", value: "Mato Grosso" },
+                                                            { label: "Mato Grosso do Sul", value: "Mato Grosso do Sul" },
+                                                            { label: "Minas Gerais", value: "Minas Gerais" },
+                                                            { label: "Pará", value: "Pará" },
+                                                            { label: "Paraíba", value: "Paraíba" },
+                                                            { label: "Paraná", value: "Paraná" },
+                                                            { label: "Pernambuco", value: "Pernambuco" },
+                                                            { label: "Piauí", value: "Piauí" },
+                                                            { label: "Rio de Janeiro", value: "Rio de Janeiro" },
+                                                            { label: "Rio Grande do Norte", value: "Rio Grande do Norte" },
+                                                            { label: "Rio Grande do Sul", value: "Rio Grande do Sul" },
+                                                            { label: "Rondônia", value: "Rondônia" },
+                                                            { label: "Roraima", value: "Roraima" },
+                                                            { label: "Santa Catarina", value: "Santa Catarina" },
+                                                            { label: "São Paulo", value: "São Paulo" },
+                                                            { label: "Sergipe", value: "Sergipe" },
+                                                            { label: "Tocantins", value: "Tocantins" }
+                                                        ]
+                                                    }
+                                                    handleSubmit={updateEstado}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+
+                                    <BlockDados>
+                                        <TextoDados
+                                            chave={"CEP"}
+                                            dados={
+                                                <InputUpdate
+                                                    dado={cepLoja}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00000-000"
+                                                    type="text"
+                                                    /* @ts-ignore */
+                                                    placeholder={cepLoja}
+                                                    value={cepLoja}
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setCepLoja(e.target.value)}
+                                                    handleSubmit={handleUpdateDataLoja}
+                                                />
+                                            }
+                                        />
+                                    </BlockDados>
+                                </SectionDate>
+                            </GridDate>
+
+                            {redesSocias.length < 1 ? (
+                                null
+                            ) :
+                                <DivisorHorizontal />
+                            }
+
+                            <TabelaSimples
+                                cabecalho={["Imagem", "Rede Social", "Ordem", "Posição no Site", "Disponivel?"]}
+                                /* @ts-ignore */
+                                dados={dados}
+                                textbutton={"Detalhes"}
+                            />
 
                             <DivisorHorizontal />
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Endereço"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={ruaLoja}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={ruaLoja}
-                                            value={ruaLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setRuaLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
+                            <GridDateForm onSubmit={handleRedeSocial}>
+                                <SectionDate>
+                                    <BlockLogomarca>
+                                        <EtiquetaLogo>
+                                            <IconSpan>
+                                                <MdFileUpload size={30} />
+                                            </IconSpan>
+                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileRede} alt="rede social loja virtual" />
+                                            {redeImageUrl ? (
+                                                <PreviewImageRede
+                                                    src={redeImageUrl}
+                                                    alt="logomarca da loja"
+                                                    width={170}
+                                                    height={100}
+                                                />
+                                            ) :
+                                                <>
+                                                    <RedeLojaImg src={"http://localhost:3333/files/" + redeImage} />
+                                                    <TextLogo>Clique na seta e insira<br /> a imagem da rede social</TextLogo>
+                                                </>
+                                            }
+                                        </EtiquetaLogo>
+                                    </BlockLogomarca>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Número"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={numeroLoja}
+                                    <Block>
+                                        <Etiqueta>Nome da rede social:</Etiqueta>
+                                        <InputPost
                                             type="text"
-                                            /* @ts-ignore */
-                                            placeholder={numeroLoja}
-                                            value={numeroLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setNumeroLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                            placeholder="Digite aqui..."
+                                            onChange={(e) => setNameRede(e.target.value)}
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </Block>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Bairro"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={bairroLoja}
+                                    <Block>
+                                        <Etiqueta>Link da rede social:</Etiqueta>
+                                        <InputPost
                                             type="text"
-                                            /* @ts-ignore */
-                                            placeholder={bairroLoja}
-                                            value={bairroLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setBairroLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                            placeholder="Digite aqui..."
+                                            onChange={(e) => setRedeLink(e.target.value)}
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </Block>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Cidade"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={cityLoja}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={cityLoja}
-                                            value={cityLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setCityLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
+                                </SectionDate>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Estado"}
-                                    dados={
-                                        <SelectUpdate
-                                            dado={stateLoja}
-                                            value={stateLojaSelected}
-                                            /* @ts-ignore */
-                                            onChange={handleChangeEstado}
+                                <SectionDate>
+
+                                    <Block>
+                                        <Etiqueta>Posição dessa rede:</Etiqueta>
+                                        <Select
+                                            value={redePosicaoSelected}
                                             opcoes={
                                                 [
                                                     { label: "Selecionar...", value: "" },
-                                                    { label: "Acre", value: "Acre" },
-                                                    { label: "Alagoas", value: "Alagoas" },
-                                                    { label: "Amapá", value: "Amapá" },
-                                                    { label: "Amazonas", value: "Amazonas" },
-                                                    { label: "Bahia", value: "Bahia" },
-                                                    { label: "Ceara", value: "Ceara" },
-                                                    { label: "Distrito Federal", value: "Distrito Federal" },
-                                                    { label: "Espírito Santo", value: "Espírito Santo" },
-                                                    { label: "Goiás", value: "Goiás" },
-                                                    { label: "Maranhão", value: "Maranhão" },
-                                                    { label: "Mato Grosso", value: "Mato Grosso" },
-                                                    { label: "Mato Grosso do Sul", value: "Mato Grosso do Sul" },
-                                                    { label: "Minas Gerais", value: "Minas Gerais" },
-                                                    { label: "Pará", value: "Pará" },
-                                                    { label: "Paraíba", value: "Paraíba" },
-                                                    { label: "Paraná", value: "Paraná" },
-                                                    { label: "Pernambuco", value: "Pernambuco" },
-                                                    { label: "Piauí", value: "Piauí" },
-                                                    { label: "Rio de Janeiro", value: "Rio de Janeiro" },
-                                                    { label: "Rio Grande do Norte", value: "Rio Grande do Norte" },
-                                                    { label: "Rio Grande do Sul", value: "Rio Grande do Sul" },
-                                                    { label: "Rondônia", value: "Rondônia" },
-                                                    { label: "Roraima", value: "Roraima" },
-                                                    { label: "Santa Catarina", value: "Santa Catarina" },
-                                                    { label: "São Paulo", value: "São Paulo" },
-                                                    { label: "Sergipe", value: "Sergipe" },
-                                                    { label: "Tocantins", value: "Tocantins" }
+                                                    { label: "Rodapé Loja", value: "Rodapé Loja" },
+                                                    { label: "PopUp Menu Topo", value: "PopUp Menu Topo" },
+                                                    { label: "Header Topo", value: "Header Topo" },
+                                                    { label: "Página Contato", value: "Página Contato" },
+                                                    { label: "Página Sobre", value: "Página Sobre" }
                                                 ]
-                                            }
-                                            handleSubmit={updateEstado}
+                                            }/* @ts-ignore */
+                                            onChange={handleChangePosicao}
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </Block>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"CEP"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={cepLoja}
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="00000-000"
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={cepLoja}
-                                            value={cepLoja}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setCepLoja(e.target.value)}
-                                            handleSubmit={handleUpdateDataLoja}
+                                    <Block>
+                                        <Etiqueta>Ordem dessa rede:</Etiqueta>
+                                        <InputPost
+                                            type="number"
+                                            placeholder="0"/* @ts-ignore */
+                                            onChange={(e) => setRedeOrder(e.target.value)}
                                         />
-                                    }
-                                />
-                            </BlockDados>
+                                    </Block>
+
+                                    <Button
+                                        style={{ backgroundColor: 'green' }}
+                                        type="submit"
+                                    >
+                                        Salvar rede
+                                    </Button>
+
+                                </SectionDate>
+
+                            </GridDateForm>
+
                         </>
                     ) : (
                         <>
