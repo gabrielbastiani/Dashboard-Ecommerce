@@ -46,6 +46,7 @@ const Configuracoes: React.FC = () => {
     const [cnpjLoja, setCnpjLoja] = useState('');
     const [emailLoja, setEmailLoja] = useState('');
     const [phoneLoja, setPhoneLoja] = useState('');
+    const [cell, setCell] = useState('');
     const [ruaLoja, setRuaLoja] = useState('');
     const [numeroLoja, setNumeroLoja] = useState('');
     const [bairroLoja, setBairroLoja] = useState('');
@@ -58,16 +59,12 @@ const Configuracoes: React.FC = () => {
         setStateLojaSelected(e.target.value)
     }
 
-    console.log(stateLoja)
-    console.log(stateLojaSelected)
-
     const [loading, setLoading] = useState(false);
 
     function isEmail(emailLoja: string) {
         // eslint-disable-next-line no-control-regex
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emailLoja)
     }
-
 
     useEffect(() => {
         async function loadStore() {
@@ -81,6 +78,7 @@ const Configuracoes: React.FC = () => {
                 setCnpjLoja(response.data.cnpjLoja || "");
                 setEmailLoja(response.data.emailLoja || "");
                 setPhoneLoja(response.data.phoneLoja || "");
+                setCell(response.data.cellPhoneLoja || "");
                 setRuaLoja(response.data.ruaLoja || "");
                 setNumeroLoja(response.data.numeroLoja || "");
                 setBairroLoja(response.data.bairroLoja || "");
@@ -127,6 +125,7 @@ const Configuracoes: React.FC = () => {
             data.append('cnpjLoja', cnpjLoja);
             data.append('emailLoja', emailLoja);
             data.append('phoneLoja', phoneLoja);
+            data.append('cellPhoneLoja', cell);
             data.append('ruaLoja', ruaLoja);
             data.append('numeroLoja', numeroLoja);
             data.append('bairroLoja', bairroLoja);
@@ -144,6 +143,7 @@ const Configuracoes: React.FC = () => {
             setCnpjLoja("");
             setEmailLoja("");
             setPhoneLoja("");
+            setCell("");
             setRuaLoja("");
             setNumeroLoja("");
             setBairroLoja("");
@@ -168,7 +168,7 @@ const Configuracoes: React.FC = () => {
 
             const lojaID = response.data.id;
 
-            await apiClient.put(`/lojaidUserUpdate?user_id=${user.id}`, { loja_id: lojaID });
+            await apiClient.put(`/updateAllDateUser?user_id=${user.id}`, { loja_id: lojaID });
 
             navigate(0);
 
@@ -254,6 +254,7 @@ const Configuracoes: React.FC = () => {
                 cnpjLoja: cnpjLoja,
                 emailLoja: emailLoja,
                 phoneLoja: phoneLoja,
+                cellPhoneLoja: cell,
                 ruaLoja: ruaLoja,
                 numeroLoja: numeroLoja,
                 bairroLoja: bairroLoja,
@@ -274,7 +275,7 @@ const Configuracoes: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/estadoLojaUpdate?loja_id=${user.loja_id}`, { stateLoja: stateLojaSelected });
+            await apiClient.put(`/updateAllDateLoja?loja_id=${user.loja_id}`, { stateLoja: stateLojaSelected });
             toast.success('Estado atualizado com sucesso.');
         } catch (error) {
             console.log(error);
@@ -401,6 +402,28 @@ const Configuracoes: React.FC = () => {
                                             value={phoneLoja}
                                             /* @ts-ignore */
                                             onChange={(e) => setPhoneLoja(e.target.value)}
+                                            handleSubmit={handleUpdateDataLoja}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Celular"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={cell}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="(00) 0000-0000"
+                                            type="text"
+                                            /* @ts-ignore */
+                                            placeholder={cell}
+                                            value={cell}
+                                            /* @ts-ignore */
+                                            onChange={(e) => setCell(e.target.value)}
                                             handleSubmit={handleUpdateDataLoja}
                                         />
                                     }
@@ -635,6 +658,23 @@ const Configuracoes: React.FC = () => {
                                     </Block>
 
                                     <Block>
+                                        <Etiqueta>Celular:</Etiqueta>
+                                        <InputPost
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="(00) 0000-0000"
+                                            type="text"
+                                            placeholder="(00) 0000-0000"
+                                            onChange={(e) => setCell(e.target.value)}
+                                        />
+                                    </Block>
+
+                                </SectionDate>
+
+                                <SectionDate>
+
+                                    <Block>
                                         <Etiqueta>Endereço:</Etiqueta>
                                         <InputPost
                                             type="text"
@@ -642,9 +682,7 @@ const Configuracoes: React.FC = () => {
                                             onChange={(e) => setRuaLoja(e.target.value)}
                                         />
                                     </Block>
-                                </SectionDate>
 
-                                <SectionDate>
                                     <Block>
                                         <Etiqueta>Número:</Etiqueta>
                                         <InputPost

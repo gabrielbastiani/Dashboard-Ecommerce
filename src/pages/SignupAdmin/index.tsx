@@ -150,7 +150,7 @@ const SignupAdmin: React.FC = () => {
                     <TextLink>Esqueceu sua senha?</TextLink>
                 </a>
 
-                <a href="https://lojavirtual.builderseunegocioonline.com.br">
+                <a href="http://localhost:3001">
                     <TextLink>Ir para o Loja Virtual</TextLink>
                 </a>
 
