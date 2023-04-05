@@ -105,31 +105,10 @@ const Aside: React.FC = () => {
                     Produtos
                 </MenuItemLink>
 
-                <MenuItemLink onClick={handleSubMenu} style={{ cursor: 'pointer' }} >
+                <MenuItemLink href='/banners'>
                     <BsImages />
                     Banners
                 </MenuItemLink>
-
-                {submenu ?
-                    <>
-                        <SubMenuItemLink href='/banners/bannerHome' >
-                            <MdPlayArrow />
-                            Banners na Home
-                        </SubMenuItemLink>
-
-                        <SubMenuItemLink href='/banners/bannerInPage' >
-                            <MdPlayArrow />
-                            Banners nas págianas
-                        </SubMenuItemLink>
-
-                        <SubMenuItemLink href='/banners/bannerMosaico' >
-                            <MdPlayArrow />
-                            Mosaicos de banners
-                        </SubMenuItemLink>
-                    </>
-                    :
-                    null
-                }
 
                 <MenuItemLink href="/newsletters">
                     <BsNewspaper />
@@ -141,10 +120,26 @@ const Aside: React.FC = () => {
                     Contatos
                 </MenuItemLink>
 
-                <MenuItemLink href="/configuracoes">
+                <MenuItemLink onClick={handleSubMenu} style={{ cursor: 'pointer' }} >
                     <MdSettingsSuggest />
                     Configurações
                 </MenuItemLink>
+
+                {submenu ?
+                    <>
+                        <SubMenuItemLink href='/configuracoes' >
+                            <MdPlayArrow />
+                            Configurações
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/textosInstitucionais' >
+                            <MdPlayArrow />
+                            Textos Institucionais
+                        </SubMenuItemLink>
+                    </>
+                    :
+                    null
+                }
 
                 <MenuItemLink href="/perfil">
                     <CgProfile />

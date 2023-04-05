@@ -17,20 +17,13 @@ import Avaliacoes from './pages/Avaliacoes';
 import Avaliacao from './pages/Avaliacoes/Avaliacao';
 import Cliente from './pages/Clientes/Cliente';
 import Pedido from './pages/Pedidos/Pedido';
-import BannerHome from './pages/Banners/BannerHome';
-import NovoBannerHome from './pages/Banners/BannerHome/NovoBannerHome';
-import EditarBannerHome from './pages/Banners/BannerHome/EditarBannerHome';
-import BannerInPage from './pages/Banners/BannerInPage';
-import NovoBannerInPage from './pages/Banners/BannerInPage/NovoBannerInPage';
-import EditarBannerInPage from './pages/Banners/BannerInPage/EditarBannerInPage';
-import BannerMosaico from './pages/Banners/BannerMosaico';
-import NovoBannerMosaico from './pages/Banners/BannerMosaico/NovoBannerMosaico';
-import EditarBannerMosaico from './pages/Banners/BannerMosaico/EditarBannerMosaico';
 import Newsletters from './pages/Newsletters';
 import Newsletter from './pages/Newsletters/Newsletter';
 import Contatos from './pages/Contatos';
 import Contato from './pages/Contatos/Contato';
 import Rede from './pages/Configuracoes/Rede';
+import TextosInstitucionais from './pages/Configuracoes/TextosInstitucionais';
+import Banners from './pages/Banners';
 
 
 const RoutesAuth: React.FC = () => {
@@ -55,19 +48,10 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />
             <Route path='/produto/:nameProduct/:product_id' element={<Produto />} />
-
             <Route path='/produto/avaliacoes/:nameProduct/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:nameProduct/:avaliacao_id' element={<Avaliacao />} />
 
-            <Route path='/banners/bannerHome' element={<BannerHome />} />
-            <Route path='/banners/bannerHome/novo' element={<NovoBannerHome />} />
-            <Route path='/banners/editarBannerHome/:bannerHome_id' element={<EditarBannerHome />} />
-            <Route path='/banners/bannerInPage' element={<BannerInPage />} />
-            <Route path='/banners/bannerInPage/novo' element={<NovoBannerInPage />} />
-            <Route path='/banners/editarBannerInPage/:bannerInPage_id' element={<EditarBannerInPage />} />
-            <Route path='/banners/bannerMosaico' element={<BannerMosaico />} />
-            <Route path='/banners/bannerMosaico/novo' element={<NovoBannerMosaico />} />
-            <Route path='/banners/editarBannerMosaico/:bannerMosaico_id' element={<EditarBannerMosaico />} />
+            <Route path='/banners' element={<Banners />} />
 
             <Route path='/newsletters' element={<Newsletters />} />
             <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
@@ -77,6 +61,7 @@ const RoutesAuth: React.FC = () => {
 
             <Route path='/configuracoes' element={<Configuracoes />} />
             <Route path='/rede/:redesocial_id' element={<Rede />} />
+            <Route path='/textosInstitucionais' element={<TextosInstitucionais />} />
 
             <Route path='/perfil' element={<Perfil />} />
         </Routes>

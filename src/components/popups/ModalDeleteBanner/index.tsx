@@ -5,16 +5,16 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteBannerMosaico } from '../../../pages/Banners/BannerMosaico/EditarBannerMosaico'; 
 
 
-interface ModalDeleteBannerMosaicoRequest {
+
+interface ModalDeleteBannerHomeRequest {
     isOpen: boolean;
-    onRequestClose: () => void;
-    bannerId: DeleteBannerMosaico;
+    onRequestClose: () => void;/* @ts-ignore */
+    bannerId: DeleteBanner;
 }
 
-export function ModalDeleteBannerMosaico({ isOpen, onRequestClose, bannerId }: ModalDeleteBannerMosaicoRequest) {
+export function ModalDeleteBanner({ isOpen, onRequestClose, bannerId }: ModalDeleteBannerHomeRequest) {
 
     const navigate = useNavigate();
 
@@ -36,12 +36,12 @@ export function ModalDeleteBannerMosaico({ isOpen, onRequestClose, bannerId }: M
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const bannerMosaico_id = bannerId.id;
+            const bannerHome_id = bannerId.id;
 
-            await apiClient.delete(`/deleteBannerMosaico?bannerMosaico_id=${bannerMosaico_id}`);
+            await apiClient.delete(`/deleteBannerHome?bannerHome_id=${bannerHome_id}`);
             toast.success(`Banner deletado com sucesso.`);
 
-            navigate('/banners/bannerMosaico');
+            navigate('/banners/bannerHome');
 
             onRequestClose();
 
