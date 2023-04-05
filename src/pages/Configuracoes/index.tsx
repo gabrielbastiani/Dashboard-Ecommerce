@@ -688,15 +688,17 @@ const Configuracoes: React.FC = () => {
                             {redesSocias.length < 1 ? (
                                 null
                             ) :
-                                <DivisorHorizontal />
-                            }
+                                <>
+                                    <DivisorHorizontal />
 
-                            <TabelaSimples
-                                cabecalho={["Imagem", "Rede Social", "Ordem", "Posição no Site", "Disponivel?"]}
-                                /* @ts-ignore */
-                                dados={dados}
-                                textbutton={"Detalhes"}
-                            />
+                                    <TabelaSimples
+                                        cabecalho={["Imagem", "Rede Social", "Ordem", "Posição no Site", "Disponivel?"]}
+                                        /* @ts-ignore */
+                                        dados={dados}
+                                        textbutton={"Detalhes"}
+                                    />
+                                </>
+                            }
 
                             <DivisorHorizontal />
 
