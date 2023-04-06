@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteCategory } from '../../../pages/Categorias/Categoria';
+import { DeleteTexto } from '../../../pages/Configuracoes/TextosInstitucionais/Texto';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -8,13 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 
 
-interface ModalCategoryDelete {
+interface ModalDeleteTexto {
     isOpen: boolean;
     onRequestClose: () => void;
-    category: DeleteCategory;
+    texto: DeleteTexto;
 }
 
-export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalCategoryDelete) {
+export function ModalDeleteTextoInstitucional({ isOpen, onRequestClose, texto }: ModalDeleteTexto) {
 
     const navigate = useNavigate();
 
@@ -31,23 +31,40 @@ export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalC
         }
     };
 
-
-    async function handleDeleteCategory() {
+    async function handleDeleteTextoAndImages() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const category_id = category.id;
+            const textoinstitucional_id = texto.id;
 
-            await apiClient.delete(`/deleteCategory?category_id=${category_id}`);
-            toast.success(`Categoria deletada com sucesso.`);
-            
-            navigate('/categorias');
+            await apiClient.delete(`/deleteAllImagesTextos?textoinstitucional_id=${textoinstitucional_id}`);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(err.response.data);
+        }
+
+        setTimeout(() => {
+            handleDeleteTexto();
+        }, 2000);
+
+    }
+
+    async function handleDeleteTexto() {
+        try {
+            const apiClient = setupAPIClient();
+            /* @ts-ignore */
+            const textoinstitucional_id = texto.id;
+
+            await apiClient.delete(`/deleteTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`);
+            toast.success(`Texto institucional deletado com sucesso.`);
+
+            navigate('/textosInstitucionais');
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao deletar a categoria!');
+            toast.error('Ops erro ao deletar o texto institucional.');
         }
         setTimeout(() => {
             navigate(0);
@@ -71,12 +88,12 @@ export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalC
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa categoria?</TextModal>
+                <TextModal>Deseja mesmo deletar esse texto institucional? Será deletada<br /> todas as imagens viculadas a esse texto também.</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteCategory()}
+                        onClick={handleDeleteTextoAndImages}
                     >
                         Deletar
                     </Button>

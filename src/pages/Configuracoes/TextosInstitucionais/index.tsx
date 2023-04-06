@@ -47,11 +47,13 @@ const TextosInstitucionais: React.FC = () => {
         setSearch(filterTextos);
     }
 
+    console.log(search)
+
     /* @ts-ignore */
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Possui Imagens?": item.imagesloja ? item.imagesloja.length + "imagem" : "SEM IMAGEM",
+            "Possui Imagens?": item.imagesloja ? item.imagesloja.length + " imagem" : "SEM IMAGEM",
             "Titulo": item.title,
             "Ordem": String(item.order),
             "Posição no Site": item.posicao,

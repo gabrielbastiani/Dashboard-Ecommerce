@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteCategory } from '../../../pages/Categorias/Categoria';
+import { DeleteImagem } from '../../../pages/Configuracoes/TextosInstitucionais/Texto/ImagemTexto';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -8,13 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 
 
-interface ModalCategoryDelete {
+interface ModalImagemTexto {
     isOpen: boolean;
     onRequestClose: () => void;
-    category: DeleteCategory;
+    textoImagem: DeleteImagem;
+    texto: DeleteImagem;
 }
 
-export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalCategoryDelete) {
+export function ModalDeleteImagemTexto({ isOpen, onRequestClose, textoImagem, texto }: ModalImagemTexto) {
 
     const navigate = useNavigate();
 
@@ -31,23 +32,24 @@ export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalC
         }
     };
 
-
-    async function handleDeleteCategory() {
+    async function handleDeleteImagemTexto() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const category_id = category.id;
+            const imageloja_id = textoImagem.id;
+            /* @ts-ignore */
+            const textoinstitucional_id = texto.textoinstitucional_id;
 
-            await apiClient.delete(`/deleteCategory?category_id=${category_id}`);
-            toast.success(`Categoria deletada com sucesso.`);
+            await apiClient.delete(`/deleteImageTextoInstitucional?imageloja_id=${imageloja_id}`);
+            toast.success(`Imagem deletada com sucesso.`);
             
-            navigate('/categorias');
+            navigate(`/texto/${textoinstitucional_id}`);
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao deletar a categoria!');
+            toast.error('Ops erro ao deletar a imagem do texto!');
         }
         setTimeout(() => {
             navigate(0);
@@ -71,12 +73,12 @@ export function ModalDeleteCategory({ isOpen, onRequestClose, category }: ModalC
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa categoria?</TextModal>
+                <TextModal>Deseja mesmo deletar essa imagem?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteCategory()}
+                        onClick={() => handleDeleteImagemTexto()}
                     >
                         Deletar
                     </Button>

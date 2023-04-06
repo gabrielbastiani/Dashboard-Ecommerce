@@ -30,7 +30,14 @@ import {
     ImgTextos
 } from "./styles";
 import TabelaSimples from "../../../../components/Tabelas";
+import Modal from 'react-modal';
+import { ModalDeleteTextoInstitucional } from "../../../../components/popups/ModalDeleteTextoInstitucional"; 
 
+
+
+export type DeleteTexto = {
+    textoinstitucional_id: string;
+}
 
 const Texto: React.FC = () => {
 
@@ -52,6 +59,9 @@ const Texto: React.FC = () => {
     const [imagesTextos, setImagesTextos] = useState<any[]>([]);
 
     const [loading, setLoading] = useState(false);
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -132,7 +142,7 @@ const Texto: React.FC = () => {
             }
             const apiClient = setupAPIClient();
             await apiClient.put(`/updatePosicaoTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`, { posicao: posicaoSelected });
-            
+
             toast.success('Posição atualizada com sucesso.');
         } catch (error) {
             console.log(error);
@@ -249,10 +259,26 @@ const Texto: React.FC = () => {
             "Imagem": <ImgTextos src={"http://localhost:3333/files/" + item.image} alt={item.titleImage} />,
             "Titulo da Imagem": item.titleImage,
             "Ordem": String(item.order),
-            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
             "botaoDetalhes": `/imagemTexto/${item.id}`
         });
     });
+
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(textoinstitucional_id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/listExactTextoInstitucional', {
+            params: {
+                textoinstitucional_id: textoinstitucional_id,
+            }
+        });
+        setModalItem(responseDelete.data || "");
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
 
     return (
@@ -380,7 +406,7 @@ const Texto: React.FC = () => {
                                 <DivisorHorizontal />
 
                                 <TabelaSimples
-                                    cabecalho={["Imagem", "Titulo da Imagem", "Ordem", "Disponivel?"]}
+                                    cabecalho={["Imagem", "Titulo da Imagem", "Ordem"]}
                                     /* @ts-ignore */
                                     dados={dados}
                                     textbutton={"Detalhes"}
@@ -423,6 +449,19 @@ const Texto: React.FC = () => {
                             <SectionDate>
 
                                 <BlockImagem>
+                                    {imageTextUrl ? (
+                                        <>
+                                            <Button
+                                                type="submit"
+                                                loading={loading}
+                                                style={{ backgroundColor: 'green', width: '100%' }}
+                                            >
+                                                Salvar imagem
+                                            </Button>
+                                        </>
+                                    ) :
+                                        null
+                                    }
                                     <EtiquetaImagem>
                                         <IconSpanImage>
                                             <MdFileUpload size={40} />
@@ -440,25 +479,20 @@ const Texto: React.FC = () => {
                                         }
                                     </EtiquetaImagem>
                                 </BlockImagem>
-
-                                {imageTextUrl ? (
-                                    <>
-                                        <Button
-                                            type="submit"
-                                            loading={loading}
-                                            style={{ backgroundColor: 'green', width: '100%' }}
-                                        >
-                                            Salvar imagem
-                                        </Button>
-                                    </>
-                                ) :
-                                    null
-                                }
                             </SectionDate>
                         </GridDateForm>
                     </Card>
                 </Container>
             </Grid>
+
+            {modalVisible && (
+                <ModalDeleteTextoInstitucional
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    texto={modalItem}
+                />
+            )}
         </>
     )
 }

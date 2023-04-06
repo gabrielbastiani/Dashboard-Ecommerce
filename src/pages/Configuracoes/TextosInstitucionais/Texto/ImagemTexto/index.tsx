@@ -23,7 +23,15 @@ import {
 import { setupAPIClient } from "../../../../../services/api";
 import { toast } from "react-toastify";
 import { MdFileUpload } from "react-icons/md";
+import Modal from 'react-modal';
+import { ModalDeleteImagemTexto } from "../../../../../components/popups/ModalDeleteImagemTexto";
 
+
+
+export type DeleteImagem = {
+    imageloja_id: string;
+    textoinstitucional_id: string;
+}
 
 const ImagemTexto: React.FC = () => {
 
@@ -37,6 +45,12 @@ const ImagemTexto: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
 
+    const [modalItem, setModalItem] = useState('');
+    const [modalItemTexto, setModalItemTexto] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const [textoId, setTextoId] = useState('');
+
 
     useEffect(() => {
         async function loadImage() {
@@ -47,6 +61,7 @@ const ImagemTexto: React.FC = () => {
                 setTitleImage(response.data.titleImage || "");
                 setImageTexto(response.data.image || null);
                 setOrder(response.data.order);
+                setTextoId(response.data.textoinstitucional_id);
 
             } catch (error) {
                 console.log(error);
@@ -139,6 +154,25 @@ const ImagemTexto: React.FC = () => {
 
     }
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(imageloja_id: string) {
+        const apiClient = setupAPIClient();
+        const responseDelete = await apiClient.get('/listExactPhotoTextoInstitucional', {
+            params: {
+                imageloja_id: imageloja_id,
+            }
+        });
+        setModalItem(responseDelete.data || "");
+        setModalItemTexto(responseDelete.data || "");
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+
+
 
     return (
         <>
@@ -148,7 +182,7 @@ const ImagemTexto: React.FC = () => {
                 <Container>
                     <Card>
                         <Voltar
-                            url="/textosInstitucionais"
+                            url={`/texto/${textoId}`}
                         />
                         <BlockTop>
                             <Titulos
@@ -225,8 +259,8 @@ const ImagemTexto: React.FC = () => {
                                     </>
                                 ) :
                                     <>
+                                        <TextPhoto>Clique para carregar uma nova imagem</TextPhoto>
                                         <ImageTextPhoto src={"http://localhost:3333/files/" + imageTexto} />
-                                        <TextPhoto>Clique para carregar nova imagem</TextPhoto>
                                     </>
                                 }
                             </EtiquetaTextImagem>
@@ -234,6 +268,17 @@ const ImagemTexto: React.FC = () => {
                     </Card>
                 </Container>
             </Grid>
+
+            {modalVisible && (
+                <ModalDeleteImagemTexto
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    textoImagem={modalItem}
+                    /* @ts-ignore */
+                    texto={modalItemTexto}
+                />
+            )}
         </>
     )
 }
