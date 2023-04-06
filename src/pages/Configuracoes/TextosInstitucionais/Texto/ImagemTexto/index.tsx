@@ -17,7 +17,8 @@ import {
     IconSpanTextImage,
     InputLogoTextImagem,
     PreviewTextImagem,
-    ImageTextPhoto
+    ImageTextPhoto,
+    TextPhoto
 } from "./styles";
 import { setupAPIClient } from "../../../../../services/api";
 import { toast } from "react-toastify";
@@ -201,9 +202,19 @@ const ImagemTexto: React.FC = () => {
                         </BlockDados>
 
                         <FormUpdateImage onSubmit={handleImageTexto}>
+                            {imageTextoUrl ? (
+                                <Button
+                                    type="submit"
+                                    loading={loading}
+                                >
+                                    Salvar nova imagem
+                                </Button>
+                            ) :
+                                null
+                            }
                             <EtiquetaTextImagem>
                                 <IconSpanTextImage>
-                                    <MdFileUpload size={20} />
+                                    <MdFileUpload size={50} />
                                 </IconSpanTextImage>
                                 <InputLogoTextImagem type="file" accept="image/png, image/jpeg" onChange={handleFile} />
                                 {imageTextoUrl ? (
@@ -211,15 +222,12 @@ const ImagemTexto: React.FC = () => {
                                         <PreviewTextImagem
                                             src={imageTextoUrl}
                                         />
-                                        <Button
-                                            type="submit"
-                                            loading={loading}
-                                        >
-                                            Salvar nova imagem
-                                        </Button>
                                     </>
                                 ) :
-                                    <ImageTextPhoto src={"http://localhost:3333/files/" + imageTexto} alt="rede social loja virtual" />
+                                    <>
+                                        <ImageTextPhoto src={"http://localhost:3333/files/" + imageTexto} />
+                                        <TextPhoto>Clique para carregar nova imagem</TextPhoto>
+                                    </>
                                 }
                             </EtiquetaTextImagem>
                         </FormUpdateImage>

@@ -21,8 +21,12 @@ export const IconSpanTextImage = styled.span`
   transition: all 0.9s;
 
   svg {
-    margin: auto 0;
+    
   }
+`;
+
+export const TextPhoto = styled.span`
+  color: ${(props) => props.theme.colors.white};
 `;
 
 export const InputLogoTextImagem = styled.input`
