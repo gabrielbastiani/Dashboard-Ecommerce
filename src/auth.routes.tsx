@@ -24,6 +24,7 @@ import Contato from './pages/Contatos/Contato';
 import Rede from './pages/Configuracoes/Rede';
 import TextosInstitucionais from './pages/Configuracoes/TextosInstitucionais';
 import Banners from './pages/Banners';
+import NovoTexto from './pages/Configuracoes/TextosInstitucionais/novoTexto';
 
 
 const RoutesAuth: React.FC = () => {
@@ -62,6 +63,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/configuracoes' element={<Configuracoes />} />
             <Route path='/rede/:redesocial_id' element={<Rede />} />
             <Route path='/textosInstitucionais' element={<TextosInstitucionais />} />
+            <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
 
             <Route path='/perfil' element={<Perfil />} />
         </Routes>

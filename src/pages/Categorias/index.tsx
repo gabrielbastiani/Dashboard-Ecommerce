@@ -56,7 +56,6 @@ const Categorias: React.FC = () => {
 
             } catch (error) {
                 console.error(error);
-                alert('Error call api list ALL categoyes');
             }
         }
         allCategorys();

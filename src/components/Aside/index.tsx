@@ -129,7 +129,7 @@ const Aside: React.FC = () => {
                     <>
                         <SubMenuItemLink href='/configuracoes' >
                             <MdPlayArrow />
-                            Configurações
+                            Dados da Loja
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href='/textosInstitucionais' >
@@ -153,7 +153,7 @@ const Aside: React.FC = () => {
             </MenuContainer>
 
             <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
-                <LojaFrontMobile href={'https://loja.builderseunegocioonline.com.br'}><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFrontMobile>
+                <LojaFrontMobile href='http://localhost:3001'><BsFillArrowLeftSquareFill size={20} />Ver Loja</LojaFrontMobile>
                 <Toggle
                     labelLeft="Light"
                     labelRight="Dark"
