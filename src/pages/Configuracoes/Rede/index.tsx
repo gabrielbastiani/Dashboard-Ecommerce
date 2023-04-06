@@ -47,9 +47,6 @@ const Rede: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
 
-    console.log(redeImageUrl)
-
-
     useEffect(() => {
         async function loadRede() {
             const apiClient = setupAPIClient();
@@ -169,8 +166,9 @@ const Rede: React.FC = () => {
                 return;
             }
 
-            setLoading(true);
             data.append('file', redeImage);
+
+            setLoading(true);
 
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateImageRedeSocial?redesocial_id=${redesocial_id}`, data);

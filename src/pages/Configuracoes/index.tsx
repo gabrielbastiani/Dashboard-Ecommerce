@@ -67,14 +67,14 @@ const Configuracoes: React.FC = () => {
     const [redeOrder, setRedeOrder] = useState(Number);
     const [redePosicaoSelected, setRedePosicaoSelected] = useState();
 
+    const [loading, setLoading] = useState(false);
+
     const [redesSocias, setRedesSocias] = useState<any[]>([]);
 
 
     function handleChangeEstado(e: any) {
         setStateLojaSelected(e.target.value)
     }
-
-    const [loading, setLoading] = useState(false);
 
     function isEmail(emailLoja: string) {
         // eslint-disable-next-line no-control-regex
@@ -702,6 +702,12 @@ const Configuracoes: React.FC = () => {
 
                             <DivisorHorizontal />
 
+                            <Titulos
+                                tipo="h2"
+                                titulo='Insira suas redes sociais'
+                            />
+                            <br />
+                            <br />
                             <GridDateForm onSubmit={handleRedeSocial}>
                                 <SectionDate>
                                     <BlockLogomarca>
