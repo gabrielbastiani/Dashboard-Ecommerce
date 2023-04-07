@@ -18,7 +18,6 @@ const TextosInstitucionais: React.FC = () => {
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
 
-
     useEffect(() => {
         async function allTextos() {
             try {
@@ -46,8 +45,6 @@ const TextosInstitucionais: React.FC = () => {
         const filterTextos = search.filter((filt) => filt.title.toLowerCase().includes(target.value));
         setSearch(filterTextos);
     }
-
-    console.log(search)
 
     /* @ts-ignore */
     const dados = [];

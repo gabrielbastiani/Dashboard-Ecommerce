@@ -219,7 +219,7 @@ const Texto: React.FC = () => {
         const apiClient = setupAPIClient();
         try {
             if (titleImage === "") {
-                toast.error('Não deixe o titulo em branco!')
+                toast.error('Não deixe o titulo em branco!');
                 return;
             }
 
@@ -228,7 +228,7 @@ const Texto: React.FC = () => {
             data.append('file', imageText);
             data.append('titleImage', titleImage);/* @ts-ignore */
             data.append('order', Number(orderImage));/* @ts-ignore */
-            data.append('posicao', posicao);/* @ts-ignore */
+            data.append('posicao', "");/* @ts-ignore */
             data.append('textoinstitucional_id', textoinstitucional_id);
 
             setLoading(true);
@@ -259,6 +259,7 @@ const Texto: React.FC = () => {
             "Imagem": <ImgTextos src={"http://localhost:3333/files/" + item.image} alt={item.titleImage} />,
             "Titulo da Imagem": item.titleImage,
             "Ordem": String(item.order),
+            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
             "botaoDetalhes": `/imagemTexto/${item.id}`
         });
     });
@@ -406,7 +407,7 @@ const Texto: React.FC = () => {
                                 <DivisorHorizontal />
 
                                 <TabelaSimples
-                                    cabecalho={["Imagem", "Titulo da Imagem", "Ordem"]}
+                                    cabecalho={["Imagem", "Titulo da Imagem", "Disponivel?", "Ordem"]}
                                     /* @ts-ignore */
                                     dados={dados}
                                     textbutton={"Detalhes"}

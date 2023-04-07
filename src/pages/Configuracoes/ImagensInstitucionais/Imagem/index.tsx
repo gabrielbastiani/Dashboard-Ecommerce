@@ -1,40 +1,31 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Grid } from "../../../../Dashboard/styles";
-import MainHeader from "../../../../../components/MainHeader";
-import Aside from "../../../../../components/Aside";
-import { BlockTop, Container } from "../../../../Categorias/styles";
-import { Card } from "../../../../../components/Content/styles";
-import Voltar from "../../../../../components/Voltar";
-import Titulos from "../../../../../components/Titulos";
-import { Button } from "../../../../../components/ui/Button";
-import { BlockDados } from "../../../../Categorias/Categoria/styles";
-import { TextoDados } from "../../../../../components/TextoDados";
-import { InputUpdate } from "../../../../../components/ui/InputUpdate";
-import {
-    FormUpdateImage,
-    EtiquetaTextImagem,
-    IconSpanTextImage,
-    InputLogoTextImagem,
-    PreviewTextImagem,
-    ImageTextPhoto,
-    TextPhoto
-} from "./styles";
-import { setupAPIClient } from "../../../../../services/api";
-import { toast } from "react-toastify";
-import { MdFileUpload } from "react-icons/md";
+import Aside from "../../../../components/Aside";
+import { Card } from "../../../../components/Content/styles";
+import MainHeader from "../../../../components/MainHeader";
+import Titulos from "../../../../components/Titulos";
+import Voltar from "../../../../components/Voltar";
+import { Button } from "../../../../components/ui/Button";
+import { BlockTop, Container } from "../../../Categorias/styles";
+import { Grid } from "../../../Dashboard/styles";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { setupAPIClient } from "../../../../services/api";
 import Modal from 'react-modal';
-import { ModalDeleteImagemTexto } from "../../../../../components/popups/ModalDeleteImagemTexto";
-import { ButtonSelect } from "../../../../../components/ui/ButtonSelect";
+import { ModalDeleteImagem } from "../../../../components/popups/ModalDeleteImagem";
+import { toast } from "react-toastify";
+import { BlockDados } from "../../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../../components/TextoDados";
+import { InputUpdate } from "../../../../components/ui/InputUpdate";
+import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
+import { EtiquetaTextImagem, FormUpdateImage, IconSpanTextImage, ImageTextPhoto, InputLogoTextImagem, PreviewTextImagem, TextPhoto } from "../../TextosInstitucionais/Texto/ImagemTexto/styles";
+import { MdFileUpload } from "react-icons/md";
+import SelectUpdate from "../../../../components/ui/SelectUpdate";
 
 
-
-export type DeleteImagem = {
+export type ImagemDelete = {
     imageloja_id: string;
-    textoinstitucional_id: string;
 }
 
-const ImagemTexto: React.FC = () => {
+const Imagem: React.FC = () => {
 
     const navigate = useNavigate();
     let { imageloja_id } = useParams();
@@ -44,14 +35,13 @@ const ImagemTexto: React.FC = () => {
     const [imageTextoUrl, setImageTextoUrl] = useState('');
     const [order, setOrder] = useState(Number);
     const [disponibilidade, setDisponibilidade] = useState('');
+    const [posicao, setPosicao] = useState('');
+    const [imagemPosicaoSelected, setImagemPosicaoSelected] = useState();
 
     const [loading, setLoading] = useState(false);
 
     const [modalItem, setModalItem] = useState('');
-    const [modalItemTexto, setModalItemTexto] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-
-    const [textoId, setTextoId] = useState('');
 
 
     useEffect(() => {
@@ -63,8 +53,8 @@ const ImagemTexto: React.FC = () => {
                 setTitleImage(response.data.titleImage || "");
                 setImageTexto(response.data.image || null);
                 setOrder(response.data.order);
-                setTextoId(response.data.textoinstitucional_id);
                 setDisponibilidade(response.data.disponibilidade);
+                setPosicao(response.data.posicao || "");
 
             } catch (error) {
                 console.log(error);
@@ -72,7 +62,6 @@ const ImagemTexto: React.FC = () => {
         }
         loadImage();
     }, [imageloja_id]);
-
 
     async function updateTitle() {
         try {
@@ -142,7 +131,7 @@ const ImagemTexto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateImageTextoInstitucional?imageloja_id=${imageloja_id}`, data);
 
-            toast.success('Image do texto atualizada com sucesso');
+            toast.success('Image atualizada com sucesso');
 
             setTimeout(() => {
                 navigate(0);
@@ -150,7 +139,7 @@ const ImagemTexto: React.FC = () => {
 
         } catch (err) {
             console.log(err);
-            toast.error('Ops erro ao atualizar a imagem do texto!');
+            toast.error('Ops erro ao atualizar a imagem!');
         }
 
         setLoading(false);
@@ -184,6 +173,28 @@ const ImagemTexto: React.FC = () => {
         }
     }
 
+    function handleChangePosicao(e: any) {
+        setImagemPosicaoSelected(e.target.value)
+    }
+
+    async function updatePosicao() {
+        try {
+            if (imagemPosicaoSelected === "") {
+                toast.error(`Selecione uma posição, ou cancele a atualização apertando no botão vermelho!`);
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updatePosicaoImageTextoInstitucional?imageloja_id=${imageloja_id}`, { posicao: imagemPosicaoSelected });
+            toast.success('Posição atualizada com sucesso.');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a posição.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 2000);
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
@@ -196,7 +207,6 @@ const ImagemTexto: React.FC = () => {
             }
         });
         setModalItem(responseDelete.data || "");
-        setModalItemTexto(responseDelete.data || "");
         setModalVisible(true);
     }
 
@@ -212,12 +222,12 @@ const ImagemTexto: React.FC = () => {
                 <Container>
                     <Card>
                         <Voltar
-                            url={`/texto/${textoId}`}
+                            url='/ImagensInstitucionais'
                         />
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo='Editar - Imagem do Texto'
+                                titulo='Editar - Imagem'
                             />
                             <Button
                                 type="submit"
@@ -260,6 +270,31 @@ const ImagemTexto: React.FC = () => {
                                         /* @ts-ignore */
                                         onChange={(e) => setOrder(e.target.value)}
                                         handleSubmit={updateOrder}
+                                    />
+                                }
+                            />
+                        </BlockDados>
+
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Posição dessa imagem"}
+                                dados={
+                                    <SelectUpdate
+                                        dado={posicao}
+                                        value={imagemPosicaoSelected}
+                                        /* @ts-ignore */
+                                        onChange={handleChangePosicao}
+                                        opcoes={
+                                            [
+                                                { label: "Selecionar...", value: "" },
+                                                { label: "Rodapé Loja", value: "Rodapé Loja" },
+                                                { label: "PopUp Menu Topo", value: "PopUp Menu Topo" },
+                                                { label: "Header Topo", value: "Header Topo" },
+                                                { label: "Página Contato", value: "Página Contato" },
+                                                { label: "Página Sobre", value: "Página Sobre" }
+                                            ]
+                                        }
+                                        handleSubmit={updatePosicao}
                                     />
                                 }
                             />
@@ -313,17 +348,15 @@ const ImagemTexto: React.FC = () => {
             </Grid>
 
             {modalVisible && (
-                <ModalDeleteImagemTexto
+                <ModalDeleteImagem
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
-                    textoImagem={modalItem}
-                    /* @ts-ignore */
-                    texto={modalItemTexto}
+                    imagem={modalItem}
                 />
             )}
         </>
     )
 }
 
-export default ImagemTexto;
+export default Imagem;

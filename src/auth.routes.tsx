@@ -27,6 +27,9 @@ import Banners from './pages/Banners';
 import NovoTexto from './pages/Configuracoes/TextosInstitucionais/novoTexto';
 import Texto from './pages/Configuracoes/TextosInstitucionais/Texto';
 import ImagemTexto from './pages/Configuracoes/TextosInstitucionais/Texto/ImagemTexto';
+import ImagensLoja from './pages/Configuracoes/ImagensInstitucionais';
+import Imagem from './pages/Configuracoes/ImagensInstitucionais/Imagem';
+import NovaImagem from './pages/Configuracoes/ImagensInstitucionais/novaImagem';
 
 
 const RoutesAuth: React.FC = () => {
@@ -68,6 +71,9 @@ const RoutesAuth: React.FC = () => {
             <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
             <Route path='/texto/:textoinstitucional_id' element={<Texto />} />
             <Route path='/ImagemTexto/:imageloja_id' element={<ImagemTexto />} />
+            <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
+            <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />
+            <Route path='/imagem/:imageloja_id' element={<Imagem />} />
 
             <Route path='/perfil' element={<Perfil />} />
         </Routes>
