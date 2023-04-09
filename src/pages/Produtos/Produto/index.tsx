@@ -34,56 +34,54 @@ export type DeleteProduct = {
 
 const Produto: React.FC = () => {
 
-    let { nameProduct, product_id } = useParams();
+    let { slug, product_id } = useParams();
 
     const navigate = useNavigate();
 
-    const [nameProducts, setNameProducts] = useState(nameProduct);
-    const [dataName, setDataName] = useState('');
-    const [descriptionProducts1, setDescriptionProducts1] = useState('');
-    const [descriptionProducts2, setDescriptionProducts2] = useState('');
-    const [descriptionProducts3, setDescriptionProducts3] = useState('');
-    const [descriptionProducts4, setDescriptionProducts4] = useState('');
-    const [descriptionProducts5, setDescriptionProducts5] = useState('');
-    const [descriptionProducts6, setDescriptionProducts6] = useState('');
-    const [precos, setPrecos] = useState('');
-    const [skus, setSkus] = useState('');
-    const [estoques, setEstoques] = useState(Number);
-    const [pesoKGs, setPesoKGs] = useState('');
-    const [larguraCMs, setLarguraCMs] = useState('');
-    const [alturaCMs, setAlturaCMs] = useState('');
-    const [profundidadeCMs, setProfundidadeCMs] = useState('');
-    const [promocoes, setPromocoes] = useState('');
-    const [categories, setCategories] = useState([])
+    const [nameProducts, setNameProducts] = useState("");
+    const [descriptionProducts1, setDescriptionProducts1] = useState("");
+    const [descriptionProducts2, setDescriptionProducts2] = useState("");
+    const [descriptionProducts3, setDescriptionProducts3] = useState("");
+    const [descriptionProducts4, setDescriptionProducts4] = useState("");
+    const [descriptionProducts5, setDescriptionProducts5] = useState("");
+    const [descriptionProducts6, setDescriptionProducts6] = useState("");
+    const [precos, setPrecos] = useState("");
+    const [skus, setSkus] = useState("");
+    const [promocoes, setPromocoes] = useState("");
+    const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
-    const [categorieName, setCategorieName] = useState('');
-    const [disponibilidades, setDisponibilidades] = useState('');
-    const [destaques, setDestaques] = useState('');
-    const [ofertas, setOfertas] = useState('');
+    const [categorieName, setCategorieName] = useState("");
+    const [disponibilidades, setDisponibilidades] = useState("");
+    const [order, setOrder] = useState(Number);
+    const [posicao, setPosicao] = useState("");
+    const [destaques, setDestaques] = useState("");
+    const [ofertas, setOfertas] = useState("");
 
     const [variacoes, setVariacoes] = useState<any[]>([]);
 
-    const [iDVariacao, setIDVariacao] = useState('');
+    const [iDVariacao, setIDVariacao] = useState("");
 
-    const [nameVariacao, setNameVariacao] = useState('');
-    const [descriptionVariacao1, setDescriptionVariacao1] = useState('');
-    const [descriptionVariacao2, setDescriptionVariacao2] = useState('');
-    const [descriptionVariacao3, setDescriptionVariacao3] = useState('');
-    const [descriptionVariacao4, setDescriptionVariacao4] = useState('');
-    const [descriptionVariacao5, setDescriptionVariacao5] = useState('');
-    const [descriptionVariacao6, setDescriptionVariacao6] = useState('');
-    const [precoVariacao, setPrecoVariacao] = useState('');
-    const [skuVariacao, setSkuVariacao] = useState('');
-    const [estoqueVariacao, setEstoqueVariacao] = useState('');
-    const [pesoKgVariacao, setPesoKgVariacao] = useState('');
-    const [larguraCmVariacao, setLarguraCmVariacao] = useState('');
-    const [profundidadeCmVariacao, setProfundidadeCmVariacao] = useState('');
-    const [alturaCmVariacao, setAlturaCmVariacao] = useState('');
-    const [promocaoVariacao, setPromocaoVariacao] = useState('');
+    const [nameVariacao, setNameVariacao] = useState("");
+    const [orderVariacao, setOrderVariacao] = useState(Number);
+    const [posicaoVariacao, setPosicaoVariacao] = useState("");
+    const [descriptionVariacao1, setDescriptionVariacao1] = useState("");
+    const [descriptionVariacao2, setDescriptionVariacao2] = useState("");
+    const [descriptionVariacao3, setDescriptionVariacao3] = useState("");
+    const [descriptionVariacao4, setDescriptionVariacao4] = useState("");
+    const [descriptionVariacao5, setDescriptionVariacao5] = useState("");
+    const [descriptionVariacao6, setDescriptionVariacao6] = useState("");
+    const [precoVariacao, setPrecoVariacao] = useState("");
+    const [skuVariacao, setSkuVariacao] = useState("");
+    const [estoqueVariacao, setEstoqueVariacao] = useState("");
+    const [pesoKgVariacao, setPesoKgVariacao] = useState("");
+    const [larguraCmVariacao, setLarguraCmVariacao] = useState("");
+    const [profundidadeCmVariacao, setProfundidadeCmVariacao] = useState("");
+    const [alturaCmVariacao, setAlturaCmVariacao] = useState("");
+    const [promocaoVariacao, setPromocaoVariacao] = useState("");
 
     const [showElement, setShowElement] = useState(false);
 
-    const [modalItem, setModalItem] = useState('');
+    const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -91,7 +89,7 @@ const Produto: React.FC = () => {
         async function loadCategorys() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/allCategorys');
+                const response = await apiClient.get('/listCategorysDisponivel');
                 setCategories(response.data || []);
             } catch (error) {
                 console.log(error);
@@ -105,46 +103,21 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             try {
                 const responseProduct = await apiClient.get(`/exactProduct?product_id=${product_id}`)
-                const {
-                    nameProduct,
-                    descriptionProduct1,
-                    descriptionProduct2,
-                    descriptionProduct3,
-                    descriptionProduct4,
-                    descriptionProduct5,
-                    descriptionProduct6,
-                    preco,
-                    sku,
-                    estoque,
-                    pesoKG,
-                    larguraCM,
-                    profundidadeCM,
-                    alturaCM,
-                    promocao,
-                    disponibilidade,
-                    produtoDestaque,
-                    produtoOferta
-                } = responseProduct.data
 
-                setDataName(nameProduct);
-                setDescriptionProducts1(descriptionProduct1);
-                setDescriptionProducts2(descriptionProduct2);
-                setDescriptionProducts3(descriptionProduct3);
-                setDescriptionProducts4(descriptionProduct4);
-                setDescriptionProducts5(descriptionProduct5);
-                setDescriptionProducts6(descriptionProduct6);
-                setPrecos(preco);
-                setSkus(sku);
-                setEstoques(estoque);
-                setPesoKGs(pesoKG);
-                setLarguraCMs(larguraCM);
-                setProfundidadeCMs(profundidadeCM);
-                setAlturaCMs(alturaCM);
-                setPromocoes(promocao);
-                setDisponibilidades(disponibilidade);
-                setDestaques(produtoDestaque);
-                setOfertas(produtoOferta);
-                setCategorieName(responseProduct.data.category.categoryName);
+                setNameProducts(responseProduct.data.nameProduct || "");
+                setDescriptionProducts1(responseProduct.data.descriptionProduct1 || "");
+                setDescriptionProducts2(responseProduct.data.descriptionProduct2 || "");
+                setDescriptionProducts3(responseProduct.data.descriptionProduct3 || "");
+                setDescriptionProducts4(responseProduct.data.descriptionProduct4 || "");
+                setDescriptionProducts5(responseProduct.data.descriptionProduct5 || "");
+                setDescriptionProducts6(responseProduct.data.descriptionProduct6 || "");
+                setPrecos(responseProduct.data.preco);
+                setSkus(responseProduct.data.sku || "");
+                setPromocoes(responseProduct.data.promocao);
+                setDisponibilidades(responseProduct.data.disponibilidade || "");
+                setDestaques(responseProduct.data.produtoDestaque);
+                setOfertas(responseProduct.data.produtoOferta);
+                setCategorieName(responseProduct.data.categories.categoryName);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -157,7 +130,6 @@ const Produto: React.FC = () => {
         const apiClient = setupAPIClient();
         const response = await apiClient.get(`/exactProduct?product_id=${product_id}`);
         setNameProducts(response?.data?.nameProduct);
-        setDataName(response?.data?.nameProduct);
         setDescriptionProducts1(response?.data?.descriptionProduct1);
         setDescriptionProducts2(response?.data?.descriptionProduct2);
         setDescriptionProducts3(response?.data?.descriptionProduct3);
@@ -166,11 +138,8 @@ const Produto: React.FC = () => {
         setDescriptionProducts6(response?.data?.descriptionProduct6);
         setPrecos(response?.data?.preco);
         setSkus(response?.data?.sku);
-        setEstoques(response?.data?.estoque);
-        setPesoKGs(response?.data?.pesoKG);
-        setLarguraCMs(response?.data?.larguraCM);
-        setProfundidadeCMs(response?.data?.profundidadeCM);
-        setAlturaCMs(response?.data?.alturaCM);
+        setOrder(response?.data?.order);
+        setPosicao(response?.data?.posicao);
         setPromocoes(response?.data?.promocao);
         setDisponibilidades(response?.data?.disponibilidade);
         setDestaques(response?.data?.produtoDestaque);
@@ -185,13 +154,51 @@ const Produto: React.FC = () => {
                 toast.error('Não deixe o nome do produto em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { nameProduct: nameProducts || dataName });
+                await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { nameProduct: nameProducts });
                 toast.success('Nome do produto atualizado com sucesso.');
                 refreshProduct();
             }
         } catch (error) {
             console.log(error);
             toast.error('Ops erro ao atualizar o nome do produto.');
+        }
+    }
+
+    async function updateProductData() {
+        try {
+            const apiClient = setupAPIClient();
+            if (
+                descriptionProducts1 === "" ||
+                descriptionProducts2 === "" ||
+                descriptionProducts3 === "" ||
+                descriptionProducts4 === "" ||
+                descriptionProducts5 === "" ||
+                descriptionProducts6 === "" ||
+                skus === ""
+            ) {
+                toast.error('Não deixe o campo do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateAllDateProduct?product_id=${product_id}`,
+                    {
+                        nameProduct: nameProducts,
+                        descriptionProduct1: descriptionProducts1,
+                        descriptionProduct2: descriptionProducts2,
+                        descriptionProduct3: descriptionProducts3,
+                        descriptionProduct4: descriptionProducts4,
+                        descriptionProduct5: descriptionProducts5,
+                        descriptionProduct6: descriptionProducts6,
+                        order: Number(order),
+                        preco: Number(precos.replace(/[^\d]+/g, '')),
+                        promocao: Number(promocoes.replace(/[^\d]+/g, '')),
+                        sku: skus
+                    });
+                toast.success('Dado do produto atualizado com sucesso.');
+                refreshProduct();
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o dado do produto.');
         }
     }
 
@@ -286,156 +293,6 @@ const Produto: React.FC = () => {
         }, 3000);
     }
 
-    async function updateDescriptions() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updateAllDescription?product_id=${product_id}`, {
-                descriptionProduct1: descriptionProducts1,
-                descriptionProduct2: descriptionProducts2,
-                descriptionProduct3: descriptionProducts3,
-                descriptionProduct4: descriptionProducts4,
-                descriptionProduct5: descriptionProducts5,
-                descriptionProduct6: descriptionProducts6,
-            });
-            toast.success('Descrição atualizada com sucesso.');
-            refreshProduct();
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a descrição.');
-        }
-    }
-
-    async function updateSKUProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (skus === '') {
-                toast.error('Não deixe o código do produto em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateSKU?product_id=${product_id}`, { sku: skus });
-                toast.success('Código do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o código do produto.');
-        }
-    }
-
-    async function updateEstoqueProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (Number(estoques) < 0) {
-                toast.error('Não deixe o estoque do produto negativo... minimo de 0.');
-                return;
-            } else {
-                await apiClient.put(`/updateEstoque?product_id=${product_id}`, { estoque: Number(estoques) });
-                toast.success('Estoque do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o estoque do produto.');
-        }
-    }
-
-    async function updatePesoProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (pesoKGs === "") {
-                toast.error('Não deixe o peso do produto em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updatePeso?product_id=${product_id}`, { pesoKG: pesoKGs });
-                toast.success('Peso do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o peso do produto.');
-        }
-    }
-
-    async function updateLarguraProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (larguraCMs === "") {
-                toast.error('Não deixe a largura do produto em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateLargura?product_id=${product_id}`, { larguraCM: larguraCMs });
-                toast.success('Largura do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a largura do produto.');
-        }
-    }
-
-    async function updateProfundidadeProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (profundidadeCMs === "") {
-                toast.error('Não deixe o comprimento do produto em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateProfundidade?product_id=${product_id}`, { profundidadeCM: profundidadeCMs });
-                toast.success('Comprimento do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o comprimento do produto.');
-        }
-    }
-
-    async function updateAlturaProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (alturaCMs === "") {
-                toast.error('Não deixe a altura do produto em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateAltura?product_id=${product_id}`, { alturaCM: alturaCMs });
-                toast.success('Altura do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a altura do produto.');
-        }
-    }
-
-    async function updatePrecoProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            if (precos === "") {
-                toast.error('Não deixe o preço do produto em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updatePrice?product_id=${product_id}`, { preco: Number(precos.replace(/[^\d]+/g, '')) });
-                toast.success('Preço do produto atualizado com sucesso.');
-                refreshProduct();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o preço do produto.');
-        }
-    }
-
-    async function updatePromocaoProduct() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/productPromocao?product_id=${product_id}`, { promocao: Number(promocoes.replace(/[^\d]+/g, '')) });
-            toast.success('Promoção do produto atualizado com sucesso.');
-            refreshProduct();
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a promoção do produto.');
-        }
-    }
-
     useEffect(() => {
         async function loadVariacao() {
             const apiClient = setupAPIClient();
@@ -517,7 +374,7 @@ const Produto: React.FC = () => {
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo={dataName}
+                                titulo={nameProducts}
                             />
                             <Button
                                 type="submit"
@@ -532,7 +389,7 @@ const Produto: React.FC = () => {
                             style={{ backgroundColor: '#f6ba24' }}
                         >
                             <MdOutlineAssessment />
-                            <Link to={"/produto/avaliacoes/" + nameProduct + '/' + product_id} >
+                            <Link to={"/produto/avaliacoes/" + slug + '/' + product_id} >
                                 <SpanText>Ver avaliações</SpanText>
                             </Link>
                         </AddButton>
@@ -544,10 +401,10 @@ const Produto: React.FC = () => {
                                         chave={"Nome"}
                                         dados={
                                             <InputUpdate
-                                                dado={dataName}
+                                                dado={nameProducts}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={nameProduct}
+                                                placeholder={nameProducts}
                                                 value={nameProducts}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setNameProducts(e.target.value)}
@@ -603,97 +460,7 @@ const Produto: React.FC = () => {
                                                 value={skus}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setSkus(e.target.value)}
-                                                handleSubmit={updateSKUProduct}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Estoque"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={estoques}
-                                                type="number"
-                                                /* @ts-ignore */
-                                                placeholder={estoques}
-                                                value={estoques}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setEstoques(e.target.value)}
-                                                handleSubmit={updateEstoqueProduct}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Peso (Kg)"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={pesoKGs}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={pesoKGs}
-                                                value={pesoKGs}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setPesoKGs(e.target.value)}
-                                                handleSubmit={updatePesoProduct}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Largura (Cm)"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={larguraCMs}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={larguraCMs}
-                                                value={larguraCMs}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setLarguraCMs(e.target.value)}
-                                                handleSubmit={updateLarguraProduct}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Comprimento (Cm)"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={profundidadeCMs}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={profundidadeCMs}
-                                                value={profundidadeCMs}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setProfundidadeCMs(e.target.value)}
-                                                handleSubmit={updateProfundidadeProduct}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Altura (Cm)"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={alturaCMs}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={alturaCMs}
-                                                value={alturaCMs}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setAlturaCMs(e.target.value)}
-                                                handleSubmit={updateAlturaProduct}
+                                                handleSubmit={updateProductData}
                                             />
                                         }
                                     />
@@ -713,7 +480,7 @@ const Produto: React.FC = () => {
                                                 value={precos}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPrecos(e.target.value)}
-                                                handleSubmit={updatePrecoProduct}
+                                                handleSubmit={updateProductData}
                                             />
                                         }
                                     />
@@ -733,7 +500,7 @@ const Produto: React.FC = () => {
                                                 value={promocoes}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPromocoes(e.target.value)}
-                                                handleSubmit={updatePromocaoProduct}
+                                                handleSubmit={updateProductData}
                                             />
                                         }
                                     />
@@ -793,12 +560,12 @@ const Produto: React.FC = () => {
                             onChange5={(e) => setDescriptionProducts5(e.target.value)}
                             /* @ts-ignore */
                             onChange6={(e) => setDescriptionProducts6(e.target.value)}
-                            handleSubmit1={updateDescriptions}
-                            handleSubmit2={updateDescriptions}
-                            handleSubmit3={updateDescriptions}
-                            handleSubmit4={updateDescriptions}
-                            handleSubmit5={updateDescriptions}
-                            handleSubmit6={updateDescriptions}
+                            handleSubmit1={updateProductData}
+                            handleSubmit2={updateProductData}
+                            handleSubmit3={updateProductData}
+                            handleSubmit4={updateProductData}
+                            handleSubmit5={updateProductData}
+                            handleSubmit6={updateProductData}
                             placeholder1={""}
                             placeholder2={""}
                             placeholder3={""}

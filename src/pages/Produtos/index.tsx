@@ -48,6 +48,8 @@ const Produtos: React.FC = () => {
         }
     });
 
+
+
     useEffect(() => {
         async function allProducts() {
             try {
@@ -119,9 +121,10 @@ const Produtos: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Produto": item.nameProduct,/* @ts-ignore */
-            "Categoria": item.category ? item.category.categoryName : "Sem Categoria",
+            "Possui Categorias?": item.categories ? item.categories.length + " categorias" : "SEM CATEGORIA(S)",
+            "Possui Sub Categorias?": item.subcategories ? item.subcategories.length + " sub categorias" : "SEM SUB CATEGORIA(S)",
             "Status": item.disponibilidade,
-            "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
+            "botaoDetalhes": `/produto/${item.slug}/${item.id}`
         });
     });
 
@@ -201,7 +204,7 @@ const Produtos: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Produto", "Categoria", "Status"]}
+                                cabecalho={["Produto", "Possui Categorias?", "Possui Sub Categorias?", "Status"]}
                                 /* @ts-ignore */
                                 dados={dados}
                                 textbutton={"Detalhes"}

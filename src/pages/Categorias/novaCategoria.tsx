@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Titulos from '../../components/Titulos';
 import { toast } from 'react-toastify';
 import { setupAPIClient } from '../../services/api';
@@ -23,28 +23,13 @@ const NovaCategoria: React.FC = () => {
     const { user } = useContext(AuthContext);
 
     const [categoryName, setCategoryName] = useState('');
-    const [codigo, setCodigo] = useState('');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [lojaID, setLojaID] = useState(user.loja_id);
+    const [lojaID] = useState(user.loja_id);
 
-    function removerAcentos(s: any) {
-        return s.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/ +/g, "-")
-            .replace(/-{2,}/g, "-")
-            .replace(/[/]/g, "-");
-    }
 
     async function handleRegisterCategory() {
         try {
             if (categoryName === '') {
                 toast.error('Digite algum nome para sua categoria!');
-                return;
-            }
-
-            if (codigo === '') {
-                toast.error('Digite o codigo para sua categoria!');
                 return;
             }
 
@@ -56,13 +41,11 @@ const NovaCategoria: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.post('/category', {
                 categoryName: categoryName.replace(/[/]/g, "-"),
-                codigo: removerAcentos(codigo),
                 loja_id: lojaID
             })
 
             toast.success('Categoria cadastrada com sucesso!');
             setCategoryName('');
-            setCodigo('');
 
         } catch (error) {
             console.log(error)
@@ -103,15 +86,7 @@ const NovaCategoria: React.FC = () => {
                         />
                     </Block>
 
-                    <Block>
-                        <Etiqueta>Código:</Etiqueta>
-                        <InputPost
-                            type="text"
-                            placeholder="Digite o código"
-                            value={codigo}
-                            onChange={(e) => setCodigo(e.target.value)}
-                        />
-                    </Block>
+                    
 
                 </Card>
             </Container>

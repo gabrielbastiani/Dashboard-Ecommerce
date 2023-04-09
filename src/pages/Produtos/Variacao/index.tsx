@@ -18,13 +18,10 @@ interface VariacaoRequest {
 const NovaVariacao = ({ product_id }: VariacaoRequest) => {
 
     const navigate = useNavigate();
-
     const { user } = useContext(AuthContext);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [loja_id, setLoja_id] = useState(user.loja_id);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [product_ids, setProduct_ids] = useState(product_id);
+    const [loja_id] = useState(user.loja_id);
+    const [product_ids] = useState(product_id);
     const [nameVariacao, setNameVariacao] = useState('');
     const [descriptionVariacao1, setDescriptionVariacao1] = useState('');
     const [descriptionVariacao2, setDescriptionVariacao2] = useState('');
