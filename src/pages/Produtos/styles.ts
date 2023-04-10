@@ -36,9 +36,7 @@ export const RenderOk = styled.span`
   color: red;
 `;
 
-export const RenderNo = styled.span`
-  
-`;
+export const RenderNo = styled.span``;
 
 export const ButtonVariacaoDetalhes = styled.button`
   background-color: #736e6e;
@@ -54,4 +52,12 @@ export const ButtonVariacaoDetalhes = styled.button`
   &:hover {
     filter: brightness(1.08);
   }
+`;
+
+export const CategoryButton = styled.a`
+  color: ${(props) => props?.theme?.colors?.white};
+  background-color: green;
+  padding: 17px;
+  border-radius: 10px;
+  font-weight: 600;
 `;
