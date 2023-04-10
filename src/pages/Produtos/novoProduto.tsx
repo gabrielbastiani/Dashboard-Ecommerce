@@ -60,6 +60,10 @@ const NovoProduto: React.FC = () => {
         return item.id
     });
 
+    const last = IDnext
+
+    console.log(last)
+
     useEffect(() => {
         setLastID([...IDnext].shift());
         setFirstId([...IDprev].pop())
@@ -487,83 +491,86 @@ const NovoProduto: React.FC = () => {
                     }
                 </Card>
 
-                <Card>
-                    {showCategory ? (
+
+                {showCategory ? (
+                    <>
                         <Button
                             style={{ backgroundColor: 'green' }}
                             onClick={showOrHideNewCategory}
                         >
                             Cadastrar mais categoria
                         </Button>
-                    ) :
-                        null
-                    }
 
-                    {showNewCategory ? (
-                        <>
-                            <Titulos
-                                tipo="h2"
-                                titulo="Escolha uma categoria para esse produto"
-                            />
-                            <br />
-                            <br />
-                            <Etiqueta>Escolha uma categoria:</Etiqueta>
-                            <Select
-                                value={categorySelected}
-                                /* @ts-ignore */
-                                onChange={handleChangeCategory}
-                                opcoes={
-                                    [
-                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
-                                    ]
-                                }
-                            />
-                            <br />
-                            <Button
-                                style={{ backgroundColor: 'green' }}
-                                onClick={handleRelationsNew}
-                            >
-                                Salvar com essa categoria
-                            </Button>
-
-
-                            {pages.map(() => (
+                        <Card>
+                            {showNewCategory ? (
                                 <>
-                                    <Card>
-                                        <Titulos
-                                            tipo="h2"
-                                            titulo="Escolha uma sub categoria para esse produto"
-                                        />
-                                        <br />
-                                        <br />
-                                        <Etiqueta>Escolha uma categoria já existente:</Etiqueta>
-                                        <Select
-                                            value={categorySelected}
-                                            /* @ts-ignore */
-                                            onChange={handleChangeCategory}
-                                            opcoes={
-                                                [
-                                                    { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
-                                                ]
-                                            }
-                                        />
-                                        <br />
-                                        <Button
-                                            style={{ backgroundColor: 'orange' }}
-                                            onClick={nextBlockNew}
-                                        >
-                                            Salvar subcategoria
-                                        </Button>
-                                    </Card>
+                                    <Titulos
+                                        tipo="h2"
+                                        titulo="Escolha uma categoria para esse produto"
+                                    />
+                                    <br />
+                                    <br />
+                                    <Etiqueta>Escolha uma categoria:</Etiqueta>
+                                    <Select
+                                        value={categorySelected}
+                                        /* @ts-ignore */
+                                        onChange={handleChangeCategory}
+                                        opcoes={
+                                            [
+                                                { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                            ]
+                                        }
+                                    />
+                                    <br />
+                                    <Button
+                                        style={{ backgroundColor: 'green' }}
+                                        onClick={handleRelationsNew}
+                                    >
+                                        Salvar com essa categoria
+                                    </Button>
+
+
+                                    {pages.map(() => (
+                                        <>
+                                            <Card>
+                                                <Titulos
+                                                    tipo="h2"
+                                                    titulo="Escolha uma sub categoria para esse produto"
+                                                />
+                                                <br />
+                                                <br />
+                                                <Etiqueta>Escolha uma categoria já existente:</Etiqueta>
+                                                <Select
+                                                    value={categorySelected}
+                                                    /* @ts-ignore */
+                                                    onChange={handleChangeCategory}
+                                                    opcoes={
+                                                        [
+                                                            { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                            ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                        ]
+                                                    }
+                                                />
+                                                <br />
+                                                <Button
+                                                    style={{ backgroundColor: 'orange' }}
+                                                    onClick={nextBlockNew}
+                                                >
+                                                    Salvar subcategoria
+                                                </Button>
+                                            </Card>
+                                        </>
+                                    ))}
                                 </>
-                            ))}
-                        </>
-                    ) :
-                        null
-                    }
-                </Card>
+                            ) :
+                                null
+                            }
+                        </Card>
+                    </>
+                ) :
+                    null
+                }
             </Container>
         </Grid>
     )
