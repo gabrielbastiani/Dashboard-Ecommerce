@@ -15,13 +15,11 @@ import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
 import DescriptionsProduct from "../../components/ui/DescriptionsProduct";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
-import { useNavigate } from "react-router-dom";
 import Select from "../../components/ui/Select";
 
 
 const NovoProduto: React.FC = () => {
 
-    const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
     const [loja_id] = useState(user.loja_id);
@@ -40,33 +38,68 @@ const NovoProduto: React.FC = () => {
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
-    const [categoryName, setCategoryName] = useState("");
 
-    const [subCategories, setSubCategories] = useState<any[]>([]);
-    const [subCategorySelected, setSubCategorySelected] = useState();
-    const [subCategoryName, setSubCategoryName] = useState("");
+    const [lastID, setLastID] = useState('');
+    const [firstId, setFirstId] = useState('');
 
     const [findFirstProduct, setFindFirstProduct] = useState("");
-    const [slugProduct, setSlugProduct] = useState("");
-    const [findFirstCategory, setFindFirstCategory] = useState("");
+
+    const [allRelations, setAllRelations] = useState<any[]>([]);
+    const [searchIDs, setSearchIDs] = useState<any[]>([]);
+
+    const [total, setTotal] = useState(0);
+    const [limit] = useState(1);
+    const [pages, setPages] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const IDnext = searchIDs.map((item) => {
+        return item.id
+    });
+
+    const IDprev = searchIDs.map((item) => {
+        return item.id
+    });
+
+    useEffect(() => {
+        setLastID([...IDnext].shift());
+        setFirstId([...IDprev].pop())
+    }, [IDnext, IDprev]);
+
+
+    useEffect(() => {
+        async function allCategorys() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/nextBlockRelationCategory?page=${currentPage}&limit=${limit}`);
+
+                setTotal(data.total);
+                const totalPages = Math.ceil(total / limit);
+
+                const arrayPages = [];
+                for (let i = 1; i <= totalPages; i++) {
+                    arrayPages.push(i);
+                }
+
+                setPages(arrayPages || []);
+                setSearchIDs(data.relationsIDs || []);
+                setAllRelations(data.relationsIDs || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        allCategorys();
+    }, [currentPage, limit, total]);
 
     const [showCategory, setShowCategory] = useState(false);
-    const [showSubCategory, setShowSubCategory] = useState(false);
-
-    console.log(
-        'firstProduct', findFirstProduct,
-        'firstCategory', findFirstCategory,
-        'categorySelected', categorySelected,
-        'subCategorySelected', subCategorySelected
-    )
-
+    const [showNewCategory, setShowNewCategory] = useState(false);
 
     const showOrHideCategory = () => {
         setShowCategory(!showCategory);
     }
 
-    const showOrHideSubCategory = () => {
-        setShowSubCategory(!showSubCategory);
+    const showOrHideNewCategory = () => {
+        setShowNewCategory(!showNewCategory);
     }
 
 
@@ -74,8 +107,24 @@ const NovoProduto: React.FC = () => {
         setCategorySelected(e.target.value)
     }
 
-    function handleChangeSubCategory(e: any) {
-        setSubCategorySelected(e.target.value)
+    async function loadRelations() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/allRelationsProductCategory?product_id=${findFirstProduct}`);
+            setTotal(data.length);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function loadLastID() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/findFirstRelation?product_id=${findFirstProduct}`);
+            setLastID(response.data.id);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
@@ -89,19 +138,6 @@ const NovoProduto: React.FC = () => {
             }
         }
         loadCategorys();
-    }, []);
-
-    useEffect(() => {
-        async function loadSubCategorys() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get('/listSubCategoryDisponivel');
-                setSubCategories(response.data || []);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        loadSubCategorys();
     }, []);
 
     async function handleRegisterProduct() {
@@ -167,7 +203,6 @@ const NovoProduto: React.FC = () => {
         try {
             const response = await apiClient.get('/findFirstProduct');
             setFindFirstProduct(response.data.id || "");
-            setSlugProduct(response.data.slug || "");
         } catch (error) {
             console.log(error);
         }
@@ -176,112 +211,112 @@ const NovoProduto: React.FC = () => {
     async function loadIDcategory() {
         const apiClient = setupAPIClient();
         try {
-            const response = await apiClient.get('/findFirstCategory');
-            setFindFirstCategory(response.data.id);
+            await apiClient.get('/findFirstCategory');
         } catch (error) {
             console.log(error);
         }
     }
 
-    async function handleRegisterNewCategory() {
+    async function handleRelations() {
+        const apiClient = setupAPIClient();
         try {
-            if (categoryName === '') {
-                toast.error('Digite algum nome para sua categoria!');
-                return;
-            }
-
-            const apiClient = setupAPIClient();
-            await apiClient.post('/category', {
-                categoryName: categoryName,
+            await apiClient.post('/createRelation', {
                 product_id: findFirstProduct,
-                order: 0,
-                posicao: "",
-                loja_id: loja_id
-            })
-
-            toast.success('Categoria cadastrada com sucesso!');
-            setCategoryName('');
+                category_id: categorySelected,
+                nivel: 1,
+                relationId: firstId || ""
+            });
 
             setTimeout(() => {
                 loadIDcategory();
-                showOrHideSubCategory();
-                toast.warning('Cadastre uma nova sub categoria se desejar!');
-            }, 2000);
+                loadRelations();
+                loadLastID();
+                toast.success('Categoria cadastrada com sucesso!');
+            }, 3000);
 
         } catch (error) {
-            console.log(error)
-        }
-
-    }
-
-    async function handleRegisterNewSubCategory() {
-        try {
-            if (subCategoryName === '') {
-                toast.error('Digite algum nome para sua sub categoria!');
-                return;
-            }
-
-            const apiClient = setupAPIClient();
-            await apiClient.post('/createSubCategory', {
-                subCategoryName: subCategoryName,
-                product_id: findFirstProduct,
-                category_id: findFirstCategory,
-                order: 0,
-                posicao: "",
-                loja_id: loja_id
-            })
-
-            toast.success('Sub categoria cadastrada com sucesso!');
-            setCategoryName('');
-
-            setTimeout(() => {
-                navigate(`/produto/${slugProduct}/${findFirstProduct}`);
-            }, 2000);
-
-        } catch (error) {
+            toast.error('Erro ao cadastrar categoria no produto!!!');
             console.log(error);
         }
-
     }
 
-    async function handleRegisterCategory() {
+    async function handleRelationsNext() {
+        const apiClient = setupAPIClient();
         try {
-            const apiClient = setupAPIClient();
-            await apiClient.post('/category', {
-                categoryName: categorySelected,
+            await apiClient.post('/createRelation', {
                 product_id: findFirstProduct,
-                order: 0,
-                posicao: "",
-                loja_id: loja_id
-            })
-
-            toast.success('Categoria cadastrada com sucesso!');
+                category_id: categorySelected,
+                nivel: 2,
+                relationId: firstId
+            });
 
             setTimeout(() => {
                 loadIDcategory();
-                showOrHideSubCategory();
-                toast.warning('Cadastre uma nova sub categoria se desejar!');
-            }, 2000);
+                loadRelations();
+                loadLastID();
+                toast.success('Subcategoria cadastrada com sucesso!');
+            }, 3000);
 
         } catch (error) {
+            toast.error('Erro ao cadastrar a subcategoria no produto!!!');
             console.log(error);
         }
     }
 
-    async function handleRegisterSubCategory() {
+    async function handleRelationsNew() {
+        const apiClient = setupAPIClient();
         try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updateProductSubCategory?subcategory_id=${subCategorySelected}`, { product_id: findFirstProduct });
-
-            toast.success('Sub categoria cadastrada com sucesso!');
+            await apiClient.post('/createRelation', {
+                product_id: findFirstProduct,
+                category_id: categorySelected,
+                nivel: 1,
+                relationId: ""
+            });
 
             setTimeout(() => {
-                navigate(`/produto/${slugProduct}/${findFirstProduct}`);
-            }, 2000);
+                loadIDcategory();
+                loadRelations();
+                loadLastID();
+                toast.success('Categoria cadastrada com sucesso!');
+            }, 3000);
 
         } catch (error) {
+            toast.error('Erro ao cadastrar categoria no produto!!!');
             console.log(error);
         }
+    }
+
+    async function handleRelationsNextNew() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post('/createRelation', {
+                product_id: findFirstProduct,
+                category_id: categorySelected,
+                nivel: 2,
+                relationId: lastID || ""
+            });
+
+            setTimeout(() => {
+                loadIDcategory();
+                loadRelations();
+                loadLastID();
+                toast.success('Subcategoria cadastrada com sucesso!');
+            }, 3000);
+
+        } catch (error) {
+            toast.error('Erro ao cadastrar a subcategoria no produto!!!');
+            console.log(error);
+        }
+    }
+
+    function nextBlock() {
+        handleRelationsNext();
+        setCurrentPage(currentPage + 1);
+    }
+
+    function nextBlockNew() {
+        handleRelationsNextNew();
+        setCurrentPage(currentPage + 1);
     }
 
 
@@ -295,11 +330,11 @@ const NovoProduto: React.FC = () => {
                         <>
                             <Titulos
                                 tipo="h2"
-                                titulo="Cadastre ou escolha uma categoria para esse produto"
+                                titulo="Escolha uma categoria para esse produto"
                             />
                             <br />
                             <br />
-                            <Etiqueta>Escolha uma categoria já existente:</Etiqueta>
+                            <Etiqueta>Escolha uma categoria:</Etiqueta>
                             <Select
                                 value={categorySelected}
                                 /* @ts-ignore */
@@ -314,82 +349,42 @@ const NovoProduto: React.FC = () => {
                             <br />
                             <Button
                                 style={{ backgroundColor: 'green' }}
-                                onClick={handleRegisterCategory}
+                                onClick={handleRelations}
                             >
                                 Salvar com essa categoria
                             </Button>
-                            <br />
-                            <br />
-                            <br />
-                            <Block>
-                                <Etiqueta>Cadastre com uma nova categoria:</Etiqueta>
-                                <InputPost
-                                    type="text"
-                                    placeholder="Digite o nome da categoria"
-                                    value={categoryName}
-                                    onChange={(e) => setCategoryName(e.target.value)}
-                                />
-                            </Block>
 
-                            <Button
-                                style={{ backgroundColor: 'green' }}
-                                onClick={handleRegisterNewCategory}
-                            >
-                                Salvar categoria
-                            </Button>
-
-                            {showSubCategory ? (
+                            {pages.map(() => (
                                 <>
-                                    <DivisorHorizontal />
-
-                                    <Voltar url={`/produto/${slugProduct}/${findFirstProduct}`} />
-
-                                    <Titulos
-                                        tipo="h2"
-                                        titulo="Cadastre ou escolha uma sub categoria para esse produto"
-                                    />
-                                    <br />
-                                    <br />
-                                    <Etiqueta>Escolha uma sub categoria já existente:</Etiqueta>
-                                    <Select
-                                        value={subCategorySelected}
-                                        /* @ts-ignore */
-                                        onChange={handleChangeSubCategory}
-                                        opcoes={
-                                            [
-                                                { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                ...(subCategories || []).map((item) => ({ label: item.subCategoryName, value: item.id }))
-                                            ]
-                                        }
-                                    />
-                                    <br />
-                                    <Button
-                                        style={{ backgroundColor: 'orange' }}
-                                        onClick={handleRegisterSubCategory}
-                                    >
-                                        Salvar com essa sub categoria
-                                    </Button>
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <Block>
-                                        <Etiqueta>Cadastre com uma nova sub categoria:</Etiqueta>
-                                        <InputPost
-                                            type="text"
-                                            placeholder="Digite o nome da sub categoria"
-                                            value={subCategoryName}
-                                            onChange={(e) => setSubCategoryName(e.target.value)}
+                                    <Card>
+                                        <Titulos
+                                            tipo="h2"
+                                            titulo="Escolha uma sub categoria para esse produto"
                                         />
-                                    </Block>
-
-                                    <Button
-                                        style={{ backgroundColor: 'orange' }}
-                                        onClick={handleRegisterNewSubCategory}
-                                    >
-                                        Salvar sub categoria
-                                    </Button>
+                                        <br />
+                                        <br />
+                                        <Etiqueta>Escolha uma categoria já existente:</Etiqueta>
+                                        <Select
+                                            value={categorySelected}
+                                            /* @ts-ignore */
+                                            onChange={handleChangeCategory}
+                                            opcoes={
+                                                [
+                                                    { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                ]
+                                            }
+                                        />
+                                        <br />
+                                        <Button
+                                            style={{ backgroundColor: 'orange' }}
+                                            onClick={nextBlock}
+                                        >
+                                            Salvar subcategoria
+                                        </Button>
+                                    </Card>
                                 </>
-                            ) : null}
+                            ))}
                         </>
                     ) :
                         <>
@@ -489,6 +484,84 @@ const NovoProduto: React.FC = () => {
                                 placeholder6="Digite aqui a 6º descrição"
                             />
                         </>
+                    }
+                </Card>
+
+                <Card>
+                    {showCategory ? (
+                        <Button
+                            style={{ backgroundColor: 'green' }}
+                            onClick={showOrHideNewCategory}
+                        >
+                            Cadastrar mais categoria
+                        </Button>
+                    ) :
+                        null
+                    }
+
+                    {showNewCategory ? (
+                        <>
+                            <Titulos
+                                tipo="h2"
+                                titulo="Escolha uma categoria para esse produto"
+                            />
+                            <br />
+                            <br />
+                            <Etiqueta>Escolha uma categoria:</Etiqueta>
+                            <Select
+                                value={categorySelected}
+                                /* @ts-ignore */
+                                onChange={handleChangeCategory}
+                                opcoes={
+                                    [
+                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                    ]
+                                }
+                            />
+                            <br />
+                            <Button
+                                style={{ backgroundColor: 'green' }}
+                                onClick={handleRelationsNew}
+                            >
+                                Salvar com essa categoria
+                            </Button>
+
+
+                            {pages.map(() => (
+                                <>
+                                    <Card>
+                                        <Titulos
+                                            tipo="h2"
+                                            titulo="Escolha uma sub categoria para esse produto"
+                                        />
+                                        <br />
+                                        <br />
+                                        <Etiqueta>Escolha uma categoria já existente:</Etiqueta>
+                                        <Select
+                                            value={categorySelected}
+                                            /* @ts-ignore */
+                                            onChange={handleChangeCategory}
+                                            opcoes={
+                                                [
+                                                    { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                ]
+                                            }
+                                        />
+                                        <br />
+                                        <Button
+                                            style={{ backgroundColor: 'orange' }}
+                                            onClick={nextBlockNew}
+                                        >
+                                            Salvar subcategoria
+                                        </Button>
+                                    </Card>
+                                </>
+                            ))}
+                        </>
+                    ) :
+                        null
                     }
                 </Card>
             </Container>
