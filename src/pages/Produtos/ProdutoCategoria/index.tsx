@@ -12,6 +12,7 @@ import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
 import { Button } from "../../../components/ui/Button";
 import { InputPost } from "../../../components/ui/InputPost";
+import { CategoryButton } from "../styles";
 
 
 
@@ -109,6 +110,7 @@ const ProdutoCategoria: React.FC = () => {
 
             toast.success('Categoria cadastrada com sucesso!');
             loadRelationsProducts();
+            showOrHideCategory();
 
         } catch (error) {
             toast.error('Erro ao cadastrar categoria no produto!!!');
@@ -116,7 +118,7 @@ const ProdutoCategoria: React.FC = () => {
         }
     }
 
-    async function handleRelationsNext() {
+    /* async function handleRelationsNext() {
         const apiClient = setupAPIClient();
         try {
             await apiClient.post('/createRelation', {
@@ -136,9 +138,15 @@ const ProdutoCategoria: React.FC = () => {
             toast.error('Erro ao cadastrar a subcategoria no produto!!!');
             console.log(error);
         }
+    } */
+
+    const [showCategorys, setShowCategorys] = useState(false);
+
+    const showOrHideCategory = () => {
+        setShowCategorys(!showCategorys);
     }
 
-   
+
     return (
         <Grid>
             <MainHeader />
@@ -164,65 +172,30 @@ const ProdutoCategoria: React.FC = () => {
                         }
                     />
                     <br />
-                    <Button
-                        style={{ backgroundColor: 'green' }}
-                        onClick={handleRelations}
-                    >
-                        Salvar com essa categoria
-                    </Button>
-
-                    {allFindAsc.map((relation) => {
-                        return (
-                            <>
-                                <Card key={relation.id}>
-                                    <Titulos
-                                        tipo="h2"
-                                        titulo="Escolha uma sub categoria para esse produto"
-                                    />
-                                    <br />
-                                    <br />
-                                    <Etiqueta>Escolha uma categoria já existente:</Etiqueta>
-                                    <Select
-                                        value={categorySelected}
-                                        /* @ts-ignore */
-                                        onChange={handleChangeCategory}
-                                        opcoes={
-                                            [
-                                                { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
-                                            ]
-                                        }
-                                    />
-                                    <br />
-                                    <Block>
-                                        <Etiqueta>Ordem:</Etiqueta>
-                                        <InputPost
-                                            type="number"/* @ts-ignore */
-                                            value={Number(order)}/* @ts-ignore */
-                                            placeholder="0"/* @ts-ignore */
-                                            onChange={ (e) => setOrder(e.target.value) }
-                                        />
-                                    </Block>
-                                    <br />
-                                    <Button
-                                        style={{ backgroundColor: 'orange' }}/* @ts-ignore */
-                                        onClick={() => handleRelationsNext()}
+                    <br />
+                    {showCategorys ? (
+                        <>
+                            {allFindAsc.map((IDRelation) => {
+                                return (
+                                    <CategoryButton
+                                        style={{ backgroundColor: 'orange' }}
+                                        href={`/produto/novo/categorias/${IDRelation.id}`}
                                     >
-                                        Salvar subcategoria
-                                    </Button>
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <Button
-                                    /* @ts-ignore */
-                                    /* onClick={ () => handleRelationsNext(relation.id)} *///-- AQUI ABRIR UMA NOVA TELA? //
-                                    >
-                                        Novo nivel
-                                    </Button>
-                                </Card>
-                            </>
-                        )
-                    })}
+                                        Cadastre uma Sub Categoria
+                                    </CategoryButton>
+                                )
+                            })}
+                        </>
+                    ) :
+                        <Button
+                            style={{ backgroundColor: 'green' }}
+                            onClick={handleRelations}
+                        >
+                            Salvar com essa categoria
+                        </Button>
+                    }
+                    <br />
+                    <br />
                 </Card>
             </Container>
         </Grid>
