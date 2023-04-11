@@ -54,10 +54,14 @@ export const ButtonVariacaoDetalhes = styled.button`
   }
 `;
 
-export const CategoryButton = styled.a`
-  color: ${(props) => props?.theme?.colors?.white};
-  background-color: green;
-  padding: 17px;
-  border-radius: 10px;
-  font-weight: 600;
+export const BlockCategory = styled.div`
+  display: flex;
+  justify-content: center;
 `;
+
+export const TextButton = styled.span`
+  color: ${(props) => props?.theme?.colors?.white};
+  padding: 17px;
+  font-weight: 600;
+  text-align: center;
+`

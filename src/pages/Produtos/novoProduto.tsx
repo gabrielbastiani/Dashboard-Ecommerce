@@ -15,8 +15,9 @@ import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
 import DescriptionsProduct from "../../components/ui/DescriptionsProduct";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
-import { useNavigate } from "react-router-dom";
-import { CategoryButton } from "./styles";
+import { TextButton, BlockCategory } from "./styles";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 
 const NovoProduto: React.FC = () => {
@@ -119,14 +120,15 @@ const NovoProduto: React.FC = () => {
             <Aside />
             <Container>
                 {showCategory ? (
-                    <Card
-                        style={{ padding: '100px' }}
-                    >
-                        <CategoryButton
-                            href={`/produto/novo/categorias/${findFirstProduct}`}
-                        >
-                            Clique aqui para cadastrar as categorias para esse produto
-                        </CategoryButton>
+                    <Card>
+                        <BlockCategory>
+                            <Button>
+                                <AiOutlinePlusCircle />
+                                <Link to={`/produto/novo/categorias/${findFirstProduct}`} >
+                                    <TextButton>Clique aqui para cadastrar as categorias para esse produto</TextButton>
+                                </Link>
+                            </Button>
+                        </BlockCategory>
                     </Card>
                 ) :
                     <>
@@ -229,7 +231,6 @@ const NovoProduto: React.FC = () => {
                         </Card>
                     </>
                 }
-
             </Container>
         </Grid>
     )

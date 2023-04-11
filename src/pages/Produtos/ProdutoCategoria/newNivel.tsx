@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -11,7 +11,8 @@ import Select from "../../../components/ui/Select";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/ui/Button";
-import { CategoryButton } from "../styles";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { TextButton } from "../styles";
 
 
 const NewNivel: React.FC = () => {
@@ -122,12 +123,15 @@ const NewNivel: React.FC = () => {
                         return (
                             <>
                                 <Card>
-                                    <CategoryButton
+                                    <Button
                                         style={{ backgroundColor: 'orange' }}
-                                        href={`/produto/categorias/newNivel/${product_id}/${item.id}`}
+                                        onClick={handleRelations}
                                     >
-                                        Cadastre um novo nivel
-                                    </CategoryButton>
+                                        <AiOutlinePlusCircle />
+                                        <Link to={`/produto/categorias/newNivel/${product_id}/${item.id}`} >
+                                            <TextButton>Cadastre um novo nivel</TextButton>
+                                        </Link>
+                                    </Button>
                                 </Card>
                             </>
                         )

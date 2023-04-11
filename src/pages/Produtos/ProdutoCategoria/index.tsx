@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { Grid } from "../../Dashboard/styles";
@@ -7,9 +7,10 @@ import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import { Container } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
-import { CategoryButton } from "../styles";
 import Titulos from "../../../components/Titulos";
-
+import { BlockCategory, TextButton } from "../styles";
+import { Button } from "../../../components/ui/Button";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 
 const ProdutoCategoria: React.FC = () => {
@@ -18,25 +19,8 @@ const ProdutoCategoria: React.FC = () => {
     const { user } = useContext(AuthContext);
 
     const [loja_id] = useState(user.loja_id);
-
-    const [lastID, setLastID] = useState('');
-    const [firstId, setFirstId] = useState('');
-
     const [allFindAsc, setAllFindAsc] = useState<any[]>([]);
-    const [allFindDesc, setAllFindDesc] = useState<any[]>([]);
 
-    const IDnext = allFindDesc.map((item) => {
-        return item.id
-    });
-
-    const IDprev = allFindDesc.map((item) => {
-        return item.id
-    });
-
-    useEffect(() => {
-        setLastID([...IDnext].shift());
-        setFirstId([...IDprev].pop());
-    }, [IDnext, IDprev]);
 
     useEffect(() => {
         async function findsRelationsProducts() {
@@ -45,7 +29,6 @@ const ProdutoCategoria: React.FC = () => {
                 const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
 
                 setAllFindAsc(data.allFindAsc || []);
-                setAllFindDesc(data.allFindDesc || []);
 
             } catch (error) {
                 console.error(error);
@@ -69,12 +52,6 @@ const ProdutoCategoria: React.FC = () => {
         findLoadRelation();
     }, []);
 
-    const [showCategorys, setShowCategorys] = useState(false);
-
-    const showOrHideCategory = () => {
-        setShowCategorys(!showCategorys);
-    }
-
 
     return (
         <Grid>
@@ -82,27 +59,31 @@ const ProdutoCategoria: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    <CategoryButton
-                        style={{ backgroundColor: 'green' }}
-                        href={`/produto/novo/categorias/novaCategoriaProduto/${product_id}`}
-                    >
-                        Cadastre uma nova categoria
-                    </CategoryButton>
+                    <BlockCategory>
+                        <Button>
+                            <AiOutlinePlusCircle />
+                            <Link to={`/produto/novo/categorias/novaCategoriaProduto/${product_id}`} >
+                                <TextButton>Cadastre uma nova categoria</TextButton>
+                            </Link>
+                        </Button>
+                    </BlockCategory>
                     {allFindAsc.map((IDRelation) => {
                         return (
                             <>
                                 <Card>
                                     <Titulos
                                         tipo="h3"
-                                        titulo="NIVEL 1"                                    
+                                        titulo="NIVEL 1"
                                     />
                                     <br />
-                                    <CategoryButton
+                                    <Button
                                         style={{ backgroundColor: 'orange' }}
-                                        href={`/produto/categorias/newNivel/${product_id}/${IDRelation.id}`}
                                     >
-                                        Cadastre um novo nivel
-                                    </CategoryButton>
+                                        <AiOutlinePlusCircle />
+                                        <Link to={`/produto/categorias/newNivel/${product_id}/${IDRelation.id}`} >
+                                            <TextButton>Cadastre um novo nivel</TextButton>
+                                        </Link>
+                                    </Button>
                                 </Card>
                             </>
                         )

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
@@ -11,8 +11,8 @@ import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
 import { Button } from "../../../components/ui/Button";
-import { CategoryButton } from "../styles";
-
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { TextButton } from "../styles";
 
 
 const NovaCategoriaProduto: React.FC = () => {
@@ -169,9 +169,10 @@ const NovaCategoriaProduto: React.FC = () => {
                         style={{ backgroundColor: 'green' }}
                         onClick={handleRelations}
                     >
-                        <a href={`/produto/novo/categorias/${product_id}`}>
-                            Salvar com essa categoria
-                        </a>
+                        <AiOutlinePlusCircle />
+                        <Link to={`/produto/novo/categorias/${product_id}`} >
+                            <TextButton>Cadastre uma nova categoria</TextButton>
+                        </Link>
                     </Button>
                     <br />
                 </Card>
