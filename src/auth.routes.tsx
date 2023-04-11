@@ -31,6 +31,8 @@ import ImagemTexto from './pages/Configuracoes/TextosInstitucionais/Texto/Imagem
 import ImagensLoja from './pages/Configuracoes/ImagensInstitucionais';
 import Imagem from './pages/Configuracoes/ImagensInstitucionais/Imagem';
 import NovaImagem from './pages/Configuracoes/ImagensInstitucionais/novaImagem';
+import NewNivel from './pages/Produtos/ProdutoCategoria/newNivel';
+import NovaCategoriaProduto from './pages/Produtos/ProdutoCategoria/novaCategoriaProduto';
 
 
 const RoutesAuth: React.FC = () => {
@@ -55,6 +57,8 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />
             <Route path='/produto/novo/categorias/:product_id' element={<ProdutoCategoria />} />
+            <Route path='/produto/novo/categorias/novaCategoriaProduto/:product_id' element={<NovaCategoriaProduto />} />
+            <Route path='/produto/categorias/newNivel/:product_id/:IDRelation' element={<NewNivel />} />
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
             <Route path='/produto/avaliacoes/:nameProduct/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:nameProduct/:avaliacao_id' element={<Avaliacao />} />

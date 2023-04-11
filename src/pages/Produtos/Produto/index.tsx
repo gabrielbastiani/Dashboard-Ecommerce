@@ -35,7 +35,6 @@ export type DeleteProduct = {
 const Produto: React.FC = () => {
 
     let { slug, product_id } = useParams();
-
     const navigate = useNavigate();
 
     const [nameProducts, setNameProducts] = useState("");
