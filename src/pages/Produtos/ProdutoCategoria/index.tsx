@@ -21,7 +21,7 @@ const ProdutoCategoria: React.FC = () => {
     const { user } = useContext(AuthContext);
 
     const [loja_id] = useState(user.loja_id);
-    const [order, setOrder] = useState(0);
+    const [order, setOrder] = useState(Number);
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
@@ -29,66 +29,28 @@ const ProdutoCategoria: React.FC = () => {
     const [lastID, setLastID] = useState('');
     const [firstId, setFirstId] = useState('');
 
-    const [allRelations, setAllRelations] = useState<any[]>([]);
-    const [searchIDs, setSearchIDs] = useState<any[]>([]);
+    const [allFindAsc, setAllFindAsc] = useState<any[]>([]);
+    const [allFindDesc, setAllFindDesc] = useState<any[]>([]);
 
-    const [total, setTotal] = useState(0);
-    const [limit] = useState(1);
-    const [pages, setPages] = useState<any[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const IDnext = searchIDs.map((item) => {
+    const IDnext = allFindDesc.map((item) => {
         return item.id
     });
 
-    const IDprev = searchIDs.map((item) => {
+    const IDprev = allFindDesc.map((item) => {
         return item.id
     });
 
     useEffect(() => {
         setLastID([...IDnext].shift());
-        setFirstId([...IDprev].pop())
+        setFirstId([...IDprev].pop());
     }, [IDnext, IDprev]);
 
 
-    useEffect(() => {
-        async function allCategorys() {
-            try {
-                const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/nextBlockRelationCategory?page=${currentPage}&limit=${limit}`);
-
-                setTotal(data.total);
-                const totalPages = Math.ceil(total / limit);
-
-                const arrayPages = [];
-                for (let i = 1; i <= totalPages; i++) {
-                    arrayPages.push(i);
-                }
-
-                setPages(arrayPages || []);
-                setSearchIDs(data.relationsIDs || []);
-                setAllRelations(data.relationsIDs || []);
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        allCategorys();
-    }, [currentPage, limit, total]);
+    console.log(firstId)
 
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
-    }
-
-    async function loadRelations() {
-        const apiClient = setupAPIClient();
-        try {
-            const { data } = await apiClient.get(`/allRelationsProductCategory?product_id=${product_id}`);
-            setTotal(data.length);
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     useEffect(() => {
@@ -104,6 +66,33 @@ const ProdutoCategoria: React.FC = () => {
         loadCategorys();
     }, []);
 
+    useEffect(() => {
+        async function findsRelationsProducts() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
+
+                setAllFindAsc(data.allFindAsc || []);
+                setAllFindDesc(data.allFindDesc || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        findsRelationsProducts();
+    }, [product_id]);
+
+    async function loadRelationsProducts() {
+        try {
+            const apiClient = setupAPIClient();
+            const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
+
+            setAllFindAsc(data.allFindAsc || []);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     async function handleRelations() {
         const apiClient = setupAPIClient();
@@ -118,10 +107,8 @@ const ProdutoCategoria: React.FC = () => {
                 loja_id: loja_id
             });
 
-            setTimeout(() => {
-                loadRelations();
-                toast.success('Categoria cadastrada com sucesso!');
-            }, 3000);
+            toast.success('Categoria cadastrada com sucesso!');
+            loadRelationsProducts();
 
         } catch (error) {
             toast.error('Erro ao cadastrar categoria no produto!!!');
@@ -129,7 +116,7 @@ const ProdutoCategoria: React.FC = () => {
         }
     }
 
-    async function handleRelationsNext(id: string) {
+    async function handleRelationsNext() {
         const apiClient = setupAPIClient();
         try {
             await apiClient.post('/createRelation', {
@@ -138,14 +125,12 @@ const ProdutoCategoria: React.FC = () => {
                 posicao: "",
                 order: Number(order),
                 nivel: 2,
-                relationId: id,
+                relationId: firstId,
                 loja_id: loja_id
             });
 
-            setTimeout(() => {
-                loadRelations();
-                toast.success('Subcategoria cadastrada com sucesso!');
-            }, 3000);
+            toast.success('Subcategoria cadastrada com sucesso!');
+            loadRelationsProducts();
 
         } catch (error) {
             toast.error('Erro ao cadastrar a subcategoria no produto!!!');
@@ -153,65 +138,7 @@ const ProdutoCategoria: React.FC = () => {
         }
     }
 
-    async function handleRelationsNew() {
-        const apiClient = setupAPIClient();
-        try {
-            await apiClient.post('/createRelation', {
-                product_id: product_id,
-                category_id: categorySelected,
-                posicao: "",
-                order: 0,
-                nivel: 1,
-                relationId: "",
-                loja_id: loja_id
-            });
-
-            setTimeout(() => {
-                loadRelations();
-                toast.success('Categoria cadastrada com sucesso!');
-            }, 3000);
-
-        } catch (error) {
-            toast.error('Erro ao cadastrar categoria no produto!!!');
-            console.log(error);
-        }
-    }
-
-    async function handleRelationsNextNew() {
-        const apiClient = setupAPIClient();
-        try {
-            await apiClient.post('/createRelation', {
-                product_id: product_id,
-                category_id: categorySelected,
-                posicao: "",
-                order: Number(order),
-                nivel: 2,
-                relationId: lastID || "",
-                loja_id: loja_id
-            });
-
-            setTimeout(() => {
-                loadRelations();
-                toast.success('Subcategoria cadastrada com sucesso!');
-            }, 3000);
-
-        } catch (error) {
-            toast.error('Erro ao cadastrar a subcategoria no produto!!!');
-            console.log(error);
-        }
-    }
-
-    /*  function nextBlock() {
-         handleRelationsNext();
-         setCurrentPage(currentPage + 1);
-     }
- 
-     function nextBlockNew() {
-         handleRelationsNextNew();
-         setCurrentPage(currentPage + 1);
-     } */
-
-
+   
     return (
         <Grid>
             <MainHeader />
@@ -244,7 +171,7 @@ const ProdutoCategoria: React.FC = () => {
                         Salvar com essa categoria
                     </Button>
 
-                    {allRelations.map((relation) => {
+                    {allFindAsc.map((relation) => {
                         return (
                             <>
                                 <Card key={relation.id}>
@@ -270,15 +197,16 @@ const ProdutoCategoria: React.FC = () => {
                                     <Block>
                                         <Etiqueta>Ordem:</Etiqueta>
                                         <InputPost
-                                            type="number"
-                                            placeholder={String(relation.length)}/* @ts-ignore */
-                                            onChange={(e) => setOrder(e.target.value)}
+                                            type="number"/* @ts-ignore */
+                                            value={Number(order)}/* @ts-ignore */
+                                            placeholder="0"/* @ts-ignore */
+                                            onChange={ (e) => setOrder(e.target.value) }
                                         />
                                     </Block>
                                     <br />
                                     <Button
                                         style={{ backgroundColor: 'orange' }}/* @ts-ignore */
-                                        onClick={ () => handleRelationsNext(relation.id)}
+                                        onClick={() => handleRelationsNext()}
                                     >
                                         Salvar subcategoria
                                     </Button>
@@ -286,8 +214,8 @@ const ProdutoCategoria: React.FC = () => {
                                     <br />
                                     <br />
                                     <Button
-                                    /* @ts-ignore */ 
-                                        /* onClick={ () => handleRelationsNext(relation.id)} *///-- AQUI ABRIR UMA NOVA TELA? //
+                                    /* @ts-ignore */
+                                    /* onClick={ () => handleRelationsNext(relation.id)} *///-- AQUI ABRIR UMA NOVA TELA? //
                                     >
                                         Novo nivel
                                     </Button>
