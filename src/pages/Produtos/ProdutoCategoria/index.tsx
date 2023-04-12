@@ -1,22 +1,33 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Container } from "../../Categorias/styles";
+import { BlockTop, Container } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
-import { BlockCategory, BlockCategorys, Categ, TextButton } from "../styles";
+import { TextButton } from "../styles";
 import { Button } from "../../../components/ui/Button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { BlockDados } from "../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
+import { toast } from "react-toastify";
+import { GridDate } from "../../Perfil/styles";
+import { SectionDate } from "../../Configuracoes/styles";
 
 
 const ProdutoCategoria: React.FC = () => {
 
     let { product_id } = useParams();
-    const [allFindAsc, setAllFindAsc] = useState<any[]>([]);
+    const navigate = useNavigate();
 
+    const [nameProduct, setNameProduct] = useState("");
+    const [slug, setSlug] = useState("");
+    const [allFindAsc, setAllFindOrderAsc] = useState<any[]>([]);
+
+    const [orderUpdate, setOrderUpdate] = useState();
 
     useEffect(() => {
         async function findsRelationsProducts() {
@@ -24,7 +35,9 @@ const ProdutoCategoria: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
 
-                setAllFindAsc(data.allFindAsc || []);
+                setAllFindOrderAsc(data.allFindOrderAsc || []);
+                setNameProduct(data.findUniqueProduct.nameProduct || "");
+                setSlug(data.findUniqueProduct.slug || "");
 
             } catch (error) {
                 console.error(error);
@@ -32,6 +45,25 @@ const ProdutoCategoria: React.FC = () => {
         }
         findsRelationsProducts();
     }, [product_id]);
+
+    async function updateOrder(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            if (updateOrder === null) {
+                toast.error('Não deixe a ordem em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateOrderRelation?relationProductCategory_id=${id}`, { order: Number(orderUpdate) });
+                toast.success('Ordem da categoria atualizada com sucesso.');
+                setTimeout(() => {
+                    navigate(0);
+                }, 2800);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a ordem da categoria.');
+        }
+    }
 
 
 
@@ -41,7 +73,20 @@ const ProdutoCategoria: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    <BlockCategory>
+                    <Link to={`/produto/${slug}/${product_id}`} >
+                        <Button>
+                            Voltar para o produto
+                        </Button>
+                    </Link>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <BlockTop>
+                        <Titulos
+                            tipo="h1"
+                            titulo={`Cadastro de categoria para - ${nameProduct}`}
+                        />
                         <Button
                             style={{ backgroundColor: 'green' }}
                         >
@@ -50,15 +95,7 @@ const ProdutoCategoria: React.FC = () => {
                                 <TextButton>Cadastre uma nova categoria</TextButton>
                             </Link>
                         </Button>
-                    </BlockCategory>
-
-                    <BlockCategorys>
-                        {allFindAsc.map((name) => {
-                            return (
-                                <Categ key={name.id}>{name.category.categoryName} - </Categ>
-                            )
-                        })}
-                    </BlockCategorys>
+                    </BlockTop>
 
                     {allFindAsc.map((IDRelation) => {
                         return (
@@ -68,15 +105,39 @@ const ProdutoCategoria: React.FC = () => {
                                         tipo="h3"
                                         titulo={IDRelation.category.categoryName}
                                     />
-                                    <br />
-                                    <Button
-                                        style={{ backgroundColor: 'orange' }}
-                                    >
-                                        <AiOutlinePlusCircle />
-                                        <Link to={`/produto/categorias/newNivel/${product_id}/${IDRelation.id}`} >
-                                            <TextButton>Cadastre um novo nivel</TextButton>
-                                        </Link>
-                                    </Button>
+
+                                    <GridDate>
+                                        <SectionDate>
+                                            <Button
+                                                style={{ backgroundColor: 'orange' }}
+                                            >
+                                                <AiOutlinePlusCircle />
+                                                <Link to={`/produto/categorias/newNivel/${product_id}/${IDRelation.id}`} >
+                                                    <TextButton>Cadastre um novo nivel</TextButton>
+                                                </Link>
+                                            </Button>
+                                        </SectionDate>
+
+                                        <SectionDate>
+                                            <BlockDados>
+                                                <TextoDados
+                                                    chave={"Ordem"}
+                                                    dados={
+                                                        <InputUpdate
+                                                            dado={String(IDRelation.order)}
+                                                            type="number"
+                                                            /* @ts-ignore */
+                                                            placeholder={String(IDRelation.order)}
+                                                            value={orderUpdate}
+                                                            /* @ts-ignore */
+                                                            onChange={(e) => setOrderUpdate(e.target.value)}
+                                                            handleSubmit={() => updateOrder(IDRelation.id)}
+                                                        />
+                                                    }
+                                                />
+                                            </BlockDados>
+                                        </SectionDate>
+                                    </GridDate>
                                 </Card>
                             </>
                         )

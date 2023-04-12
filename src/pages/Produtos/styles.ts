@@ -1,73 +1,73 @@
 import styled from "styled-components";
 
 export const BlockMobile = styled.div`
-display: none;
+  display: none;
 
-@media (max-width: 600px) {
-display: block;
-}
+  @media (max-width: 600px) {
+    display: block;
+  }
 `;
 
 export const ContainerVariacao = styled.section`
-display: flex;
+  display: flex;
 
-@media (max-width: 1405px) {
-width: 95%;
-flex-direction: column;
-}
+  @media (max-width: 1405px) {
+    width: 95%;
+    flex-direction: column;
+  }
 `;
 
 export const ButtonVariacao = styled.button`
-background-color: ${(props) => props?.theme?.colors?.gray};
-border: 0;
-padding: 0.8rem;
-border-radius: 0.5rem;
-color: black;
-font-size: 16px;
-width: 100%;
-font-weight: 600;
+  background-color: ${(props) => props?.theme?.colors?.gray};
+  border: 0;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  color: black;
+  font-size: 16px;
+  width: 100%;
+  font-weight: 600;
 
-&:hover {
-filter: brightness(1.08);
-}
+  &:hover {
+    filter: brightness(1.08);
+  }
 `;
 
 export const RenderOk = styled.span`
-color: red;
+  color: red;
 `;
 
 export const RenderNo = styled.span``;
 
 export const ButtonVariacaoDetalhes = styled.button`
-background-color: #736e6e;
-border: 0;
-padding: 0.8rem;
-border-radius: 0.5rem;
-color: black;
-font-size: 16px;
-width: 100%;
-font-weight: 600;
-margin-top: 15px;
+  background-color: #736e6e;
+  border: 0;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  color: black;
+  font-size: 16px;
+  width: 100%;
+  font-weight: 600;
+  margin-top: 15px;
 
-&:hover {
-filter: brightness(1.08);
-}
+  &:hover {
+    filter: brightness(1.08);
+  }
 `;
 
 export const BlockCategory = styled.div`
-display: flex;
-justify-content: center;
+  display: flex;
+  justify-content: center;
 `;
 
 export const TextButton = styled.span`
-color: ${(props) => props?.theme?.colors?.white};
-padding: 17px;
-font-weight: 600;
-text-align: center;
+  color: ${(props) => props?.theme?.colors?.white};
+  padding: 17px;
+  font-weight: 600;
+  text-align: center;
 `;
 
 export const BlockCategorys = styled.div`
-margin: 50px 20px 0;
+  margin: 50px 20px 0;
 `;
 
 export const Categ = styled.span``;

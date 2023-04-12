@@ -4,7 +4,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Container, Etiqueta } from "../../Categorias/styles";
+import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
@@ -13,6 +13,13 @@ import { toast } from "react-toastify";
 import { Button } from "../../../components/ui/Button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { TextButton } from "../styles";
+import Voltar from "../../../components/Voltar";
+import { InputPost } from "../../../components/ui/InputPost";
+import { BlockDados } from "../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
+import { GridDate } from "../../Perfil/styles";
+import { SectionDate } from "../../Configuracoes/styles";
 
 
 const NewNivel: React.FC = () => {
@@ -25,8 +32,10 @@ const NewNivel: React.FC = () => {
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
+    const [order, setOrder] = useState(Number);
+    const [orderUpdate, setOrderUpdate] = useState();
 
-    const [iDRelationSub, setIDRelationSub] = useState<any[]>([]);
+    const [allRelationIDOrderAsc, setAllRelationIDOrderAsc] = useState<any[]>([]);
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -48,11 +57,15 @@ const NewNivel: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
+            if (categorySelected === "") {
+                toast.error('Não deixe a categoria em branco.');
+                return;
+            }
             await apiClient.post('/createRelation', {
                 product_id: product_id,
                 category_id: categorySelected,
                 posicao: "",
-                order: 0,
+                order: Number(order),
                 nivel: 0,
                 relationId: IDRelation,
                 loja_id: loja_id
@@ -76,7 +89,7 @@ const NewNivel: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/findLastIdRelations?relationId=${IDRelation}`);
 
-                setIDRelationSub(data.allFindRelationIDAsc || []);
+                setAllRelationIDOrderAsc(data.allRelationIDOrderAsc || []);
 
             } catch (error) {
                 console.error(error);
@@ -85,6 +98,25 @@ const NewNivel: React.FC = () => {
         findLoadRelation();
     }, [IDRelation]);
 
+    async function updateOrder(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            if (updateOrder === null) {
+                toast.error('Não deixe a ordem em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateOrderRelation?relationProductCategory_id=${id}`, { order: Number(orderUpdate) });
+                toast.success('Ordem da categoria atualizada com sucesso.');
+                setTimeout(() => {
+                    navigate(0);
+                }, 2800);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a ordem da categoria.');
+        }
+    }
+
 
     return (
         <Grid>
@@ -92,12 +124,16 @@ const NewNivel: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    <Titulos
-                        tipo="h2"
-                        titulo="Escolha uma sub categoria para essa categoria/produto"
+                    <Voltar
+                        url={`/produto/novo/categorias/${product_id}`}
                     />
-                    <br />
-                    <br />
+                    <BlockTop>
+                        <Titulos
+                            tipo="h1"
+                            titulo={`Escolha uma sub categoria para essa categoria/produto`}
+                        />
+                    </BlockTop>
+
                     <Etiqueta>Escolha uma subcategoria:</Etiqueta>
                     <Select
                         value={categorySelected}
@@ -111,6 +147,15 @@ const NewNivel: React.FC = () => {
                         }
                     />
                     <br />
+                    <Block>
+                        <Etiqueta>Ordem:</Etiqueta>
+                        <InputPost
+                            type="number"
+                            placeholder="0"
+                            value={order}/* @ts-ignore */
+                            onChange={(e) => setOrder(e.target.value)}
+                        />
+                    </Block>
                     <br />
                     <Button
                         onClick={handleRelations}
@@ -119,19 +164,47 @@ const NewNivel: React.FC = () => {
                     </Button>
                     <br />
                     <br />
-                    {iDRelationSub.map((item) => {
+                    {allRelationIDOrderAsc.map((item) => {
                         return (
                             <>
                                 <Card>
-                                    <Button
-                                        style={{ backgroundColor: 'orange' }}
-                                        onClick={handleRelations}
-                                    >
-                                        <AiOutlinePlusCircle />
-                                        <Link to={`/produto/categorias/newNivel/${product_id}/${item.id}`} >
-                                            <TextButton>Cadastre um novo nivel</TextButton>
-                                        </Link>
-                                    </Button>
+                                    <Titulos
+                                        tipo="h3"
+                                        titulo={item.category.categoryName}
+                                    />
+                                    <GridDate>
+                                        <SectionDate>
+                                            <Button
+                                                style={{ backgroundColor: 'green' }}
+                                                onClick={handleRelations}
+                                            >
+                                                <AiOutlinePlusCircle />
+                                                <Link to={`/produto/categorias/newNivel/${product_id}/${item.id}`} >
+                                                    <TextButton>Cadastre um novo nivel</TextButton>
+                                                </Link>
+                                            </Button>
+                                        </SectionDate>
+
+                                        <SectionDate>
+                                            <BlockDados>
+                                                <TextoDados
+                                                    chave={"Ordem"}
+                                                    dados={
+                                                        <InputUpdate
+                                                            dado={String(item.order)}
+                                                            type="number"
+                                                            /* @ts-ignore */
+                                                            placeholder={String(item.order)}
+                                                            value={orderUpdate}
+                                                            /* @ts-ignore */
+                                                            onChange={(e) => setOrderUpdate(e.target.value)}
+                                                            handleSubmit={() => updateOrder(item.id)}
+                                                        />
+                                                    }
+                                                />
+                                            </BlockDados>
+                                        </SectionDate>
+                                    </GridDate>
                                 </Card>
                             </>
                         )

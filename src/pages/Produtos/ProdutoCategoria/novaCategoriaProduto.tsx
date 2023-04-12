@@ -6,13 +6,14 @@ import { toast } from "react-toastify";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Container, Etiqueta } from "../../Categorias/styles";
+import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
 import { Button } from "../../../components/ui/Button";
-import { AiOutlinePlusCircle } from "react-icons/ai";
 import { TextButton } from "../styles";
+import { InputPost } from "../../../components/ui/InputPost";
+import Voltar from "../../../components/Voltar";
 
 
 const NovaCategoriaProduto: React.FC = () => {
@@ -25,6 +26,7 @@ const NovaCategoriaProduto: React.FC = () => {
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
+    const [order, setOrder] = useState(Number);
 
 
     function handleChangeCategory(e: any) {
@@ -47,11 +49,15 @@ const NovaCategoriaProduto: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
+            if (categorySelected === "") {
+                toast.error('Não deixe a categoria em branco.');
+                return;
+            }
             await apiClient.post('/createRelation', {
                 product_id: product_id,
                 category_id: categorySelected,
                 posicao: "",
-                order: 0,
+                order: Number(order),
                 nivel: 0,
                 relationId: "",
                 loja_id: loja_id
@@ -77,12 +83,23 @@ const NovaCategoriaProduto: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    <Titulos
-                        tipo="h2"
-                        titulo="Escolha uma categoria para esse produto"
+                    <Voltar
+                        url={`/produto/novo/categorias/${product_id}`}
                     />
-                    <br />
-                    <br />
+                    <BlockTop>
+                        <Titulos
+                            tipo="h1"
+                            titulo="Escolha uma categoriapara esse produto"
+                        />
+                        <Button
+                            style={{ backgroundColor: 'green' }}
+                            onClick={handleRelations}
+                        >
+                            <Link to={`/produto/novo/categorias/${product_id}`} >
+                                <TextButton>Salvar categoria no produto</TextButton>
+                            </Link>
+                        </Button>
+                    </BlockTop>
                     <Etiqueta>Escolha uma categoria:</Etiqueta>
                     <Select
                         value={categorySelected}
@@ -96,17 +113,15 @@ const NovaCategoriaProduto: React.FC = () => {
                         }
                     />
                     <br />
-                    <br />
-                    <Button
-                        style={{ backgroundColor: 'green' }}
-                        onClick={handleRelations}
-                    >
-                        <AiOutlinePlusCircle />
-                        <Link to={`/produto/novo/categorias/${product_id}`} >
-                            <TextButton>Cadastre uma nova categoria</TextButton>
-                        </Link>
-                    </Button>
-                    <br />
+                    <Block>
+                        <Etiqueta>Ordem:</Etiqueta>
+                        <InputPost
+                            type="number"
+                            placeholder="0"
+                            value={order}/* @ts-ignore */
+                            onChange={(e) => setOrder(e.target.value)}
+                        />
+                    </Block>
                 </Card>
             </Container>
         </Grid>
