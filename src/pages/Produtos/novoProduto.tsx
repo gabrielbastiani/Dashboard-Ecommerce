@@ -122,8 +122,10 @@ const NovoProduto: React.FC = () => {
                 {showCategory ? (
                     <Card>
                         <BlockCategory>
-                            <Button>
-                                <AiOutlinePlusCircle />
+                            <Button
+                                style={{ backgroundColor: 'green' }}
+                            >
+                                <AiOutlinePlusCircle size={25} />
                                 <Link to={`/produto/novo/categorias/${findFirstProduct}`} >
                                     <TextButton>Clique aqui para cadastrar as categorias para esse produto</TextButton>
                                 </Link>

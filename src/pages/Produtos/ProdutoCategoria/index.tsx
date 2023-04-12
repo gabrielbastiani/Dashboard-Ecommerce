@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -8,7 +7,7 @@ import Aside from "../../../components/Aside";
 import { Container } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
-import { BlockCategory, TextButton } from "../styles";
+import { BlockCategory, BlockCategorys, Categ, TextButton } from "../styles";
 import { Button } from "../../../components/ui/Button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 
@@ -16,9 +15,6 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 const ProdutoCategoria: React.FC = () => {
 
     let { product_id } = useParams();
-    const { user } = useContext(AuthContext);
-
-    const [loja_id] = useState(user.loja_id);
     const [allFindAsc, setAllFindAsc] = useState<any[]>([]);
 
 
@@ -37,20 +33,6 @@ const ProdutoCategoria: React.FC = () => {
         findsRelationsProducts();
     }, [product_id]);
 
-    useEffect(() => {
-        async function findLoadRelation() {
-            try {
-                const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findIdsRelations?relationProductCategory_id=${''}`);
-
-
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        findLoadRelation();
-    }, []);
 
 
     return (
@@ -60,20 +42,31 @@ const ProdutoCategoria: React.FC = () => {
             <Container>
                 <Card>
                     <BlockCategory>
-                        <Button>
+                        <Button
+                            style={{ backgroundColor: 'green' }}
+                        >
                             <AiOutlinePlusCircle />
                             <Link to={`/produto/novo/categorias/novaCategoriaProduto/${product_id}`} >
                                 <TextButton>Cadastre uma nova categoria</TextButton>
                             </Link>
                         </Button>
                     </BlockCategory>
+
+                    <BlockCategorys>
+                        {allFindAsc.map((name) => {
+                            return (
+                                <Categ key={name.id}>{name.category.categoryName} - </Categ>
+                            )
+                        })}
+                    </BlockCategorys>
+
                     {allFindAsc.map((IDRelation) => {
                         return (
                             <>
-                                <Card>
+                                <Card key={IDRelation.id}>
                                     <Titulos
                                         tipo="h3"
-                                        titulo="NIVEL 1"
+                                        titulo={IDRelation.category.categoryName}
                                     />
                                     <br />
                                     <Button
