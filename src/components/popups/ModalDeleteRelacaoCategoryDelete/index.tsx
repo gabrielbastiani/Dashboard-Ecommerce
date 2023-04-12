@@ -18,6 +18,8 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
 
     const navigate = useNavigate();
 
+    console.log(relation[0].id)
+
     const customStyles = {
         content: {
             top: '50%',
@@ -40,17 +42,16 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
             await apiClient.delete(`/deleteRelation?relationProductCategory_id=${relationProductCategory_id}`);
             toast.success('Categoria deletada do produto com sucesso.');
             
-            navigate(0);
-
-            onRequestClose();
+            setTimeout(() => {
+                onRequestClose();
+                navigate(0);
+            }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
             toast.error('Ops erro ao deletar a categoria do produto.');
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
+        
     }
 
 
