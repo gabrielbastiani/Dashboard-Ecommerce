@@ -130,7 +130,7 @@ const NewNivel: React.FC = () => {
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo={`Escolha uma sub categoria para essa categoria/produto`}
+                            titulo={`Escolha uma subcategoria para essa categoria ${''}`}
                         />
                     </BlockTop>
 
