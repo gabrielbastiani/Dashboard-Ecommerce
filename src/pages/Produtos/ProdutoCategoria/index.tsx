@@ -36,6 +36,7 @@ const ProdutoCategoria: React.FC = () => {
     const [allRelationIDOrderDesc, setAllRelationIDOrderDesc] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
+    const [iDrelations, setIDrelations] = useState();
 
     const [modalItem, setModalItem] = useState<DeleteRelationAll[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -62,16 +63,16 @@ const ProdutoCategoria: React.FC = () => {
         async function loadIDsRelations() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${''}`);
+                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${iDrelations}`);
 
-                setAllRelationIDOrderDesc(data.allRelationIDOrderDesc || []);
+                setAllRelationIDOrderDesc(data.allRelationIDOrderDesc[0].relationId || []);
 
             } catch (error) {
                 console.error(error);
             }
         }
-        loadIDsRelations();
-    }, []);
+        loadIDsRelations()
+    }, [iDrelations]);
 
     async function updateOrder(id: string) {
         try {
@@ -108,9 +109,6 @@ const ProdutoCategoria: React.FC = () => {
     }
 
     Modal.setAppElement('body');
-
-
-    console.log(modalItem)
 
 
     return (
