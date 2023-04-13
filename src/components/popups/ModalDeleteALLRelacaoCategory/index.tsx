@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteID, DeleteRelation } from '../../../pages/Produtos/ProdutoCategoria/newNivel';
+import { DeleteRelationAll } from '../../../pages/Produtos/ProdutoCategoria';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -8,19 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 
 
-interface ModalRelation {
+interface ModalRelationAll {
     isOpen: boolean;
     onRequestClose: () => void;
-    relation: DeleteRelation[];
-    relationID: DeleteID;
+    relationAll: DeleteRelationAll[];
 }
 
-export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relation, relationID }: ModalRelation) {
+export function ModalDeleteALLRelacaoCategory({ isOpen, onRequestClose, relationAll }: ModalRelationAll) {
 
     const navigate = useNavigate();
-
-    console.log("ID de relação", relationID)
-    console.log("ID Tabela", relation[0].id)
 
     const customStyles = {
         content: {
@@ -35,28 +31,13 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
         }
     };
 
-    async function handleDeleteRelationID() {
-        try {
-            const apiClient = setupAPIClient();
-            const relationId = relation[0].id;
-
-            await apiClient.delete(`/deleteRelation?relationId=${relationId || relationID}`);
-            
-        } catch (error) {/* @ts-ignore */
-            console.log(error.response.data);
-        }
-        setTimeout(() => {
-            handleDeleteRelation()
-        }, 2000);
-    }
-
     async function handleDeleteRelation() {
         try {
             const apiClient = setupAPIClient();
-            const relationProductCategory_id = relation[0].id;
+            const relationProductCategory_id = relationAll[0].id;
 
-            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationProductCategory_id || relationID}`);
-            toast.success('Categoria deletada do produto com sucesso.');
+            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationProductCategory_id}`);
+            toast.success('Categoria principal deletada do produto com sucesso.');
             
             onRequestClose();
 
@@ -86,12 +67,12 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa categoria desse produto?<br />Será deletada suas subcategorias também.</TextModal>
+                <TextModal>Deseja mesmo deletar essa categoria principal desse produto?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteRelationID()}
+                        onClick={() => handleDeleteRelation()}
                     >
                         Deletar
                     </Button>

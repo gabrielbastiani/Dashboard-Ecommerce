@@ -17,14 +17,14 @@ import { toast } from "react-toastify";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { BsTrash } from "react-icons/bs";
-/* import Modal from 'react-modal';
-import { ModalDeleteRelacaoCategoryDelete } from "../../../components/popups/ModalDeleteRelacaoCategoryDelete"; */
+import Modal from 'react-modal';
+import { ModalDeleteALLRelacaoCategory } from "../../../components/popups/ModalDeleteALLRelacaoCategory";
 
 
-/* export type DeleteRelation = {
+export type DeleteRelationAll = {
     id: string;
 }
- */
+
 const ProdutoCategoria: React.FC = () => {
 
     let { product_id } = useParams();
@@ -33,12 +33,13 @@ const ProdutoCategoria: React.FC = () => {
     const [nameProduct, setNameProduct] = useState("");
     const [slug, setSlug] = useState("");
     const [allFindAsc, setAllFindOrderAsc] = useState<any[]>([]);
+    const [allRelationIDOrderDesc, setAllRelationIDOrderDesc] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
 
-    /* const [modalItem, setModalItem] = useState<DeleteRelation[]>([]);
-    const [modalVisible, setModalVisible] = useState(false); */
-    
+    const [modalItem, setModalItem] = useState<DeleteRelationAll[]>([]);
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     useEffect(() => {
         async function findsRelationsProducts() {
@@ -56,6 +57,21 @@ const ProdutoCategoria: React.FC = () => {
         }
         findsRelationsProducts();
     }, [product_id]);
+
+    useEffect(() => {
+        async function loadIDsRelations() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${''}`);
+
+                setAllRelationIDOrderDesc(data.allRelationIDOrderDesc || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        loadIDsRelations();
+    }, []);
 
     async function updateOrder(id: string) {
         try {
@@ -76,7 +92,7 @@ const ProdutoCategoria: React.FC = () => {
         }
     }
 
-    /* function handleCloseModalDelete() {
+    function handleCloseModalDelete() {
         setModalVisible(false);
     }
 
@@ -91,7 +107,10 @@ const ProdutoCategoria: React.FC = () => {
         setModalVisible(true);
     }
 
-    Modal.setAppElement('body'); */
+    Modal.setAppElement('body');
+
+
+    console.log(modalItem)
 
 
     return (
@@ -165,26 +184,26 @@ const ProdutoCategoria: React.FC = () => {
                                             </BlockDados>
                                         </SectionDate>
 
-                                        {/* <SectionDate>
+                                        <SectionDate>
                                             <BsTrash
                                                 style={{ cursor: 'pointer' }}
-                                                onClick={ () => handleOpenModalDelete(IDRelation.id)}
+                                                onClick={() => handleOpenModalDelete(IDRelation.id)}
                                                 size={32}
                                                 color="red"
                                             />
-                                        </SectionDate> */}
-                                        
+                                        </SectionDate>
+
                                     </GridDate>
                                 </Card>
 
-                                {/* {modalVisible && (
-                                    <ModalDeleteRelacaoCategoryDelete
+                                {modalVisible && (
+                                    <ModalDeleteALLRelacaoCategory
                                         isOpen={modalVisible}
                                         onRequestClose={handleCloseModalDelete}
-                                        
-                                        relation={modalItem}
+                                        /* @ts-ignore */
+                                        relationAll={modalItem}
                                     />
-                                )} */}
+                                )}
                             </>
                         )
                     })}
