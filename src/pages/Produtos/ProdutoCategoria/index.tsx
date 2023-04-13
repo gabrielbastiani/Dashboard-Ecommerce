@@ -17,14 +17,14 @@ import { toast } from "react-toastify";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { BsTrash } from "react-icons/bs";
-import Modal from 'react-modal';
-import { ModalDeleteRelacaoCategoryDelete } from "../../../components/popups/ModalDeleteRelacaoCategoryDelete";
+/* import Modal from 'react-modal';
+import { ModalDeleteRelacaoCategoryDelete } from "../../../components/popups/ModalDeleteRelacaoCategoryDelete"; */
 
 
-export type DeleteRelation = {
+/* export type DeleteRelation = {
     id: string;
 }
-
+ */
 const ProdutoCategoria: React.FC = () => {
 
     let { product_id } = useParams();
@@ -36,8 +36,8 @@ const ProdutoCategoria: React.FC = () => {
 
     const [orderUpdate, setOrderUpdate] = useState();
 
-    const [modalItem, setModalItem] = useState<DeleteRelation[]>([]);
-    const [modalVisible, setModalVisible] = useState(false);
+    /* const [modalItem, setModalItem] = useState<DeleteRelation[]>([]);
+    const [modalVisible, setModalVisible] = useState(false); */
     
 
     useEffect(() => {
@@ -76,7 +76,7 @@ const ProdutoCategoria: React.FC = () => {
         }
     }
 
-    function handleCloseModalDelete() {
+    /* function handleCloseModalDelete() {
         setModalVisible(false);
     }
 
@@ -91,7 +91,7 @@ const ProdutoCategoria: React.FC = () => {
         setModalVisible(true);
     }
 
-    Modal.setAppElement('body');
+    Modal.setAppElement('body'); */
 
 
     return (
@@ -165,26 +165,26 @@ const ProdutoCategoria: React.FC = () => {
                                             </BlockDados>
                                         </SectionDate>
 
-                                        <SectionDate>
+                                        {/* <SectionDate>
                                             <BsTrash
                                                 style={{ cursor: 'pointer' }}
                                                 onClick={ () => handleOpenModalDelete(IDRelation.id)}
                                                 size={32}
                                                 color="red"
                                             />
-                                        </SectionDate>
+                                        </SectionDate> */}
                                         
                                     </GridDate>
                                 </Card>
 
-                                {modalVisible && (
+                                {/* {modalVisible && (
                                     <ModalDeleteRelacaoCategoryDelete
                                         isOpen={modalVisible}
                                         onRequestClose={handleCloseModalDelete}
-                                        /* @ts-ignore */
+                                        
                                         relation={modalItem}
                                     />
-                                )}
+                                )} */}
                             </>
                         )
                     })}

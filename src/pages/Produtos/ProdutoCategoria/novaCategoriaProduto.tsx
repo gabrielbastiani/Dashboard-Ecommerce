@@ -49,7 +49,7 @@ const NovaCategoriaProduto: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === "") {
+            if (categorySelected === null) {
                 toast.error('Não deixe a categoria em branco.');
                 return;
             }

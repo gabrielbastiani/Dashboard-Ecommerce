@@ -20,7 +20,18 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
+import Modal from 'react-modal';
+import { ModalDeleteRelacaoCategoryDelete } from "../../../components/popups/ModalDeleteRelacaoCategoryDelete";
+import { BsTrash } from "react-icons/bs";
 
+
+export type DeleteRelation = {
+    id: string;
+}
+
+export type DeleteID = {
+    IDRelation: string;
+}
 
 const NewNivel: React.FC = () => {
 
@@ -36,6 +47,11 @@ const NewNivel: React.FC = () => {
     const [orderUpdate, setOrderUpdate] = useState();
 
     const [allRelationIDOrderAsc, setAllRelationIDOrderAsc] = useState<any[]>([]);
+
+    const [modalItem, setModalItem] = useState<DeleteRelation[]>([]);
+    const [modalIDItem] = useState(IDRelation);
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -57,7 +73,7 @@ const NewNivel: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === "") {
+            if (categorySelected === null) {
                 toast.error('Não deixe a categoria em branco.');
                 return;
             }
@@ -116,6 +132,24 @@ const NewNivel: React.FC = () => {
             toast.error('Ops erro ao atualizar a ordem da categoria.');
         }
     }
+
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(id: string) {
+        const apiClient = setupAPIClient();
+        const responseData = await apiClient.get('/findAllExactRelationID', {
+            params: {
+                relationProductCategory_id: id,
+            }
+        });
+        setModalItem(responseData.data || []);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+
 
 
     return (
@@ -176,7 +210,6 @@ const NewNivel: React.FC = () => {
                                         <SectionDate>
                                             <Button
                                                 style={{ backgroundColor: 'green' }}
-                                                onClick={handleRelations}
                                             >
                                                 <AiOutlinePlusCircle />
                                                 <Link to={`/produto/categorias/newNivel/${product_id}/${item.id}`} >
@@ -204,8 +237,28 @@ const NewNivel: React.FC = () => {
                                                 />
                                             </BlockDados>
                                         </SectionDate>
+
+                                        <SectionDate>
+                                            <BsTrash
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() => handleOpenModalDelete(item.id)}
+                                                size={32}
+                                                color="red"
+                                            />
+                                        </SectionDate>
                                     </GridDate>
                                 </Card>
+
+                                {modalVisible && (
+                                    <ModalDeleteRelacaoCategoryDelete
+                                        isOpen={modalVisible}
+                                        onRequestClose={handleCloseModalDelete}
+                                        /* @ts-ignore */
+                                        relation={modalItem}
+                                        /* @ts-ignore */
+                                        relationID={modalIDItem}
+                                    />
+                                )}
                             </>
                         )
                     })}

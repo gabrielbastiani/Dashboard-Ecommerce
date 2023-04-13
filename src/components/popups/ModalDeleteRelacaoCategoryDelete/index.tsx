@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteRelation } from '../../../pages/Produtos/ProdutoCategoria';
+import { DeleteID, DeleteRelation } from '../../../pages/Produtos/ProdutoCategoria/newNivel';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -12,13 +12,15 @@ interface ModalRelation {
     isOpen: boolean;
     onRequestClose: () => void;
     relation: DeleteRelation[];
+    relationID: DeleteID;
 }
 
-export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relation }: ModalRelation) {
+export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relation, relationID }: ModalRelation) {
 
     const navigate = useNavigate();
 
-    console.log(relation[0].id)
+    console.log("ID de relação", relationID)
+    console.log("ID Tabela", relation[0].id)
 
     const customStyles = {
         content: {
@@ -33,25 +35,39 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
         }
     };
 
+    async function handleDeleteRelationID() {
+        try {
+            const apiClient = setupAPIClient();
+            const relationId = relation[0].id;
+
+            await apiClient.delete(`/deleteRelation?relationId=${relationId || relationID}`);
+            
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+        setTimeout(() => {
+            handleDeleteRelation()
+        }, 2000);
+    }
+
     async function handleDeleteRelation() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
             const relationProductCategory_id = relation[0].id;
 
-            await apiClient.delete(`/deleteRelation?relationProductCategory_id=${relationProductCategory_id}`);
+            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationProductCategory_id}`);
             toast.success('Categoria deletada do produto com sucesso.');
             
-            setTimeout(() => {
-                onRequestClose();
-                navigate(0);
-            }, 3000);
+            onRequestClose();
+
 
         } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
+            console.log(error.response.data);
             toast.error('Ops erro ao deletar a categoria do produto.');
         }
-        
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
     }
 
 
@@ -71,12 +87,12 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa categoria desse produto?</TextModal>
+                <TextModal>Deseja mesmo deletar essa categoria desse produto?<br />Será deletada suas subcategorias também.</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteRelation()}
+                        onClick={() => handleDeleteRelationID()}
                     >
                         Deletar
                     </Button>
