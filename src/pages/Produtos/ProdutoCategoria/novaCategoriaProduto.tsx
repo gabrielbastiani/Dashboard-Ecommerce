@@ -49,10 +49,6 @@ const NovaCategoriaProduto: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === null) {
-                toast.error('Não deixe a categoria em branco.');
-                return;
-            }
             await apiClient.post('/createRelation', {
                 product_id: product_id,
                 category_id: categorySelected,

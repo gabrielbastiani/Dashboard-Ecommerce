@@ -16,14 +16,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { toast } from "react-toastify";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
-import { BsTrash } from "react-icons/bs";
-import Modal from 'react-modal';
-import { ModalDeleteALLRelacaoCategory } from "../../../components/popups/ModalDeleteALLRelacaoCategory";
 
-
-export type DeleteRelationAll = {
-    id: string;
-}
 
 const ProdutoCategoria: React.FC = () => {
 
@@ -32,14 +25,11 @@ const ProdutoCategoria: React.FC = () => {
 
     const [nameProduct, setNameProduct] = useState("");
     const [slug, setSlug] = useState("");
-    const [allFindAsc, setAllFindOrderAsc] = useState<any[]>([]);
+    const [allFindAsc, setAllFindAsc] = useState<any[]>([]);
     const [allRelationIDOrderDesc, setAllRelationIDOrderDesc] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
     const [iDrelations, setIDrelations] = useState();
-
-    const [modalItem, setModalItem] = useState<DeleteRelationAll[]>([]);
-    const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -48,7 +38,7 @@ const ProdutoCategoria: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
 
-                setAllFindOrderAsc(data.allFindOrderAsc || []);
+                setAllFindAsc(data.allFindOrderAsc || []);
                 setNameProduct(data.findUniqueProduct.nameProduct || "");
                 setSlug(data.findUniqueProduct.slug || "");
 
@@ -93,22 +83,6 @@ const ProdutoCategoria: React.FC = () => {
         }
     }
 
-    function handleCloseModalDelete() {
-        setModalVisible(false);
-    }
-
-    async function handleOpenModalDelete(id: string) {
-        const apiClient = setupAPIClient();
-        const responseData = await apiClient.get('/findAllExactRelationID', {
-            params: {
-                relationProductCategory_id: id,
-            }
-        });
-        setModalItem(responseData.data || []);
-        setModalVisible(true);
-    }
-
-    Modal.setAppElement('body');
 
 
     return (
@@ -181,27 +155,8 @@ const ProdutoCategoria: React.FC = () => {
                                                 />
                                             </BlockDados>
                                         </SectionDate>
-
-                                        <SectionDate>
-                                            <BsTrash
-                                                style={{ cursor: 'pointer' }}
-                                                onClick={() => handleOpenModalDelete(IDRelation.id)}
-                                                size={32}
-                                                color="red"
-                                            />
-                                        </SectionDate>
-
                                     </GridDate>
                                 </Card>
-
-                                {modalVisible && (
-                                    <ModalDeleteALLRelacaoCategory
-                                        isOpen={modalVisible}
-                                        onRequestClose={handleCloseModalDelete}
-                                        /* @ts-ignore */
-                                        relationAll={modalItem}
-                                    />
-                                )}
                             </>
                         )
                     })}

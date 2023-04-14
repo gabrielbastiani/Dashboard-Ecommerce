@@ -32,13 +32,7 @@ import { Avisos } from "../../../components/Avisos";
 import Pesquisa from "../../../components/Pesquisa";
 import { Card } from "../../../components/Content/styles";
 import Select from "../../../components/ui/Select";
-import Modal from 'react-modal';
-import { ModalDeleteCategory } from "../../../components/popups/ModalDeleteCategory";
 
-
-export type DeleteCategory = {
-    category_id: string;
-}
 
 const Categoria: React.FC = () => {
 
@@ -61,9 +55,6 @@ const Categoria: React.FC = () => {
     const [limit, setLimit] = useState(4);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-
-    const [modalItem, setModalItem] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
 
 
     async function updateCategoryName() {
@@ -212,29 +203,6 @@ const Categoria: React.FC = () => {
             "botaoDetalhes": `/produto/${item.nameProduct}/${item.id}`
         });
     });
-
-    useEffect(() => {
-        refreshCategory();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    function handleCloseModalDelete() {
-        setModalVisible(false);
-    }
-
-    async function handleOpenModalDelete(category_id: string) {
-        const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/exactCategory', {
-            params: {
-                category_id: category_id,
-            }
-        });
-        setModalItem(responseDelete.data || "");
-        setModalVisible(true);
-    }
-
-    Modal.setAppElement('body');
-
 
     return (
         <>
@@ -407,14 +375,6 @@ const Categoria: React.FC = () => {
                 </Container>
             </Grid>
 
-            {modalVisible && (
-                <ModalDeleteCategory
-                    isOpen={modalVisible}
-                    onRequestClose={handleCloseModalDelete}
-                    /* @ts-ignore */
-                    category={modalItem}
-                />
-            )}
         </>
     )
 }
