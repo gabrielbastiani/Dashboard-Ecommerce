@@ -35,27 +35,29 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
         }
     };
 
-    async function handleDeleteRelationID() {
+    /* async function handleDeleteRelationID() {
         try {
             const apiClient = setupAPIClient();
-            const relationId = relation[0].id;
+            const relationProductCategory_id = relation[0].id;
 
-            await apiClient.delete(`/deleteRelation?relationId=${relationId || relationID}`);
+            await apiClient.delete(`/deleteRelation?relationId=${relationProductCategory_id}`);
+            await apiClient.delete(`/deleteRelation?relationId=${relationID}`);
             
-        } catch (error) {/* @ts-ignore */
+        } catch (error) {
             console.log(error.response.data);
         }
         setTimeout(() => {
             handleDeleteRelation()
         }, 2000);
-    }
+    } */
 
     async function handleDeleteRelation() {
         try {
             const apiClient = setupAPIClient();
             const relationProductCategory_id = relation[0].id;
 
-            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationProductCategory_id || relationID}`);
+            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationProductCategory_id}`);
+
             toast.success('Categoria deletada do produto com sucesso.');
             
             onRequestClose();
@@ -91,7 +93,7 @@ export function ModalDeleteRelacaoCategoryDelete({ isOpen, onRequestClose, relat
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteRelationID()}
+                        onClick={() => handleDeleteRelation()}
                     >
                         Deletar
                     </Button>
