@@ -15,9 +15,10 @@ import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
 import DescriptionsProduct from "../../components/ui/DescriptionsProduct";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
-import { TextButton, BlockCategory } from "./styles";
+import { TextButton } from "./styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { BlockCategory } from "../Categorias/Categoria/styles";
 
 
 const NovoProduto: React.FC = () => {

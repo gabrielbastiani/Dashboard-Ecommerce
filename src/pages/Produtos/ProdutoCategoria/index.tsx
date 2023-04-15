@@ -130,7 +130,7 @@ const ProdutoCategoria: React.FC = () => {
                                                 style={{ backgroundColor: 'orange' }}
                                             >
                                                 <AiOutlinePlusCircle />
-                                                <Link to={`/produto/categorias/newNivel/${product_id}/${IDRelation.id}`} >
+                                                <Link to={`/produto/categorias/newNivelCategoryProduct/${product_id}/${IDRelation.id}`} >
                                                     <TextButton>Cadastre um novo nivel</TextButton>
                                                 </Link>
                                             </Button>

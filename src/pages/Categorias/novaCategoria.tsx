@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Titulos from '../../components/Titulos';
 import { toast } from 'react-toastify';
 import { setupAPIClient } from '../../services/api';
@@ -27,24 +27,6 @@ const NovaCategoria: React.FC = () => {
     const [categoryName, setCategoryName] = useState('');
     const [lojaID] = useState(user.loja_id);
 
-    const [categoryID, setCategoryID] = useState("");
-
-    const [buttonRelation, setButtonRelation] = useState(false);
-
-    const showButton = () => {
-        setButtonRelation(!buttonRelation);
-    }
-
-
-    async function loadCategory() {
-        const apiClient = setupAPIClient();
-        try {
-            const response = await apiClient.get('/findFirstCategory');
-            setCategoryID(response.data.id);
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     async function handleRegisterCategory() {
         try {
@@ -68,36 +50,14 @@ const NovaCategoria: React.FC = () => {
 
             setCategoryName('');
 
-            setTimeout(() => {
-                loadCategory();
-                showButton();
-            }, 2000);
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async function handleRelations() {
-        const apiClient = setupAPIClient();
-        try {
-            await apiClient.post('/createRelation', {
-                category_id: categoryID,
-                posicao: "",
-                order: 0,
-                nivel: 0,
-                relationId: "",
-                loja_id: lojaID
-            });
-
             toast.success('Categoria cadastrada com sucesso!');
 
             setTimeout(() => {
                 navigate('/categorias');
             }, 3000);
 
-        } catch (error) {/* @ts-ignore */
-            console.log(error.response.data);
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -116,24 +76,13 @@ const NovaCategoria: React.FC = () => {
                             tipo="h1"
                             titulo="Nova Categoria"
                         />
-
-                        {buttonRelation ? (
-                            <Button
-                                type="submit"
-                                style={{ backgroundColor: 'green' }}
-                                onClick={handleRelations}
-                            >
-                                Confirme
-                            </Button>
-                        ) :
-                            <Button
-                                type="submit"
-                                style={{ backgroundColor: 'orange' }}
-                                onClick={handleRegisterCategory}
-                            >
-                                Salvar
-                            </Button>
-                        }
+                        <Button
+                            type="submit"
+                            style={{ backgroundColor: 'green' }}
+                            onClick={handleRegisterCategory}
+                        >
+                            Salvar
+                        </Button>
                     </BlockTop>
 
                     <Block>

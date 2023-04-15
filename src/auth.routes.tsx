@@ -31,8 +31,9 @@ import ImagemTexto from './pages/Configuracoes/TextosInstitucionais/Texto/Imagem
 import ImagensLoja from './pages/Configuracoes/ImagensInstitucionais';
 import Imagem from './pages/Configuracoes/ImagensInstitucionais/Imagem';
 import NovaImagem from './pages/Configuracoes/ImagensInstitucionais/novaImagem';
-import NewNivel from './pages/Produtos/ProdutoCategoria/newNivel';
 import NovaCategoriaProduto from './pages/Produtos/ProdutoCategoria/novaCategoriaProduto';
+import NewNivelCategory from './pages/Categorias/Categoria/newNivelCategory';
+import NewNivelCategoryProduct from './pages/Produtos/ProdutoCategoria/newNivelCategoryProduct';
 
 
 const RoutesAuth: React.FC = () => {
@@ -53,12 +54,14 @@ const RoutesAuth: React.FC = () => {
             <Route path='/categorias' element={<Categorias />} />
             <Route path='/categoria/nova' element={<NovaCategoria />} />
             <Route path='/categoria/:category_id' element={<Categoria />} />
+            <Route path='/categoria/newNivelCategory/:IDRelation' element={<NewNivelCategory />} />
 
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />
             <Route path='/produto/novo/categorias/:product_id' element={<ProdutoCategoria />} />
             <Route path='/produto/novo/categorias/novaCategoriaProduto/:product_id' element={<NovaCategoriaProduto />} />
-            <Route path='/produto/categorias/newNivel/:IDRelation' element={<NewNivel />} />
+            <Route path='/produto/categorias/newNivelCategoryProduct/:product_id/:IDRelation' element={<NewNivelCategoryProduct />} />
+            
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
             <Route path='/produto/avaliacoes/:nameProduct/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:nameProduct/:avaliacao_id' element={<Avaliacao />} />
