@@ -53,7 +53,7 @@ const Categorias: React.FC = () => {
 
                 setPages(arrayPages || []);
                 setSearch(data.categorys || []);
-                setInitialFilter(data.categorys.category[0]);
+                setInitialFilter(data.categorys);
 
             } catch (error) {
                 console.error(error);
@@ -84,12 +84,13 @@ const Categorias: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Categoria": item.categoryName,
-            "Qtd. de Produtos": item.product_id,
+            "Qtd. de Produtos": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem produto(s)",
             "Status": item.disponibilidade,
             "botaoDetalhes": `/categoria/${item.id}`
         });
     });
 
+    
 
     return (
         <Grid>

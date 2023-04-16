@@ -116,13 +116,11 @@ const Produtos: React.FC = () => {
         setSearch(filterProducts);
     }
 
-    /* @ts-ignore */
-    const dados = [];
+    const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Produto": item.nameProduct,/* @ts-ignore */
-            "Possui Categorias?": item.categories ? item.categories.length + " categorias" : "SEM CATEGORIA(S)",
-            "Possui Sub Categorias?": item.subcategories ? item.subcategories.length + " sub categorias" : "SEM SUB CATEGORIA(S)",
+            "Produto": item.nameProduct,
+            "Qtd. de Categorias": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem categoria",
             "Status": item.disponibilidade,
             "botaoDetalhes": `/produto/${item.slug}/${item.id}`
         });
@@ -204,8 +202,7 @@ const Produtos: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Produto", "Possui Categorias?", "Possui Sub Categorias?", "Status"]}
-                                /* @ts-ignore */
+                                cabecalho={["Produto", "Qtd. de Categorias", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />
