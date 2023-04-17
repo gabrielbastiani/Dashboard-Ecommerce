@@ -88,14 +88,14 @@ const Produto: React.FC = () => {
         async function loadCategorys() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/listCategorysDisponivel');
-                setCategories(response.data || []);
+                const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
+                setCategories(data.allFindOrderAsc || []);
             } catch (error) {
                 console.log(error);
             }
         }
         loadCategorys();
-    }, [])
+    }, [product_id]);
 
     useEffect(() => {
         async function loadProduct() {
@@ -123,28 +123,7 @@ const Produto: React.FC = () => {
             }
         }
         loadProduct();
-    }, [product_id])
-
-    async function refreshProduct() {
-        const apiClient = setupAPIClient();
-        const response = await apiClient.get(`/exactProduct?product_id=${product_id}`);
-        setNameProducts(response?.data?.nameProduct);
-        setDescriptionProducts1(response?.data?.descriptionProduct1);
-        setDescriptionProducts2(response?.data?.descriptionProduct2);
-        setDescriptionProducts3(response?.data?.descriptionProduct3);
-        setDescriptionProducts4(response?.data?.descriptionProduct4);
-        setDescriptionProducts5(response?.data?.descriptionProduct5);
-        setDescriptionProducts6(response?.data?.descriptionProduct6);
-        setPrecos(response?.data?.preco);
-        setSkus(response?.data?.sku);
-        setOrder(response?.data?.order);
-        setPosicao(response?.data?.posicao);
-        setPromocoes(response?.data?.promocao);
-        setDisponibilidades(response?.data?.disponibilidade);
-        setDestaques(response?.data?.produtoDestaque);
-        setOfertas(response?.data?.produtoOferta);
-        setCategorieName(response?.data?.category?.categoryName);
-    }
+    }, [product_id]);
 
     async function updateNameProduct() {
         try {
@@ -155,7 +134,9 @@ const Produto: React.FC = () => {
             } else {
                 await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { nameProduct: nameProducts });
                 toast.success('Nome do produto atualizado com sucesso.');
-                refreshProduct();
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
             }
         } catch (error) {
             console.log(error);
@@ -193,7 +174,9 @@ const Produto: React.FC = () => {
                         sku: skus
                     });
                 toast.success('Dado do produto atualizado com sucesso.');
-                refreshProduct();
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
             }
         } catch (error) {
             console.log(error);
@@ -206,7 +189,9 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/diponibilidadeProduct?product_id=${product_id}`);
 
-            refreshProduct();
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
 
         } catch (error) {
             console.log(error);
@@ -229,7 +214,9 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/destaque?product_id=${product_id}`);
 
-            refreshProduct();
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
 
         } catch (error) {
             console.log(error);
@@ -252,7 +239,9 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/oferta?product_id=${product_id}`);
 
-            refreshProduct();
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
 
         } catch (error) {
             console.log(error);
@@ -303,7 +292,7 @@ const Produto: React.FC = () => {
             }
         }
         loadVariacao();
-    }, [product_id])
+    }, [product_id]);
 
     async function loadVariacaoProduct(id: string) {
         setIDVariacao(id)
@@ -428,27 +417,6 @@ const Produto: React.FC = () => {
 
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Categoria"}
-                                        dados={
-                                            <SelectUpdate
-                                                dado={categorieName || "SEM CATEGORIA"}
-                                                value={categorySelected}
-                                                /* @ts-ignore */
-                                                onChange={handleChangeCategory}
-                                                opcoes={
-                                                    [
-                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
-                                                    ]
-                                                }
-                                                handleSubmit={updateCategory}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
                                         chave={"SKU"}
                                         dados={
                                             <InputUpdate
@@ -526,6 +494,32 @@ const Produto: React.FC = () => {
                                                 /* @ts-ignore */
                                                 dado={ofertas}
                                                 handleSubmit={updateOferta}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    {categories.map((categ) => {
+                                        return(
+                                            <span>{categ.category.categoryName}</span>
+                                        )
+                                    })}
+                                    <br />
+                                    <TextoDados
+                                        chave={"Categoria"}
+                                        dados={
+                                            <SelectUpdate
+                                                value={categorySelected}
+                                                /* @ts-ignore */
+                                                onChange={handleChangeCategory}
+                                                opcoes={
+                                                    [
+                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                        ...(categories || []).map((item) => ({ label: item.category.categoryName, value: item.category.id }))
+                                                    ]
+                                                }
+                                                handleSubmit={updateCategory}
                                             />
                                         }
                                     />

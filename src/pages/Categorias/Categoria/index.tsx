@@ -69,9 +69,10 @@ const Categoria: React.FC = () => {
             } else {
                 await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames });
                 toast.success('Nome da categoria atualizada com sucesso.');
+                
                 setTimeout(() => {
                     navigate(0);
-                }, 2800);
+                }, 3000);
             }
         } catch (err) {
             toast.error('Ops erro ao atualizar o nome da categoria.');
@@ -89,7 +90,7 @@ const Categoria: React.FC = () => {
                 toast.success('Ordem atualizada com sucesso.');
                 setTimeout(() => {
                     navigate(0);
-                }, 2800);
+                }, 3000);
             }
         } catch (err) {
             toast.error('Ops erro ao atualizar a ordem da categoria.');
@@ -103,7 +104,7 @@ const Categoria: React.FC = () => {
 
             setTimeout(() => {
                 navigate(0);
-            }, 2800);
+            }, 3000);
 
         } catch (err) {
             toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
