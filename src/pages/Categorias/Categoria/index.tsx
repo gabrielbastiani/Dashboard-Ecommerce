@@ -4,7 +4,15 @@ import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import {
     BlockTop,
+    ButtonPage,
     Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems,
 } from "../styles";
 import {
     BlockDados,
@@ -18,6 +26,10 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { TextoDados } from "../../../components/TextoDados";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { Card } from "../../../components/Content/styles";
+import { Button } from "../../../components/ui/Button";
+import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
+import TabelaSimples from "../../../components/Tabelas";
+import { Avisos } from "../../../components/Avisos";
 
 
 const Categoria: React.FC = () => {
@@ -28,6 +40,13 @@ const Categoria: React.FC = () => {
     const [categoryNames, setCategoryNames] = useState("");
     const [order, setOrder] = useState(Number);
     const [disponibilidades, setDisponibilidades] = useState('');
+
+    const [search, setSearch] = useState<any[]>([]);
+
+    const [total, setTotal] = useState(0);
+    const [limit, setLimit] = useState(4);
+    const [pages, setPages] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
 
     useEffect(() => {
@@ -101,6 +120,42 @@ const Categoria: React.FC = () => {
         }
     }
 
+
+    useEffect(() => {
+        async function allProducts() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/pageRelationsCategorys?page=${currentPage}&limit=${limit}&category_id=${category_id}`);
+
+                setTotal(data.total);
+                const totalPages = Math.ceil(total / limit);
+
+                const arrayPages = [];
+                for (let i = 1; i <= totalPages; i++) {
+                    arrayPages.push(i);
+                }
+
+                setPages(arrayPages || []);
+                setSearch(data.allFindAscCategorys || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        allProducts();
+    }, [category_id, currentPage, limit, total]);
+
+    const dados: any = [];
+    (search || []).forEach((item) => {
+        dados.push({
+            "Produto": item.product.nameProduct,
+            "SKU": item.product.sku,
+            "Disponibilidade": item.product.disponibilidade,
+            "botaoDetalhes": `/produto/${item.product.slug}/${item.product.id}`
+        });
+    });
+
+
     return (
         <>
             <Grid>
@@ -116,14 +171,6 @@ const Categoria: React.FC = () => {
                                 tipo="h1"
                                 titulo={`Editar categoria - ${categoryNames}`}
                             />
-                            {/* <Button
-                                type="submit"
-                                style={{ backgroundColor: '#FB451E' }}
-                                
-                                onClick={() => handleOpenModalDelete(category_id)}
-                            >
-                                Remover
-                            </Button> */}
                         </BlockTop>
 
                         <BlockDados>
@@ -174,6 +221,63 @@ const Categoria: React.FC = () => {
                                 }
                             />
                         </BlockDados>
+
+                        <DivisorHorizontal />
+
+                        <Titulos
+                            tipo="h2"
+                            titulo="Produtos da Categoria"
+                        />
+                        <br />
+                        <br />
+                        {search.length < 1 ? (
+                            <>
+                                <Avisos
+                                    texto="Não há produtos cadastradas aqui..."
+                                />
+                                {currentPage > 1 && (
+                                    <Previus>
+                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                            Voltar
+                                        </ButtonPage>
+                                    </Previus>
+                                )}
+                            </>
+                        ) :
+                            <>
+                                <TabelaSimples
+                                    cabecalho={["Produto", "SKU", "Disponibilidade"]}
+                                    dados={dados}
+                                    textbutton={"Detalhes"}
+                                />
+
+                                <ContainerPagination>
+                                    <TotalBoxItems key={total}>
+                                        <TextTotal>Total de produtos: {total}</TextTotal>
+                                    </TotalBoxItems>
+                                    <ContainerCategoryPage>
+
+                                        {pages.map((page) => (
+                                            <TextPage
+                                                key={page}
+                                                onClick={() => setCurrentPage(page)}
+                                            >
+                                                {page}
+                                            </TextPage>
+                                        ))}
+
+                                        {currentPage < search.length && (
+                                            <Next>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                    Avançar
+                                                </ButtonPage>
+                                            </Next>
+                                        )}
+
+                                    </ContainerCategoryPage>
+                                </ContainerPagination>
+                            </>
+                        }
                     </Card>
                 </Container>
             </Grid>

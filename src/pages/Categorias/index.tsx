@@ -90,7 +90,7 @@ const Categorias: React.FC = () => {
         });
     });
 
-    
+
 
     return (
         <Grid>

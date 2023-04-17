@@ -16,7 +16,14 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { toast } from "react-toastify";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
+import Modal from 'react-modal';
+import { ModalDeleteRelationsCategorys } from "../../../components/popups/ModalDeleteRelationsCategorys";
+import { BsTrash } from "react-icons/bs";
 
+
+export type DeleteRelations = {
+    id: string;
+}
 
 const ProdutoCategoria: React.FC = () => {
 
@@ -30,6 +37,9 @@ const ProdutoCategoria: React.FC = () => {
 
     const [orderUpdate, setOrderUpdate] = useState();
     const [iDrelations, setIDrelations] = useState();
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -82,6 +92,23 @@ const ProdutoCategoria: React.FC = () => {
             toast.error('Ops erro ao atualizar a ordem da categoria.');
         }
     }
+
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(id: string) {
+        const apiClient = setupAPIClient();
+        const { data } = await apiClient.get('/findIdsRelations', {
+            params: {
+                relationProductCategory_id: id,
+            }
+        });
+        setModalItem(data.findUniqueRelation || "");
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
 
 
@@ -155,8 +182,26 @@ const ProdutoCategoria: React.FC = () => {
                                                 />
                                             </BlockDados>
                                         </SectionDate>
+
+                                        <SectionDate>
+                                            <BsTrash
+                                                onClick={() => handleOpenModalDelete(IDRelation.id)}
+                                                style={{ cursor: 'pointer' }}
+                                                color="red"
+                                                size={35}
+                                            />
+                                        </SectionDate>
+
                                     </GridDate>
                                 </Card>
+                                {modalVisible && (
+                                    <ModalDeleteRelationsCategorys
+                                        isOpen={modalVisible}
+                                        onRequestClose={handleCloseModalDelete}
+                                        /* @ts-ignore */
+                                        relation={modalItem}
+                                    />
+                                )}
                             </>
                         )
                     })}
