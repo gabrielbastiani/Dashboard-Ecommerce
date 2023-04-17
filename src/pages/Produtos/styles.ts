@@ -71,3 +71,15 @@ export const BlockCategorys = styled.div`
 `;
 
 export const Categ = styled.span``;
+
+export const ButtonUpdateCategory = styled.a`
+  background-color: ${(props) => props?.theme?.colors?.warning};
+  color: ${(props) => props?.theme?.colors?.white};
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  width: 200px;
+  margin-top: 10px;
+  justify-content: center;
+`

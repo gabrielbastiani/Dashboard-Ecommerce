@@ -20,7 +20,7 @@ import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProduc
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes } from "../styles";
+import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory } from "../styles";
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
@@ -499,31 +499,18 @@ const Produto: React.FC = () => {
                                     />
                                 </BlockDados>
 
-                                <BlockDados>
-                                    {categories.map((categ) => {
-                                        return(
-                                            <span>{categ.category.categoryName}</span>
-                                        )
-                                    })}
-                                    <br />
-                                    <TextoDados
-                                        chave={"Categoria"}
-                                        dados={
-                                            <SelectUpdate
-                                                value={categorySelected}
-                                                /* @ts-ignore */
-                                                onChange={handleChangeCategory}
-                                                opcoes={
-                                                    [
-                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(categories || []).map((item) => ({ label: item.category.categoryName, value: item.category.id }))
-                                                    ]
-                                                }
-                                                handleSubmit={updateCategory}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
+                                {categories.map((categ) => {
+                                    return (
+                                        <>
+                                            <span>{categ.category.categoryName}<br /><br /></span>
+                                        </>
+                                    )
+                                })}
+
+                                <ButtonUpdateCategory href={`/produto/atualizar/categorias/${product_id}`}>
+                                    Atualizar Categorias
+                                </ButtonUpdateCategory>
+
                             </SectionDate>
 
                             <SectionDate>

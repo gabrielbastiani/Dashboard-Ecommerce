@@ -1,19 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../../../contexts/AuthContext";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
-import Select from "../../../components/ui/Select";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/ui/Button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { TextButton } from "../styles";
-import { InputPost } from "../../../components/ui/InputPost";
 import { BlockDados } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
@@ -23,13 +20,17 @@ import VoltarNavagation from "../../../components/VoltarNavagation";
 import Modal from 'react-modal';
 import { ModalDeleteRelationsCategorys } from "../../../components/popups/ModalDeleteRelationsCategorys";
 import { BsTrash } from "react-icons/bs";
+import SelectUpdate from "../../../components/ui/SelectUpdate";
+import Select from "../../../components/ui/Select";
+import { InputPost } from "../../../components/ui/InputPost";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 
 export type DeleteRelations = {
     id: string;
 }
 
-const NewNivelCategoryProduct: React.FC = () => {
+const UpdateNivelCategoryProduct: React.FC = () => {
 
     let { product_id, IDRelation } = useParams();
     const { user } = useContext(AuthContext);
@@ -39,14 +40,27 @@ const NewNivelCategoryProduct: React.FC = () => {
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
-    const [order, setOrder] = useState(Number);
     const [orderUpdate, setOrderUpdate] = useState();
+    const [order, setOrder] = useState(Number);
 
     const [allRelationIDOrderAsc, setAllRelationIDOrderAsc] = useState<any[]>([]);
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
+
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCategorys();
+    }, []);
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -64,35 +78,6 @@ const NewNivelCategoryProduct: React.FC = () => {
         }
         loadCategorys();
     }, []);
-
-    async function handleRelations() {
-        const apiClient = setupAPIClient();
-        try {
-            if (categorySelected === null) {
-                toast.error('Não deixe a categoria em branco.');
-                return;
-            }
-            await apiClient.post('/createRelation', {
-                product_id: product_id,
-                category_id: categorySelected,
-                posicao: "",
-                order: Number(order),
-                nivel: 0,
-                relationId: IDRelation,
-                loja_id: loja_id
-            });
-
-            toast.success('Subcategoria cadastrada com sucesso!');
-
-            setTimeout(() => {
-                navigate(0);
-            }, 2800);
-
-        } catch (error) {
-            toast.error('Erro ao cadastrar a subcategoria no produto!!!');
-            console.log(error);
-        }
-    }
 
     useEffect(() => {
         async function findLoadRelation() {
@@ -128,8 +113,58 @@ const NewNivelCategoryProduct: React.FC = () => {
         }
     }
 
+    async function updateCategory(id: string) {
+        try {
+            if (categorySelected === "") {
+                toast.error(`Selecione a categoria, ou cancele a atualização apertando no botão vermelho!`);
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateCategoryIDrelation?relationProductCategory_id=${id}`, { category_id: categorySelected });
+
+            toast.success('Categoria atualizada com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a categoria.');
+        }
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
+    }
+
+    async function handleRelations() {
+        const apiClient = setupAPIClient();
+        try {
+            if (categorySelected === null) {
+                toast.error('Não deixe a categoria em branco.');
+                return;
+            }
+            await apiClient.post('/createRelation', {
+                product_id: product_id,
+                category_id: categorySelected,
+                posicao: "",
+                order: Number(order),
+                nivel: 0,
+                relationId: IDRelation,
+                loja_id: loja_id
+            });
+
+            toast.success('Subcategoria cadastrada com sucesso!');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 2800);
+
+        } catch (error) {
+            toast.error('Erro ao cadastrar a subcategoria no produto!!!');
+            console.log(error);
+        }
     }
 
     async function handleOpenModalDelete(id: string) {
@@ -158,11 +193,10 @@ const NewNivelCategoryProduct: React.FC = () => {
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo="Escolha uma subcategoria para essa categoria"
+                                titulo="Escolha uma nova subcategoria para essa categoria"
                             />
                         </BlockTop>
-
-                        <Etiqueta>Escolha uma subcategoria:</Etiqueta>
+                        <Etiqueta>Escolha uma nova subcategoria:</Etiqueta>
                         <Select
                             value={categorySelected}
                             /* @ts-ignore */
@@ -215,6 +249,28 @@ const NewNivelCategoryProduct: React.FC = () => {
                                             <SectionDate>
                                                 <BlockDados>
                                                     <TextoDados
+                                                        chave={"Categoria"}
+                                                        dados={
+                                                            <SelectUpdate
+                                                                dado={item.category.categoryName}
+                                                                handleSubmit={() => updateCategory(item.id)}
+                                                                value={categorySelected}
+                                                                opcoes={
+                                                                    [
+                                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                                    ]
+                                                                }/* @ts-ignore */
+                                                                onChange={handleChangeCategory}
+                                                            />
+                                                        }
+                                                    />
+                                                </BlockDados>
+                                            </SectionDate>
+
+                                            <SectionDate>
+                                                <BlockDados>
+                                                    <TextoDados
                                                         chave={"Ordem"}
                                                         dados={
                                                             <InputUpdate
@@ -260,4 +316,4 @@ const NewNivelCategoryProduct: React.FC = () => {
     )
 }
 
-export default NewNivelCategoryProduct;
+export default UpdateNivelCategoryProduct;

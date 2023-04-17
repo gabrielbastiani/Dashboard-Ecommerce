@@ -49,6 +49,16 @@ const NovaCategoriaProduto: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
+            const { data } = await apiClient.get(`/findCategoryRelation?category_id=${categorySelected}&product_id=${product_id}`);
+            const idCateg = data.findCategoryRelationDesc.category_id || "";
+
+            console.log(idCateg)
+
+            if (idCateg === categorySelected) {
+                toast.error('Categoria já cadastrada nesse produto!');
+                return;
+            }
+
             await apiClient.post('/createRelation', {
                 product_id: product_id,
                 category_id: categorySelected,
@@ -62,8 +72,8 @@ const NovaCategoriaProduto: React.FC = () => {
             toast.success('Categoria cadastrada com sucesso!');
 
             setTimeout(() => {
-                navigate(0);
-            }, 2800);
+                navigate(-1);
+            }, 3000);
 
         } catch (error) {
             toast.error('Erro ao cadastrar categoria no produto!!!');
@@ -85,7 +95,7 @@ const NovaCategoriaProduto: React.FC = () => {
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo="Escolha uma categoriapara esse produto"
+                            titulo="Escolha uma categoria para esse produto"
                         />
                         <Button
                             style={{ backgroundColor: 'green' }}
