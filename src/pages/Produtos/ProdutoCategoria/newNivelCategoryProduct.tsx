@@ -27,7 +27,7 @@ import { BsTrash } from "react-icons/bs";
 
 export type DeleteIDSRelations = {
     id: string;
-    IDRelation: string;
+    iDsPai: string;
 }
 
 const NewNivelCategoryProduct: React.FC = () => {
@@ -46,6 +46,7 @@ const NewNivelCategoryProduct: React.FC = () => {
     const [allRelationIDOrderAsc, setAllRelationIDOrderAsc] = useState<any[]>([]);
 
     const [modalItem, setModalItem] = useState('');
+    const [iDsPai] = useState(IDRelation);
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -256,7 +257,7 @@ const NewNivelCategoryProduct: React.FC = () => {
                     /* @ts-ignore */
                     relationIDS={modalItem}
                     /* @ts-ignore */
-                    idPai={IDRelation}
+                    idPai={iDsPai}
                 />
             )}
         </>

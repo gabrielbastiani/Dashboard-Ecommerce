@@ -42,7 +42,7 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
             await apiClient.delete(`/deleteAllVariacaoProduct?product_id=${product_id}`);
 
         } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
+            console.log(error.response.data);
         }
 
         setTimeout(() => {

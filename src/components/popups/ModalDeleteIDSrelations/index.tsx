@@ -32,46 +32,45 @@ export function ModalDeleteIDSrelations({ isOpen, onRequestClose, relationIDS, i
         }
     };
 
-    async function handleDeleteRelation() {
+    /* async function handleDeleteRelation() {
         try {
             const apiClient = setupAPIClient();
+            
+            const relationsIDS = relationIDS.id;
+            
+            await apiClient.delete(`/deleteRelation?relationId=${relationsIDS}`);
+            
+            await apiClient.delete(`/deleteRelation?relationId=${idPai}`);
 
-            console.log(idPai)
+        } catch (error) {
+            
+            console.log(error.response.data);
+        }
+        setTimeout(() => {
+            handleRelationsIDSDelete();
+        }, 2000);
+    } */
 
-            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${idPai}`);
+    async function handleRelationsIDSDelete() {
+        try {
+            const apiClient = setupAPIClient();
+            const relationsIDS = relationIDS.id;
+            /* DELETAR A LINHA DO ID PRINCIPAL */
+            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationsIDS}`);
+            
             toast.success(`Relação de categoria deletada com sucesso.`);
 
             onRequestClose();
 
         } catch (error) {
-            toast.error('Ops.. erro ao deletar a relação de categorias!');
+            /* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
             /* @ts-ignore */
             console.log(error.response.data);
         }
-    }
-
-    async function handleRelationsIDSDelete() {
-        try {
-            const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const relationsIDS = relation.id;
-
-            console.log(relationsIDS)
-            console.log(idPai)
-
-            await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${idPai}`);
-            await apiClient.delete(`/deleteRelation?relationId=${relationsIDS}`);
-            toast.success(`Relação de categoria deletada com sucesso.`);
-
-            /* setTimeout(() => {
-                handleDeleteRelation();
-            }, 3000); */
-
-        } catch (error) {
-            toast.error('Ops.. erro ao deletar a relação de categorias!');
-            /* @ts-ignore */
-            console.log(error.response.data);
-        }
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
     }
 
 
@@ -96,7 +95,7 @@ export function ModalDeleteIDSrelations({ isOpen, onRequestClose, relationIDS, i
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleRelationsIDSDelete()}
+                        onClick={handleRelationsIDSDelete}
                     >
                         Deletar
                     </Button>
