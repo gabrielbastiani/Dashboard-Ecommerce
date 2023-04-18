@@ -21,12 +21,13 @@ import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import Modal from 'react-modal';
-import { ModalDeleteRelationsCategorys } from "../../../components/popups/ModalDeleteRelationsCategorys";
+import { ModalDeleteIDSrelations } from "../../../components/popups/ModalDeleteIDSrelations"; 
 import { BsTrash } from "react-icons/bs";
 
 
-export type DeleteRelations = {
+export type DeleteIDSRelations = {
     id: string;
+    IDRelation: string;
 }
 
 const NewNivelCategoryProduct: React.FC = () => {
@@ -68,7 +69,7 @@ const NewNivelCategoryProduct: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === null) {
+            if (categorySelected === "") {
                 toast.error('Não deixe a categoria em branco.');
                 return;
             }
@@ -86,7 +87,7 @@ const NewNivelCategoryProduct: React.FC = () => {
 
             setTimeout(() => {
                 navigate(0);
-            }, 2800);
+            }, 3000);
 
         } catch (error) {
             toast.error('Erro ao cadastrar a subcategoria no produto!!!');
@@ -120,7 +121,7 @@ const NewNivelCategoryProduct: React.FC = () => {
                 toast.success('Ordem da categoria atualizada com sucesso.');
                 setTimeout(() => {
                     navigate(0);
-                }, 2800);
+                }, 3000);
             }
         } catch (error) {
             console.log(error);
@@ -249,11 +250,13 @@ const NewNivelCategoryProduct: React.FC = () => {
                 </Container>
             </Grid>
             {modalVisible && (
-                <ModalDeleteRelationsCategorys
+                <ModalDeleteIDSrelations
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
-                    relation={modalItem}
+                    relationIDS={modalItem}
+                    /* @ts-ignore */
+                    idPai={IDRelation}
                 />
             )}
         </>

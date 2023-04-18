@@ -92,7 +92,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             toast.success('Logado com sucesso!')
 
         } catch (err) {
-            toast.error("Erro ao acessar, confirmou seu cadastro em seu email?")
+            toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
+            /* @ts-ignore */
+            toast.error(`${err.response.data.error}`);
             console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err)
         }
     }

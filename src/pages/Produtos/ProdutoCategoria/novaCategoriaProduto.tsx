@@ -20,7 +20,6 @@ const NovaCategoriaProduto: React.FC = () => {
 
     let { product_id } = useParams();
     const { user } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     const [loja_id] = useState(user.loja_id);
 
@@ -49,13 +48,8 @@ const NovaCategoriaProduto: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            const { data } = await apiClient.get(`/findCategoryRelation?category_id=${categorySelected}&product_id=${product_id}`);
-            const idCateg = data.findCategoryRelationDesc.category_id || "";
-
-            console.log(idCateg)
-
-            if (idCateg === categorySelected) {
-                toast.error('Categoria já cadastrada nesse produto!');
+            if (categorySelected === "") {
+                toast.error('Favor, selecione uma categoria!');
                 return;
             }
 
@@ -71,13 +65,10 @@ const NovaCategoriaProduto: React.FC = () => {
 
             toast.success('Categoria cadastrada com sucesso!');
 
-            setTimeout(() => {
-                navigate(-1);
-            }, 3000);
-
-        } catch (error) {
-            toast.error('Erro ao cadastrar categoria no produto!!!');
-            console.log(error);
+        } catch (error) {/* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
+            /* @ts-ignore */
+            console.log(error.response.data);
         }
     }
 

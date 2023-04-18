@@ -32,11 +32,9 @@ const ProdutoCategoria: React.FC = () => {
 
     const [nameProduct, setNameProduct] = useState("");
     const [slug, setSlug] = useState("");
-    const [allFindAsc, setAllFindAsc] = useState<any[]>([]);
-    const [allRelationIDOrderDesc, setAllRelationIDOrderDesc] = useState<any[]>([]);
+    const [allFindOrderRelationIDAsc, setAllFindOrderRelationIDAsc] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
-    const [iDrelations, setIDrelations] = useState();
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -48,7 +46,7 @@ const ProdutoCategoria: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
 
-                setAllFindAsc(data.allFindOrderAsc || []);
+                setAllFindOrderRelationIDAsc(data.allFindOrderRelationIDAsc || []);
                 setNameProduct(data.findUniqueProduct.nameProduct || "");
                 setSlug(data.findUniqueProduct.slug || "");
 
@@ -58,21 +56,6 @@ const ProdutoCategoria: React.FC = () => {
         }
         findsRelationsProducts();
     }, [product_id]);
-
-    useEffect(() => {
-        async function loadIDsRelations() {
-            try {
-                const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${iDrelations}`);
-
-                setAllRelationIDOrderDesc(data.allRelationIDOrderDesc[0].relationId || []);
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        loadIDsRelations()
-    }, [iDrelations]);
 
     async function updateOrder(id: string) {
         try {
@@ -142,7 +125,7 @@ const ProdutoCategoria: React.FC = () => {
                         </Button>
                     </BlockTop>
 
-                    {allFindAsc.map((IDRelation) => {
+                    {allFindOrderRelationIDAsc.map((IDRelation) => {
                         return (
                             <>
                                 <Card key={IDRelation.id}>
