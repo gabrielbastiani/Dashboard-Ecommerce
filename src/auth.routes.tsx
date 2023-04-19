@@ -46,7 +46,6 @@ const RoutesAuth: React.FC = () => {
             <Route path='/painel' element={<Painel />} />
             <Route path='/painel' element={<Painel />} />
 
-
             <Route path='/pedidos' element={<Pedidos />} />
             <Route path='/pedido/:pedido_id' element={<Pedido />} />
 

@@ -189,8 +189,8 @@ const AtualizarCategoria: React.FC = () => {
                                             </Button>
                                         </SectionDate>
 
-                                        <SectionDate>
-                                            <BlockDados>
+                                        <SectionDate >
+                                            <BlockDados style={{ marginLeft: "30px" }} >
                                                 <TextoDados
                                                     chave={"Categoria"}
                                                     dados={

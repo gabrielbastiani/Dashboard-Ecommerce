@@ -5,7 +5,7 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteIDSRelations } from '../../../pages/Produtos/ProdutoCategoria/newNivelCategoryProduct'; 
+import { DeleteIDSRelations } from '../../../pages/Produtos/ProdutoCategoria/newNivelCategoryProduct';
 
 
 interface DeleteRelationsCategorys {
@@ -15,7 +15,7 @@ interface DeleteRelationsCategorys {
     idPai: DeleteIDSRelations;
 }
 
-export function ModalDeleteIDSrelations({ isOpen, onRequestClose, relationIDS, idPai }: DeleteRelationsCategorys) {
+export function ModalDeleteIDSrelations({ isOpen, onRequestClose, relationIDS }: DeleteRelationsCategorys) {
 
     const navigate = useNavigate();
 
@@ -32,32 +32,13 @@ export function ModalDeleteIDSrelations({ isOpen, onRequestClose, relationIDS, i
         }
     };
 
-    /* async function handleDeleteRelation() {
-        try {
-            const apiClient = setupAPIClient();
-            
-            const relationsIDS = relationIDS.id;
-            
-            await apiClient.delete(`/deleteRelation?relationId=${relationsIDS}`);
-            
-            await apiClient.delete(`/deleteRelation?relationId=${idPai}`);
-
-        } catch (error) {
-            
-            console.log(error.response.data);
-        }
-        setTimeout(() => {
-            handleRelationsIDSDelete();
-        }, 2000);
-    } */
-
     async function handleRelationsIDSDelete() {
         try {
             const apiClient = setupAPIClient();
             const relationsIDS = relationIDS.id;
             /* DELETAR A LINHA DO ID PRINCIPAL */
             await apiClient.delete(`/deleteIDRelation?relationProductCategory_id=${relationsIDS}`);
-            
+
             toast.success(`Relação de categoria deletada com sucesso.`);
 
             onRequestClose();

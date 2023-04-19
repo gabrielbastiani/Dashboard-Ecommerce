@@ -5,7 +5,7 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteRelations } from '../../../pages/Produtos/ProdutoCategoria'; 
+import { DeleteRelations } from '../../../pages/Produtos/ProdutoCategoria';
 
 
 interface DeleteRelationsCategorys {
@@ -37,7 +37,7 @@ export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation
             /* @ts-ignore */
             const relationProductCategory_id = relation.id;
 
-            await apiClient.delete(`/deleteNivelProncipal?relationProductCategory_id=${relationProductCategory_id}`);
+            await apiClient.delete(`/deleteNivelPrincipal?relationProductCategory_id=${relationProductCategory_id}`);
             toast.success(`Relação de categoria deletada com sucesso.`);
 
             onRequestClose();
