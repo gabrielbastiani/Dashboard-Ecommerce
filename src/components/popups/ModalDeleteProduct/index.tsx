@@ -41,6 +41,7 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
             await apiClient.delete(`/deleteAllPhotosVariacao?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllVariacaoProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteRelationProductIds?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAvaliacaoProductID?product_id=${product_id}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

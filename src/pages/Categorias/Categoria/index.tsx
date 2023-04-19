@@ -44,7 +44,7 @@ const Categoria: React.FC = () => {
     const [search, setSearch] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(4);
+    const [limit] = useState(10);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -69,7 +69,7 @@ const Categoria: React.FC = () => {
             } else {
                 await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames });
                 toast.success('Nome da categoria atualizada com sucesso.');
-                
+
                 setTimeout(() => {
                     navigate(0);
                 }, 3000);
@@ -236,13 +236,6 @@ const Categoria: React.FC = () => {
                                 <Avisos
                                     texto="Não há produtos cadastradas aqui..."
                                 />
-                                {currentPage > 1 && (
-                                    <Previus>
-                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                            Voltar
-                                        </ButtonPage>
-                                    </Previus>
-                                )}
                             </>
                         ) :
                             <>
@@ -257,6 +250,13 @@ const Categoria: React.FC = () => {
                                         <TextTotal>Total de produtos: {total}</TextTotal>
                                     </TotalBoxItems>
                                     <ContainerCategoryPage>
+                                        {currentPage > 1 && (
+                                            <Previus>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                    Voltar
+                                                </ButtonPage>
+                                            </Previus>
+                                        )}
 
                                         {pages.map((page) => (
                                             <TextPage
@@ -274,7 +274,6 @@ const Categoria: React.FC = () => {
                                                 </ButtonPage>
                                             </Next>
                                         )}
-
                                     </ContainerCategoryPage>
                                 </ContainerPagination>
                             </>

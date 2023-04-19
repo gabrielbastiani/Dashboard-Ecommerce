@@ -134,7 +134,7 @@ const Rede: React.FC = () => {
         }
         setTimeout(() => {
             navigate(0);
-        }, 2000);
+        }, 3000);
     }
 
     function handleFile(e: ChangeEvent<HTMLInputElement>) {

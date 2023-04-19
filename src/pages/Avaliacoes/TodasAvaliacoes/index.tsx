@@ -99,7 +99,8 @@ const TodasAvaliacoes: React.FC = () => {
                             onChange={handleChange}
                         />
                     }
-
+                    <br />
+                    <br />
                     {search.length < 1 ? (
                         <>
                             <Avisos
@@ -114,14 +115,14 @@ const TodasAvaliacoes: React.FC = () => {
                                 /* @ts-ignore */
                                 onChange={limits}
                                 opcoes={[
-                                    { label: "Todas categorias", value: "999999" },
+                                    { label: "Todas avaliações", value: "999999" },
                                     { label: "4", value: "4" },
                                     { label: "8", value: "8" }
                                 ]}
                             />
 
                             <TabelaSimples
-                                cabecalho={["Categoria", "Qtd. de Produtos", "Status"]}
+                                cabecalho={["Produto", "Avaliação", "Comentário", "Data da avaliação", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

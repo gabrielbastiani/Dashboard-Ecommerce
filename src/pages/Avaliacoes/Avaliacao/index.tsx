@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import { Card, Container } from "../../../components/Content/styles";
-import Voltar from "../../../components/Voltar";
 import { BlockTop } from "../../Categorias/styles";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { setupAPIClient } from "../../../services/api";
-import { TextAvaliacao } from './styles';
+import { Perfil, TextAvaliacao } from './styles';
 import Modal from 'react-modal';
 import { ModalDeleteAvaliacao } from "../../../components/popups/ModalDeleteAvaliacao";
+import VoltarNavagation from "../../../components/VoltarNavagation";
+import { BlockDados } from "../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
+import { SendEmail } from "../../Contatos/Contato/styles";
+import SelectUpdate from "../../../components/ui/SelectUpdate";
+import { toast } from "react-toastify";
 
 
 export type DeleteAvaliacao = {
@@ -23,11 +28,17 @@ export type DeleteAvaliacao = {
 const Avaliacao: React.FC = () => {
 
     let { slug, avaliacao_id } = useParams();
+    const navigate = useNavigate();
 
+    const [user_id, setUser_id] = useState('');
     const [clientName, setClientName] = useState('');
+    const [slugCliente, setSlugCliente] = useState('');
+    const [email, setEmail] = useState("");
     const [description, setDescription] = useState('');
     const [pontuacao, setPontuacao] = useState('');
+    const [status, setStatus] = useState('');
     const [product_id, setProduct_id] = useState('');
+    const [statusSelected, setStatusSelected] = useState();
 
     const [nameProduct, setNameProduct] = useState('');
 
@@ -41,8 +52,12 @@ const Avaliacao: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const response = await apiClient.get(`/avaliacaoDados?avaliacao_id=${avaliacao_id}`);
 
-                setClientName(response.data.clientName || "");
+                setUser_id(response.data.user.id || "");
+                setClientName(response.data.user.nameComplete || "");
+                setSlugCliente(response.data.user.slug || "");
+                setEmail(response.data.user.email || "");
                 setPontuacao(response.data.pontuacao || "");
+                setStatus(response.data.status || "");
                 setDescription(response.data.description);
                 setProduct_id(response.data.product_id || "");
                 setNameProduct(response.data.product.nameProduct || "");
@@ -52,7 +67,25 @@ const Avaliacao: React.FC = () => {
             }
         }
         loadAvaliacao();
-    }, [avaliacao_id])
+    }, [avaliacao_id]);
+
+    function handleChangeStatus(e: any) {
+        setStatusSelected(e.target.value);
+    }
+
+    async function updateStatus() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusAvaliacao?avaliacao_id=${avaliacao_id}`, { status: statusSelected });
+            toast.success('Status atualizado com sucesso.');
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o status.');
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
+    }
 
     function handleCloseModalDelete() {
         setModalVisible(false);
@@ -79,9 +112,7 @@ const Avaliacao: React.FC = () => {
                 <Aside />
                 <Container>
                     <Card>
-                        <Voltar
-                            url={`/produto/avaliacoes/${slug}/${product_id}`}
-                        />
+                        <VoltarNavagation />
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
@@ -104,7 +135,53 @@ const Avaliacao: React.FC = () => {
                             titulo={"Cliente - " + clientName}
                         />
 
-                        <TextAvaliacao>{description}</TextAvaliacao>
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Contato do avaliador"}
+                                dados={
+                                    <SendEmail
+                                        href={`mailto:${email}?subject=${clientName} falo da loja virtual Builder Seu Negócio Online`}
+                                    >
+                                        {email}
+                                    </SendEmail>
+                                }
+                            />
+                        </BlockDados>
+
+                        <BlockDados>
+                            <Perfil
+                                href={`/cliente/${slugCliente}/${user_id}`}
+                            >
+                                Ver Perfil do Cliente
+                            </Perfil>
+                        </BlockDados>
+
+                        <BlockDados>
+                            <TextAvaliacao>{description}</TextAvaliacao>
+                        </BlockDados>
+
+                        <BlockDados>
+                            <TextoDados
+                                chave={"Status da Avaliação"}
+                                dados={
+                                    <SelectUpdate
+                                        dado={status}
+                                        value={statusSelected}
+                                        /* @ts-ignore */
+                                        onChange={handleChangeStatus}
+                                        opcoes={
+                                            [
+                                                { label: "Selecionar...", value: "" },
+                                                { label: "Pendente", value: "Pendente" },
+                                                { label: "Não Aprovado", value: "Não Aprovado" },
+                                                { label: "Aprovado", value: "Aprovado" },
+                                            ]
+                                        }
+                                        handleSubmit={updateStatus}
+                                    />
+                                }
+                            />
+                        </BlockDados>
 
                     </Card>
                 </Container>

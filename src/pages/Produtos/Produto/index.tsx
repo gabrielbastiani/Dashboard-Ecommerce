@@ -3,7 +3,6 @@ import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import { CardResponsive, Card, Container } from "../../../components/Content/styles";
-import Voltar from "../../../components/Voltar";
 import { AddButton, BlockTop, SpanText } from "../../Categorias/styles";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
@@ -25,6 +24,7 @@ import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
 import Modal from 'react-modal';
 import { ModalDeleteProduct } from '../../../components/popups/ModalDeleteProduct';
+import VoltarNavagation from "../../../components/VoltarNavagation";
 
 
 export type DeleteProduct = {
@@ -331,7 +331,7 @@ const Produto: React.FC = () => {
                 <Container>
                     <Card>
 
-                        <Voltar url={'/produtos'} />
+                        <VoltarNavagation />
 
                         <BlockTop>
                             <Titulos

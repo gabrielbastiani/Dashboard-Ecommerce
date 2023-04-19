@@ -76,7 +76,7 @@ const NovaImagem: React.FC = () => {
 
             setTimeout(() => {
                 navigate('/ImagensInstitucionais');
-            }, 2000);
+            }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
