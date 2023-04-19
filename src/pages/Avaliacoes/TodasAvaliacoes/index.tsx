@@ -1,32 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Grid } from "../Dashboard/styles";
-import MainHeader from "../../components/MainHeader";
-import Aside from "../../components/Aside";
-import {
-    Container,
-    ContainerPagination,
-    TotalBoxItems,
-    TextTotal,
-    ContainerCategoryPage,
-    Previus,
-    ButtonPage,
-    TextPage,
-    Next,
-    AddButton,
-    SpanText
-} from "./styles";
-import Pesquisa from "../../components/Pesquisa";
-import { setupAPIClient } from '../../services/api';
-import Titulos from "../../components/Titulos";
-import TabelaSimples from "../../components/Tabelas";
-import { Link } from "react-router-dom";
-import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { Card } from "../../components/Content/styles";
-import Select from "../../components/ui/Select";
-import { Avisos } from "../../components/Avisos";
+import { useEffect, useState, useCallback } from "react";
+import Aside from "../../../components/Aside";
+import { Avisos } from "../../../components/Avisos";
+import { Card } from "../../../components/Content/styles";
+import MainHeader from "../../../components/MainHeader";
+import Pesquisa from "../../../components/Pesquisa";
+import TabelaSimples from "../../../components/Tabelas";
+import Titulos from "../../../components/Titulos";
+import Select from "../../../components/ui/Select";
+import { ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
+import { Grid } from "../../Dashboard/styles";
+import { setupAPIClient } from "../../../services/api";
+import moment from 'moment';
 
 
-const Categorias: React.FC = () => {
+const TodasAvaliacoes: React.FC = () => {
 
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
@@ -38,10 +25,10 @@ const Categorias: React.FC = () => {
 
 
     useEffect(() => {
-        async function allCategorys() {
+        async function allAvaliations() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/allCategorysPage?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/allAvaliacao?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -51,15 +38,15 @@ const Categorias: React.FC = () => {
                     arrayPages.push(i);
                 }
 
-                setPages(arrayPages || []);
-                setSearch(data.categorys || []);
-                setInitialFilter(data.categorys);
+                setPages(arrayPages);
+                setSearch(data.allAvaliacao || []);
+                setInitialFilter(data.allAvaliacao);
 
-            } catch (error) {
-                console.error(error);
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
             }
         }
-        allCategorys();
+        allAvaliations();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -76,21 +63,21 @@ const Categorias: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterCategory = search.filter((filt) => filt.categoryName.toLowerCase().includes(target.value));
-        setSearch(filterCategory);
+        const filterAvaliacoes = search.filter((filt) => filt.product.nameProduct.toLowerCase().includes(target.value));
+        setSearch(filterAvaliacoes);
     }
 
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Categoria": item.categoryName,
-            "Qtd. de Produtos": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem produto(s)",
-            "Status": item.disponibilidade,
-            "botaoDetalhes": `/categoria/${item.id}`
+            "Produto": item.product.nameProduct,
+            "Avaliação": item.pontuacao,
+            "Comentário": item.description,
+            "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "Status": item.status,
+            "botaoDetalhes": `/avaliacao/${item.product.slug}/${item.id}`
         });
     });
-
-
 
     return (
         <Grid>
@@ -100,35 +87,28 @@ const Categorias: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Categorias"
+                        titulo="Avaliações dos produtos"
                     />
 
                     {search.length < 1 ? (
                         null
                     ) :
                         <Pesquisa
-                            placeholder={"Pesquise aqui pelo nome da categoria..."}
+                            placeholder={"Pesquise aqui pelo nome do produto..."}
                             /* @ts-ignore */
                             onChange={handleChange}
                         />
                     }
 
-                    <AddButton>
-                        <AiOutlinePlusCircle />
-                        <Link to="/categoria/nova" >
-                            <SpanText>Nova Categoria</SpanText>
-                        </Link>
-                    </AddButton>
-
                     {search.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há categorias cadastradas na loja ainda..."
+                                texto="Não há avaliações em nenhum produto ainda..."
                             />
                         </>
                     ) :
                         <>
-                            <TextTotal>Categorias por página: &nbsp;</TextTotal>
+                            <TextTotal>Avaliações por página: &nbsp;</TextTotal>
 
                             <Select
                                 /* @ts-ignore */
@@ -148,7 +128,7 @@ const Categorias: React.FC = () => {
 
                             <ContainerPagination>
                                 <TotalBoxItems key={total}>
-                                    <TextTotal>Total de categorias: {total}</TextTotal>
+                                    <TextTotal>Total de avaliações: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
                                     {currentPage > 1 && (
@@ -175,7 +155,6 @@ const Categorias: React.FC = () => {
                                             </ButtonPage>
                                         </Next>
                                     )}
-
                                 </ContainerCategoryPage>
                             </ContainerPagination>
                         </>
@@ -186,4 +165,4 @@ const Categorias: React.FC = () => {
     )
 }
 
-export default Categorias;
+export default TodasAvaliacoes;

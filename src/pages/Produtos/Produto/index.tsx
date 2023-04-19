@@ -15,12 +15,11 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
-import SelectUpdate from "../../../components/ui/SelectUpdate";
 import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProductUpdate";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory } from "../styles";
+import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer } from "../styles";
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
@@ -48,8 +47,6 @@ const Produto: React.FC = () => {
     const [skus, setSkus] = useState("");
     const [promocoes, setPromocoes] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
-    const [categorySelected, setCategorySelected] = useState();
-    const [categorieName, setCategorieName] = useState("");
     const [disponibilidades, setDisponibilidades] = useState("");
     const [order, setOrder] = useState(Number);
     const [posicao, setPosicao] = useState("");
@@ -116,7 +113,6 @@ const Produto: React.FC = () => {
                 setDisponibilidades(responseProduct.data.disponibilidade || "");
                 setDestaques(responseProduct.data.produtoDestaque);
                 setOfertas(responseProduct.data.produtoOferta);
-                setCategorieName(responseProduct.data.categories.categoryName);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -259,28 +255,6 @@ const Produto: React.FC = () => {
         }
     }
 
-    function handleChangeCategory(e: any) {
-        setCategorySelected(e.target.value)
-    }
-
-    async function updateCategory() {
-        try {
-            if (categorySelected === "") {
-                toast.error(`Selecione uma nova categoria, ou cancele a atualização apertando no botão vermelho!`);
-                return;
-            }
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updateCategory?product_id=${product_id}`, { category_id: categorySelected });
-            toast.success('Categoria atualizada com sucesso.');
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a categoria.');
-        }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
-    }
-
     useEffect(() => {
         async function loadVariacao() {
             const apiClient = setupAPIClient();
@@ -377,7 +351,7 @@ const Produto: React.FC = () => {
                             style={{ backgroundColor: '#f6ba24' }}
                         >
                             <MdOutlineAssessment />
-                            <Link to={"/produto/avaliacoes/" + slug + '/' + product_id} >
+                            <Link to={`/produto/avaliacoes/${slug}/${product_id}`} >
                                 <SpanText>Ver avaliações</SpanText>
                             </Link>
                         </AddButton>
@@ -499,13 +473,15 @@ const Produto: React.FC = () => {
                                     />
                                 </BlockDados>
 
-                                {categories.map((categ) => {
-                                    return (
-                                        <>
-                                            <span>{categ.category.categoryName}<br /><br /></span>
-                                        </>
-                                    )
-                                })}
+                                <GridContainer>
+                                    {categories.map((categ) => {
+                                        return (
+                                            <BoxCategory key={categ.id}>
+                                                <NameCategory>{categ.category.categoryName}</NameCategory>
+                                            </BoxCategory>
+                                        )
+                                    })}
+                                </GridContainer>
 
                                 <ButtonUpdateCategory href={`/produto/atualizar/categorias/${product_id}`}>
                                     Atualizar Categorias

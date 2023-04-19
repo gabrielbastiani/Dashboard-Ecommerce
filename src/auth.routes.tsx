@@ -36,6 +36,7 @@ import NewNivelCategory from './pages/Categorias/Categoria/newNivelCategory';
 import NewNivelCategoryProduct from './pages/Produtos/ProdutoCategoria/newNivelCategoryProduct';
 import AtualizarCategoria from './pages/Produtos/AtualizarCategoria';
 import UpdateNivelCategoryProduct from './pages/Produtos/AtualizarCategoria/updateNivelCategoryProduct';
+import TodasAvaliacoes from './pages/Avaliacoes/TodasAvaliacoes';
 
 
 const RoutesAuth: React.FC = () => {
@@ -65,8 +66,9 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/atualizar/categorias/:product_id' element={<AtualizarCategoria />} />
             <Route path='/produto/atualizar/categorias/updateNivelCategoryProduct/:product_id/:IDRelation' element={<UpdateNivelCategoryProduct />} />
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
-            <Route path='/produto/avaliacoes/:nameProduct/:product_id' element={<Avaliacoes />} />
-            <Route path='/avaliacao/:nameProduct/:avaliacao_id' element={<Avaliacao />} />
+            <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
+            <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
+            <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
 
             <Route path='/banners' element={<Banners />} />
 

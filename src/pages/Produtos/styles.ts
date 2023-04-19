@@ -82,4 +82,33 @@ export const ButtonUpdateCategory = styled.a`
   width: 200px;
   margin-top: 10px;
   justify-content: center;
-`
+`;
+
+export const GridContainer = styled.div`
+  width: 400px;
+  padding: 18px;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: 120px 120px;
+  grid-gap: 20px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border: solid 2px ${(props) => props?.theme?.colors?.white};
+  border-radius: 10px;
+  background-color: ${(props) => props?.theme?.colors?.white};
+
+  @media (max-width: 797px) {
+    width: 300px;
+  }
+
+  @media (max-width: 688px) {
+    width: 200px;
+    grid-template-columns: 120px;
+  }
+`;
+
+export const BoxCategory = styled.div``;
+
+export const NameCategory = styled.span`
+  color: ${(props) => props?.theme?.colors?.black};
+`;

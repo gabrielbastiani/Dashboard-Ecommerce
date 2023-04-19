@@ -16,20 +16,22 @@ import moment from 'moment';
 
 const Avaliacoes: React.FC = () => {
 
-    let { nameProduct, product_id } = useParams();
+    let { slug, product_id } = useParams();
 
     const [avaliations, setAvaliations] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(4);
+    const [limit, setLimit] = useState(999999);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [nameProduct, setNameProduct] = useState("");
 
     useEffect(() => {
         async function allAvaliations() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/allAvaliacao?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageAvaliacao?page=${currentPage}&limit=${limit}&product_id=${product_id}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -40,15 +42,15 @@ const Avaliacoes: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setAvaliations(data.allAvaliacao || []);
+                setAvaliations(data.productAvaliacao || []);
+                setNameProduct(data.product.nameProduct || "");
 
-            } catch (error) {
-                console.error(error);
-                alert('Error call api list ALL avalientions');
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
             }
         }
         allAvaliations();
-    }, [currentPage, limit, total]);
+    }, [currentPage, limit, product_id, total]);
 
     /* @ts-ignore */
     const limits = useCallback((e) => {
@@ -56,13 +58,12 @@ const Avaliacoes: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
-    /* @ts-ignore */
-    const dados = [];
+    const dados: any = [];
     (avaliations || []).forEach((item) => {
         dados.push({
             "Cliente": item.clientName,
             "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/avaliacao/${nameProduct}/${item.id}`
+            "botaoDetalhes": `/avaliacao/${item.product.slug}/${item.id}`
         });
     });
 
@@ -73,7 +74,7 @@ const Avaliacoes: React.FC = () => {
             <Container>
                 <Card>
                     <Voltar
-                        url={'/produto/' + nameProduct + '/' + product_id}
+                        url={`/produto/${slug}/${product_id}`}
                     />
                     <BlockTop>
                         <Titulos
@@ -85,15 +86,8 @@ const Avaliacoes: React.FC = () => {
                     {dados.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há avaliações aqui..."
+                                texto="Não há avaliações ainda..."
                             />
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
                         </>
                     ) :
                         <>
@@ -103,15 +97,14 @@ const Avaliacoes: React.FC = () => {
                                 /* @ts-ignore */
                                 onChange={limits}
                                 opcoes={[
+                                    { label: "Todas avaliações", value: "999999" },
                                     { label: "4", value: "4" },
-                                    { label: "8", value: "8" },
-                                    { label: "Todas avaliações", value: "999999" }
+                                    { label: "8", value: "8" }
                                 ]}
                             />
 
                             <TabelaSimples
                                 cabecalho={["Cliente", "Data da avaliação"]}
-                                /* @ts-ignore */
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />
@@ -121,6 +114,13 @@ const Avaliacoes: React.FC = () => {
                                     <TextTotal>Total de avaliações: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
 
                                     {pages.map((page) => (
                                         <TextPage
@@ -138,7 +138,6 @@ const Avaliacoes: React.FC = () => {
                                             </ButtonPage>
                                         </Next>
                                     )}
-
                                 </ContainerCategoryPage>
                             </ContainerPagination>
                         </>

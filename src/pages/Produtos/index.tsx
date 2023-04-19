@@ -34,7 +34,7 @@ const Produtos: React.FC = () => {
     const [search, setSearch] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(4);
+    const [limit, setLimit] = useState(999999);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -177,15 +177,8 @@ const Produtos: React.FC = () => {
                     {dados.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há produtos cadastrados aqui..."
+                                texto="Não há produtos cadastrados na loja ainda..."
                             />
-                            {currentPage > 1 && (
-                                <Previus>
-                                    <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                        Voltar
-                                    </ButtonPage>
-                                </Previus>
-                            )}
                         </>
                     ) :
                         <>
@@ -195,9 +188,9 @@ const Produtos: React.FC = () => {
                                 /* @ts-ignore */
                                 onChange={limits}
                                 opcoes={[
+                                    { label: "Todos produtos", value: "999999" },
                                     { label: "4", value: "4" },
-                                    { label: "8", value: "8" },
-                                    { label: "Todos produtos", value: "999999" }
+                                    { label: "8", value: "8" }
                                 ]}
                             />
 
@@ -212,6 +205,14 @@ const Produtos: React.FC = () => {
                                     <TextTotal>Total de produtos: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
+
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
 
                                     {pages.map((page) => (
                                         <TextPage

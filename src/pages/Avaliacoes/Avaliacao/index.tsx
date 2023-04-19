@@ -16,18 +16,20 @@ import { ModalDeleteAvaliacao } from "../../../components/popups/ModalDeleteAval
 
 export type DeleteAvaliacao = {
     avaliacao_id: string;
-    nameProduct: string;
+    slug: string;
     product_id: string;
 }
 
 const Avaliacao: React.FC = () => {
 
-    let { nameProduct, avaliacao_id } = useParams();
+    let { slug, avaliacao_id } = useParams();
 
     const [clientName, setClientName] = useState('');
     const [description, setDescription] = useState('');
     const [pontuacao, setPontuacao] = useState('');
     const [product_id, setProduct_id] = useState('');
+
+    const [nameProduct, setNameProduct] = useState('');
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -41,8 +43,9 @@ const Avaliacao: React.FC = () => {
 
                 setClientName(response.data.clientName || "");
                 setPontuacao(response.data.pontuacao || "");
-                setDescription(response.data.descriptionv);
+                setDescription(response.data.description);
                 setProduct_id(response.data.product_id || "");
+                setNameProduct(response.data.product.nameProduct || "");
 
             } catch (error) {
                 console.log(error);
@@ -77,7 +80,7 @@ const Avaliacao: React.FC = () => {
                 <Container>
                     <Card>
                         <Voltar
-                            url={'/produto/avaliacoes/' + nameProduct + '/' + product_id}
+                            url={`/produto/avaliacoes/${slug}/${product_id}`}
                         />
                         <BlockTop>
                             <Titulos
@@ -114,7 +117,7 @@ const Avaliacao: React.FC = () => {
                     /* @ts-ignore */
                     avaliacao={modalItem}
                     /* @ts-ignore */
-                    nameProduct={nameProduct}
+                    slug={slug}
                     /* @ts-ignore */
                     product_id={product_id}
                 />

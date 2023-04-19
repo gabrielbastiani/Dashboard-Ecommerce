@@ -47,9 +47,14 @@ const Aside: React.FC = () => {
     const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
 
     const [submenu, setSubmenu] = useState(false);
+    const [submenu1, setSubmenu1] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
+    }
+
+    const handleSubMenu1 = () => {
+        setSubmenu1(!submenu1);
     }
 
     const handleToggleMenu = () => {
@@ -100,10 +105,24 @@ const Aside: React.FC = () => {
                     Categorias
                 </MenuItemLink>
 
-                <MenuItemLink href="/produtos">
+                <MenuItemLink onClick={handleSubMenu1} style={{ cursor: 'pointer' }} >
                     <MdOutlineProductionQuantityLimits />
                     Produtos
                 </MenuItemLink>
+
+                {submenu1 ? (
+                    <>
+                        <SubMenuItemLink href="/produtos" >
+                            <MdPlayArrow />
+                            Produtos
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/avaliacoes' >
+                            <MdPlayArrow />
+                            Todas Avaliações
+                        </SubMenuItemLink>
+                    </>
+                ) : null}
 
                 <MenuItemLink href='/banners'>
                     <BsImages />
@@ -142,9 +161,7 @@ const Aside: React.FC = () => {
                             Imagens Institucionais
                         </SubMenuItemLink>
                     </>
-                    :
-                    null
-                }
+                    : null}
 
                 <MenuItemLink href="/perfil">
                     <CgProfile />

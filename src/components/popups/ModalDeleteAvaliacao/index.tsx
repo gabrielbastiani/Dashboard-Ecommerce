@@ -12,11 +12,11 @@ interface ModalAvaliacaoDelete {
     isOpen: boolean;
     onRequestClose: () => void;
     avaliacao: DeleteAvaliacao;
-    nameProduct: DeleteAvaliacao;
+    slug: DeleteAvaliacao;
     product_id: DeleteAvaliacao;
 }
 
-export function ModalDeleteAvaliacao({ isOpen, onRequestClose, avaliacao, nameProduct, product_id }: ModalAvaliacaoDelete) {
+export function ModalDeleteAvaliacao({ isOpen, onRequestClose, avaliacao, slug, product_id }: ModalAvaliacaoDelete) {
 
     const navigate = useNavigate();
 
@@ -43,12 +43,12 @@ export function ModalDeleteAvaliacao({ isOpen, onRequestClose, avaliacao, namePr
             await apiClient.delete(`/deleteAvaliacao?avaliacao_id=${avaliacao_id}`);
             toast.success(`Avaliação deletada com sucesso.`);
 
-            navigate(`/produto/avaliacoes/${nameProduct}/${product_id}`);
+            navigate(`/produto/avaliacoes/${slug}/${product_id}`);
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
+            console.log(error.response.data);
             toast.error('Ops erro ao deletar a avaliação!');
         }
         
