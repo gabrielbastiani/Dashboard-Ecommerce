@@ -15,7 +15,7 @@ import {
     TotalBoxItems,
 } from "../styles";
 import {
-    BlockDados,
+    BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload,
 } from "./styles"
 import Titulos from "../../../components/Titulos";
 import Voltar from "../../../components/Voltar";
@@ -30,8 +30,11 @@ import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
 import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
 import { Button } from "../../../components/ui/Button";
-import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
 import { MdFileUpload } from "react-icons/md";
+import { GridDate } from "../../Perfil/styles";
+import { SectionDate } from "../../Configuracoes/styles";
+import { EtiquetaTextImagem, FormUpdateImage, IconSpanTextImage, ImageTextPhoto, InputLogoTextImagem, PreviewTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
 
 
 
@@ -54,6 +57,11 @@ const Categoria: React.FC = () => {
     const [categoryImage, setCategoryImage] = useState(null);
     const [categoryImageUrl, setCategoryImageUrl] = useState('');
 
+    const [categoryImageUpload, setCategoryImageUpload] = useState(null);
+    const [categoryImageUploadUrl, setCategoryImageUploadUrl] = useState('');
+
+    const [imageCategories, setImageCategories] = useState("");
+    const [iDImage, setIDImage] = useState("");
 
     useEffect(() => {
         async function refreshCategoryLoad() {
@@ -62,6 +70,9 @@ const Categoria: React.FC = () => {
             setCategoryNames(response.data.categoryName || "");
             setOrder(response.data.order);
             setDisponibilidades(response.data.disponibilidade || "");
+            setImageCategories(response.data.imagecategories[0].categoryImage);
+            setCategoryImageUpload(response.data.imagecategories[0].categoryImage);
+            setIDImage(response.data.imagecategories[0].id);
         }
         refreshCategoryLoad();
     }, [category_id]);
@@ -157,11 +168,14 @@ const Categoria: React.FC = () => {
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', categoryImage);
+            data.append('title', categoryNames);
+            data.append('posicao', "");/* @ts-ignore */
+            data.append('category_id', category_id);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageCategory?category_id=${category_id}`, data);
+            await apiClient.post(`/createImageCategory`, data);
 
-            toast.success('Imagem atualizada com sucesso.');
+            toast.success('Imagem cadastrada com sucesso.');
 
             setTimeout(() => {
                 navigate('/categorias');
@@ -169,9 +183,8 @@ const Categoria: React.FC = () => {
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            toast.error('Erro ao atualizar a imagem da categoria!!!');
+            toast.error('Erro ao cadastrar a imagem da categoria!!!');
         }
-
     }
 
     function handleFile(e: ChangeEvent<HTMLInputElement>) {
@@ -188,6 +201,46 @@ const Categoria: React.FC = () => {
             /* @ts-ignore */
             setCategoryImage(image)
             setCategoryImageUrl(URL.createObjectURL(image))
+        }
+
+    }
+
+    async function handleImageUpload(event: FormEvent) {
+        event.preventDefault();
+        try {
+            const data = new FormData();
+            /* @ts-ignore */
+            data.append('file', categoryImageUpload);
+
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateImageCategory?imageCategory_id=${iDImage}`, data);
+
+            toast.success('Imagem atualizada com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao atualizar a imagem da categoria!!!');
+        }
+    }
+
+    function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return;
+        }
+
+        const image = e.target.files[0]
+        if (!image) {
+            return;
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setCategoryImageUpload(image);
+            setCategoryImageUploadUrl(URL.createObjectURL(image));
         }
 
     }
@@ -220,55 +273,130 @@ const Categoria: React.FC = () => {
                             />
                         </BlockTop>
 
-                        <BlockDados>
-                            <TextoDados
-                                chave={"Nome"}
-                                dados={
-                                    <InputUpdate
-                                        dado={categoryNames}
-                                        type="text"
-                                        /* @ts-ignore */
-                                        placeholder={categoryNames}
-                                        value={categoryNames}
-                                        /* @ts-ignore */
-                                        onChange={(e) => setCategoryNames(e.target.value)}
-                                        handleSubmit={updateCategoryName}
+                        <GridDate>
+                            <SectionDate>
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Nome"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={categoryNames}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={categoryNames}
+                                                value={categoryNames}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setCategoryNames(e.target.value)}
+                                                handleSubmit={updateCategoryName}
+                                            />
+                                        }
                                     />
-                                }
-                            />
-                        </BlockDados>
+                                </BlockDados>
 
-                        <BlockDados>
-                            <TextoDados
-                                chave={"Ordem"}
-                                dados={
-                                    <InputUpdate
-                                        dado={order}
-                                        type="number"
-                                        /* @ts-ignore */
-                                        placeholder={order}
-                                        value={order}
-                                        /* @ts-ignore */
-                                        onChange={(e) => setOrder(e.target.value)}
-                                        handleSubmit={updateOrderCategory}
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Ordem"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={order}
+                                                type="number"
+                                                /* @ts-ignore */
+                                                placeholder={order}
+                                                value={order}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setOrder(e.target.value)}
+                                                handleSubmit={updateOrderCategory}
+                                            />
+                                        }
                                     />
-                                }
-                            />
-                        </BlockDados>
+                                </BlockDados>
 
-                        <BlockDados>
-                            <TextoDados
-                                chave={"Disponibilidade"}
-                                dados={
-                                    <ButtonSelect
-                                        /* @ts-ignore */
-                                        dado={disponibilidades}
-                                        handleSubmit={updateStatus}
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Disponibilidade"}
+                                        dados={
+                                            <ButtonSelect
+                                                /* @ts-ignore */
+                                                dado={disponibilidades}
+                                                handleSubmit={updateStatus}
+                                            />
+                                        }
                                     />
-                                }
-                            />
-                        </BlockDados>
+                                </BlockDados>
+                            </SectionDate>
 
+                            <SectionDate>
+                                {imageCategories ? (
+                                    <>
+                                        <FormUpdateImage onSubmit={handleImageUpload}>
+                                            <EtiquetaTextImagem>
+                                                {categoryImageUploadUrl ? (
+                                                    <Button
+                                                        type="submit"
+                                                    >
+                                                        Salvar nova imagem
+                                                    </Button>
+                                                ) :
+                                                    null
+                                                }
+                                                <IconSpanCatgoryImagens>
+                                                    <MdFileUpload size={50} />
+                                                </IconSpanCatgoryImagens>
+                                                <InputLogoTextImagem type="file" accept="image/png, image/jpeg" onChange={handleFileUpload} />
+                                                {categoryImageUploadUrl ? (
+                                                    <>
+                                                        <ImagensCategoryUpload
+                                                            src={categoryImageUploadUrl}
+                                                        />
+                                                    </>
+                                                ) :
+                                                    <>
+                                                        <TextPhoto>Clique para carregar uma nova imagem</TextPhoto>
+                                                        <ImagensCategoryPreviewUrl src={"http://localhost:3333/files/" + categoryImageUpload} />
+                                                    </>
+                                                }
+                                            </EtiquetaTextImagem>
+                                        </FormUpdateImage>
+                                    </>
+                                ) :
+                                    <>
+                                        <FormImagens onSubmit={handleRegisterImageCategory}>
+                                            <BlockImagem>
+                                                <EtiquetaImagens>
+                                                    {categoryImageUrl ? (
+                                                        <Button
+                                                            type="submit"
+                                                        >
+                                                            Salvar Imagem
+                                                        </Button>
+                                                    ) : null}
+                                                    <IconSpanCatgoryImagens>
+                                                        <MdFileUpload size={50} />
+                                                    </IconSpanCatgoryImagens>
+                                                    <InputImagens type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="imagem da categoria loja" />
+                                                    {categoryImageUrl ? (
+                                                        <ImagensCategoryPreviewUrl
+                                                            src={categoryImageUrl}
+                                                            alt="imagem da categoria loja"
+                                                        />
+                                                    ) :
+                                                        <>
+                                                            <ImagensCategoryUpload src={"http://localhost:3333/files/" + categoryImage} />
+                                                            <TextImagens>Clique na seta e insira<br /> uma imagem</TextImagens>
+                                                        </>
+                                                    }
+                                                </EtiquetaImagens>
+                                            </BlockImagem>
+                                        </FormImagens>
+                                    </>
+                                }
+
+                            </SectionDate>
+                        </GridDate>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
                         <DivisorHorizontal />
 
                         <Titulos
@@ -324,37 +452,6 @@ const Categoria: React.FC = () => {
                                 </ContainerPagination>
                             </>
                         }
-
-                        {categoryImageUrl ? (
-                            <Button
-                                type="submit"
-                                form="form-category"
-                            >
-                                Salvar Imagem
-                            </Button>
-                        ) : null}
-
-                        <FormImagens id="form-category" onSubmit={handleRegisterImageCategory}>
-                            <BlockImagem>
-                                <EtiquetaImagens>
-                                    <IconSpanImagens>
-                                        <MdFileUpload size={50} />
-                                    </IconSpanImagens>
-                                    <InputImagens type="file" accept="image/png, image/jpeg" onChange={handleFile} alt={categoryNames} />
-                                    {categoryImageUrl ? (
-                                        <ImagensPreviewUrl
-                                            src={categoryImageUrl}
-                                            alt={categoryNames}
-                                        />
-                                    ) :
-                                        <>
-                                            <ImagensUpload src={"http://localhost:3333/files/" + categoryImage} />
-                                            <TextImagens>Clique na seta e insira<br /> uma imagem</TextImagens>
-                                        </>
-                                    }
-                                </EtiquetaImagens>
-                            </BlockImagem>
-                        </FormImagens>
                     </Card>
                 </Container>
             </Grid>

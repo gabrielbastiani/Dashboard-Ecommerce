@@ -28,3 +28,26 @@ export const BlockCategorys = styled.div`
 `;
 
 export const Categ = styled.span``;
+
+export const ImagensCategoryPreviewUrl = styled.img`
+  width: 50%;
+  height: 350px;
+  margin-bottom: 20px;
+  object-fit: contain;
+`;
+
+export const ImagensCategoryUpload = styled.img`
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+`;
+
+export const IconSpanCatgoryImagens = styled.span`
+  z-index: 1;
+  opacity: 0.7;
+  transition: all 0.9s;
+
+  svg {
+    margin: -185px 0;
+  }
+`;
