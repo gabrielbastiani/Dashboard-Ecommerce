@@ -91,6 +91,7 @@ const PhotosVariacoes = ({ variacao_id, product_id }: PhotoVariacao) => {
             /* @ts-ignore */
             data.append('variacao_id', variacao_id);
             data.append('product_id', product_id);
+            data.append('posicao', "");
 
             const apiClient = setupAPIClient();
             await apiClient.post(`/photoVariante`, data);

@@ -88,6 +88,7 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
             data.append('file', productPhoto);
             /* @ts-ignore */
             data.append('product_id', product_id);
+            data.append('posicao', "");
 
             const apiClient = setupAPIClient();
             await apiClient.post(`/photo`, data);

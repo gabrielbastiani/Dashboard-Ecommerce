@@ -37,6 +37,8 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
     const [profundidadeCm, setProfundidadeCm] = useState('');
     const [alturaCm, setAlturaCm] = useState('');
     const [promocao, setPromocao] = useState('');
+    const [order] = useState(0);
+    const [posicao] = useState("");
 
 
     async function handleRegisterVariacao() {
@@ -59,7 +61,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
 
             const apiClient = setupAPIClient();
             await apiClient.post('/variacao', {
-                nameVariacao: nameVariacao.replace(/[/]/g, "-"),
+                nameVariacao: nameVariacao,
                 descriptionVariacao1: descriptionVariacao1,
                 descriptionVariacao2: descriptionVariacao2,
                 descriptionVariacao3: descriptionVariacao3,
@@ -75,7 +77,9 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                 alturaCm: alturaCm,
                 promocao: Number(promocao.replace(/[^\d]+/g, '')),
                 loja_id: loja_id,
-                product_id: product_ids
+                product_id: product_ids,
+                order: order,
+                posicao: posicao,
             })
 
             toast.success('Variação cadastrada com sucesso')
