@@ -20,6 +20,7 @@ import Modal from 'react-modal';
 import { ModalDeleteRelationsCategorys } from "../../../components/popups/ModalDeleteRelationsCategorys";
 import { BsTrash } from "react-icons/bs";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 
 
 export type DeleteRelations = {
@@ -118,6 +119,31 @@ const AtualizarCategoria: React.FC = () => {
         }
     }
 
+    async function updateStatus(id: string, status: string) {
+        console.log(id)
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusRelation?relationProductCategory_id=${id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            toast.error('Ops erro ao atualizar o status da relação de categorias.');
+        }
+
+        if (status === "Inativo") {
+            toast.success(`A relação de categorias se encontra disponivel.`);
+            return;
+        }
+
+        if (status === "Ativo") {
+            toast.error(`A relação de categorias se encontra indisponivel.`);
+            return;
+        }
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
@@ -184,13 +210,13 @@ const AtualizarCategoria: React.FC = () => {
                                             >
                                                 <AiOutlinePlusCircle />
                                                 <Link to={`/produto/atualizar/categorias/updateNivelCategoryProduct/${product_id}/${IDRelation.id}`} >
-                                                    <TextButton>Entre nesse nivel de categorias</TextButton>
+                                                    <TextButton>Niveis da categorias</TextButton>
                                                 </Link>
                                             </Button>
                                         </SectionDate>
 
                                         <SectionDate >
-                                            <BlockDados style={{ marginLeft: "30px" }} >
+                                            <BlockDados style={{ marginLeft: "10px" }} >
                                                 <TextoDados
                                                     chave={"Categoria"}
                                                     dados={
@@ -212,7 +238,7 @@ const AtualizarCategoria: React.FC = () => {
                                         </SectionDate>
 
                                         <SectionDate>
-                                            <BlockDados>
+                                            <BlockDados style={{ marginLeft: "40px" }} >
                                                 <TextoDados
                                                     chave={"Ordem"}
                                                     dados={
@@ -225,6 +251,21 @@ const AtualizarCategoria: React.FC = () => {
                                                             /* @ts-ignore */
                                                             onChange={(e) => setOrderUpdate(e.target.value)}
                                                             handleSubmit={() => updateOrder(IDRelation.id)}
+                                                        />
+                                                    }
+                                                />
+                                            </BlockDados>
+                                        </SectionDate>
+
+                                        <SectionDate>
+                                            <BlockDados>
+                                                <TextoDados
+                                                    chave={"Status"}
+                                                    dados={
+                                                        <ButtonSelect
+                                                            /* @ts-ignore */
+                                                            dado={IDRelation.status}
+                                                            handleSubmit={() => updateStatus(IDRelation.id, IDRelation.status)}
                                                         />
                                                     }
                                                 />

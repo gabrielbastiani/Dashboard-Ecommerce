@@ -123,7 +123,7 @@ const Categoria: React.FC = () => {
                 navigate(0);
             }, 3000);
 
-        } catch (err) {
+        } catch (error) {
             toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
         }
 

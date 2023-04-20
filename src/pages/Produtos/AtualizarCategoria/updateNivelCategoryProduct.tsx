@@ -24,6 +24,7 @@ import SelectUpdate from "../../../components/ui/SelectUpdate";
 import Select from "../../../components/ui/Select";
 import { InputPost } from "../../../components/ui/InputPost";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 
 
 export type DeleteRelations = {
@@ -167,6 +168,31 @@ const UpdateNivelCategoryProduct: React.FC = () => {
         }
     }
 
+    async function updateStatus(id: string, status: string) {
+        console.log(id)
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusRelation?relationProductCategory_id=${id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            toast.error('Ops erro ao atualizar o status da relação de categorias.');
+        }
+
+        if (status === "Inativo") {
+            toast.success(`A relação de categorias se encontra disponivel.`);
+            return;
+        }
+
+        if (status === "Ativo") {
+            toast.error(`A relação de categorias se encontra indisponivel.`);
+            return;
+        }
+    }
+
     async function handleOpenModalDelete(id: string) {
         const apiClient = setupAPIClient();
         const { data } = await apiClient.get('/findIdsRelations', {
@@ -282,6 +308,21 @@ const UpdateNivelCategoryProduct: React.FC = () => {
                                                                 /* @ts-ignore */
                                                                 onChange={(e) => setOrderUpdate(e.target.value)}
                                                                 handleSubmit={() => updateOrder(item.id)}
+                                                            />
+                                                        }
+                                                    />
+                                                </BlockDados>
+                                            </SectionDate>
+
+                                            <SectionDate>
+                                                <BlockDados>
+                                                    <TextoDados
+                                                        chave={"Status"}
+                                                        dados={
+                                                            <ButtonSelect
+                                                                /* @ts-ignore */
+                                                                dado={item.status}
+                                                                handleSubmit={() => updateStatus(item.id, item.status)}
                                                             />
                                                         }
                                                     />
