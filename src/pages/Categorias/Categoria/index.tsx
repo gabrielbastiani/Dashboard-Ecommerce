@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
@@ -26,10 +26,13 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { TextoDados } from "../../../components/TextoDados";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { Card } from "../../../components/Content/styles";
-import { Button } from "../../../components/ui/Button";
 import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
 import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
+import { Button } from "../../../components/ui/Button";
+import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import { MdFileUpload } from "react-icons/md";
+
 
 
 const Categoria: React.FC = () => {
@@ -47,6 +50,9 @@ const Categoria: React.FC = () => {
     const [limit] = useState(10);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [categoryImage, setCategoryImage] = useState(null);
+    const [categoryImageUrl, setCategoryImageUrl] = useState('');
 
 
     useEffect(() => {
@@ -121,7 +127,6 @@ const Categoria: React.FC = () => {
         }
     }
 
-
     useEffect(() => {
         async function allProducts() {
             try {
@@ -145,6 +150,47 @@ const Categoria: React.FC = () => {
         }
         allProducts();
     }, [category_id, currentPage, limit, total]);
+
+    async function handleRegisterImageCategory(event: FormEvent) {
+        event.preventDefault();
+        try {
+            const data = new FormData();
+            /* @ts-ignore */
+            data.append('file', categoryImage);
+
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateImageCategory?category_id=${category_id}`, data);
+
+            toast.success('Imagem atualizada com sucesso.');
+
+            setTimeout(() => {
+                navigate('/categorias');
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao atualizar a imagem da categoria!!!');
+        }
+
+    }
+
+    function handleFile(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return
+        }
+
+        const image = e.target.files[0]
+        if (!image) {
+            return
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setCategoryImage(image)
+            setCategoryImageUrl(URL.createObjectURL(image))
+        }
+
+    }
 
     const dados: any = [];
     (search || []).forEach((item) => {
@@ -278,6 +324,37 @@ const Categoria: React.FC = () => {
                                 </ContainerPagination>
                             </>
                         }
+
+                        {categoryImageUrl ? (
+                            <Button
+                                type="submit"
+                                form="form-category"
+                            >
+                                Salvar Imagem
+                            </Button>
+                        ) : null}
+
+                        <FormImagens id="form-category" onSubmit={handleRegisterImageCategory}>
+                            <BlockImagem>
+                                <EtiquetaImagens>
+                                    <IconSpanImagens>
+                                        <MdFileUpload size={50} />
+                                    </IconSpanImagens>
+                                    <InputImagens type="file" accept="image/png, image/jpeg" onChange={handleFile} alt={categoryNames} />
+                                    {categoryImageUrl ? (
+                                        <ImagensPreviewUrl
+                                            src={categoryImageUrl}
+                                            alt={categoryNames}
+                                        />
+                                    ) :
+                                        <>
+                                            <ImagensUpload src={"http://localhost:3333/files/" + categoryImage} />
+                                            <TextImagens>Clique na seta e insira<br /> uma imagem</TextImagens>
+                                        </>
+                                    }
+                                </EtiquetaImagens>
+                            </BlockImagem>
+                        </FormImagens>
                     </Card>
                 </Container>
             </Grid>

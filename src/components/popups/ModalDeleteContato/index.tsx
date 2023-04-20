@@ -8,13 +8,13 @@ import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './sty
 import { DeleteContato } from '../../../pages/Contatos/Contato';
 
 
-interface DeleteNewsletter {
+interface DeleteContatos {
     isOpen: boolean;
     onRequestClose: () => void;
     contato: DeleteContato;
 }
 
-export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteNewsletter) {
+export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteContatos) {
 
     const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteNe
     };
 
 
-    async function handleDeleteNews() {
+    async function handleDeleteContato() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
@@ -76,7 +76,7 @@ export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteNe
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteNews()}
+                        onClick={() => handleDeleteContato()}
                     >
                         Deletar
                     </Button>

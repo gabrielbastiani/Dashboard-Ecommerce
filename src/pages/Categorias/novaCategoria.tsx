@@ -17,8 +17,6 @@ import Voltar from '../../components/Voltar';
 import { InputPost } from '../../components/ui/InputPost';
 import { Card } from '../../components/Content/styles';
 import { useNavigate } from 'react-router-dom';
-import { MdFileUpload } from 'react-icons/md';
-import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from '../Configuracoes/ImagensInstitucionais/styles';
 
 
 const NovaCategoria: React.FC = () => {
@@ -29,17 +27,11 @@ const NovaCategoria: React.FC = () => {
     const [categoryName, setCategoryName] = useState('');
     const [lojaID] = useState(user.loja_id);
 
-    const [redeImage, setRedeImage] = useState(null);
-    const [redeImageUrl, setRedeImageUrl] = useState('');
-
-
-    async function handleRegisterCategory(event: FormEvent) {
-        event.preventDefault();
-        const apiClient = setupAPIClient();
+    async function handleRegisterCategory() {
         try {
             if (categoryName === '') {
-                toast.error('Digite algum nome para sua categoria!');
-                return;
+                toast.error('Não deixe o nome em branco!!!')
+                return
             }
 
             if (lojaID === null) {
@@ -47,43 +39,25 @@ const NovaCategoria: React.FC = () => {
                 return;
             }
 
-            const data = new FormData();
-            /* @ts-ignore */
-            data.append('file', logoLoja);
-            data.append('categoryName', categoryName.replace(/[/]/g, "-"));
-            data.append('posicao', "");
-            data.append('order', "0");
-            data.append('loja_id', lojaID);
+            const apiClient = setupAPIClient();
+            await apiClient.post('/category', {
+                categoryName: categoryName,
+                order: 0,
+                posicao: "",
+                loja_id: lojaID
+            });
 
-            await apiClient.post(`/category`, data);
+            toast.success('Categoria cadastrada com sucesso');
 
-            toast.success('Loja cadastrada com sucesso.');
+            setCategoryName("");
 
             setTimeout(() => {
                 navigate('/categorias');
             }, 3000);
 
         } catch (error) {/* @ts-ignore */
-            console.log(error.data.response);
-            toast.error('Erro ao cadastrar a categoria!!!');
-        }
-
-    }
-
-    function handleFile(e: ChangeEvent<HTMLInputElement>) {
-        if (!e.target.files) {
-            return
-        }
-
-        const image = e.target.files[0]
-        if (!image) {
-            return
-        }
-
-        if (image.type === 'image/jpeg' || image.type === 'image/png') {
-            /* @ts-ignore */
-            setRedeImage(image)
-            setRedeImageUrl(URL.createObjectURL(image))
+            console.log(error.response.data);
+            toast.error('Ops erro ao cadastrar a categoria!');
         }
 
     }
@@ -106,42 +80,20 @@ const NovaCategoria: React.FC = () => {
                         <Button
                             type="submit"
                             style={{ backgroundColor: 'green' }}
-                            form="form-category"
+                            onClick={handleRegisterCategory}
                         >
                             Salvar
                         </Button>
                     </BlockTop>
-
-                    <FormImagens id="form-category" onSubmit={handleRegisterCategory}>
-                        <BlockImagem>
-                            <EtiquetaImagens>
-                                <IconSpanImagens>
-                                    <MdFileUpload size={50} />
-                                </IconSpanImagens>
-                                <InputImagens type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="imagem da loja" />
-                                {imagesUrl ? (
-                                    <ImagensPreviewUrl
-                                        src={imagesUrl}
-                                        alt="imagem da loja"
-                                    />
-                                ) :
-                                    <>
-                                        <ImagensUpload src={"http://localhost:3333/files/" + images} />
-                                        <TextImagens>Clique na seta e insira<br /> uma imagem</TextImagens>
-                                    </>
-                                }
-                            </EtiquetaImagens>
-                        </BlockImagem>
-
-                        <Block>
-                            <Etiqueta>Nome:</Etiqueta>
-                            <InputPost
-                                type="text"
-                                placeholder="Digite o nome da categoria"
-                                onChange={(e) => setCategoryName(e.target.value)}
-                            />
-                        </Block>
-                    </FormImagens>
+                    <Block>
+                        <Etiqueta>Nome:</Etiqueta>
+                        <InputPost
+                            type="text"
+                            placeholder="Digite o nome da categoria"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                        />
+                    </Block>
                 </Card>
             </Container>
         </Grid>
