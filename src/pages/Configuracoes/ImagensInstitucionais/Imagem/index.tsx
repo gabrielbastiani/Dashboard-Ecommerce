@@ -161,7 +161,7 @@ const Imagem: React.FC = () => {
             setTimeout(() => {
                 navigate(0);
                 return;
-            }, 2000);
+            }, 3000);
         }
 
         if (disponibilidade === "Disponivel") {
@@ -169,7 +169,7 @@ const Imagem: React.FC = () => {
             setTimeout(() => {
                 navigate(0);
                 return;
-            }, 2000);
+            }, 3000);
         }
     }
 
@@ -192,7 +192,7 @@ const Imagem: React.FC = () => {
         }
         setTimeout(() => {
             navigate(0);
-        }, 2000);
+        }, 3000);
     }
 
     function handleCloseModalDelete() {

@@ -5,12 +5,12 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-
+import { DeleteBanner } from '../../../pages/Banners/Banner';
 
 
 interface ModalDeleteBannerHomeRequest {
     isOpen: boolean;
-    onRequestClose: () => void;/* @ts-ignore */
+    onRequestClose: () => void;
     bannerId: DeleteBanner;
 }
 
@@ -36,17 +36,17 @@ export function ModalDeleteBanner({ isOpen, onRequestClose, bannerId }: ModalDel
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const bannerHome_id = bannerId.id;
+            const banner_id = bannerId.id;
 
-            await apiClient.delete(`/deleteBannerHome?bannerHome_id=${bannerHome_id}`);
+            await apiClient.delete(`/deleteBanner?banner_id=${banner_id}`);
             toast.success(`Banner deletado com sucesso.`);
 
-            navigate('/banners/bannerHome');
+            navigate('/banners');
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
+            console.log(error.response.data);
             toast.error('Ops erro ao deletar o banner!');
         }
         setTimeout(() => {

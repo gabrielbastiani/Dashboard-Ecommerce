@@ -13,6 +13,7 @@ import Pesquisa from "../../components/Pesquisa";
 import TabelaSimples from "../../components/Tabelas";
 import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
+import moment from "moment";
 
 
 const Banners: React.FC = () => {
@@ -21,7 +22,7 @@ const Banners: React.FC = () => {
     const [search, setSearch] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(999999);
+    const [limit, setLimit] = useState(99999);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -74,11 +75,12 @@ const Banners: React.FC = () => {
         dados.push({
             "Imagem": item.banner ? <ImgInstitucional src={"http://localhost:3333/files/" + item.banner} /> : "Sem banner",
             "Titulo": item.title,
-            "Data Inicio": item.dateInicio,
-            "Data Fim": item.dateFim,
-            "Ordem": item.order,
+            "Data Inicio": item.dateInicio ? moment(item.dateInicio).format('DD/MM/YYYY - HH:mm') : "Sem Programação",
+            "Data Fim": item.dateInicio ? moment(item.dateFim).format('DD/MM/YYYY - HH:mm') : "Sem Programação",
+            "Ordem": String(item.order),
             "Posição": item.posicao,
             "Ativado?": item.active,
+            "Publicado?": item.publicar ? "Sim" : "Não",
             "botaoDetalhes": `/banner/${item.id}`
         });
     });
@@ -133,7 +135,7 @@ const Banners: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Titulo", "Data Inicio", "Data Fim", "Ordem", "Posição", "Ativado?"]}
+                                cabecalho={["Imagem", "Titulo", "Data Inicio", "Data Fim", "Ordem", "Posição", "Ativado?", "Publicado?"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

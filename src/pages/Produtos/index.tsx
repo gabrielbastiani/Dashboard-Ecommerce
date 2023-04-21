@@ -26,6 +26,7 @@ import TabelaSimples from "../../components/Tabelas";
 import { setupAPIClient } from "../../services/api";
 import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
+import { ImgRedes } from "../Configuracoes/styles";
 
 
 const Produtos: React.FC = () => {
@@ -119,6 +120,7 @@ const Produtos: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
+            "Imagem": item.photoproducts[0] ? <ImgRedes src={"http://localhost:3333/files/" + item.photoproducts[0].photo} /> : "Sem imagem",
             "Produto": item.nameProduct,
             "Qtd. de Categorias": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem categoria",
             "Status": item.disponibilidade,
@@ -195,7 +197,7 @@ const Produtos: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Produto", "Qtd. de Categorias", "Status"]}
+                                cabecalho={["Imagem", "Produto", "Qtd. de Categorias", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

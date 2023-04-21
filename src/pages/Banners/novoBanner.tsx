@@ -17,7 +17,6 @@ import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "./styles";
 import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from "../Configuracoes/ImagensInstitucionais/styles";
 import { MdFileUpload } from "react-icons/md";
 import { GridDate } from "../Perfil/styles";
-import moment from "moment";
 
 
 const NovoBanner: React.FC = () => {
@@ -42,14 +41,6 @@ const NovoBanner: React.FC = () => {
     };
 
     const [loading, setLoading] = useState(false);
-
-    const [hourNow, setHourNow] = useState(Number);
-    const [minuteNow, setMinuteNow] = useState(Number);
-    const [secondNow, setSecondNow] = useState(Number);
-
-    const [publishDate, setPublishDate] = useState('');
-
-    const place = moment(publishDate).format('DD/MM/YYYY HH:mm');
 
 
     async function handleRegisterBanner(event: FormEvent) {
@@ -111,32 +102,8 @@ const NovoBanner: React.FC = () => {
         setPosicaoSelected(e.target.value);
     }
 
-    const hoje = new Date();
-    const dia = hoje.getDate().toString().padStart(2, '0');
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const ano = hoje.getFullYear();
-    const dataAtual = `${dia}/${mes}/${ano}`;
-
-    const getHours = () => {
-        const date = new Date();
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const seconds = date.getSeconds();
-        const hourNow = hours < 10 ? `0${hours}` : hours;
-        const minuteNow = minutes < 10 ? `0${minutes}` : minutes;
-        const secondNow = seconds < 10 ? `0${seconds}` : seconds;
-
-        /* @ts-ignore */
-        setHourNow(hourNow);
-        /* @ts-ignore */
-        setMinuteNow(minuteNow);
-        /* @ts-ignore */
-        setSecondNow(secondNow);
-
-    }
-
     setInterval(() => {
-        getHours();
+        new Date();
     }, 1000);
 
 
@@ -238,26 +205,6 @@ const NovoBanner: React.FC = () => {
                                 </Block>
 
                                 <Block>
-                                    <Etiqueta>Data de início:</Etiqueta>
-                                    <InputPost
-                                        type="datetime-local"
-                                        placeholder={dateInicio}
-                                        value={dateInicio}
-                                        onChange={(e) => setDateInicio(e.target.value)}
-                                    />
-                                </Block>
-
-                                <Block>
-                                    <Etiqueta>Data do fim:</Etiqueta>
-                                    <InputPost
-                                        type="datetime-local"
-                                        placeholder={dateFim}
-                                        value={dateFim}
-                                        onChange={(e) => setDateFim(e.target.value)}
-                                    />
-                                </Block>
-
-                                <Block>
                                     <BlockInputs>
                                         <BoxActive>
                                             <EtiquetaInput>Ativar banner</EtiquetaInput>
@@ -270,6 +217,27 @@ const NovoBanner: React.FC = () => {
                                             />
                                         </BoxActive>
                                     </BlockInputs>
+                                </Block>
+                                <br />
+                                <Etiqueta style={{ color: 'red' }} >PROGRAME A PUBLICAÇÃO DO BANNER<br />ABAIXO SE DESEJAR</Etiqueta>
+                                <br />
+                                <br />
+                                <Block>
+                                    <Etiqueta>Data de início:</Etiqueta>
+                                    <InputPost
+                                        type="datetime-local"
+                                        placeholder={dateInicio}
+                                        onChange={(e) => setDateInicio(e.target.value)}
+                                    />
+                                </Block>
+
+                                <Block>
+                                    <Etiqueta>Data do fim:</Etiqueta>
+                                    <InputPost
+                                        type="datetime-local"
+                                        placeholder={dateFim}
+                                        onChange={(e) => setDateFim(e.target.value)}
+                                    />
                                 </Block>
                             </SectionDate>
                         </GridDate>

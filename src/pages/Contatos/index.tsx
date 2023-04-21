@@ -23,7 +23,7 @@ const Contatos: React.FC = () => {
     const [search, setSearch] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(4);
+    const [limit, setLimit] = useState(99999);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -77,8 +77,7 @@ const Contatos: React.FC = () => {
         setSearch(filterContatos);
     }
 
-    /* @ts-ignore */
-    const dados = [];
+    const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
             "Nome": item.name,
@@ -176,13 +175,6 @@ const Contatos: React.FC = () => {
                                 <Avisos
                                     texto="Não há contatos cadastradas aqui..."
                                 />
-                                {currentPage > 1 && (
-                                    <Previus>
-                                        <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                            Voltar
-                                        </ButtonPage>
-                                    </Previus>
-                                )}
                             </>
                         ) :
                             <>
@@ -192,20 +184,27 @@ const Contatos: React.FC = () => {
                                     /* @ts-ignore */
                                     onChange={limits}
                                     opcoes={[
+                                        { label: "Todas contatos", value: "99999" },
                                         { label: "15", value: "15" },
-                                        { label: "30", value: "30" },
-                                        { label: "Todas contatos", value: "99999999" }
+                                        { label: "30", value: "30" }
                                     ]}
                                 />
 
                                 <TabelaSimples
                                     cabecalho={["Nome", "E-mail", "Data de Cadastro"]}
-                                    /* @ts-ignore */
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
 
                                 <ContainerPagination>
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
+
                                     <TotalBoxItems key={total}>
                                         <TextTotal>Total de contatos: {total}</TextTotal>
                                     </TotalBoxItems>
