@@ -37,6 +37,7 @@ import NewNivelCategoryProduct from './pages/Produtos/ProdutoCategoria/newNivelC
 import AtualizarCategoria from './pages/Produtos/AtualizarCategoria';
 import UpdateNivelCategoryProduct from './pages/Produtos/AtualizarCategoria/updateNivelCategoryProduct';
 import TodasAvaliacoes from './pages/Avaliacoes/TodasAvaliacoes';
+import NovoBanner from './pages/Banners/novoBanner';
 
 
 const RoutesAuth: React.FC = () => {
@@ -71,6 +72,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
 
             <Route path='/banners' element={<Banners />} />
+            <Route path='/banners/novo' element={<NovoBanner />} />
 
             <Route path='/newsletters' element={<Newsletters />} />
             <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />

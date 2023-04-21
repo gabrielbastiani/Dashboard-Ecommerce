@@ -24,6 +24,7 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Card } from "../../components/Content/styles";
 import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
+import { ImgInstitucional } from "../Configuracoes/ImagensInstitucionais/styles";
 
 
 const Categorias: React.FC = () => {
@@ -83,6 +84,7 @@ const Categorias: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
+            "Imagem": item.imagecategories[0] ? <ImgInstitucional src={"http://localhost:3333/files/" + item.imagecategories[0].categoryImage} /> : "Sem Imagem",
             "Categoria": item.categoryName,
             "Qtd. de Produtos": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem produto(s)",
             "Status": item.disponibilidade,
@@ -141,7 +143,7 @@ const Categorias: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Categoria", "Qtd. de Produtos", "Status"]}
+                                cabecalho={["Imagem", "Categoria", "Qtd. de Produtos", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

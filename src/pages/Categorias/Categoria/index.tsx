@@ -34,7 +34,7 @@ import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } 
 import { MdFileUpload } from "react-icons/md";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
-import { EtiquetaTextImagem, FormUpdateImage, IconSpanTextImage, ImageTextPhoto, InputLogoTextImagem, PreviewTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
+import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
 
 
 

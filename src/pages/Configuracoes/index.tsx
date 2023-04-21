@@ -43,8 +43,6 @@ const Configuracoes: React.FC = () => {
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [loja_id, setLoja_id] = useState('');
     const [logoLoja, setLogoLoja] = useState(null);
     const [lojaUrl, setLojaUrl] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -87,7 +85,6 @@ const Configuracoes: React.FC = () => {
             try {
                 const response = await apiClient.get(`/userLoja?loja_id=${user.loja_id}`);
 
-                setLoja_id(response.data.loja_id || "");
                 setLogoLoja(response.data.logoLoja || "");
                 setNameLoja(response.data.nameLoja || "");
                 setCnpjLoja(response.data.cnpjLoja || "");
@@ -351,7 +348,7 @@ const Configuracoes: React.FC = () => {
 
             setTimeout(() => {
                 navigate(0);
-            }, 2000);
+            }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
