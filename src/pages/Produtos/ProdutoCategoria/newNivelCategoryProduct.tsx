@@ -79,7 +79,7 @@ const NewNivelCategoryProduct: React.FC = () => {
                 category_id: categorySelected,
                 posicao: "",
                 order: Number(order),
-                nivel: 0,
+                nivel: 1,
                 relationId: IDRelation,
                 loja_id: loja_id
             });
