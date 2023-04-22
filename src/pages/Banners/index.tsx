@@ -80,7 +80,6 @@ const Banners: React.FC = () => {
             "Ordem": String(item.order),
             "Posição": item.posicao,
             "Ativado?": item.active,
-            "Publicado?": item.publicar ? "Sim" : "Não",
             "botaoDetalhes": `/banner/${item.id}`
         });
     });
@@ -135,7 +134,7 @@ const Banners: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Titulo", "Data Inicio", "Data Fim", "Ordem", "Posição", "Ativado?", "Publicado?"]}
+                                cabecalho={["Imagem", "Titulo", "Data Inicio", "Data Fim", "Ordem", "Posição", "Ativado?"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

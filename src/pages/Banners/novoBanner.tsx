@@ -33,14 +33,15 @@ const NovoBanner: React.FC = () => {
     const [order, setOrder] = useState(Number);
     const [url, setUrl] = useState("");
     const [posicaoSelected, setPosicaoSelected] = useState();
+
+    const [loading, setLoading] = useState(false);
+
     const [active, setActive] = useState('Nao');
     const [check, setCheck] = useState(false);
 
     const handleChecked = (e: any) => {
         setCheck(e.target.checked);
     };
-
-    const [loading, setLoading] = useState(false);
 
 
     async function handleRegisterBanner(event: FormEvent) {
@@ -67,6 +68,8 @@ const NovoBanner: React.FC = () => {
 
             toast.success('Banner cadastrado com sucesso.');
 
+            setLoading(false);
+
             setTimeout(() => {
                 navigate('/banners');
             }, 3000);
@@ -75,8 +78,6 @@ const NovoBanner: React.FC = () => {
             console.log(error.response.data);
             toast.error('Erro ao cadastrar o banner.');
         }
-
-        setLoading(false);
 
     }
 
@@ -95,7 +96,6 @@ const NovoBanner: React.FC = () => {
             setBanner(image)
             setBannerUrl(URL.createObjectURL(image))
         }
-
     }
 
     function handleChangePosicao(e: any) {
@@ -174,24 +174,29 @@ const NovoBanner: React.FC = () => {
                                     />
                                 </Block>
 
-                                <Block>
-                                    <Etiqueta>Largura (px):</Etiqueta>
-                                    <InputPost
-                                        type="text"
-                                        placeholder="Digite o aqui..."
-                                        onChange={(e) => setWidth(e.target.value)}
-                                    />
-                                </Block>
+                                {posicaoSelected === "Banner Topo" ? (
+                                    null
+                                ) :
+                                    <>
+                                        <Block>
+                                            <Etiqueta>Largura (px):</Etiqueta>
+                                            <InputPost
+                                                type="text"
+                                                placeholder="Digite o aqui..."
+                                                onChange={(e) => setWidth(e.target.value)}
+                                            />
+                                        </Block>
 
-                                <Block>
-                                    <Etiqueta>Altura (px):</Etiqueta>
-                                    <InputPost
-                                        type="text"
-                                        placeholder="Digite o aqui..."
-                                        onChange={(e) => setHeight(e.target.value)}
-                                    />
-                                </Block>
-
+                                        <Block>
+                                            <Etiqueta>Altura (px):</Etiqueta>
+                                            <InputPost
+                                                type="text"
+                                                placeholder="Digite o aqui..."
+                                                onChange={(e) => setHeight(e.target.value)}
+                                            />
+                                        </Block>
+                                    </>
+                                }
                             </SectionDate>
 
                             <SectionDate>
@@ -207,7 +212,7 @@ const NovoBanner: React.FC = () => {
                                 <Block>
                                     <BlockInputs>
                                         <BoxActive>
-                                            <EtiquetaInput>Ativar banner</EtiquetaInput>
+                                            <EtiquetaInput>Ativar banner?</EtiquetaInput>
                                             <RadioBotton
                                                 type="checkbox"
                                                 value={active}
@@ -219,26 +224,39 @@ const NovoBanner: React.FC = () => {
                                     </BlockInputs>
                                 </Block>
                                 <br />
-                                <Etiqueta style={{ color: 'red' }} >PROGRAME A PUBLICAÇÃO DO BANNER<br />ABAIXO SE DESEJAR</Etiqueta>
-                                <br />
-                                <br />
-                                <Block>
-                                    <Etiqueta>Data de início:</Etiqueta>
-                                    <InputPost
-                                        type="datetime-local"
-                                        placeholder={dateInicio}
-                                        onChange={(e) => setDateInicio(e.target.value)}
-                                    />
-                                </Block>
 
-                                <Block>
-                                    <Etiqueta>Data do fim:</Etiqueta>
-                                    <InputPost
-                                        type="datetime-local"
-                                        placeholder={dateFim}
-                                        onChange={(e) => setDateFim(e.target.value)}
-                                    />
-                                </Block>
+                                {active === "Sim" ? (
+                                    null
+                                ) :
+                                    <>
+                                        <Etiqueta
+                                            style={{ color: 'red', fontSize: '15px' }}
+                                        >
+                                            PROGRAME A PUBLICAÇÃO DO BANNER ABAIXO SE DESEJAR<br />
+                                            (OBS: NÃO ATIVE O BANNER NO CHECKBOX ACIMA PARA PODER<br />
+                                            PROGRAMAR ABAIXO), MAS CASO QUEIRA ATIVAR O BANNER NA LOJA SEM PROGRAMAÇÃO, ATIVE O CHECKBOX ACIMA E SALVE NORMALMENTE.
+                                        </Etiqueta>
+                                        <br />
+                                        <br />
+                                        <Block>
+                                            <Etiqueta>Data de início:</Etiqueta>
+                                            <InputPost
+                                                type="datetime-local"
+                                                placeholder={dateInicio}
+                                                onChange={(e) => setDateInicio(e.target.value)}
+                                            />
+                                        </Block>
+
+                                        <Block>
+                                            <Etiqueta>Data do fim:</Etiqueta>
+                                            <InputPost
+                                                type="datetime-local"
+                                                placeholder={dateFim}
+                                                onChange={(e) => setDateFim(e.target.value)}
+                                            />
+                                        </Block>
+                                    </>
+                                }
                             </SectionDate>
                         </GridDate>
                         <br />
@@ -263,7 +281,6 @@ const NovoBanner: React.FC = () => {
                                 }
                             </EtiquetaImagens>
                         </BlockImagem>
-
                     </FormImagens>
                 </Card>
             </Container>

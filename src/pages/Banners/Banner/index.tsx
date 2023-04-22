@@ -22,6 +22,7 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import moment from "moment";
 import Modal from 'react-modal';
 import { ModalDeleteBanner } from "../../../components/popups/ModalDeleteBanner";
+import { RadioBotton } from "../styles";
 
 
 export type DeleteBanner = {
@@ -250,6 +251,7 @@ const Banner: React.FC = () => {
                                 Remover
                             </Button>
                         </BlockTop>
+                        <br />
                         <GridDate>
                             <SectionDate>
                                 <BlockDados>
@@ -316,42 +318,47 @@ const Banner: React.FC = () => {
                                     />
                                 </BlockDados>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Largura (px)"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={width}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={width}
-                                                value={width}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setWidth(e.target.value)}
-                                                handleSubmit={updateBannerData}
+                                {posicao === "Banner Topo" ? (
+                                    null
+                                ) :
+                                    <>
+                                        <BlockDados>
+                                            <TextoDados
+                                                chave={"Largura (px)"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={width}
+                                                        type="text"
+                                                        /* @ts-ignore */
+                                                        placeholder={width}
+                                                        value={width}
+                                                        /* @ts-ignore */
+                                                        onChange={(e) => setWidth(e.target.value)}
+                                                        handleSubmit={updateBannerData}
+                                                    />
+                                                }
                                             />
-                                        }
-                                    />
-                                </BlockDados>
+                                        </BlockDados>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Altura (px)"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={height}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={height}
-                                                value={height}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setHeight(e.target.value)}
-                                                handleSubmit={updateBannerData}
+                                        <BlockDados>
+                                            <TextoDados
+                                                chave={"Altura (px)"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={height}
+                                                        type="text"
+                                                        /* @ts-ignore */
+                                                        placeholder={height}
+                                                        value={height}
+                                                        /* @ts-ignore */
+                                                        onChange={(e) => setHeight(e.target.value)}
+                                                        handleSubmit={updateBannerData}
+                                                    />
+                                                }
                                             />
-                                        }
-                                    />
-                                </BlockDados>
-
+                                        </BlockDados>
+                                    </>
+                                }
                             </SectionDate>
 
                             <SectionDate>
@@ -386,50 +393,64 @@ const Banner: React.FC = () => {
                                     />
                                 </BlockDados>
                                 <br />
-                                <Etiqueta style={{ color: 'red' }} >PROGRAME A PUBLICAÇÃO DO BANNER<br />ABAIXO SE DESEJAR</Etiqueta>
-                                <br />
-                                <br />
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Data de início"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={dateInicio ? moment(dateInicio).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
-                                                type="datetime-local"
-                                                /* @ts-ignore */
-                                                placeholder={dateInicio}
-                                                value={dateInicio}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setDateInicio(e.target.value)}
-                                                handleSubmit={updateBannerData}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Data do fim"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={dateFim ? moment(dateFim).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
-                                                type="datetime-local"
-                                                /* @ts-ignore */
-                                                placeholder={dateFim}
-                                                value={dateFim}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setDateFim(e.target.value)}
-                                                handleSubmit={updateBannerData}
+                                {active === "Sim" ? (
+                                    null
+                                ) :
+                                    <>
+                                        <Etiqueta
+                                            style={{ color: 'red', fontSize: '15px' }}
+                                        >
+                                            PROGRAME A PUBLICAÇÃO DO BANNER ABAIXO SE DESEJAR<br />
+                                            (OBS: NÃO ATIVE O BANNER NO CHECKBOX ACIMA PARA PODER<br />
+                                            PROGRAMAR ABAIXO), MAS CASO QUEIRA ATIVAR O BANNER NA LOJA<br />
+                                            SEM PROGRAMAÇÃO, ATIVE O CHECKBOX ACIMA.
+                                        </Etiqueta>
+                                        <br />
+                                        <br />
+                                        <BlockDados>
+                                            <TextoDados
+                                                chave={"Data de início"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={dateInicio ? moment(dateInicio).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
+                                                        type="datetime-local"
+                                                        /* @ts-ignore */
+                                                        placeholder={dateInicio}
+                                                        value={dateInicio}
+                                                        /* @ts-ignore */
+                                                        onChange={(e) => setDateInicio(e.target.value)}
+                                                        handleSubmit={updateBannerData}
+                                                    />
+                                                }
                                             />
-                                        }
-                                    />
-                                </BlockDados>
+                                        </BlockDados>
 
-                                <Button
-                                    onClick={bannerPublish}
-                                >
-                                    Ativar programação
-                                </Button>
+                                        <BlockDados>
+                                            <TextoDados
+                                                chave={"Data do fim"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={dateFim ? moment(dateFim).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
+                                                        type="datetime-local"
+                                                        /* @ts-ignore */
+                                                        placeholder={dateFim}
+                                                        value={dateFim}
+                                                        /* @ts-ignore */
+                                                        onChange={(e) => setDateFim(e.target.value)}
+                                                        handleSubmit={updateBannerData}
+                                                    />
+                                                }
+                                            />
+                                        </BlockDados>
+
+                                        <Button
+                                            onClick={bannerPublish}
+                                        >
+                                            Ativar programação
+                                        </Button>
+                                    </>
+                                }
                             </SectionDate>
                         </GridDate>
                         <br />
