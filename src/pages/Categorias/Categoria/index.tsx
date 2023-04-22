@@ -167,9 +167,7 @@ const Categoria: React.FC = () => {
         try {
             const data = new FormData();
             /* @ts-ignore */
-            data.append('file', categoryImage);
-            data.append('title', categoryNames);
-            data.append('posicao', "");/* @ts-ignore */
+            data.append('file', categoryImage);/* @ts-ignore */
             data.append('category_id', category_id);
 
             const apiClient = setupAPIClient();
