@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import noImage from '../../../assets/semfoto.png';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
@@ -6,7 +7,7 @@ import { toast } from "react-toastify";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../styles";
+import { Block, BlockTop, Container, Etiqueta, ImagensCategorys } from "../styles";
 import { Card } from "../../../components/Content/styles";
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import Titulos from "../../../components/Titulos";
@@ -21,19 +22,14 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { BsTrash } from "react-icons/bs";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
-import { ModalDeleteIDSCategoryGroup } from "../../../components/popups/ModalDeleteIDSCategoryGroup";
 import Modal from 'react-modal';
 import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
+import { ModalDeleteGroup } from "../../../components/popups/ModalDeleteGroup";
 
 
 export type DeleteGroups = {
     groupCategoy_id: string;
-}
-
-export type DeleteCategoriesGroups = {
-    id: string;
-    iDsPai: string;
 }
 
 const CategoriasGrupo: React.FC = () => {
@@ -47,7 +43,6 @@ const CategoriasGrupo: React.FC = () => {
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
     const [order, setOrder] = useState(Number);
-    const [orderUpdate, setOrderUpdate] = useState();
     const [itemName, setItemName] = useState("");
 
     const [nameGroup, setNameGroup] = useState("");
@@ -56,11 +51,8 @@ const CategoriasGrupo: React.FC = () => {
 
     const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);
 
-    const [iDsPai] = useState(groupCategoy_id);
-
-    const [modalItem, setModalItem] = useState<DeleteCategoriesGroups>();
+    const [modalItem, setModalItem] = useState<DeleteGroups>();
     const [modalVisible, setModalVisible] = useState(false);
-
 
 
     function handleChangeCategory(e: any) {
@@ -146,54 +138,11 @@ const CategoriasGrupo: React.FC = () => {
         findLoadIDGroup();
     }, [groupCategoy_id]);
 
-    async function updateOrder(id: string) {
-        try {
-            const apiClient = setupAPIClient();
-            if (updateOrder === null) {
-                toast.error('Não deixe a ordem em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateOrderItemGroup?groupCategoy_id=${id}`, { order: Number(orderUpdate) });
-                toast.success('Ordem da categoria no grupo atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a ordem da categoria no grupo.');
-        }
-    }
-
-    async function updateStatus(id: string, status: string) {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusGroup?groupCategoy_id=${id}`);
-
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-
-        } catch (error) {
-            toast.error('Ops erro ao atualizar a disponibilidade do item categoria nesse grupo.');
-        }
-
-        if (status === "Inativo") {
-            toast.success(`O item categoria se encontra Disponivel no grupo.`);
-            return;
-        }
-
-        if (status === "Ativo") {
-            toast.error(`O item categoria se encontra Indisponivel no grupo.`);
-            return;
-        }
-    }
-
     async function updateNameGroup() {
         try {
             const apiClient = setupAPIClient();
             if (nameGroup === "") {
-                toast.error('Não deixe o campo do produto em branco!!!');
+                toast.error('Não deixe o nome do grupo em branco!!!');
                 return;
             } else {
                 await apiClient.put(`/updateNameGroup?groupCategoy_id=${groupCategoy_id}`, { nameGroup: nameGroup });
@@ -254,11 +203,11 @@ const CategoriasGrupo: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(id: string) {
+    async function handleOpenModalDelete(groupCategoy_id: string) {
         const apiClient = setupAPIClient();
         const response = await apiClient.get('/findUniqueGroup', {
             params: {
-                groupCategoy_id: id,
+                groupCategoy_id: groupCategoy_id,
             }
         });
         setModalItem(response.data || "");
@@ -280,13 +229,14 @@ const CategoriasGrupo: React.FC = () => {
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo={`Escolha uma categoria/item para o grupo = ${nameGroup}`}
+                                titulo="Escolha uma categoria/item para o grupo"
                             />
 
                             <Button
                                 style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
+                                onClick={() => handleOpenModalDelete(groupCategoy_id)}
                             >
-                                <a href={`/grupo/delete/${groupCategoy_id}`} >Remover todo grupo</a>
+                                Remover grupo
                             </Button>
                         </BlockTop>
 
@@ -379,14 +329,32 @@ const CategoriasGrupo: React.FC = () => {
                                             tipo="h3"
                                             titulo={item.itemName}
                                         />
+
                                         <GridDate>
+
+                                            <SectionDate>
+                                                {item.imagegroupcategories[0] ? (
+                                                    <ImagensCategorys
+                                                        src={"http://localhost:3333/files/" + item.imagegroupcategories[0].imageGroup}
+                                                        width={170}
+                                                        height={80}
+                                                    />
+                                                ) :
+                                                    <ImagensCategorys
+                                                        src={noImage}
+                                                        width={170}
+                                                        height={80}
+                                                    />
+                                                }
+                                            </SectionDate>
+
                                             <SectionDate>
                                                 <Button
                                                     style={{ backgroundColor: 'green' }}
                                                 >
                                                     <AiOutlinePlusCircle />
                                                     <Link to={`/grupo/${item.id}`} >
-                                                        <TextButton>Cadastre um novo</TextButton>
+                                                        <TextButton>Cadastre item</TextButton>
                                                     </Link>
                                                 </Button>
                                             </SectionDate>
@@ -395,20 +363,7 @@ const CategoriasGrupo: React.FC = () => {
                                                 <BlockDados>
                                                     <TextoDados
                                                         chave={"Categoria"}
-                                                        dados={
-                                                            <SelectUpdate
-                                                                dado={item.category.categoryName}
-                                                                handleSubmit={() => updateCategory(item.id)}
-                                                                value={categorySelected}
-                                                                opcoes={
-                                                                    [
-                                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
-                                                                    ]
-                                                                }/* @ts-ignore */
-                                                                onChange={handleChangeCategory}
-                                                            />
-                                                        }
+                                                        dados={item.category.categoryName}
                                                     />
                                                 </BlockDados>
                                             </SectionDate>
@@ -417,18 +372,7 @@ const CategoriasGrupo: React.FC = () => {
                                                 <BlockDados>
                                                     <TextoDados
                                                         chave={"Ordem"}
-                                                        dados={
-                                                            <InputUpdate
-                                                                dado={String(item.order)}
-                                                                type="number"
-                                                                /* @ts-ignore */
-                                                                placeholder={String(item.order)}
-                                                                value={orderUpdate}
-                                                                /* @ts-ignore */
-                                                                onChange={(e) => setOrderUpdate(e.target.value)}
-                                                                handleSubmit={() => updateOrder(item.id)}
-                                                            />
-                                                        }
+                                                        dados={item.order}
                                                     />
                                                 </BlockDados>
                                             </SectionDate>
@@ -437,35 +381,29 @@ const CategoriasGrupo: React.FC = () => {
                                                 <BlockDados>
                                                     <TextoDados
                                                         chave={"Ativo?"}
-                                                        dados={
-                                                            <ButtonSelect
-                                                                /* @ts-ignore */
-                                                                dado={item.status}
-                                                                handleSubmit={() => updateStatus(item.id, item.status)}
-                                                            />
-                                                        }
+                                                        dados={item.status}
                                                     />
                                                 </BlockDados>
                                             </SectionDate>
 
                                             <SectionDate>
-                                                <BsTrash
-                                                    onClick={() => handleOpenModalDelete(item.id)}
-                                                    style={{ cursor: 'pointer' }}
-                                                    color="red"
-                                                    size={35}
-                                                />
+                                                <Button
+                                                    style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                                >
+                                                    <Link to={`/grupo/item/edit/${item.id}`}
+                                                    >
+                                                        <TextButton>Editar item</TextButton>
+                                                    </Link>
+                                                </Button>
                                             </SectionDate>
                                         </GridDate>
                                     </Card>
                                     {modalVisible && (
-                                        <ModalDeleteIDSCategoryGroup
+                                        <ModalDeleteGroup
                                             isOpen={modalVisible}
                                             onRequestClose={handleCloseModalDelete}
                                             /* @ts-ignore */
-                                            relationIDS={modalItem}
-                                            /* @ts-ignore */
-                                            idPai={iDsPai}
+                                            groupId={modalItem}
                                         />
                                     )}
                                 </>

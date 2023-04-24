@@ -1,58 +1,46 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { setupAPIClient } from "../../../services/api";
+import { toast } from "react-toastify";
+import { ModalDeleteIDSCategoryGroup } from "../../../components/popups/ModalDeleteIDSCategoryGroup";
+import Modal from 'react-modal';
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import {
-    BlockTop,
-    ButtonPage,
-    Container,
-    ContainerCategoryPage,
-    ContainerPagination,
-    Next,
-    Previus,
-    TextPage,
-    TextTotal,
-    TotalBoxItems,
-} from "../styles";
-import {
-    BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload,
-} from "./styles"
-import Titulos from "../../../components/Titulos";
-import Voltar from "../../../components/Voltar";
-import { toast } from 'react-toastify';
-import { setupAPIClient } from "../../../services/api";
-import { useNavigate, useParams } from "react-router-dom";
-import { InputUpdate } from "../../../components/ui/InputUpdate";
-import { TextoDados } from "../../../components/TextoDados";
-import { ButtonSelect } from "../../../components/ui/ButtonSelect";
+import { BlockTop, Container } from "../styles";
 import { Card } from "../../../components/Content/styles";
-import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
-import TabelaSimples from "../../../components/Tabelas";
-import { Avisos } from "../../../components/Avisos";
-import { Button } from "../../../components/ui/Button";
-import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
-import { MdFileUpload } from "react-icons/md";
+import VoltarNavagation from "../../../components/VoltarNavagation";
+import Titulos from "../../../components/Titulos";
 import { GridDate } from "../../Perfil/styles";
+import { Button } from "../../../components/ui/Button";
 import { SectionDate } from "../../Configuracoes/styles";
+import { BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload } from "../Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
+import { MdFileUpload } from "react-icons/md";
+import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import SelectUpdate from "../../../components/ui/SelectUpdate";
 
 
+export type DeleteCategoriesGroups = {
+    groupCategoy_id: string;
+}
 
-const Categoria: React.FC = () => {
+const EditItem: React.FC = () => {
 
-    let { category_id } = useParams();
+    let { groupCategoy_id } = useParams();
     const navigate = useNavigate();
 
-    const [categoryNames, setCategoryNames] = useState("");
+    const [categories, setCategories] = useState<any[]>([]);
+    const [categorySelected, setCategorySelected] = useState();
+    const [categoryName, setCategoryName] = useState("");
     const [order, setOrder] = useState(Number);
-    const [disponibilidades, setDisponibilidades] = useState('');
-
-    const [search, setSearch] = useState<any[]>([]);
-
-    const [total, setTotal] = useState(0);
-    const [limit] = useState(10);
-    const [pages, setPages] = useState<any[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [orderUpdate, setOrderUpdate] = useState();
+    const [status, setStatus] = useState("");
+    const [itemName, setItemName] = useState("");
+    const [itemNameUpdate, setItemNameUpdate] = useState("");
 
     const [categoryImage, setCategoryImage] = useState(null);
     const [categoryImageUrl, setCategoryImageUrl] = useState('');
@@ -63,104 +51,127 @@ const Categoria: React.FC = () => {
     const [imageCategories, setImageCategories] = useState("");
     const [iDImage, setIDImage] = useState("");
 
+    const [modalItem, setModalItem] = useState<DeleteCategoriesGroups>();
+    const [modalVisible, setModalVisible] = useState(false);
+
+    console.log(categoryName)
+
+    function handleChangeCategory(e: any) {
+        setCategorySelected(e.target.value)
+    }
+
     useEffect(() => {
-        async function refreshCategoryLoad() {
+        async function loaditem() {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
-            setCategoryNames(response.data.categoryName || "");
+            const response = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+            setItemName(response.data.itemName || "");
             setOrder(response.data.order);
-            setDisponibilidades(response.data.disponibilidade || "");
-            setImageCategories(response.data.imagecategories[0].categoryImage);
-            setCategoryImageUpload(response.data.imagecategories[0].categoryImage);
-            setIDImage(response.data.imagecategories[0].id);
+            setStatus(response.data.status || "");
+            setImageCategories(response.data.imagegroupcategories[0].imageGroup);
+            setCategoryImageUpload(response.data.imagegroupcategories[0].imageGroup);
+            setIDImage(response.data.imagegroupcategories[0].id);
+            setCategoryName(response.data.category.categoryName);
         }
-        refreshCategoryLoad();
-    }, [category_id]);
+        loaditem();
+    }, [groupCategoy_id]);
 
-    async function updateCategoryName() {
-        try {
+    useEffect(() => {
+        async function loadCategorys() {
             const apiClient = setupAPIClient();
-            if (categoryNames === '') {
-                toast.error('Não deixe o nome da categoria em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames });
-                toast.success('Nome da categoria atualizada com sucesso.');
-
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+            try {
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
+            } catch (error) {
+                console.log(error);
             }
-        } catch (err) {
-            toast.error('Ops erro ao atualizar o nome da categoria.');
         }
-    }
+        loadCategorys();
+    }, []);
 
-    async function updateOrderCategory() {
+    async function updateCategory() {
         try {
-            const apiClient = setupAPIClient();
-            if (order === null) {
-                toast.error('Não deixe a ordem em branco!!!');
+            if (categorySelected === "") {
+                toast.error(`Selecione a categoria, ou cancele a atualização apertando no botão vermelho!`);
                 return;
-            } else {
-                await apiClient.put(`/updateOrderCategory?category_id=${category_id}`, { order: Number(order) });
-                toast.success('Ordem atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
             }
-        } catch (err) {
-            toast.error('Ops erro ao atualizar a ordem da categoria.');
-        }
-    }
-
-    async function updateStatus() {
-        try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateDisponibilidadeCategory?category_id=${category_id}`);
+            await apiClient.put(`/updateCategoryGroup?groupCategoy_id=${groupCategoy_id}`, { category_id: categorySelected });
+
+            toast.success('Categoria atualizada com sucesso.');
 
             setTimeout(() => {
                 navigate(0);
             }, 3000);
 
         } catch (error) {
-            toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
-        }
-
-        if (disponibilidades === "Indisponivel") {
-            toast.success(`A categoria se encontra Disponivel.`);
-            return;
-        }
-
-        if (disponibilidades === "Disponivel") {
-            toast.error(`A categoria se encontra Indisponivel.`);
-            return;
+            console.log(error);
+            toast.error('Ops erro ao atualizar a categoria.');
         }
     }
 
-    useEffect(() => {
-        async function allProducts() {
-            try {
-                const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageRelationsCategorys?page=${currentPage}&limit=${limit}&category_id=${category_id}`);
+    async function updateItemName() {
+        try {
+            const apiClient = setupAPIClient();
+            if (itemNameUpdate === "") {
+                toast.error('Não deixe o nome do item em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateItemName?groupCategoy_id=${groupCategoy_id}`, { itemName: itemNameUpdate });
 
-                setTotal(data.total);
-                const totalPages = Math.ceil(total / limit);
+                toast.success('Nome do item atualizado com sucesso.');
 
-                const arrayPages = [];
-                for (let i = 1; i <= totalPages; i++) {
-                    arrayPages.push(i);
-                }
-
-                setPages(arrayPages || []);
-                setSearch(data.allFindAscCategorys || []);
-
-            } catch (error) {
-                console.error(error);
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
             }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o nome do grupo.');
         }
-        allProducts();
-    }, [category_id, currentPage, limit, total]);
+    }
+
+    async function updateOrder() {
+        try {
+            const apiClient = setupAPIClient();
+            if (updateOrder === null) {
+                toast.error('Não deixe a ordem em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateOrderItemGroup?groupCategoy_id=${groupCategoy_id}`, { order: Number(orderUpdate) });
+                toast.success('Ordem da categoria no grupo atualizada com sucesso.');
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a ordem da categoria no grupo.');
+        }
+    }
+
+    async function updateStatus() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusGroup?groupCategoy_id=${groupCategoy_id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            toast.error('Ops erro ao atualizar a disponibilidade do item categoria nesse grupo.');
+        }
+
+        if (status === "Inativo") {
+            toast.success(`O item categoria se encontra Disponivel no grupo.`);
+            return;
+        }
+
+        if (status === "Ativo") {
+            toast.error(`O item categoria se encontra Indisponivel no grupo.`);
+            return;
+        }
+    }
 
     async function handleRegisterImageCategory(event: FormEvent) {
         event.preventDefault();
@@ -168,20 +179,20 @@ const Categoria: React.FC = () => {
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', categoryImage);/* @ts-ignore */
-            data.append('category_id', category_id);
+            data.append('groupCategoy_id', groupCategoy_id);
 
             const apiClient = setupAPIClient();
-            await apiClient.post(`/createImageCategory`, data);
+            await apiClient.post(`/createImageGroup`, data);
 
             toast.success('Imagem cadastrada com sucesso.');
 
             setTimeout(() => {
-                navigate('/categorias');
+                navigate(0);
             }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            toast.error('Erro ao cadastrar a imagem da categoria!!!');
+            toast.error('Erro ao cadastrar a imagem!!!');
         }
     }
 
@@ -243,15 +254,22 @@ const Categoria: React.FC = () => {
 
     }
 
-    const dados: any = [];
-    (search || []).forEach((item) => {
-        dados.push({
-            "Produto": item.product.nameProduct,
-            "SKU": item.product.sku,
-            "Disponibilidade": item.product.disponibilidade,
-            "botaoDetalhes": `/produto/${item.product.slug}/${item.product.id}`
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(groupCategoy_id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueGroup', {
+            params: {
+                groupCategoy_id: groupCategoy_id,
+            }
         });
-    });
+        setModalItem(response.data || "");
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
 
     return (
@@ -261,31 +279,56 @@ const Categoria: React.FC = () => {
                 <Aside />
                 <Container>
                     <Card>
-                        <Voltar
-                            url="/categorias"
-                        />
+                        <VoltarNavagation />
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo={`Editar categoria - ${categoryNames}`}
+                                titulo={`Editar item - ${itemName}`}
                             />
+
+                            <Button
+                                style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
+                                onClick={() => handleOpenModalDelete(groupCategoy_id)}
+                            >
+                                Deletar item
+                            </Button>
                         </BlockTop>
 
                         <GridDate>
                             <SectionDate>
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Nome"}
+                                        chave={"Nome do item"}
                                         dados={
                                             <InputUpdate
-                                                dado={categoryNames}
+                                                dado={itemName}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={categoryNames}
-                                                value={categoryNames}
+                                                placeholder={itemName}
+                                                value={itemName}
                                                 /* @ts-ignore */
-                                                onChange={(e) => setCategoryNames(e.target.value)}
-                                                handleSubmit={updateCategoryName}
+                                                onChange={(e) => setItemName(e.target.value)}
+                                                handleSubmit={updateItemName}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Categoria"}
+                                        dados={
+                                            <SelectUpdate
+                                                dado={categoryName}
+                                                handleSubmit={updateCategory}
+                                                value={categorySelected}
+                                                opcoes={
+                                                    [
+                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                    ]
+                                                }/* @ts-ignore */
+                                                onChange={handleChangeCategory}
                                             />
                                         }
                                     />
@@ -303,7 +346,7 @@ const Categoria: React.FC = () => {
                                                 value={order}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setOrder(e.target.value)}
-                                                handleSubmit={updateOrderCategory}
+                                                handleSubmit={updateOrder}
                                             />
                                         }
                                     />
@@ -311,11 +354,11 @@ const Categoria: React.FC = () => {
 
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Disponibilidade"}
+                                        chave={"Ativo?"}
                                         dados={
                                             <ButtonSelect
                                                 /* @ts-ignore */
-                                                dado={disponibilidades}
+                                                dado={status}
                                                 handleSubmit={updateStatus}
                                             />
                                         }
@@ -390,70 +433,21 @@ const Categoria: React.FC = () => {
                                 }
                             </SectionDate>
                         </GridDate>
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <DivisorHorizontal />
-
-                        <Titulos
-                            tipo="h2"
-                            titulo="Produtos da Categoria"
-                        />
-                        <br />
-                        <br />
-                        {search.length < 1 ? (
-                            <>
-                                <Avisos
-                                    texto="Não há produtos cadastradas aqui..."
-                                />
-                            </>
-                        ) :
-                            <>
-                                <TabelaSimples
-                                    cabecalho={["Produto", "SKU", "Disponibilidade"]}
-                                    dados={dados}
-                                    textbutton={"Detalhes"}
-                                />
-
-                                <ContainerPagination>
-                                    <TotalBoxItems key={total}>
-                                        <TextTotal>Total de produtos: {total}</TextTotal>
-                                    </TotalBoxItems>
-                                    <ContainerCategoryPage>
-                                        {currentPage > 1 && (
-                                            <Previus>
-                                                <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
-                                                    Voltar
-                                                </ButtonPage>
-                                            </Previus>
-                                        )}
-
-                                        {pages.map((page) => (
-                                            <TextPage
-                                                key={page}
-                                                onClick={() => setCurrentPage(page)}
-                                            >
-                                                {page}
-                                            </TextPage>
-                                        ))}
-
-                                        {currentPage < search.length && (
-                                            <Next>
-                                                <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
-                                                    Avançar
-                                                </ButtonPage>
-                                            </Next>
-                                        )}
-                                    </ContainerCategoryPage>
-                                </ContainerPagination>
-                            </>
-                        }
                     </Card>
                 </Container>
-            </Grid>
+            </Grid >
+            {modalVisible && (
+                <ModalDeleteIDSCategoryGroup
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    relationIDS={modalItem}
+                    /* @ts-ignore */
+                    idPai={iDsPai}
+                />
+            )}
         </>
     )
 }
 
-export default Categoria;
+export default EditItem;

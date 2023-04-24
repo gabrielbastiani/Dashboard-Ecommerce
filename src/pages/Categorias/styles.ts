@@ -164,3 +164,9 @@ export const BlockSection = styled.div`
     margin-top: 15px;
   }
 `;
+
+export const ImagensCategorys = styled.img`
+  width: 170px;
+  height: 100px;
+  object-fit: contain;
+`;

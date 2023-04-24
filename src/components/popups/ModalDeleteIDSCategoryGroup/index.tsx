@@ -5,7 +5,7 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteCategoriesGroups } from '../../../pages/Categorias/GruposCategorias/categoriasGrupo';
+import { DeleteCategoriesGroups } from '../../../pages/Categorias/GruposCategorias/editItem';
 
 
 interface DeleteRelationsCategorys {
@@ -35,7 +35,7 @@ export function ModalDeleteIDSCategoryGroup({ isOpen, onRequestClose, relationID
     async function handleRelationsIDSDelete() {
         try {
             const apiClient = setupAPIClient();
-            const relationsIDS = relationIDS.id;
+            const relationsIDS = relationIDS;
             /* DELETAR A LINHA DO ID PRINCIPAL */
             await apiClient.delete(`/deleteCategoriesGroups?groupCategoy_id=${relationsIDS}`);
 

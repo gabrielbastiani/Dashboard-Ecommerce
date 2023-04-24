@@ -59,6 +59,7 @@ const NovoGrupo: React.FC = () => {
             await apiClient.post('/group', {
                 nameGroup: nameGroup,
                 itemName: "",
+                groupId: "",
                 nivel: 0,
                 order: 0,
                 posicao: selectedPosicao,
