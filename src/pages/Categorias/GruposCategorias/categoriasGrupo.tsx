@@ -59,13 +59,13 @@ const CategoriasGrupo: React.FC = () => {
 
     const [iDsPai] = useState(groupCategoy_id);
 
-    const [modalItem, setModalItem] = useState('');
+    const [modalItem, setModalItem] = useState<DeleteCategoriesGroups>();
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [modalItemGroup, setModalItemGroup] = useState('');
+    const [modalItemGroup, setModalItemGroup] = useState<DeleteGroups>();
     const [modalVisibleGroups, setModalVisibleGroups] = useState(false);
 
-
+   
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)

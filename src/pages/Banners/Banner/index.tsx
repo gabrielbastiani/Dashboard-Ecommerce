@@ -22,7 +22,7 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import moment from "moment";
 import Modal from 'react-modal';
 import { ModalDeleteBanner } from "../../../components/popups/ModalDeleteBanner";
-import { RadioBotton } from "../styles";
+
 
 
 export type DeleteBanner = {
@@ -243,7 +243,6 @@ const Banner: React.FC = () => {
                                 titulo="Editar Banner"
                             />
                             <Button
-                                type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
                                 onClick={() => handleOpenModalDelete(banner_id)}
