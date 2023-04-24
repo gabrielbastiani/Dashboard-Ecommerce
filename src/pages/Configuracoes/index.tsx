@@ -295,7 +295,7 @@ const Configuracoes: React.FC = () => {
         }
         setTimeout(() => {
             navigate(0);
-        }, 2000);
+        }, 3000);
     }
 
     // -------- REDE SOCIAL ------------ //

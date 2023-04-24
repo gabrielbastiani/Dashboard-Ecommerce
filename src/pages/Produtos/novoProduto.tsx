@@ -128,7 +128,7 @@ const NovoProduto: React.FC = () => {
                             >
                                 <AiOutlinePlusCircle size={25} />
                                 <Link to={`/produto/novo/categorias/${findFirstProduct}`} >
-                                    <TextButton>Clique aqui para cadastrar as categorias para esse produto</TextButton>
+                                    <TextButton>Clique aqui, para cadastrar as categorias para esse produto</TextButton>
                                 </Link>
                             </Button>
                         </BlockCategory>

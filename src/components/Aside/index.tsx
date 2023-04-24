@@ -48,6 +48,7 @@ const Aside: React.FC = () => {
 
     const [submenu, setSubmenu] = useState(false);
     const [submenu1, setSubmenu1] = useState(false);
+    const [submenu2, setSubmenu2] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -55,6 +56,10 @@ const Aside: React.FC = () => {
 
     const handleSubMenu1 = () => {
         setSubmenu1(!submenu1);
+    }
+
+    const handleSubMenu2 = () => {
+        setSubmenu2(!submenu2);
     }
 
     const handleToggleMenu = () => {
@@ -100,10 +105,24 @@ const Aside: React.FC = () => {
                     Clientes
                 </MenuItemLink>
 
-                <MenuItemLink href="/categorias">
+                <MenuItemLink onClick={handleSubMenu2} style={{ cursor: 'pointer' }} >
                     <MdOutlineCategory />
                     Categorias
                 </MenuItemLink>
+
+                {submenu2 ? (
+                    <>
+                        <SubMenuItemLink href="/categorias" >
+                            <MdPlayArrow />
+                            Categorias
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/groups' >
+                            <MdPlayArrow />
+                            Grupos de Categorias
+                        </SubMenuItemLink>
+                    </>
+                ) : null}
 
                 <MenuItemLink onClick={handleSubMenu1} style={{ cursor: 'pointer' }} >
                     <MdOutlineProductionQuantityLimits />
