@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
-import Modal from 'react-modal';
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
@@ -23,7 +22,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { BsTrash } from "react-icons/bs";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { ModalDeleteIDSCategoryGroup } from "../../../components/popups/ModalDeleteIDSCategoryGroup";
-import { ModalDeleteGroup } from "../../../components/popups/ModalDeleteGroup";
+import Modal from 'react-modal';
 import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 
@@ -62,10 +61,7 @@ const CategoriasGrupo: React.FC = () => {
     const [modalItem, setModalItem] = useState<DeleteCategoriesGroups>();
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [modalItemGroup, setModalItemGroup] = useState<DeleteGroups>();
-    const [modalVisibleGroups, setModalVisibleGroups] = useState(false);
 
-   
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -269,21 +265,6 @@ const CategoriasGrupo: React.FC = () => {
         setModalVisible(true);
     }
 
-    function handleCloseModalDeleteGroup() {
-        setModalVisibleGroups(false);
-    }
-
-    async function handleOpenModalDeleteGroup(groupCategoy_id: string) {
-        const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueGroup', {
-            params: {
-                groupCategoy_id: groupCategoy_id,
-            }
-        });
-        setModalItemGroup(response.data || "");
-        setModalVisibleGroups(true);
-    }
-
     Modal.setAppElement('body');
 
 
@@ -304,9 +285,8 @@ const CategoriasGrupo: React.FC = () => {
 
                             <Button
                                 style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                onClick={() => handleOpenModalDeleteGroup(groupCategoy_id)}
                             >
-                                Remover todo grupo
+                                <a href={`/grupo/delete/${groupCategoy_id}`} >Remover todo grupo</a>
                             </Button>
                         </BlockTop>
 
@@ -486,15 +466,6 @@ const CategoriasGrupo: React.FC = () => {
                                             relationIDS={modalItem}
                                             /* @ts-ignore */
                                             idPai={iDsPai}
-                                        />
-                                    )}
-
-                                    {modalVisibleGroups && (
-                                        <ModalDeleteGroup
-                                            isOpen={modalVisibleGroups}
-                                            onRequestClose={handleCloseModalDeleteGroup}
-                                            /* @ts-ignore */
-                                            groupId={modalItemGroup}
                                         />
                                     )}
                                 </>

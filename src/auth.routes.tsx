@@ -42,6 +42,7 @@ import Banner from './pages/Banners/Banner';
 import GruposCategorias from './pages/Categorias/GruposCategorias';
 import NovoGrupo from './pages/Categorias/GruposCategorias/novoGrupo';
 import CategoriasGrupo from './pages/Categorias/GruposCategorias/categoriasGrupo';
+import DeletePageGroup from './pages/Categorias/GruposCategorias/deletePageGroup';
 
 
 const RoutesAuth: React.FC = () => {
@@ -65,6 +66,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/groups' element={<GruposCategorias />} />
             <Route path='/grupo/novo' element={<NovoGrupo />} />
             <Route path='/grupo/:groupCategoy_id' element={<CategoriasGrupo />} />
+            <Route path='/grupo/delete/:groupCategoy_id' element={<DeletePageGroup />} />
 
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />

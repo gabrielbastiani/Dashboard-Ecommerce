@@ -1,11 +1,11 @@
 import Modal from 'react-modal';
-import { FiX } from 'react-icons/fi';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
+import { ContainerContent, ContainerButton, TextModal } from './styles';
 import { DeleteGroups } from '../../../pages/Categorias/GruposCategorias/categoriasGrupo';
+import VoltarNavagation from '../../VoltarNavagation';
 
 
 interface DeleteGroupsID {
@@ -14,7 +14,7 @@ interface DeleteGroupsID {
     groupId: DeleteGroups;
 }
 
-export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGroupsID) {
+export function ModalDeleteGroup({ isOpen, groupId }: DeleteGroupsID) {
 
     const navigate = useNavigate();
 
@@ -40,34 +40,30 @@ export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGrou
             await apiClient.delete(`/deleteGroups?groupCategoy_id=${groupCategoy_id}`);
             toast.success(`Grupo deletado com sucesso.`);
 
-            onRequestClose();
+            setTimeout(() => {
+                navigate('/groups');
+            }, 3000);
 
         } catch (error) {
             /* @ts-ignore */
             toast.error(`${error.response.data.error}`);
             /* @ts-ignore */
             console.log(error.response.data);
+            setTimeout(() => {
+                navigate(-1);
+            }, 3000);
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
+
     }
 
 
     return (
         <Modal
             isOpen={isOpen}
-            onRequestClose={onRequestClose}
             style={customStyles}
         >
-            <ButtonClose
-                type='button'
-                onClick={onRequestClose}
-                className='react-modal-close'
-                style={{ background: 'transparent', border: 0, cursor: 'pointer' }}
-            >
-                <FiX size={45} color="#f34748" />
-            </ButtonClose>
+
+            <VoltarNavagation />
 
             <ContainerContent>
                 <TextModal>Deseja mesmo deletar esse grupo?</TextModal>
