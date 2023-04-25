@@ -1,11 +1,11 @@
 import Modal from 'react-modal';
-import { FiX } from 'react-icons/fi';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
+import { ContainerContent, ContainerButton, TextModal } from './styles';
 import { DeleteNews } from '../../../pages/Newsletters/Newsletter';
+import VoltarNavagation from '../../VoltarNavagation';
 
 
 interface DeleteNewsletter {
@@ -58,17 +58,9 @@ export function ModalDeleteNewsletter({ isOpen, onRequestClose, newsletter }: De
     return (
         <Modal
             isOpen={isOpen}
-            onRequestClose={onRequestClose}
             style={customStyles}
         >
-            <ButtonClose
-                type='button'
-                onClick={onRequestClose}
-                className='react-modal-close'
-                style={{ background: 'transparent', border: 0, cursor: 'pointer' }}
-            >
-                <FiX size={45} color="#f34748" />
-            </ButtonClose>
+            <VoltarNavagation />
 
             <ContainerContent>
                 <TextModal>Deseja mesmo deletar essa newsletter?</TextModal>
