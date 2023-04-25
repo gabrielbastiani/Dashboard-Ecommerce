@@ -43,6 +43,7 @@ import GruposCategorias from './pages/Categorias/GruposCategorias';
 import NovoGrupo from './pages/Categorias/GruposCategorias/novoGrupo';
 import CategoriasGrupo from './pages/Categorias/GruposCategorias/categoriasGrupo';
 import EditItem from './pages/Categorias/GruposCategorias/editItem';
+import EditGroup from './pages/Categorias/GruposCategorias/editGroup';
 
 
 const RoutesAuth: React.FC = () => {
@@ -65,6 +66,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/categoria/newNivelCategory/:IDRelation' element={<NewNivelCategory />} />
             <Route path='/groups' element={<GruposCategorias />} />
             <Route path='/grupo/novo' element={<NovoGrupo />} />
+            <Route path='/grupo/edit/:groupCategoy_id' element={<EditGroup />} />
             <Route path='/grupo/:groupCategoy_id' element={<CategoriasGrupo />} />
             <Route path='/grupo/item/edit/:groupCategoy_id' element={<EditItem />} />
 

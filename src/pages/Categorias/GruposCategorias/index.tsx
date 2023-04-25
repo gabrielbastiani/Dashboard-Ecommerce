@@ -12,6 +12,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { Avisos } from "../../../components/Avisos";
 import TabelaSimples from "../../../components/Tabelas";
+import { Button } from "../../../components/ui/Button";
 
 
 
@@ -75,6 +76,7 @@ const GruposCategorias: React.FC = () => {
             "Nome do Grupo": item.nameGroup,
             "Posição": item.posicao,
             "Ativo?": item.status,
+            "Editar Grupo": <Link to={`/grupo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
             "botaoDetalhes": `/grupo/${item.id}`
         });
     });
@@ -130,9 +132,9 @@ const GruposCategorias: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Nome do Grupo", "Posição", "Ativo?"]}
+                                cabecalho={["Nome do Grupo", "Posição", "Ativo?", "Editar Grupo"]}
                                 dados={dados}
-                                textbutton={"Detalhes"}
+                                textbutton={"Ver itens do grupo"}
                             />
 
                             <ContainerPagination>

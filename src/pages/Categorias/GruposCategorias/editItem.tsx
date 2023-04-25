@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { ModalDeleteIDSCategoryGroup } from "../../../components/popups/ModalDeleteIDSCategoryGroup";
+import { ModalDeleteCategoryGroup } from "../../../components/popups/ModalDeleteCategoryGroup";
 import Modal from 'react-modal';
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -26,6 +27,11 @@ import SelectUpdate from "../../../components/ui/SelectUpdate";
 
 export type DeleteCategoriesGroups = {
     groupCategoy_id: string;
+    iDImage: string;
+}
+
+export type DeleteItens = {
+    groupCategoy_id: string;
 }
 
 const EditItem: React.FC = () => {
@@ -37,10 +43,8 @@ const EditItem: React.FC = () => {
     const [categorySelected, setCategorySelected] = useState();
     const [categoryName, setCategoryName] = useState("");
     const [order, setOrder] = useState(Number);
-    const [orderUpdate, setOrderUpdate] = useState();
     const [status, setStatus] = useState("");
     const [itemName, setItemName] = useState("");
-    const [itemNameUpdate, setItemNameUpdate] = useState("");
 
     const [categoryImage, setCategoryImage] = useState(null);
     const [categoryImageUrl, setCategoryImageUrl] = useState('');
@@ -51,28 +55,34 @@ const EditItem: React.FC = () => {
     const [imageCategories, setImageCategories] = useState("");
     const [iDImage, setIDImage] = useState("");
 
-    const [modalItem, setModalItem] = useState<DeleteCategoriesGroups>();
+    const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
-    console.log(categoryName)
+    const [modalItens, setModalItens] = useState("");
+    const [modalVisibleItens, setModalVisibleItens] = useState(false);
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
     }
 
     useEffect(() => {
-        async function loaditem() {
+        async function loadItemDate() {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
-            setItemName(response.data.itemName || "");
-            setOrder(response.data.order);
-            setStatus(response.data.status || "");
-            setImageCategories(response.data.imagegroupcategories[0].imageGroup);
-            setCategoryImageUpload(response.data.imagegroupcategories[0].imageGroup);
-            setIDImage(response.data.imagegroupcategories[0].id);
-            setCategoryName(response.data.category.categoryName);
+            try {
+                const { data } = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+
+                setItemName(data.itemName || "");
+                setOrder(data.order);
+                setStatus(data.status);
+                setImageCategories(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
+                setCategoryImageUpload(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
+                setIDImage(data.imagegroupcategories.id || "");
+                setCategoryName(data.category ? data.category.categoryName : data.category[0].categoryName);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
         }
-        loaditem();
+        loadItemDate();
     }, [groupCategoy_id]);
 
     useEffect(() => {
@@ -112,11 +122,11 @@ const EditItem: React.FC = () => {
     async function updateItemName() {
         try {
             const apiClient = setupAPIClient();
-            if (itemNameUpdate === "") {
+            if (itemName === "") {
                 toast.error('Não deixe o nome do item em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateItemName?groupCategoy_id=${groupCategoy_id}`, { itemName: itemNameUpdate });
+                await apiClient.put(`/updateItemName?groupCategoy_id=${groupCategoy_id}`, { itemName: itemName });
 
                 toast.success('Nome do item atualizado com sucesso.');
 
@@ -137,7 +147,7 @@ const EditItem: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderItemGroup?groupCategoy_id=${groupCategoy_id}`, { order: Number(orderUpdate) });
+                await apiClient.put(`/updateOrderItemGroup?groupCategoy_id=${groupCategoy_id}`, { order: Number(order) });
                 toast.success('Ordem da categoria no grupo atualizada com sucesso.');
                 setTimeout(() => {
                     navigate(0);
@@ -222,7 +232,7 @@ const EditItem: React.FC = () => {
             data.append('file', categoryImageUpload);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageCategory?imageCategory_id=${iDImage}`, data);
+            await apiClient.put(`/updateImageGroup?imageGroupCategory_id=${iDImage}`, data);
 
             toast.success('Imagem atualizada com sucesso.');
 
@@ -266,7 +276,23 @@ const EditItem: React.FC = () => {
             }
         });
         setModalItem(response.data || "");
+        setIDImage(response.data.imagegroupcategories[0].id || "")
         setModalVisible(true);
+    }
+
+    function handleCloseModalDeleteItens() {
+        setModalVisibleItens(false);
+    }
+
+    async function handleOpenModalDeleteItens(groupCategoy_id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueGroup', {
+            params: {
+                groupCategoy_id: groupCategoy_id,
+            }
+        });
+        setModalItens(response.data || "");
+        setModalVisibleItens(true);
     }
 
     Modal.setAppElement('body');
@@ -286,12 +312,22 @@ const EditItem: React.FC = () => {
                                 titulo={`Editar item - ${itemName}`}
                             />
 
-                            <Button
-                                style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(groupCategoy_id)}
-                            >
-                                Deletar item
-                            </Button>
+                            {imageCategories ? (
+                                <Button
+                                    style={{ backgroundColor: 'red' }}/* @ts-ignore */
+                                    onClick={() => handleOpenModalDelete(groupCategoy_id)}
+                                >
+                                    Deletar Com imagem
+                                </Button>
+                            ) :
+                                <Button
+                                    style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
+                                    onClick={() => handleOpenModalDeleteItens(groupCategoy_id)}
+                                >
+                                    Deletar item
+                                </Button>
+                            }
+
                         </BlockTop>
 
                         <GridDate>
@@ -443,7 +479,16 @@ const EditItem: React.FC = () => {
                     /* @ts-ignore */
                     relationIDS={modalItem}
                     /* @ts-ignore */
-                    idPai={iDsPai}
+                    idGroupImage={iDImage}
+                />
+            )}
+
+            {modalVisibleItens && (
+                <ModalDeleteCategoryGroup
+                    isOpen={modalVisibleItens}
+                    onRequestClose={handleCloseModalDeleteItens}
+                    /* @ts-ignore */
+                    itensIds={modalItens}
                 />
             )}
         </>

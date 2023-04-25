@@ -1,11 +1,11 @@
 import Modal from 'react-modal';
+import { FiX } from 'react-icons/fi';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteGroups } from '../../../pages/Categorias/GruposCategorias/categoriasGrupo';
-import VoltarNavagation from '../../VoltarNavagation';
+import { ContainerContent, ContainerButton, TextModal, ButtonClose } from './styles';
+import { DeleteGroups } from '../../../pages/Categorias/GruposCategorias/editGroup';
 
 
 interface DeleteGroupsID {
@@ -14,7 +14,7 @@ interface DeleteGroupsID {
     groupId: DeleteGroups;
 }
 
-export function ModalDeleteGroup({ isOpen, groupId }: DeleteGroupsID) {
+export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGroupsID) {
 
     const navigate = useNavigate();
 
@@ -40,6 +40,8 @@ export function ModalDeleteGroup({ isOpen, groupId }: DeleteGroupsID) {
             await apiClient.delete(`/deleteGroups?groupCategoy_id=${groupCategoy_id}`);
             toast.success(`Grupo deletado com sucesso.`);
 
+            onRequestClose();
+
             setTimeout(() => {
                 navigate('/groups');
             }, 3000);
@@ -49,9 +51,6 @@ export function ModalDeleteGroup({ isOpen, groupId }: DeleteGroupsID) {
             toast.error(`${error.response.data.error}`);
             /* @ts-ignore */
             console.log(error.response.data);
-            setTimeout(() => {
-                navigate(-1);
-            }, 3000);
         }
 
     }
@@ -60,10 +59,18 @@ export function ModalDeleteGroup({ isOpen, groupId }: DeleteGroupsID) {
     return (
         <Modal
             isOpen={isOpen}
+            onRequestClose={onRequestClose}
             style={customStyles}
         >
 
-            <VoltarNavagation />
+            <ButtonClose
+                type='button'
+                onClick={onRequestClose}
+                className='react-modal-close'
+                style={{ background: 'transparent', border: 0, cursor: 'pointer' }}
+            >
+                <FiX size={45} color="#f34748" />
+            </ButtonClose>
 
             <ContainerContent>
                 <TextModal>Deseja mesmo deletar esse grupo?</TextModal>
