@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Grid } from "../../Dashboard/styles";
