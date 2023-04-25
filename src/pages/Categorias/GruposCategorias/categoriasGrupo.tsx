@@ -29,10 +29,12 @@ const CategoriasGrupo: React.FC = () => {
 
     const [loja_id] = useState(user.loja_id);
 
+    const [nameGroup, setNameGroup] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
     const [order, setOrder] = useState(Number);
     const [itemName, setItemName] = useState("");
+    const [nameItem, setNameItem] = useState("");
 
     const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);
 
@@ -40,6 +42,22 @@ const CategoriasGrupo: React.FC = () => {
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
     }
+
+    useEffect(() => {
+        async function findGroupDate() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+
+                setNameGroup(response.data.nameGroup || "");
+                setNameItem(response.data.itemName || "");
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        findGroupDate();
+    }, [groupCategoy_id]);
 
     useEffect(() => {
         async function loadCategorys() {
@@ -62,7 +80,7 @@ const CategoriasGrupo: React.FC = () => {
                 return;
             }
             await apiClient.post('/group', {
-                nameGroup: "",
+                nameGroup: nameGroup,
                 itemName: itemName,
                 category_id: categorySelected,
                 groupId: groupCategoy_id,
@@ -112,10 +130,18 @@ const CategoriasGrupo: React.FC = () => {
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>
-                            <Titulos
-                                tipo="h1"
-                                titulo="Escolha uma categoria/item para o grupo"
-                            />
+
+                            {nameItem ? (
+                                <Titulos
+                                    tipo="h1"
+                                    titulo={`Insira novos itens/categorias em = ${nameItem}`}
+                                />
+                            ) :
+                                <Titulos
+                                    tipo="h1"
+                                    titulo={`Escolha uma categoria/item para o grupo = ${nameGroup}`}
+                                />
+                            }
 
                         </BlockTop>
 
@@ -162,13 +188,13 @@ const CategoriasGrupo: React.FC = () => {
                         {LoadIDGroup.map((item) => {
                             return (
                                 <>
-                                    <Card key={item.id}>
+                                    <Card>
                                         <Titulos
                                             tipo="h3"
                                             titulo={item.itemName}
                                         />
 
-                                        <GridDate>
+                                        <GridDate key={item.id}>
 
                                             <SectionDate>
                                                 {item.imagegroupcategories[0] ? (

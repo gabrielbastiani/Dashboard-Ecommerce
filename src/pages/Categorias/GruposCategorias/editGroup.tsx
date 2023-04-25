@@ -127,7 +127,7 @@ const EditGroup: React.FC = () => {
                             <BlockTop>
                                 <Titulos
                                     tipo="h1"
-                                    titulo="Escolha uma categoria/item para o grupo"
+                                    titulo={`Editar grupo = ${nameGroup}`}
                                 />
 
                                 <Button

@@ -39,6 +39,7 @@ const EditItem: React.FC = () => {
     let { groupCategoy_id } = useParams();
     const navigate = useNavigate();
 
+    const [nameGroup, setNameGroup] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
     const [categoryName, setCategoryName] = useState("");
@@ -61,6 +62,8 @@ const EditItem: React.FC = () => {
     const [modalItens, setModalItens] = useState("");
     const [modalVisibleItens, setModalVisibleItens] = useState(false);
 
+    console.log(nameGroup)
+
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
     }
@@ -77,12 +80,27 @@ const EditItem: React.FC = () => {
                 setImageCategories(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
                 setCategoryImageUpload(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
                 setIDImage(data.imagegroupcategories.id || "");
-                setCategoryName(data.category ? data.category.categoryName : data.category[0].categoryName);
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadItemDate();
+    }, [groupCategoy_id]);
+
+    useEffect(() => {
+        async function loadCategory() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+
+                setCategoryName(data.category.categoryName);
+                setNameGroup(data.nameGroup || "");
+
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        loadCategory();
     }, [groupCategoy_id]);
 
     useEffect(() => {
@@ -307,6 +325,13 @@ const EditItem: React.FC = () => {
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>
+                        <Titulos
+                                tipo="h4"
+                                titulo={`Grupo = ${nameGroup}`}
+                            />
+                        </BlockTop>
+                        <br />
+                        <BlockTop>
                             <Titulos
                                 tipo="h1"
                                 titulo={`Editar item - ${itemName}`}
@@ -317,7 +342,7 @@ const EditItem: React.FC = () => {
                                     style={{ backgroundColor: 'red' }}/* @ts-ignore */
                                     onClick={() => handleOpenModalDelete(groupCategoy_id)}
                                 >
-                                    Deletar Com imagem
+                                    Deletar item
                                 </Button>
                             ) :
                                 <Button

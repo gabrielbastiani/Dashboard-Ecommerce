@@ -91,7 +91,7 @@ const GruposCategorias: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Grupos de categorias"
+                        titulo="Grupos de categorias/itens"
                     />
 
                     {search.length < 1 ? (
@@ -114,7 +114,7 @@ const GruposCategorias: React.FC = () => {
                     {search.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há grupos de categorias cadastrados na loja ainda..."
+                                texto="Não há grupos de categorias/itens cadastrados na loja ainda..."
                             />
                         </>
                     ) :
