@@ -75,8 +75,8 @@ const CategoriasGrupo: React.FC = () => {
     async function handleGroupCategories() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === "") {
-                toast.error('Não deixe a categoria em branco.');
+            if (categorySelected === "" || itemName === "") {
+                toast.error('Não deixe campos em branco.');
                 return;
             }
             await apiClient.post('/group', {

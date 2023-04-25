@@ -44,7 +44,6 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
     async function handleRegisterVariacao() {
         try {
             if (nameVariacao === '' ||
-                descriptionVariacao1 === '' ||
                 preco === null ||
                 skuVariacao === '' ||
                 estoqueVariacao === null ||

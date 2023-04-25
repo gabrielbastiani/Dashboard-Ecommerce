@@ -169,7 +169,6 @@ const UpdateNivelCategoryProduct: React.FC = () => {
     }
 
     async function updateStatus(id: string, status: string) {
-        console.log(id)
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusRelation?relationProductCategory_id=${id}`);

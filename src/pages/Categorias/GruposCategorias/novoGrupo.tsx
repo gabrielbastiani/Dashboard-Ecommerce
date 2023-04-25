@@ -136,6 +136,7 @@ const NovoGrupo: React.FC = () => {
                                 value={selectedPosicao}
                                 opcoes={
                                     [
+                                        { label: "Selecione...", value: "" },
                                         { label: "Menu Topo", value: "Menu Topo" },
                                         { label: "Lateral esquerda", value: "Lateral esquerda" }
                                     ]

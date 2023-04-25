@@ -4,6 +4,7 @@ import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { ModalDeleteIDSCategoryGroup } from "../../../components/popups/ModalDeleteIDSCategoryGroup";
 import { ModalDeleteCategoryGroup } from "../../../components/popups/ModalDeleteCategoryGroup";
+import { ModalDeleteImagemCategoryGroup } from "../../../components/popups/ModalDeleteImagemCategoryGroup";
 import Modal from 'react-modal';
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -24,6 +25,10 @@ import { MdFileUpload } from "react-icons/md";
 import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 
+
+export type DeleteImagemItem = {
+    iDImage: string;
+}
 
 export type DeleteCategoriesGroups = {
     groupCategoy_id: string;
@@ -62,7 +67,9 @@ const EditItem: React.FC = () => {
     const [modalItens, setModalItens] = useState("");
     const [modalVisibleItens, setModalVisibleItens] = useState(false);
 
-    console.log(nameGroup)
+    const [modalItemImagem, setModalItemImagem] = useState("");
+    const [modalVisibleImagem, setModalVisibleImagem] = useState(false);
+
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -79,7 +86,7 @@ const EditItem: React.FC = () => {
                 setStatus(data.status);
                 setImageCategories(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
                 setCategoryImageUpload(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
-                setIDImage(data.imagegroupcategories.id || "");
+                
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
@@ -95,6 +102,7 @@ const EditItem: React.FC = () => {
 
                 setCategoryName(data.category.categoryName);
                 setNameGroup(data.nameGroup || "");
+                setIDImage(data.imagegroupcategories ? data.imagegroupcategories[0].id : data.imagegroupcategories.id);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -313,6 +321,21 @@ const EditItem: React.FC = () => {
         setModalVisibleItens(true);
     }
 
+    function handleCloseModalDeleteImagem() {
+        setModalVisibleImagem(false);
+    }
+
+    async function handleOpenModalDeleteImagem(groupCategoy_id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueGroup', {
+            params: {
+                groupCategoy_id: groupCategoy_id,
+            }
+        });
+        setModalItemImagem(response.data.imagegroupcategories[0].id || "");
+        setModalVisibleImagem(true);
+    }
+
     Modal.setAppElement('body');
 
 
@@ -325,7 +348,7 @@ const EditItem: React.FC = () => {
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>
-                        <Titulos
+                            <Titulos
                                 tipo="h4"
                                 titulo={`Grupo = ${nameGroup}`}
                             />
@@ -425,6 +448,18 @@ const EditItem: React.FC = () => {
                                         }
                                     />
                                 </BlockDados>
+
+                                {imageCategories ? (
+                                    <Button
+                                        /* @ts-ignore */
+                                        onClick={() => handleOpenModalDeleteImagem(groupCategoy_id)}
+                                    >
+                                        Deletar imagem
+                                    </Button>
+                                ) :
+                                    null
+                                }
+
                             </SectionDate>
 
                             <SectionDate>
@@ -467,6 +502,7 @@ const EditItem: React.FC = () => {
                                                 <EtiquetaImagens>
                                                     {categoryImageUrl ? (
                                                         <Button
+                                                            style={{ backgroundColor: 'green' }}
                                                             type="submit"
                                                         >
                                                             Salvar Imagem
@@ -514,6 +550,15 @@ const EditItem: React.FC = () => {
                     onRequestClose={handleCloseModalDeleteItens}
                     /* @ts-ignore */
                     itensIds={modalItens}
+                />
+            )}
+
+            {modalVisibleImagem && (
+                <ModalDeleteImagemCategoryGroup
+                    isOpen={modalVisibleImagem}
+                    onRequestClose={handleCloseModalDeleteImagem}
+                    /* @ts-ignore */
+                    idImage={modalItemImagem}
                 />
             )}
         </>

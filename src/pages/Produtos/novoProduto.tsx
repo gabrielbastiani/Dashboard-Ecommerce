@@ -60,7 +60,6 @@ const NovoProduto: React.FC = () => {
     async function handleRegisterProduct() {
         try {
             if (nameProduct === '' ||
-                descriptionProduct1 === '' ||
                 preco === null ||
                 sku === ''
             ) {

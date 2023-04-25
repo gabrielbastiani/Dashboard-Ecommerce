@@ -167,6 +167,7 @@ const EditGroup: React.FC = () => {
                                             onChange={handleChangePosicao}
                                             opcoes={
                                                 [
+                                                    { label: "Selecione...", value: "" },
                                                     { label: "Menu Topo", value: "Menu Topo" },
                                                     { label: "Lateral esquerda", value: "Lateral esquerda" }
                                                 ]

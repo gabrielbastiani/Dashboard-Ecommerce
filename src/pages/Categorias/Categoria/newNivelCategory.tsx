@@ -146,7 +146,6 @@ const NewNivelCategory: React.FC = () => {
     }
 
     async function updateStatus(id: string, status: string) {
-        console.log(status)
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusRelation?relationProductCategory_id=${id}`);
