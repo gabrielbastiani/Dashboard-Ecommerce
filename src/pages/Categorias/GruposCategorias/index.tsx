@@ -75,6 +75,7 @@ const GruposCategorias: React.FC = () => {
         dados.push({
             "Nome do Grupo": item.nameGroup,
             "Posição": item.posicao,
+            "Qtd. de itens": item.nameGroup ? String(item.nameGroup.length) : "Sem itens",
             "Ativo?": item.status,
             "Editar Grupo": <Link to={`/grupo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
             "botaoDetalhes": `/grupo/${item.id}`
@@ -132,7 +133,7 @@ const GruposCategorias: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Nome do Grupo", "Posição", "Ativo?", "Editar Grupo"]}
+                                cabecalho={["Nome do Grupo", "Posição", "Qtd. de itens", "Ativo?", "Editar Grupo"]}
                                 dados={dados}
                                 textbutton={"Ver itens do grupo"}
                             />
