@@ -30,6 +30,7 @@ const CategoriasGrupo: React.FC = () => {
     const [loja_id] = useState(user.loja_id);
 
     const [nameGroup, setNameGroup] = useState("");
+    const [posicao, setPosicao] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
     const [order, setOrder] = useState(Number);
@@ -51,6 +52,7 @@ const CategoriasGrupo: React.FC = () => {
 
                 setNameGroup(response.data.nameGroup || "");
                 setNameItem(response.data.itemName || "");
+                setPosicao(response.data.posicao || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -84,7 +86,7 @@ const CategoriasGrupo: React.FC = () => {
                 itemName: itemName,
                 category_id: categorySelected,
                 groupId: groupCategoy_id,
-                posicao: "",
+                posicao: posicao,
                 order: Number(order),
                 nivel: 1,
                 loja_id: loja_id
