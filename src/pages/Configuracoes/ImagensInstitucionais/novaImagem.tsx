@@ -65,8 +65,7 @@ const NovaImagem: React.FC = () => {
             data.append('file', images);
             data.append('titleImage', titleImage);/* @ts-ignore */
             data.append('order', Number(order));/* @ts-ignore */
-            data.append('posicao', posicaoSelected);/* @ts-ignore */
-            data.append('someImage', true);
+            data.append('posicao', posicaoSelected);
 
             setLoading(true);
 

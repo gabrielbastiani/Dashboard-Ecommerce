@@ -33,8 +33,7 @@ const ImagensInstitucionais: React.FC = () => {
         allImagensInstitucionais();
     }, []);
 
-    /* @ts-ignore */
-    const dados = [];
+    const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
             "Imagem": <ImgInstitucional src={"http://localhost:3333/files/" + item.image} alt={item.titleImage} />,
@@ -74,7 +73,6 @@ const ImagensInstitucionais: React.FC = () => {
                     ) :
                         <TabelaSimples
                             cabecalho={["Imagem", "Titulo da Imagem", "Ordem", "Disponivel?", "Posição no Site"]}
-                            /* @ts-ignore */
                             dados={dados}
                             textbutton={"Detalhes"}
                         />
