@@ -168,7 +168,8 @@ const EditGroup: React.FC = () => {
                                                 [
                                                     { label: "Selecione...", value: "" },
                                                     { label: "Menu Topo", value: "Menu Topo" },
-                                                    { label: "Lateral esquerda", value: "Lateral esquerda" }
+                                                    { label: "Lateral esquerda", value: "Lateral esquerda" },
+                                                    { label: "Home Page", value: "Home Page" }
                                                 ]
                                             }
                                             handleSubmit={updatePosicao}
