@@ -216,7 +216,7 @@ const EditGroup: React.FC = () => {
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Atualizar página de categoria esse grupo vai aparecer"}
+                                    chave={"Atualizar página de categoria que esse grupo vai aparecer"}
                                     dados={
                                         <SelectUpdate
                                             dado={slug}
