@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
@@ -24,6 +24,9 @@ const NovoGrupo: React.FC = () => {
     const [nameGroup, setNameGroup] = useState('');
     const [selectedPosicao, setSelectedPosicao] = useState();
 
+    const [categories, setCategories] = useState<any[]>([]);
+    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+
     const [lojaID] = useState(user.loja_id);
 
     const [showCategory, setShowCategory] = useState(false);
@@ -37,6 +40,23 @@ const NovoGrupo: React.FC = () => {
     function handleChangePosicao(e: any) {
         setSelectedPosicao(e.target.value);
     }
+
+    function handleChangeSlug(e: any) {
+        setSlugCategoryOrItem(e.target.value);
+    }
+
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCategorys();
+    }, []);
 
     async function loadGroup() {
         const apiClient = setupAPIClient();
@@ -58,6 +78,7 @@ const NovoGrupo: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.post('/group', {
                 nameGroup: nameGroup,
+                slugCategoryOrItem: slugCategoryOrItem,
                 itemName: "",
                 groupId: "",
                 nivel: 0,
@@ -144,6 +165,23 @@ const NovoGrupo: React.FC = () => {
                                 }/* @ts-ignore */
                                 onChange={handleChangePosicao}
                             />
+                        </Block>
+
+                        <Block>
+                        <Etiqueta>Indique em qual página de categoria esse grupo vai aparecer:</Etiqueta>
+                        <Select
+                            value={slugCategoryOrItem}
+                            /* @ts-ignore */
+                            onChange={handleChangeSlug}
+                            opcoes={
+                                [
+                                    { label: "Selecionar...", value: "" },
+                                    { label: "Home page", value: "Home page" },/* @ts-ignore */
+                                    ...(categories || []).map((item) => ({ label: item.slug, value: item.slug }))
+                                ]
+                            }
+                        />
+                        <br />
                         </Block>
 
                     </Card>
