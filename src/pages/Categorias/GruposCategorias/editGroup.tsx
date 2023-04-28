@@ -31,6 +31,10 @@ const EditGroup: React.FC = () => {
     const [posicao, setPosicao] = useState([]);
     const [posicaoSelected, setPosicaoSelected] = useState();
 
+    const [categories, setCategories] = useState<any[]>([]);
+    const [slug, setSlug] = useState("");
+    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+
     const [modalItem, setModalItem] = useState<DeleteGroups>();
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -38,6 +42,22 @@ const EditGroup: React.FC = () => {
         setPosicaoSelected(e.target.value)
     }
 
+    function handleChangeSlug(e: any) {
+        setSlugCategoryOrItem(e.target.value);
+    }
+
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCategorys();
+    }, []);
 
     useEffect(() => {
         async function findDdatesGroups() {
@@ -47,6 +67,7 @@ const EditGroup: React.FC = () => {
 
                 setNameGroup(response.data.nameGroup || "");
                 setPosicao(response.data.posicao || "");
+                setSlug(response.data.slugCategoryOrItem || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -88,7 +109,22 @@ const EditGroup: React.FC = () => {
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
             /* @ts-ignore */
-            toast.error(`${error.response.data.error}`);
+            toast.error(error.response.data);
+        }
+        setTimeout(() => {
+            navigate(0);
+        }, 3000);
+    }
+
+    async function updateSlugGroup() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateSlugGroup?groupCategoy_id=${groupCategoy_id}`, { slugCategoryOrItem: slugCategoryOrItem });
+            toast.success('Caminho atualizado com sucesso.');
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            /* @ts-ignore */
+            toast.error(error.response.data);
         }
         setTimeout(() => {
             navigate(0);
@@ -173,6 +209,28 @@ const EditGroup: React.FC = () => {
                                                 ]
                                             }
                                             handleSubmit={updatePosicao}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Atualizar página de categoria esse grupo vai aparecer"}
+                                    dados={
+                                        <SelectUpdate
+                                            dado={slug}
+                                            value={slugCategoryOrItem}
+                                            /* @ts-ignore */
+                                            onChange={handleChangeSlug}
+                                            opcoes={
+                                                [
+                                                    { label: "Selecionar...", value: "" },
+                                                    { label: "Home page", value: "home-page" },/* @ts-ignore */
+                                                    ...(categories || []).map((item) => ({ label: item.slug, value: item.slug }))
+                                                ]
+                                            }
+                                            handleSubmit={updateSlugGroup}
                                         />
                                     }
                                 />

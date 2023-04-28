@@ -168,20 +168,20 @@ const NovoGrupo: React.FC = () => {
                         </Block>
 
                         <Block>
-                        <Etiqueta>Indique em qual página de categoria esse grupo vai aparecer:</Etiqueta>
-                        <Select
-                            value={slugCategoryOrItem}
-                            /* @ts-ignore */
-                            onChange={handleChangeSlug}
-                            opcoes={
-                                [
-                                    { label: "Selecionar...", value: "" },
-                                    { label: "Home page", value: "Home page" },/* @ts-ignore */
-                                    ...(categories || []).map((item) => ({ label: item.slug, value: item.slug }))
-                                ]
-                            }
-                        />
-                        <br />
+                            <Etiqueta>Indique em qual página de categoria esse grupo vai aparecer:</Etiqueta>
+                            <Select
+                                value={slugCategoryOrItem}
+                                /* @ts-ignore */
+                                onChange={handleChangeSlug}
+                                opcoes={
+                                    [
+                                        { label: "Selecionar...", value: "" },
+                                        { label: "Home page", value: "home-page" },/* @ts-ignore */
+                                        ...(categories || []).map((item) => ({ label: item.slug, value: item.slug }))
+                                    ]
+                                }
+                            />
+                            <br />
                         </Block>
 
                     </Card>
