@@ -143,16 +143,8 @@ const Produto: React.FC = () => {
     async function updateProductData() {
         try {
             const apiClient = setupAPIClient();
-            if (
-                descriptionProducts1 === "" ||
-                descriptionProducts2 === "" ||
-                descriptionProducts3 === "" ||
-                descriptionProducts4 === "" ||
-                descriptionProducts5 === "" ||
-                descriptionProducts6 === "" ||
-                skus === ""
-            ) {
-                toast.error('Não deixe o campo do produto em branco!!!');
+            if (skus === "") {
+                toast.error('Não deixe o código do produto em branco!!!');
                 return;
             } else {
                 await apiClient.put(`/updateAllDateProduct?product_id=${product_id}`,
@@ -165,8 +157,8 @@ const Produto: React.FC = () => {
                         descriptionProduct5: descriptionProducts5,
                         descriptionProduct6: descriptionProducts6,
                         order: Number(order),
-                        preco: Number(precos.replace(/[^\d]+/g, '')),
-                        promocao: Number(promocoes.replace(/[^\d]+/g, '')),
+                        preco: precos,
+                        promocao: promocoes,
                         sku: skus
                     });
                 toast.success('Dado do produto atualizado com sucesso.');

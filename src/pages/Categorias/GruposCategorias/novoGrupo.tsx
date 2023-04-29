@@ -176,7 +176,7 @@ const NovoGrupo: React.FC = () => {
                                 opcoes={
                                     [
                                         { label: "Selecionar...", value: "" },
-                                        { label: "Home page", value: "home-page" },/* @ts-ignore */
+                                        { label: "Neutro", value: "neutro" },/* @ts-ignore */
                                         ...(categories || []).map((item) => ({ label: item.slug, value: item.slug }))
                                     ]
                                 }
