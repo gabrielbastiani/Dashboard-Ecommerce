@@ -151,7 +151,7 @@ const EditAtributo: React.FC = () => {
         async function allProducts() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageListAtributos?page=${currentPage}&limit=${limit}&atributo_id=${atributo_id}`);
+                const { data } = await apiClient.get(`/pageListAtributosRelations?page=${currentPage}&limit=${limit}&atributo_id=${atributo_id}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -251,12 +251,6 @@ const EditAtributo: React.FC = () => {
         }
 
     }
-
-    console.log(search.map((item) => {
-        return(
-            item.product
-        )
-    }))
 
     const dados: any = [];
     (search || []).forEach((item) => {
