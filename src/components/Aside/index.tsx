@@ -30,7 +30,8 @@ import {
     ToggleMenu,
     ThemeToggleFooter,
     LojaFrontMobile,
-    SubMenuItemLink
+    SubMenuItemLink,
+    SubMenuItemLink1
 } from './styles';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
@@ -49,6 +50,7 @@ const Aside: React.FC = () => {
     const [submenu, setSubmenu] = useState(false);
     const [submenu1, setSubmenu1] = useState(false);
     const [submenu2, setSubmenu2] = useState(false);
+    const [submenu3, setSubmenu3] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -60,6 +62,10 @@ const Aside: React.FC = () => {
 
     const handleSubMenu2 = () => {
         setSubmenu2(!submenu2);
+    }
+
+    const handleSubMenu3 = () => {
+        setSubmenu3(!submenu3);
     }
 
     const handleToggleMenu = () => {
@@ -140,6 +146,25 @@ const Aside: React.FC = () => {
                             <MdPlayArrow />
                             Todas Avaliações
                         </SubMenuItemLink>
+
+                        <SubMenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
+                            <MdPlayArrow />
+                            Atributos
+                        </SubMenuItemLink>
+
+                        {submenu3 ? (
+                            <>
+                                <SubMenuItemLink1 href='/atributos' >
+                                    <MdPlayArrow />
+                                    Criar Atributos
+                                </SubMenuItemLink1>
+
+                                <SubMenuItemLink1 href='/filterGrupos' >
+                                    <MdPlayArrow />
+                                    Grupos de Atributos
+                                </SubMenuItemLink1>
+                            </>
+                        ) : null}
                     </>
                 ) : null}
 

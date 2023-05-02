@@ -71,7 +71,6 @@ const Produtos: React.FC = () => {
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
-                alert('Error call api list ALL products');
             }
         }
         allProducts();

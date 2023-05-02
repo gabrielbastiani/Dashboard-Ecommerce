@@ -44,6 +44,9 @@ import NovoGrupo from './pages/Categorias/GruposCategorias/novoGrupo';
 import CategoriasGrupo from './pages/Categorias/GruposCategorias/categoriasGrupo';
 import EditItem from './pages/Categorias/GruposCategorias/editItem';
 import EditGroup from './pages/Categorias/GruposCategorias/editGroup';
+import Atributos from './pages/Atributos';
+import NovoAtributo from './pages/Atributos/novoAtributo';
+import EditAtributo from './pages/Atributos/editAtributo';
 
 
 const RoutesAuth: React.FC = () => {
@@ -81,6 +84,10 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
+
+            <Route path='/atributos' element={<Atributos />} />
+            <Route path='/atributo/novo' element={<NovoAtributo />} />
+            <Route path='/atributo/:atributo_id' element={<EditAtributo />} />
 
             <Route path='/banners' element={<Banners />} />
             <Route path='/banners/novo' element={<NovoBanner />} />
