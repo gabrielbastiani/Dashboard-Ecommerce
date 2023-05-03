@@ -52,6 +52,7 @@ import NovoGrupoFiltro from './pages/Atributos/GrupoFiltroAtributo/novoGrupoFilt
 import AtributosGrupo from './pages/Atributos/GrupoFiltroAtributo/atributosGrupo';
 import EditFiltro from './pages/Atributos/GrupoFiltroAtributo/editFiltro';
 import EditGroupFiltro from './pages/Atributos/GrupoFiltroAtributo/editGroupFiltro';
+import ProdutoAtributo from './pages/Produtos/ProdutoAtributo';
 
 
 const RoutesAuth: React.FC = () => {
@@ -89,6 +90,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
+            <Route path='/produto/atributo/:variacao_id/:productId' element={<ProdutoAtributo />} />
 
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/atributo/novo' element={<NovoAtributo />} />

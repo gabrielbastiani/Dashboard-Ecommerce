@@ -37,7 +37,7 @@ export function ModalDeleteGroupFiltro({ isOpen, onRequestClose, groupId }: Dele
             /* @ts-ignore */
             const groupFilterAtributo_id = groupId.id;
 
-            await apiClient.delete(`/groupFilterAtributo_id?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+            await apiClient.delete(`/deleteFiltroGrupo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
             toast.success(`Grupo de filtro deletado com sucesso.`);
 
             onRequestClose();

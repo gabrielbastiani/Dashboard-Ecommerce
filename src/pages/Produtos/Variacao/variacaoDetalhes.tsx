@@ -14,6 +14,7 @@ import { GridDate } from "../../Perfil/styles";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import { ModalDeleteVariacao } from '../../../components/popups/ModalDeleteVariacao';
+import { BoxCategory, ButtonUpdateCategory, GridContainer, NameCategory } from "../styles";
 
 
 export type DeleteVariacao = {
@@ -583,6 +584,21 @@ const VariacaoDetalhes = ({
                             }
                         />
                     </BlockDados>
+
+                    <GridContainer>
+                    {/* {categories.map((categ) => {
+                                        return ( */}
+                    <BoxCategory /* key={categ.id} */>
+                        <NameCategory>{/* {categ.category.categoryName} */}</NameCategory>
+                    </BoxCategory>
+                    {/* )
+                                    })} */}
+                    </GridContainer>
+
+                <ButtonUpdateCategory href={`/produto/atributo/${variacao_id}/${productId}`} >
+                    Cadastrar atributos
+                </ButtonUpdateCategory>
+
                 </SectionDate>
 
                 <SectionDate>
