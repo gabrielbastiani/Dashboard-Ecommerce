@@ -61,7 +61,7 @@ const GrupoFiltroAtributo: React.FC = () => {
             "Posição Filtro": item.slugCategoryOrItem,
             "Ativo?": item.status,
             "Editar Grupo/Filtro": <Link to={`/grupoFiltro/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
-            "botaoDetalhes": `/filtro/${item.id}`
+            "botaoDetalhes": `/grupoFiltro/${item.id}`
         });
     });
 

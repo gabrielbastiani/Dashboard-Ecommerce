@@ -21,19 +21,22 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
 import { MdFileUpload } from "react-icons/md";
 import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import { ModalDeleteFiltroAndImage } from "../../../components/popups/ModalDeleteFiltroAndImage";
+import { ModalDeleteImagemFiltro } from "../../../components/popups/ModalDeleteImagemFiltro";
+import { ModalDeleteFiltro } from "../../../components/popups/ModalDeleteFiltro";
 
 
-export type DeleteImagemItem = {
+export type DeleteFiltro = {
+    groupFilterAtributo_id: string;
+}
+
+export type DeleteImagemAtributo = {
     iDImage: string;
 }
 
-export type DeleteCategoriesGroups = {
+export type DeleteFiltroAndImage = {
     groupFilterAtributo_id: string;
     iDImage: string;
-}
-
-export type DeleteItens = {
-    groupFilterAtributo_id: string;
 }
 
 const EditFiltro: React.FC = () => {
@@ -51,8 +54,8 @@ const EditFiltro: React.FC = () => {
     const [imageAtributo, setImageAtributo] = useState(null);
     const [imageAtributoUrl, setImageAtributoUrl] = useState('');
 
-    const [categoryImageUpload, setCategoryImageUpload] = useState(null);
-    const [categoryImageUploadUrl, setCategoryImageUploadUrl] = useState('');
+    const [imageAtributoUpload, setImageAtributoUpload] = useState(null);
+    const [imageAtributoUploadUrl, setImageAtributoUploadUrl] = useState('');
 
     const [imageAtributoLoad, setImageAtributoLoad] = useState("");
     const [iDImage, setIDImage] = useState("");
@@ -79,8 +82,8 @@ const EditFiltro: React.FC = () => {
 
                 setOrder(data.order);
                 setStatus(data.status);
-                setImageAtributoLoad(data.imageAtributoGroups ? data.imageAtributoGroups[0].imageGroup : data.imageAtributoGroups.imageGroup);
-                setCategoryImageUpload(data.imageAtributoGroups ? data.imageAtributoGroups[0].imageGroup : data.imageAtributoGroups.imageGroup);
+                setImageAtributoLoad(data.imageAtributoGroups ? data.imageAtributoGroups[0].imageAtributo : data.imageAtributoGroups.imageAtributo);
+                setImageAtributoUpload(data.imageAtributoGroups ? data.imageAtributoGroups[0].imageAtributo : data.imageAtributoGroups.imageAtributo);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -229,7 +232,7 @@ const EditFiltro: React.FC = () => {
         try {
             const data = new FormData();
             /* @ts-ignore */
-            data.append('file', categoryImageUpload);
+            data.append('file', imageAtributoUpload);
 
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateImageFitroAtributoGrupo?imageAtributoGroup_id=${iDImage}`, data);
@@ -258,10 +261,25 @@ const EditFiltro: React.FC = () => {
 
         if (image.type === 'image/jpeg' || image.type === 'image/png') {
             /* @ts-ignore */
-            setCategoryImageUpload(image);
-            setCategoryImageUploadUrl(URL.createObjectURL(image));
+            setImageAtributoUpload(image);
+            setImageAtributoUploadUrl(URL.createObjectURL(image));
         }
 
+    }
+
+    function handleCloseModalDeleteFiltro() {
+        setModalVisibleItens(false);
+    }
+
+    async function handleOpenModalDeleteFiltro(groupFilterAtributo_id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/filterUniqueGroup', {
+            params: {
+                groupFilterAtributo_id: groupFilterAtributo_id,
+            }
+        });
+        setModalItens(response.data || "");
+        setModalVisibleItens(true);
     }
 
     function handleCloseModalDelete() {
@@ -276,23 +294,8 @@ const EditFiltro: React.FC = () => {
             }
         });
         setModalItem(response.data || "");
-        setIDImage(response.data.imageAtributoGroups[0].id || "")
+        setIDImage(response.data.imageAtributoGroups[0].id || "");
         setModalVisible(true);
-    }
-
-    function handleCloseModalDeleteItens() {
-        setModalVisibleItens(false);
-    }
-
-    async function handleOpenModalDeleteItens(groupFilterAtributo_id: string) {
-        const apiClient = setupAPIClient();
-        const response = await apiClient.get('/filterUniqueGroup', {
-            params: {
-                groupFilterAtributo_id: groupFilterAtributo_id,
-            }
-        });
-        setModalItens(response.data || "");
-        setModalVisibleItens(true);
     }
 
     function handleCloseModalDeleteImagem() {
@@ -344,7 +347,7 @@ const EditFiltro: React.FC = () => {
                             ) :
                                 <Button
                                     style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDeleteItens(groupFilterAtributo_id)}
+                                    onClick={() => handleOpenModalDeleteFiltro(groupFilterAtributo_id)}
                                 >
                                     Deletar filtro
                                 </Button>
@@ -405,7 +408,8 @@ const EditFiltro: React.FC = () => {
                                         }
                                     />
                                 </BlockDados>
-
+                                <br />
+                                <br />
                                 {imageAtributoLoad ? (
                                     <Button
                                         /* @ts-ignore */
@@ -424,7 +428,7 @@ const EditFiltro: React.FC = () => {
                                     <>
                                         <FormUpdateImage onSubmit={handleImageUpload}>
                                             <EtiquetaTextImagem>
-                                                {categoryImageUploadUrl ? (
+                                                {imageAtributoUploadUrl ? (
                                                     <Button
                                                         type="submit"
                                                     >
@@ -437,16 +441,16 @@ const EditFiltro: React.FC = () => {
                                                     <MdFileUpload size={50} />
                                                 </IconSpanCatgoryImagens>
                                                 <InputLogoTextImagem type="file" accept="image/png, image/jpeg" onChange={handleFileUpload} />
-                                                {categoryImageUploadUrl ? (
+                                                {imageAtributoUploadUrl ? (
                                                     <>
                                                         <ImagensCategoryUpload
-                                                            src={categoryImageUploadUrl}
+                                                            src={imageAtributoUploadUrl}
                                                         />
                                                     </>
                                                 ) :
                                                     <>
                                                         <TextPhoto>Clique para carregar uma nova imagem</TextPhoto>
-                                                        <ImagensCategoryPreviewUrl src={"http://localhost:3333/files/" + categoryImageUpload} />
+                                                        <ImagensCategoryPreviewUrl src={"http://localhost:3333/files/" + imageAtributoUpload} />
                                                     </>
                                                 }
                                             </EtiquetaTextImagem>
@@ -490,8 +494,18 @@ const EditFiltro: React.FC = () => {
                     </Card>
                 </Container>
             </Grid >
+
+            {modalVisibleItens && (
+                <ModalDeleteFiltro
+                    isOpen={modalVisibleItens}
+                    onRequestClose={handleCloseModalDeleteFiltro}
+                    /* @ts-ignore */
+                    relationIDS={modalItens}
+                />
+            )}
+
             {modalVisible && (
-                <ModalDeleteIDSCategoryGroup
+                <ModalDeleteFiltroAndImage
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
@@ -501,17 +515,8 @@ const EditFiltro: React.FC = () => {
                 />
             )}
 
-            {modalVisibleItens && (
-                <ModalDeleteCategoryGroup
-                    isOpen={modalVisibleItens}
-                    onRequestClose={handleCloseModalDeleteItens}
-                    /* @ts-ignore */
-                    itensIds={modalItens}
-                />
-            )}
-
             {modalVisibleImagem && (
-                <ModalDeleteImagemCategoryGroup
+                <ModalDeleteImagemFiltro
                     isOpen={modalVisibleImagem}
                     onRequestClose={handleCloseModalDeleteImagem}
                     /* @ts-ignore */
