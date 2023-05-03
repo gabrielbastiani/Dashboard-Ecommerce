@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const Subtitulo = styled.h4`
+export const Subtitulo = styled.h2`
     color: ${(props) => props.theme.colors.white};
     letter-spacing: 1px;
 `;
 
-export const TituloSecundario = styled.h2`
+export const TituloQuarto = styled.h4`
     color: ${(props) => props.theme.colors.white};
     letter-spacing: 1px;
 `;

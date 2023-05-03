@@ -1,15 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import noImage from '../../../assets/semfoto.png';
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
+import { Block, BlockTop, Container, Etiqueta, ImagensCategorys } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import Titulos from "../../../components/Titulos";
+import Select from "../../../components/ui/Select";
+import { InputPost } from "../../../components/ui/InputPost";
+import { Button } from "../../../components/ui/Button";
+import { GridDate } from "../../Perfil/styles";
+import { SectionDate } from "../../Configuracoes/styles";
+import { BlockDados, TextButton } from "../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
 
 
 
@@ -69,7 +77,7 @@ const AtributosGrupo: React.FC = () => {
     async function handleFiltrosAtributos() {
         const apiClient = setupAPIClient();
         try {
-            if (atributosSelected === "" || itemName === "") {
+            if (atributosSelected === "") {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
@@ -139,17 +147,7 @@ const AtributosGrupo: React.FC = () => {
 
                         </BlockTop>
 
-                        <Block>
-                            <Etiqueta>Nome da categoria ou item:</Etiqueta>
-                            <InputPost
-                                type="text"
-                                placeholder="Digite o nome aqui..."
-                                value={itemName}
-                                onChange={(e) => setItemName(e.target.value)}
-                            />
-                        </Block>
-
-                        <Etiqueta>Escolha uma categoria:</Etiqueta>
+                        <Etiqueta>Escolha um valor de atributo:</Etiqueta>
                         <Select
                             value={atributosSelected}
                             /* @ts-ignore */
@@ -157,7 +155,7 @@ const AtributosGrupo: React.FC = () => {
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(atributos || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                    ...(atributos || []).map((item) => ({ label: item.valor, value: item.id }))
                                 ]
                             }
                         />
@@ -175,7 +173,7 @@ const AtributosGrupo: React.FC = () => {
                         <Button
                             onClick={handleFiltrosAtributos}
                         >
-                            Cadastrar categoria/item
+                            Cadastrar atributo/filtro
                         </Button>
                         <br />
                         <br />
@@ -184,16 +182,17 @@ const AtributosGrupo: React.FC = () => {
                                 <>
                                     <Card>
                                         <Titulos
-                                            tipo="h3"
-                                            titulo={item.itemName}
+                                            tipo="h2"
+                                            titulo={item.atributo.valor}
                                         />
-
+                                        <br />
+                                        <br />
                                         <GridDate key={item.id}>
 
                                             <SectionDate>
-                                                {item.imagegroupcategories[0] ? (
+                                                {item.imageAtributoGroups[0] ? (
                                                     <ImagensCategorys
-                                                        src={"http://localhost:3333/files/" + item.imagegroupcategories[0].imageGroup}
+                                                        src={"http://localhost:3333/files/" + item.imageAtributoGroups[0].imageAtributo}
                                                         width={170}
                                                         height={80}
                                                     />
@@ -204,26 +203,6 @@ const AtributosGrupo: React.FC = () => {
                                                         height={80}
                                                     />
                                                 }
-                                            </SectionDate>
-
-                                            <SectionDate>
-                                                <Button
-                                                    style={{ backgroundColor: 'green' }}
-                                                >
-                                                    <AiOutlinePlusCircle />
-                                                    <Link to={`/grupo/${item.id}`} >
-                                                        <TextButton>Item</TextButton>
-                                                    </Link>
-                                                </Button>
-                                            </SectionDate>
-
-                                            <SectionDate style={{ width: '780px' }} >
-                                                <BlockDados>
-                                                    <TextoDados
-                                                        chave={"Categoria"}
-                                                        dados={item.category.categoryName}
-                                                    />
-                                                </BlockDados>
                                             </SectionDate>
 
                                             <SectionDate>
@@ -248,9 +227,9 @@ const AtributosGrupo: React.FC = () => {
                                                 <Button
                                                     style={{ backgroundColor: '#FB451E', padding: '5px' }}
                                                 >
-                                                    <Link to={`/grupo/item/edit/${item.id}`}
+                                                    <Link to={`/grupo/filtroAtributo/edit/${item.id}`}
                                                     >
-                                                        <TextButton>Editar item</TextButton>
+                                                        <TextButton>Editar filtro</TextButton>
                                                     </Link>
                                                 </Button>
                                             </SectionDate>

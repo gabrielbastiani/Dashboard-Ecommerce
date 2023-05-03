@@ -1,8 +1,8 @@
 import {
     Subtitulo,
-    TituloSecundario,
     TituloTerciario,
-    TituloPrincipal
+    TituloPrincipal,
+    TituloQuarto
 } from './styles';
 
 interface TituloRequest {
@@ -10,14 +10,14 @@ interface TituloRequest {
     titulo: any;
 }
 
-const Titulos = ({tipo, titulo}: TituloRequest) => {
+const Titulos = ({ tipo, titulo }: TituloRequest) => {
     switch (tipo) {
-        case 'h4':
-            return (<Subtitulo>{titulo}</Subtitulo>);
         case 'h2':
-            return (<TituloSecundario>{titulo}</TituloSecundario>);
+            return (<Subtitulo>{titulo}</Subtitulo>);
         case 'h3':
             return (<TituloTerciario>{titulo}</TituloTerciario>);
+        case 'h4':
+            return (<TituloQuarto>{titulo}</TituloQuarto>);
         case 'h1':
             return (<TituloPrincipal>{titulo}</TituloPrincipal>);
         default:
