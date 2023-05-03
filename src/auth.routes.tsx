@@ -51,6 +51,7 @@ import GrupoFiltroAtributo from './pages/Atributos/GrupoFiltroAtributo';
 import NovoGrupoFiltro from './pages/Atributos/GrupoFiltroAtributo/novoGrupoFiltro';
 import AtributosGrupo from './pages/Atributos/GrupoFiltroAtributo/atributosGrupo';
 import EditFiltro from './pages/Atributos/GrupoFiltroAtributo/editFiltro';
+import EditGroupFiltro from './pages/Atributos/GrupoFiltroAtributo/editGroupFiltro';
 
 
 const RoutesAuth: React.FC = () => {
@@ -94,6 +95,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/atributo/:atributo_id' element={<EditAtributo />} />
             <Route path='/filterGrupos' element={<GrupoFiltroAtributo />} />
             <Route path='/grupoFiltro/novo' element={<NovoGrupoFiltro />} />
+            <Route path='/grupoFiltro/edit/:groupFilterAtributo_id' element={<EditGroupFiltro />} />
             <Route path='/grupoFiltro/:groupFilterAtributo_id' element={<AtributosGrupo />} />
             <Route path='/grupo/filtroAtributo/edit/:groupFilterAtributo_id' element={<EditFiltro />} />
 

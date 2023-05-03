@@ -38,6 +38,7 @@ export function ModalDeleteFiltroAndImage({ isOpen, onRequestClose, relationIDS,
             /* @ts-ignore */
             const groupFilterAtributo_id = relationIDS.id;
 
+            await apiClient.delete(`/deleteImageFiltro?imageAtributoGroup_id=${idGroupImage}`);
             await apiClient.delete(`/deleteImagesAndFiltroAtributo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
 
         } catch (error) {/* @ts-ignore */
