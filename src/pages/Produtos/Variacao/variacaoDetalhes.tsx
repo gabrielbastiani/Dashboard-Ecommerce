@@ -606,14 +606,16 @@ const VariacaoDetalhes = ({
                         {allRelationAtributos.map((atri) => {
                             return (
                                 <BoxCategory key={atri.id} >
-                                    <NameCategory>{atri.atributo.tipo + "= " + atri.atributo.valor}</NameCategory>
+                                    <NameCategory>{atri.atributo.tipo + ": " + atri.atributo.valor}</NameCategory>
                                 </BoxCategory>
                             )
                         })}
                     </GridContainer>
 
-                    <ButtonUpdateCategory href={`/produto/atributo/${variacao_id}/${productId}`} >
-                        Cadastrar atributos
+                    <ButtonUpdateCategory
+                        href={`/produto/atributo/${variacao_id}/${productId}`}
+                    >
+                        Cadastrar atributos ou atualizar
                     </ButtonUpdateCategory>
 
                 </SectionDate>

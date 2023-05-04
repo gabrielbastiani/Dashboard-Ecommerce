@@ -22,6 +22,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Select from "../../../components/ui/Select";
 import { InputPost } from "../../../components/ui/InputPost";
 import { Avisos } from "../../../components/Avisos";
+import SelectUpdate from "../../../components/ui/SelectUpdate";
 
 
 export type DeleteRelationsAtributos = {
@@ -42,6 +43,7 @@ const ProdutoAtributo: React.FC = () => {
     const [lojaID] = useState(user.loja_id);
     const [allRelationAtributos, setAllRelationAtributos] = useState<any[]>([]);
 
+    const [atributoID, setAtributoID] = useState();
     const [orderUpdate, setOrderUpdate] = useState();
 
     const [modalItem, setModalItem] = useState('');
@@ -80,6 +82,10 @@ const ProdutoAtributo: React.FC = () => {
 
     function handleChangeAtributo(e: any) {
         setSelectedAtributo(e.target.value)
+    }
+
+    function handleChangeAtributoUpdate(e: any) {
+        setAtributoID(e.target.value)
     }
 
     useEffect(() => {
@@ -121,6 +127,25 @@ const ProdutoAtributo: React.FC = () => {
             toast.error("Ops, erro ao cadastrar o atributo no produto.");
             /* @ts-ignore */
             console.log(error.response.data);
+        }
+    }
+
+    async function updateAtributo(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            if (atributoID === "") {
+                toast.error('Não deixe o atributo em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateAtributoIDProduct?relationProductAtributo_id=${id}`, { atributo_id: atributoID });
+                toast.success('Atributo atualizado com sucesso.');
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o atributo.');
         }
     }
 
@@ -227,6 +252,26 @@ const ProdutoAtributo: React.FC = () => {
                                                         tipo="h2"
                                                         titulo={IDRelation.atributo.tipo + " = " + IDRelation.atributo.valor}
                                                     />
+
+                                                    <BlockDados>
+                                                        <TextoDados
+                                                            chave={"Atualize o atributo"}
+                                                            dados={
+                                                                <SelectUpdate
+                                                                    dado={IDRelation.atributo.tipo + " = " + IDRelation.atributo.valor}
+                                                                    handleSubmit={() => updateAtributo(IDRelation.id)}
+                                                                    value={atributoID}
+                                                                    opcoes={
+                                                                        [
+                                                                            { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                                            ...(atributo || []).map((item) => ({ label: item.tipo + "= " + item.valor, value: item.id }))
+                                                                        ]
+                                                                    }/* @ts-ignore */
+                                                                    onChange={handleChangeAtributoUpdate}
+                                                                />
+                                                            }
+                                                        />
+                                                    </BlockDados>
                                                 </SectionDate>
 
                                                 <SectionDate>
