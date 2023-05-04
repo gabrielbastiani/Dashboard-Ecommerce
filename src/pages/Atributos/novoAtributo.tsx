@@ -123,7 +123,7 @@ const NovoAtributo: React.FC = () => {
                         <Etiqueta>Tipo:</Etiqueta>
                         <InputPost
                             type="text"
-                            placeholder="Digite o tipo de atributo aqui..."
+                            placeholder="Digite um novo tipo de atributo aqui..."
                             value={tipo || selectedAtributo}
                             onChange={(e) => setTipo(e.target.value)}
                         />

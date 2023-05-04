@@ -112,3 +112,7 @@ export const BoxCategory = styled.div``;
 export const NameCategory = styled.span`
   color: ${(props) => props?.theme?.colors?.black};
 `;
+
+export const TextNotFound = styled.span`
+  color: ${(props) => props?.theme?.colors?.black};
+`

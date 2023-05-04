@@ -18,7 +18,7 @@ import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProduc
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer } from "../styles";
+import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer, TextNotFound } from "../styles";
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
@@ -466,13 +466,21 @@ const Produto: React.FC = () => {
                                 </BlockDados>
 
                                 <GridContainer>
-                                    {categories.map((categ) => {
-                                        return (
-                                            <BoxCategory key={categ.id}>
-                                                <NameCategory>{categ.category.categoryName}</NameCategory>
-                                            </BoxCategory>
-                                        )
-                                    })}
+                                    {categories.length < 1 ? (
+                                        <>
+                                            <TextNotFound>Não há categorias cadastrados no produto ainda...</TextNotFound>
+                                        </>
+                                    ) :
+                                        <>
+                                            {categories.map((categ) => {
+                                                return (
+                                                    <BoxCategory key={categ.id}>
+                                                        <NameCategory>{categ.category.categoryName}</NameCategory>
+                                                    </BoxCategory>
+                                                )
+                                            })}
+                                        </>
+                                    }
                                 </GridContainer>
 
                                 <ButtonUpdateCategory href={`/produto/atualizar/categorias/${product_id}`}>
