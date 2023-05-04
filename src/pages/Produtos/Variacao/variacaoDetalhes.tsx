@@ -84,6 +84,8 @@ const VariacaoDetalhes = ({
     const [descriptionVariacoes5, setDescriptionVariacoes5] = useState('');
     const [descriptionVariacoes6, setDescriptionVariacoes6] = useState('');
 
+    const [allRelationAtributos, setAllRelationAtributos] = useState<any[]>([]);
+
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -141,7 +143,22 @@ const VariacaoDetalhes = ({
             }
         }
         loadVariacao();
-    }, [variacao_id])
+    }, [variacao_id]);
+
+    useEffect(() => {
+        async function findsRelationsProducts() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/allAtributosProductRelation?variacao_id=${variacao_id}`);
+
+                setAllRelationAtributos(response.data || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        findsRelationsProducts();
+    }, [variacao_id]);
 
     async function updateStatus() {
         try {
@@ -586,18 +603,18 @@ const VariacaoDetalhes = ({
                     </BlockDados>
 
                     <GridContainer>
-                    {/* {categories.map((categ) => {
-                                        return ( */}
-                    <BoxCategory /* key={categ.id} */>
-                        <NameCategory>{/* {categ.category.categoryName} */}</NameCategory>
-                    </BoxCategory>
-                    {/* )
-                                    })} */}
+                        {allRelationAtributos.map((atri) => {
+                            return (
+                                <BoxCategory key={atri.id} >
+                                    <NameCategory>{atri.atributo.tipo + "= " + atri.atributo.valor}</NameCategory>
+                                </BoxCategory>
+                            )
+                        })}
                     </GridContainer>
 
-                <ButtonUpdateCategory href={`/produto/atributo/${variacao_id}/${productId}`} >
-                    Cadastrar atributos
-                </ButtonUpdateCategory>
+                    <ButtonUpdateCategory href={`/produto/atributo/${variacao_id}/${productId}`} >
+                        Cadastrar atributos
+                    </ButtonUpdateCategory>
 
                 </SectionDate>
 

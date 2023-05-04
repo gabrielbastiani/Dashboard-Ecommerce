@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { BlockTop, Container } from "../../Categorias/styles";
+import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
-import { TextButton } from "../styles";
 import { Button } from "../../../components/ui/Button";
-import { AiOutlinePlusCircle } from "react-icons/ai";
 import { BlockDados } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
@@ -17,21 +15,32 @@ import { toast } from "react-toastify";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import Modal from 'react-modal';
-import { ModalDeleteRelationsCategorys } from "../../../components/popups/ModalDeleteRelationsCategorys";
+import { ModalDeleteRelationsAtributosProduct } from "../../../components/popups/ModalDeleteRelationsAtributosProduct";
 import { BsTrash } from "react-icons/bs";
+import VoltarNavagation from "../../../components/VoltarNavagation";
+import { AuthContext } from "../../../contexts/AuthContext";
+import Select from "../../../components/ui/Select";
+import { InputPost } from "../../../components/ui/InputPost";
+import { Avisos } from "../../../components/Avisos";
 
 
-export type DeleteRelations = {
+export type DeleteRelationsAtributos = {
     id: string;
 }
 
 const ProdutoAtributo: React.FC = () => {
 
-    let { variacao_id, product_id } = useParams();
+    let { variacao_id, productId } = useParams();
     const navigate = useNavigate();
 
-    const [nameProduct, setNameProduct] = useState("");
-    const [allFindOrderRelationIDAsc, setAllFindOrderRelationIDAsc] = useState<any[]>([]);
+    const { user } = useContext(AuthContext);
+
+    const [nameVariacao, setNameVariacao] = useState("");
+    const [atributo, setAtributo] = useState<any>([]);
+    const [selectedAtributo, setSelectedAtributo] = useState();
+    const [order, setOrder] = useState(Number);
+    const [lojaID] = useState(user.loja_id);
+    const [allRelationAtributos, setAllRelationAtributos] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
 
@@ -40,13 +49,27 @@ const ProdutoAtributo: React.FC = () => {
 
 
     useEffect(() => {
+        async function findLoadDates() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/variacoes?variacao_id=${variacao_id}`);
+
+                setNameVariacao(response.data.nameVariacao || "");
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        findLoadDates();
+    }, [variacao_id]);
+
+    useEffect(() => {
         async function findsRelationsProducts() {
             try {
                 const apiClient = setupAPIClient();
                 const response = await apiClient.get(`/allAtributosProductRelation?variacao_id=${variacao_id}`);
 
-                setAllFindOrderRelationIDAsc(response.data || []);
-                setNameProduct(response.data.product.nameProduct || "");
+                setAllRelationAtributos(response.data || []);
 
             } catch (error) {
                 console.error(error);
@@ -54,6 +77,52 @@ const ProdutoAtributo: React.FC = () => {
         }
         findsRelationsProducts();
     }, [variacao_id]);
+
+    function handleChangeAtributo(e: any) {
+        setSelectedAtributo(e.target.value)
+    }
+
+    useEffect(() => {
+        async function loadAtributos() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/allAtributos');
+                setAtributo(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadAtributos();
+    }, []);
+
+    async function handleRegisterAtributo() {
+        const apiClient = setupAPIClient();
+        try {
+            if (selectedAtributo === "") {
+                toast.error('Favor, selecione um atributo!');
+                return;
+            }
+
+            await apiClient.post('/createRelationAtributos', {
+                product_id: productId,
+                variacao_id: variacao_id,
+                atributo_id: selectedAtributo,
+                order: Number(order),
+                loja_id: lojaID
+            });
+
+            toast.success('Atributo cadastrado com sucesso!');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            toast.error("Ops, erro ao cadastrar o atributo no produto.");
+            /* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
     async function updateOrder(id: string) {
         try {
@@ -82,7 +151,7 @@ const ProdutoAtributo: React.FC = () => {
         const apiClient = setupAPIClient();
         const response = await apiClient.get('/findUniqueRelationAtributoProduct', {
             params: {
-                relationProductCategory_id: id,
+                relationProductAtributo_id: id,
             }
         });
         setModalItem(response.data || "");
@@ -99,93 +168,111 @@ const ProdutoAtributo: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    <Link to={`/produto/${slug}/${product_id}`} >
-                        <Button>
-                            Voltar para o produto
-                        </Button>
-                    </Link>
-                    <br />
-                    <br />
-                    <br />
+                    <VoltarNavagation />
                     <br />
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo={`Cadastro de categoria para - ${nameProduct}`}
+                            titulo={`Cadastro de atributo para - ${nameVariacao}`}
                         />
                         <Button
                             style={{ backgroundColor: 'green' }}
+                            onClick={handleRegisterAtributo}
                         >
-                            <AiOutlinePlusCircle />
-                            <Link to={`/produto/novo/categorias/novaCategoriaProduto/${product_id}`} >
-                                <TextButton>Cadastre uma nova categoria</TextButton>
-                            </Link>
+                            Salvar atributo no produto
                         </Button>
                     </BlockTop>
 
-                    {allFindOrderRelationIDAsc.map((IDRelation) => {
-                        return (
-                            <>
-                                <Card key={IDRelation.id}>
-                                    <Titulos
-                                        tipo="h3"
-                                        titulo={IDRelation.category.categoryName}
-                                    />
+                    <Etiqueta>Escolha um atributo para esse produto:</Etiqueta>
+                    <Select
+                        value={selectedAtributo}
+                        /* @ts-ignore */
+                        onChange={handleChangeAtributo}
+                        opcoes={
+                            [
+                                { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                ...(atributo || []).map((item) => ({ label: item.tipo + "= " + item.valor, value: item.id }))
+                            ]
+                        }
+                    />
+                    <br />
+                    <Block>
+                        <Etiqueta>Ordem:</Etiqueta>
+                        <InputPost
+                            type="number"
+                            placeholder="0"
+                            value={order}/* @ts-ignore */
+                            onChange={(e) => setOrder(e.target.value)}
+                        />
+                    </Block>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    {allRelationAtributos.length < 1 ? (
+                        <>
+                            <Avisos
+                                texto="Não há atributos cadastrados nesse produto ainda..."
+                            />
+                        </>
+                    ) :
+                        <>
+                            {allRelationAtributos.map((IDRelation) => {
+                                return (
+                                    <>
+                                        <Card key={IDRelation.id}>
+                                            <GridDate>
+                                                <SectionDate>
+                                                    <Titulos
+                                                        tipo="h2"
+                                                        titulo={IDRelation.atributo.tipo + " = " + IDRelation.atributo.valor}
+                                                    />
+                                                </SectionDate>
 
-                                    <GridDate>
-                                        <SectionDate>
-                                            <Button
-                                                style={{ backgroundColor: 'orange' }}
-                                            >
-                                                <AiOutlinePlusCircle />
-                                                <Link to={`/produto/categorias/newNivelCategoryProduct/${product_id}/${IDRelation.id}`} >
-                                                    <TextButton>Cadastre um novo nivel</TextButton>
-                                                </Link>
-                                            </Button>
-                                        </SectionDate>
-
-                                        <SectionDate>
-                                            <BlockDados>
-                                                <TextoDados
-                                                    chave={"Ordem"}
-                                                    dados={
-                                                        <InputUpdate
-                                                            dado={String(IDRelation.order)}
-                                                            type="number"
-                                                            /* @ts-ignore */
-                                                            placeholder={String(IDRelation.order)}
-                                                            value={orderUpdate}
-                                                            /* @ts-ignore */
-                                                            onChange={(e) => setOrderUpdate(e.target.value)}
-                                                            handleSubmit={() => updateOrder(IDRelation.id)}
+                                                <SectionDate>
+                                                    <BlockDados>
+                                                        <TextoDados
+                                                            chave={"Ordem"}
+                                                            dados={
+                                                                <InputUpdate
+                                                                    dado={String(IDRelation.order)}
+                                                                    type="number"
+                                                                    /* @ts-ignore */
+                                                                    placeholder={String(IDRelation.order)}
+                                                                    value={orderUpdate}
+                                                                    /* @ts-ignore */
+                                                                    onChange={(e) => setOrderUpdate(e.target.value)}
+                                                                    handleSubmit={() => updateOrder(IDRelation.id)}
+                                                                />
+                                                            }
                                                         />
-                                                    }
-                                                />
-                                            </BlockDados>
-                                        </SectionDate>
+                                                    </BlockDados>
+                                                </SectionDate>
 
-                                        <SectionDate>
-                                            <BsTrash
-                                                onClick={() => handleOpenModalDelete(IDRelation.id)}
-                                                style={{ cursor: 'pointer' }}
-                                                color="red"
-                                                size={35}
+                                                <SectionDate>
+                                                    <BsTrash
+                                                        onClick={() => handleOpenModalDelete(IDRelation.id)}
+                                                        style={{ cursor: 'pointer' }}
+                                                        color="red"
+                                                        size={35}
+                                                    />
+                                                </SectionDate>
+
+                                            </GridDate>
+                                        </Card>
+                                        {modalVisible && (
+                                            <ModalDeleteRelationsAtributosProduct
+                                                isOpen={modalVisible}
+                                                onRequestClose={handleCloseModalDelete}
+                                                /* @ts-ignore */
+                                                relation={modalItem}
                                             />
-                                        </SectionDate>
-
-                                    </GridDate>
-                                </Card>
-                                {modalVisible && (
-                                    <ModalDeleteRelationsCategorys
-                                        isOpen={modalVisible}
-                                        onRequestClose={handleCloseModalDelete}
-                                        /* @ts-ignore */
-                                        relation={modalItem}
-                                    />
-                                )}
-                            </>
-                        )
-                    })}
+                                        )}
+                                    </>
+                                )
+                            })}
+                        </>
+                    }
                 </Card>
             </Container>
         </Grid>
