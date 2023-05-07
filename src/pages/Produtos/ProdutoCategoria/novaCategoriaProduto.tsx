@@ -27,6 +27,9 @@ const NovaCategoriaProduto: React.FC = () => {
     const [categorySelected, setCategorySelected] = useState();
     const [order, setOrder] = useState(Number);
 
+    const [allPhotos, setAllPhotos] = useState<any[]>([]);
+
+    const photosProduct = allPhotos.map((item) => {return item.id });
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -45,6 +48,21 @@ const NovaCategoriaProduto: React.FC = () => {
         loadCategorys();
     }, []);
 
+    useEffect(() => {
+        async function loadAllPhotosProduct() {
+            const apiClient = setupAPIClient();
+            try {
+                const responseProduct = await apiClient.get(`/allPhotosProducts?product_id=${product_id}`)
+
+                setAllPhotos(responseProduct.data);
+
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        loadAllPhotosProduct();
+    }, [product_id]);
+
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
@@ -55,6 +73,8 @@ const NovaCategoriaProduto: React.FC = () => {
 
             await apiClient.post('/createRelation', {
                 product_id: product_id,
+                photoProduct_id: photosProduct[0] || null,
+                photoProduct_id1: photosProduct[1] || null,
                 category_id: categorySelected,
                 posicao: "",
                 order: Number(order),

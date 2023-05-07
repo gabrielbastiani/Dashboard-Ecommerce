@@ -41,6 +41,24 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
     const [modalItem, setModalItem] = useState<DeletePhotoProduct[]>();
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [categories, setCategories] = useState<any[]>([]);
+
+    const photosProduct = allPhotos.map((item) => { return item.id });
+    const existCategories = categories.length;
+
+
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
+                setCategories(data.allFindOrderAsc || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCategorys();
+    }, [product_id]);
 
     useEffect(() => {
         async function loadAllPhotosProduct() {
@@ -55,7 +73,7 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
             }
         }
         loadAllPhotosProduct();
-    }, [product_id])
+    }, [product_id]);
 
     function handleFileInput(e: ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) {
@@ -71,6 +89,31 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
             /* @ts-ignore */
             setProductPhoto(image);
             setPhotoInsertUrl(URL.createObjectURL(image));
+        }
+    }
+
+    useEffect(() => {
+        if (existCategories >= 1) {
+            updateRelationPhotoProduct();
+            updateRelationPhotoProduct1();
+        }
+    });
+
+    async function updateRelationPhotoProduct() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateFirstPhotoProduct?product_id=${product_id}`, { photoProduct_id: photosProduct[0] });
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
+    async function updateRelationPhotoProduct1() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateFirstPhotoProduct1?product_id=${product_id}`, { photoProduct_id1: photosProduct[1] });
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
         }
     }
 
@@ -95,13 +138,14 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
             toast.success('Foto inserida com sucesso');
 
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
         } catch (err) {/* @ts-ignore */
             console.log(err.response.data);
             toast.error('Ops erro ao inserir a foto!');
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
     function handleCloseModalDelete() {
@@ -123,6 +167,7 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
 
     return (
+
         <>
             <FormPhotoProduct onSubmit={handlePhoto}>
                 <EtiquetaPhotoProductInsert>
@@ -131,18 +176,11 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
                     </IconSpan>
                     <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileInput} alt="foto do produto" />
                     {photoInsertUrl ? (
+
                         <>
-                            <PhotoProductPreview
-                                src={photoInsertUrl}
-                                alt="foto do produto"
-                                width={170}
-                                height={120}
-                            />
+                            <PhotoProductPreview src={photoInsertUrl} alt="foto do produto" width={170} height={120} />
                             <BlockButton>
-                                <Button
-                                    type="submit"
-                                    style={{ backgroundColor: 'green' }}
-                                >
+                                <Button type="submit" style={{ backgroundColor: 'green' }}>
                                     Salvar Imagem</Button>
                             </BlockButton>
                         </>
