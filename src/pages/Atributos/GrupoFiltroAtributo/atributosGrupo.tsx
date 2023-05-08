@@ -34,7 +34,7 @@ const AtributosGrupo: React.FC = () => {
     const [atributos, setAtributos] = useState<any[]>([]);
     const [atributosSelected, setAtributosSelected] = useState();
     const [order, setOrder] = useState(Number);
-    const [itemName, setItemName] = useState("");
+    const [itemName] = useState("");
     const [nameItem, setNameItem] = useState("");
 
     const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);

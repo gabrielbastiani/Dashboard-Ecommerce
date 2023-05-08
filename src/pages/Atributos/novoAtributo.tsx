@@ -47,7 +47,7 @@ const NovoAtributo: React.FC = () => {
 
     async function handleRegisterAtributo() {
         try {
-            if (valor === "" || tipo === "" || tipo === undefined || tipo === null) {
+            if (valor === "") {
                 toast.error('Não deixe o valor em branco!!!');
                 return
             }
