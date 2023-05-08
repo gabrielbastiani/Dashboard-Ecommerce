@@ -77,7 +77,7 @@ const AtributosGrupo: React.FC = () => {
     async function handleFiltrosAtributos() {
         const apiClient = setupAPIClient();
         try {
-            if (atributosSelected === "") {
+            if (atributosSelected === "" || atributosSelected === undefined || atributosSelected === null) {
                 toast.error('Não deixe campos em branco.');
                 return;
             }

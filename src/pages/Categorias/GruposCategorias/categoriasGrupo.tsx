@@ -74,10 +74,12 @@ const CategoriasGrupo: React.FC = () => {
         loadCategorys();
     }, []);
 
+    console.log(categorySelected)
+
     async function handleGroupCategories() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === "" || itemName === "") {
+            if (categorySelected === undefined || categorySelected === null || categorySelected === "" || itemName === "") {
                 toast.error('Não deixe campos em branco.');
                 return;
             }

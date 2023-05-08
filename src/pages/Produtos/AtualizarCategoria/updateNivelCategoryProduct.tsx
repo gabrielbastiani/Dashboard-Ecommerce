@@ -161,7 +161,7 @@ const UpdateNivelCategoryProduct: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === null) {
+            if (categorySelected === null || categorySelected === undefined || categorySelected === "") {
                 toast.error('Não deixe a categoria em branco.');
                 return;
             }

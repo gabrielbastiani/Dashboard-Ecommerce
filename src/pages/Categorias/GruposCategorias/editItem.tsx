@@ -126,7 +126,7 @@ const EditItem: React.FC = () => {
 
     async function updateCategory() {
         try {
-            if (categorySelected === "") {
+            if (categorySelected === "" || categorySelected === null || categorySelected === undefined) {
                 toast.error(`Selecione a categoria, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }

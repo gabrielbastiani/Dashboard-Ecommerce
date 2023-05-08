@@ -104,7 +104,7 @@ const ProdutoAtributo: React.FC = () => {
     async function handleRegisterAtributo() {
         const apiClient = setupAPIClient();
         try {
-            if (selectedAtributo === "") {
+            if (selectedAtributo === "" || selectedAtributo === null || selectedAtributo === undefined) {
                 toast.error('Favor, selecione um atributo!');
                 return;
             }

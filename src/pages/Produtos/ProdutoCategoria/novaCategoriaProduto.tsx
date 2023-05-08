@@ -66,7 +66,7 @@ const NovaCategoriaProduto: React.FC = () => {
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === "") {
+            if (categorySelected === "" || categorySelected === null || categorySelected === undefined) {
                 toast.error('Favor, selecione uma categoria!');
                 return;
             }
