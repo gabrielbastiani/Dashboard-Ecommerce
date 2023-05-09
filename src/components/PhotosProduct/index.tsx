@@ -42,10 +42,25 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const [categories, setCategories] = useState<any[]>([]);
+    const [atributos, setAtributos] = useState<any[]>([]);
 
     const photosProduct = allPhotos.map((item) => { return item.id });
     const existCategories = categories.length;
+    const existAtributos = atributos.length;
 
+
+    useEffect(() => {
+        async function loadAtributos() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/findAllAtributosProduct?product_id=${product_id}`);
+                setAtributos(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadAtributos();
+    }, [product_id]);
 
     useEffect(() => {
         async function loadCategorys() {
@@ -112,6 +127,31 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/updateFirstPhotoProduct1?product_id=${product_id}`, { photoProduct_id1: photosProduct[1] });
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
+    useEffect(() => {
+        if (existAtributos >= 1) {
+            updatePhotoAtributo();
+            updatePhotoAtributo1();
+        }
+    });
+
+    async function updatePhotoAtributo() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateFirstPhotoProductAtributo?product_id=${product_id}`, { photoProduct_id: photosProduct[0] });
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
+    async function updatePhotoAtributo1() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateFirstPhotoProduct1Atributo?product_id=${product_id}`, { photoProduct_id1: photosProduct[1] });
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
         }

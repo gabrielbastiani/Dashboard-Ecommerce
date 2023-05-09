@@ -49,6 +49,25 @@ const ProdutoAtributo: React.FC = () => {
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [allPhotos, setAllPhotos] = useState<any[]>([]);
+
+    const photosProduct = allPhotos.map((item) => {return item.id });
+
+
+    useEffect(() => {
+        async function loadAllPhotosProduct() {
+            const apiClient = setupAPIClient();
+            try {
+                const responseProduct = await apiClient.get(`/allPhotosProducts?product_id=${productId}`)
+
+                setAllPhotos(responseProduct.data);
+
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        loadAllPhotosProduct();
+    }, [productId]);
 
     useEffect(() => {
         async function findLoadDates() {
@@ -111,6 +130,8 @@ const ProdutoAtributo: React.FC = () => {
 
             await apiClient.post('/createRelationAtributos', {
                 product_id: productId,
+                photoProduct_id: photosProduct[0] || null,
+                photoProduct_id1: photosProduct[1] || null,
                 variacao_id: variacao_id,
                 atributo_id: selectedAtributo,
                 order: Number(order),
