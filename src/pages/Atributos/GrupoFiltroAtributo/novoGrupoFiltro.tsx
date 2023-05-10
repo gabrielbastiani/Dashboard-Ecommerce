@@ -115,7 +115,7 @@ const NovoGrupoFiltro: React.FC = () => {
                                 style={{ backgroundColor: 'green' }}
                             >
                                 <AiOutlinePlusCircle size={25} />
-                                <Link to={`/grupoFiltro/${findFirstGroup}`} >
+                                <Link to={`/grupoFiltro/${findFirstGroup}/${groupNumber}`} >
                                     <TextButton>Clique aqui, para cadastrar os atributos para esse grupo/filtro</TextButton>
                                 </Link>
                             </Button>

@@ -57,11 +57,12 @@ const GrupoFiltroAtributo: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
+            "Cod. Grupo": item.groupNumber,
             "Nome do Grupo/Filtro": item.nameGroup,
             "Posição Filtro": item.slugCategoryOrItem,
             "Ativo?": item.status,
             "Editar Grupo/Filtro": <Link to={`/grupoFiltro/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
-            "botaoDetalhes": `/grupoFiltro/${item.id}`
+            "botaoDetalhes": `/grupoFiltro/${item.id}/${item.groupNumber}`
         });
     });
 
@@ -106,7 +107,7 @@ const GrupoFiltroAtributo: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Nome do Grupo/Filtro", "Posição Filtro", "Ativo?", "Editar Grupo/Filtro"]}
+                                cabecalho={["Cod. Grupo", "Nome do Grupo/Filtro", "Posição Filtro", "Ativo?", "Editar Grupo/Filtro"]}
                                 dados={dados}
                                 textbutton={"Ver itens do grupo"}
                             />
