@@ -23,7 +23,7 @@ import { TextoDados } from "../../../components/TextoDados";
 
 const AtributosGrupo: React.FC = () => {
 
-    let { groupFilterAtributo_id } = useParams();
+    let { groupFilterAtributo_id, groupNumber } = useParams();
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -82,6 +82,7 @@ const AtributosGrupo: React.FC = () => {
                 return;
             }
             await apiClient.post('/createFilter', {
+                groupNumber: Number(groupNumber),
                 nameGroup: nameGroup,
                 itemName: itemName,
                 atributo_id: atributosSelected,

@@ -22,6 +22,7 @@ const NovoGrupoFiltro: React.FC = () => {
 
     const { user } = useContext(AuthContext);
 
+    const [groupNumber, setGroupNumber] = useState(Number);
     const [nameGroup, setNameGroup] = useState('');
     const [itemName, setItemName] = useState('');
 
@@ -67,13 +68,14 @@ const NovoGrupoFiltro: React.FC = () => {
 
     async function handleRegisterGroup() {
         try {
-            if (nameGroup === "" || itemName === "") {
-                toast.error('Não deixe em branco!!!');
+            if (groupNumber === null || nameGroup === "" || itemName === "") {
+                toast.error('Não deixe campo em branco!!!');
                 return
             }
 
             const apiClient = setupAPIClient();
             await apiClient.post('/createFilter', {
+                groupNumber: Number(groupNumber),
                 nameGroup: nameGroup,
                 slugCategoryOrItem: slugCategoryOrItem,
                 itemName: itemName,
@@ -137,6 +139,16 @@ const NovoGrupoFiltro: React.FC = () => {
                                 Salvar
                             </Button>
                         </BlockTop>
+
+                        <Block>
+                            <Etiqueta>Código desse grupo (ATENÇÂO: Não insira mesmos códigos de grupos existentes):</Etiqueta>
+                            <InputPost
+                                type="number"
+                                placeholder="0"
+                                value={groupNumber}/* @ts-ignore */
+                                onChange={(e) => setGroupNumber(e.target.value)}
+                            />
+                        </Block>
 
                         <Block>
                             <Etiqueta>Nome do grupo/filtro:</Etiqueta>

@@ -98,7 +98,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/filterGrupos' element={<GrupoFiltroAtributo />} />
             <Route path='/grupoFiltro/novo' element={<NovoGrupoFiltro />} />
             <Route path='/grupoFiltro/edit/:groupFilterAtributo_id' element={<EditGroupFiltro />} />
-            <Route path='/grupoFiltro/:groupFilterAtributo_id' element={<AtributosGrupo />} />
+            <Route path='/grupoFiltro/:groupFilterAtributo_id/:groupNumber' element={<AtributosGrupo />} />
             <Route path='/grupo/filtroAtributo/edit/:groupFilterAtributo_id' element={<EditFiltro />} />
 
             <Route path='/banners' element={<Banners />} />
