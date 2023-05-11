@@ -141,7 +141,7 @@ const NovoGrupoFiltro: React.FC = () => {
                         </BlockTop>
 
                         <Block>
-                            <Etiqueta>Código desse grupo (ATENÇÂO: Não insira mesmos códigos de grupos existentes):</Etiqueta>
+                            <Etiqueta>Código desse grupo (ATENÇÃO: Não insira mesmos códigos de grupos existentes):</Etiqueta>
                             <InputPost
                                 type="number"
                                 placeholder="0"
