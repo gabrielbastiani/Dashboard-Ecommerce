@@ -68,7 +68,7 @@ const NovoGrupoFiltro: React.FC = () => {
 
     async function handleRegisterGroup() {
         try {
-            if (groupNumber === null || nameGroup === "" || itemName === "") {
+            if (nameGroup === "" || itemName === "") {
                 toast.error('Não deixe campo em branco!!!');
                 return
             }
@@ -140,15 +140,15 @@ const NovoGrupoFiltro: React.FC = () => {
                             </Button>
                         </BlockTop>
 
-                        <Block>
+                        {/* <Block>
                             <Etiqueta>Código desse grupo (ATENÇÃO: Não insira mesmos códigos de grupos existentes):</Etiqueta>
                             <InputPost
                                 type="number"
                                 placeholder="0"
-                                value={groupNumber}/* @ts-ignore */
+                                value={groupNumber}
                                 onChange={(e) => setGroupNumber(e.target.value)}
                             />
-                        </Block>
+                        </Block> */}
 
                         <Block>
                             <Etiqueta>Nome do grupo/filtro:</Etiqueta>
