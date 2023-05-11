@@ -24,6 +24,7 @@ import { TextoDados } from "../../../components/TextoDados";
 const AtributosGrupo: React.FC = () => {
 
     let { groupFilterAtributo_id, groupNumber } = useParams();
+
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -39,6 +40,11 @@ const AtributosGrupo: React.FC = () => {
 
     const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);
 
+    let num = Number(groupNumber);
+
+    const valorNumber = ++num;
+
+    console.log(valorNumber)
 
     function handleChangeAtributos(e: any) {
         setAtributosSelected(e.target.value);
@@ -82,7 +88,7 @@ const AtributosGrupo: React.FC = () => {
                 return;
             }
             await apiClient.post('/createFilter', {
-                groupNumber: Number(groupNumber),
+                groupNumber: Number(valorNumber),
                 nameGroup: nameGroup,
                 itemName: itemName,
                 atributo_id: atributosSelected,
