@@ -40,11 +40,6 @@ const AtributosGrupo: React.FC = () => {
 
     const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);
 
-    let num = Number(groupNumber);
-
-    const valorNumber = ++num;
-
-    console.log(valorNumber)
 
     function handleChangeAtributos(e: any) {
         setAtributosSelected(e.target.value);
@@ -88,7 +83,7 @@ const AtributosGrupo: React.FC = () => {
                 return;
             }
             await apiClient.post('/createFilter', {
-                groupNumber: Number(valorNumber),
+                groupNumber: Number(groupNumber),
                 nameGroup: nameGroup,
                 itemName: itemName,
                 atributo_id: atributosSelected,

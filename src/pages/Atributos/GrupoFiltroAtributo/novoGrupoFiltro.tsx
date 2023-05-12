@@ -140,15 +140,15 @@ const NovoGrupoFiltro: React.FC = () => {
                             </Button>
                         </BlockTop>
 
-                        {/* <Block>
+                        <Block>
                             <Etiqueta>Código desse grupo (ATENÇÃO: Não insira mesmos códigos de grupos existentes):</Etiqueta>
                             <InputPost
                                 type="number"
                                 placeholder="0"
-                                value={groupNumber}
+                                value={groupNumber}/* @ts-ignore */
                                 onChange={(e) => setGroupNumber(e.target.value)}
                             />
-                        </Block> */}
+                        </Block>
 
                         <Block>
                             <Etiqueta>Nome do grupo/filtro:</Etiqueta>
