@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteFiltro } from '../../../pages/Atributos/GrupoFiltroAtributo/editFiltro';
+import { DeleteFiltro } from '../../../pages/Atributos/GrupoFiltro/editFiltro';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';

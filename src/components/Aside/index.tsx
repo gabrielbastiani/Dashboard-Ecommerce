@@ -31,10 +31,10 @@ import {
     ThemeToggleFooter,
     LojaFrontMobile,
     SubMenuItemLink,
-    SubMenuItemLink1
 } from './styles';
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
+import { FaFilter } from 'react-icons/fa';
 
 
 const Aside: React.FC = () => {
@@ -125,7 +125,7 @@ const Aside: React.FC = () => {
 
                         <SubMenuItemLink href='/groups' >
                             <MdPlayArrow />
-                            Grupos de Categorias
+                            Menus de Categorias
                         </SubMenuItemLink>
                     </>
                 ) : null}
@@ -147,24 +147,35 @@ const Aside: React.FC = () => {
                             Todas Avaliações
                         </SubMenuItemLink>
 
-                        <SubMenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
+                        <SubMenuItemLink href='/atributos' >
                             <MdPlayArrow />
                             Atributos
                         </SubMenuItemLink>
 
-                        {submenu3 ? (
-                            <>
-                                <SubMenuItemLink1 href='/atributos' >
-                                    <MdPlayArrow />
-                                    Criar Atributos
-                                </SubMenuItemLink1>
+                    </>
+                ) : null}
 
-                                <SubMenuItemLink1 href='/filterGrupos' >
-                                    <MdPlayArrow />
-                                    Grupos de Atributos
-                                </SubMenuItemLink1>
-                            </>
-                        ) : null}
+                <MenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
+                    <FaFilter />
+                    Filtros
+                </MenuItemLink>
+
+                {submenu3 ? (
+                    <>
+                        <SubMenuItemLink href='/filterGrupos' >
+                            <MdPlayArrow />
+                            Grupos de Filtros
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/filterCategories' >
+                            <MdPlayArrow />
+                            Filtros de Categorias
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/filterAtributos' >
+                            <MdPlayArrow />
+                            Filtros de Atributos
+                        </SubMenuItemLink>
                     </>
                 ) : null}
 

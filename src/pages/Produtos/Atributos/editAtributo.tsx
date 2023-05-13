@@ -1,27 +1,27 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { setupAPIClient } from "../../services/api";
+import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
-import { Grid } from "../Dashboard/styles";
-import MainHeader from "../../components/MainHeader";
-import Aside from "../../components/Aside";
-import { BlockTop, ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../Categorias/styles";
-import { Card } from "../../components/Content/styles";
-import Voltar from "../../components/Voltar";
-import Titulos from "../../components/Titulos";
-import { GridDate } from "../Perfil/styles";
-import { SectionDate } from "../Configuracoes/styles";
-import { BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload } from "../Categorias/Categoria/styles";
-import { TextoDados } from "../../components/TextoDados";
-import { InputUpdate } from "../../components/ui/InputUpdate";
-import { ButtonSelect } from "../../components/ui/ButtonSelect";
-import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
-import { Button } from "../../components/ui/Button";
+import { Grid } from "../../Dashboard/styles";
+import MainHeader from "../../../components/MainHeader";
+import Aside from "../../../components/Aside";
+import { Card, Container } from "../../../components/Content/styles";
+import Voltar from "../../../components/Voltar";
+import { BlockTop, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
+import Titulos from "../../../components/Titulos";
+import { GridDate } from "../../Perfil/styles";
+import { SectionDate } from "../../Configuracoes/styles";
+import { BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload } from "../../Categorias/Categoria/styles";
+import { TextoDados } from "../../../components/TextoDados";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
+import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
+import { Button } from "../../../components/ui/Button";
 import { MdFileUpload } from "react-icons/md";
-import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../Configuracoes/ImagensInstitucionais/styles";
-import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
-import { Avisos } from "../../components/Avisos";
-import TabelaSimples from "../../components/Tabelas";
+import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import { DivisorHorizontal } from "../../../components/ui/DivisorHorizontal";
+import { Avisos } from "../../../components/Avisos";
+import TabelaSimples from "../../../components/Tabelas";
 
 
 
@@ -32,7 +32,6 @@ const EditAtributo: React.FC = () => {
 
     const [tipo, setTipo] = useState("");
     const [valor, setValor] = useState("");
-    const [order, setOrder] = useState(Number);
     const [disponibilidade, setDisponibilidade] = useState('');
 
     const [search, setSearch] = useState<any[]>([]);
@@ -58,7 +57,6 @@ const EditAtributo: React.FC = () => {
             const response = await apiClient.get(`/exactAtributo?atributo_id=${atributo_id}`);
             setTipo(response.data.tipo || "");
             setValor(response.data.valor || "");
-            setOrder(response.data.order);
             setDisponibilidade(response.data.disponibilidade || "");
             setImageAtributes(response.data.imageatributos[0].imageAtributo);
             setAtributoImageUpload(response.data.imageatributos[0].imageAtributo);
@@ -102,24 +100,6 @@ const EditAtributo: React.FC = () => {
             }
         } catch (err) {
             toast.error('Ops erro ao atualizar o valor do atributo.');
-        }
-    }
-
-    async function updateOrderCategory() {
-        try {
-            const apiClient = setupAPIClient();
-            if (order === null) {
-                toast.error('Não deixe a ordem em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateOrderAtributo?atributo_id=${atributo_id}`, { order: Number(order) });
-                toast.success('Ordem atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
-            }
-        } catch (err) {
-            toast.error('Ops erro ao atualizar a ordem do atributo.');
         }
     }
 
@@ -313,24 +293,6 @@ const EditAtributo: React.FC = () => {
                                                 /* @ts-ignore */
                                                 onChange={(e) => setValor(e.target.value)}
                                                 handleSubmit={updateValorAtributo}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Ordem"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={order}
-                                                type="number"
-                                                /* @ts-ignore */
-                                                placeholder={order}
-                                                value={order}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setOrder(e.target.value)}
-                                                handleSubmit={updateOrderCategory}
                                             />
                                         }
                                     />

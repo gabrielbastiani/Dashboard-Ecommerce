@@ -1,20 +1,20 @@
 import { useEffect, useState, useCallback } from "react";
 import { setupAPIClient } from "../../../services/api";
-import { Link } from "react-router-dom";
-import { Button } from "../../../components/ui/Button";
+import { ImgInstitucional } from "../../Configuracoes/ImagensInstitucionais/styles";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { AddButton, ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
-import { Card } from "../../../components/Content/styles";
+import { Card, Container } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
+import { AddButton, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import TabelaSimples from "../../../components/Tabelas";
 
 
-const GrupoFiltroAtributo: React.FC = () => {
+const Atributos: React.FC = () => {
 
     const [search, setSearch] = useState<any[]>([]);
 
@@ -25,10 +25,10 @@ const GrupoFiltroAtributo: React.FC = () => {
 
 
     useEffect(() => {
-        async function allGroups() {
+        async function allAtributos() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/listPageFilterGroups?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageListAtributos?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -39,13 +39,13 @@ const GrupoFiltroAtributo: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.filter || []);
+                setSearch(data.atributos || []);
 
             } catch (error) {/* @ts-ignore */
-                console.error(error.response.data);
+                console.error(error.data.response);
             }
         }
-        allGroups();
+        allAtributos();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -57,12 +57,12 @@ const GrupoFiltroAtributo: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Cod. Grupo": item.groupNumber,
-            "Nome do Grupo/Filtro": item.nameGroup,
-            "Posição Filtro": item.slugCategoryOrItem,
-            "Ativo?": item.status,
-            "Editar Grupo/Filtro": <Link to={`/grupoFiltro/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
-            "botaoDetalhes": `/grupoFiltro/${item.id}/${item.groupNumber}`
+            "Imagem": item.imageatributos[0] ? <ImgInstitucional src={"http://localhost:3333/files/" + item.imageatributos[0].imageAtributo} /> : "Sem Imagem",
+            "Tipo de atributo": item.tipo,
+            "Valor do atributo": item.valor,
+            "Qtd. de Produtos": item.relationProductAtributos ? String(item.relationProductAtributos.length) : "Sem produto(s)",
+            "Status": item.disponibilidade,
+            "botaoDetalhes": `/atributo/${item.id}`
         });
     });
 
@@ -76,45 +76,45 @@ const GrupoFiltroAtributo: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Grupos de atributos/filtros"
+                        titulo="Atributos"
                     />
 
                     <AddButton>
                         <AiOutlinePlusCircle />
-                        <Link to="/grupoFiltro/novo" >
-                            <SpanText>Novo Grupo/Filtro</SpanText>
+                        <Link to="/atributo/novo" >
+                            <SpanText>Novo Atributo</SpanText>
                         </Link>
                     </AddButton>
 
                     {search.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há grupos de atributos/filtros cadastrados na loja ainda..."
+                                texto="Não há atributos cadastrados ainda..."
                             />
                         </>
                     ) :
                         <>
-                            <TextTotal>Grupos/Filtros por página: &nbsp;</TextTotal>
+                            <TextTotal>Atributos por página: &nbsp;</TextTotal>
 
                             <Select
                                 /* @ts-ignore */
                                 onChange={limits}
                                 opcoes={[
-                                    { label: "Todos grupos/filtros", value: "999999" },
+                                    { label: "Todos atributos", value: "999999" },
                                     { label: "4", value: "4" },
                                     { label: "8", value: "8" }
                                 ]}
                             />
 
                             <TabelaSimples
-                                cabecalho={["Cod. Grupo", "Nome do Grupo/Filtro", "Posição Filtro", "Ativo?", "Editar Grupo/Filtro"]}
+                                cabecalho={["Imagem", "Tipo de atributo", "Valor do atributo", "Qtd. de Produtos", "Status"]}
                                 dados={dados}
-                                textbutton={"Ver itens do grupo"}
+                                textbutton={"Detalhes"}
                             />
 
                             <ContainerPagination>
                                 <TotalBoxItems key={total}>
-                                    <TextTotal>Total de grupos/filtros: {total}</TextTotal>
+                                    <TextTotal>Total de categorias: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
                                     {currentPage > 1 && (
@@ -152,4 +152,4 @@ const GrupoFiltroAtributo: React.FC = () => {
     )
 }
 
-export default GrupoFiltroAtributo;
+export default Atributos;

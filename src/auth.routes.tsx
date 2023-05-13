@@ -44,15 +44,11 @@ import NovoGrupo from './pages/Categorias/GruposCategorias/novoGrupo';
 import CategoriasGrupo from './pages/Categorias/GruposCategorias/categoriasGrupo';
 import EditItem from './pages/Categorias/GruposCategorias/editItem';
 import EditGroup from './pages/Categorias/GruposCategorias/editGroup';
-import Atributos from './pages/Atributos';
-import NovoAtributo from './pages/Atributos/novoAtributo';
-import EditAtributo from './pages/Atributos/editAtributo';
-import GrupoFiltroAtributo from './pages/Atributos/GrupoFiltroAtributo';
-import NovoGrupoFiltro from './pages/Atributos/GrupoFiltroAtributo/novoGrupoFiltro';
-import AtributosGrupo from './pages/Atributos/GrupoFiltroAtributo/atributosGrupo';
-import EditFiltro from './pages/Atributos/GrupoFiltroAtributo/editFiltro';
-import EditGroupFiltro from './pages/Atributos/GrupoFiltroAtributo/editGroupFiltro';
+import Atributos from './pages/Produtos/Atributos'; 
+import NovoAtributo from './pages/Produtos/Atributos/novoAtributo'; 
+import EditAtributo from './pages/Produtos/Atributos/editAtributo'; 
 import ProdutoAtributo from './pages/Produtos/ProdutoAtributo';
+import Filtros from './pages/Filtros'; 
 
 
 const RoutesAuth: React.FC = () => {
@@ -91,15 +87,12 @@ const RoutesAuth: React.FC = () => {
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
             <Route path='/produto/atributo/:variacao_id/:productId' element={<ProdutoAtributo />} />
-
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/atributo/novo' element={<NovoAtributo />} />
             <Route path='/atributo/:atributo_id' element={<EditAtributo />} />
-            <Route path='/filterGrupos' element={<GrupoFiltroAtributo />} />
-            <Route path='/grupoFiltro/novo' element={<NovoGrupoFiltro />} />
-            <Route path='/grupoFiltro/edit/:groupFilterAtributo_id' element={<EditGroupFiltro />} />
-            <Route path='/grupoFiltro/:groupFilterAtributo_id/:groupNumber' element={<AtributosGrupo />} />
-            <Route path='/grupo/filtroAtributo/edit/:groupFilterAtributo_id' element={<EditFiltro />} />
+
+            <Route path='/filterGrupos' element={<Filtros />} />
+           
 
             <Route path='/banners' element={<Banners />} />
             <Route path='/banners/novo' element={<NovoBanner />} />

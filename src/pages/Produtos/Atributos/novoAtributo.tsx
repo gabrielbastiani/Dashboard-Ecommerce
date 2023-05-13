@@ -1,19 +1,18 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
-import { setupAPIClient } from "../../services/api";
-import { Grid } from "../Dashboard/styles";
-import MainHeader from "../../components/MainHeader";
-import Aside from "../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../Categorias/styles";
-import { Card } from "../../components/Content/styles";
-import Voltar from "../../components/Voltar";
-import Titulos from "../../components/Titulos";
-import { Button } from "../../components/ui/Button";
-import { InputPost } from "../../components/ui/InputPost";
-import Select from "../../components/ui/Select";
-
+import { Grid } from "../../Dashboard/styles";
+import MainHeader from "../../../components/MainHeader";
+import Aside from "../../../components/Aside";
+import { Card, Container } from "../../../components/Content/styles";
+import Voltar from "../../../components/Voltar";
+import { Block, BlockTop, Etiqueta } from "../../Categorias/styles";
+import Titulos from "../../../components/Titulos";
+import { Button } from "../../../components/ui/Button";
+import Select from "../../../components/ui/Select";
+import { InputPost } from "../../../components/ui/InputPost";
 
 
 const NovoAtributo: React.FC = () => {
@@ -61,7 +60,6 @@ const NovoAtributo: React.FC = () => {
             await apiClient.post('/createAtributo', {
                 tipo: tipo || selectedAtributo,
                 valor: valor,
-                order: 0,
                 loja_id: lojaID
             });
 
