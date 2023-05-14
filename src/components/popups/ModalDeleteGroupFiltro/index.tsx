@@ -48,7 +48,7 @@ export function ModalDeleteGroupFiltro({ isOpen, onRequestClose, groupId }: Dele
 
         } catch (error) {
             /* @ts-ignore */
-            toast.error(`${error.response.data.error}`);
+            toast.error("Erro ao deletar esse grupo.");
             /* @ts-ignore */
             console.log(error.response.data);
         }

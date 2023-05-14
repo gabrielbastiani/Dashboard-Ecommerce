@@ -172,19 +172,18 @@ const EditGroupFiltroAtributo: React.FC = () => {
     }
 
     async function handleOpenModalDelete(groupFilter_id: string) {
-        if (allAtributos.length < 1) {
+        if (allAtributos.length >= 1) {
             toast.error("Delete todos os filtros desse grupo antes de deletar esse grupo!!!");
             return;
-        } else {
-            const apiClient = setupAPIClient();
-            const response = await apiClient.get('/findUniqueIDGroup', {
-                params: {
-                    groupFilter_id: groupFilter_id,
-                }
-            });
-            setModalItem(response.data || "");
-            setModalVisible(true);
         }
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueIDGroup', {
+            params: {
+                groupFilter_id: groupFilter_id,
+            }
+        });
+        setModalItem(response.data || "");
+        setModalVisible(true);
     }
 
     Modal.setAppElement('body');
