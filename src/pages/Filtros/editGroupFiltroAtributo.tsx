@@ -1,37 +1,41 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { setupAPIClient } from "../../../services/api";
+import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
-import { Grid } from "../../Dashboard/styles";
-import MainHeader from "../../../components/MainHeader";
-import Aside from "../../../components/Aside";
-import { BlockTop, Container } from "../../Categorias/styles";
-import { Card } from "../../../components/Content/styles";
-import VoltarNavagation from "../../../components/VoltarNavagation";
-import Titulos from "../../../components/Titulos";
-import { Button } from "../../../components/ui/Button";
-import { BlockDados } from "../../Categorias/Categoria/styles";
-import { TextoDados } from "../../../components/TextoDados";
-import { InputUpdate } from "../../../components/ui/InputUpdate";
-import SelectUpdate from "../../../components/ui/SelectUpdate";
-import { ModalDeleteGroupFiltro } from "../../../components/popups/ModalDeleteGroupFiltro";
+import { Grid } from "../Dashboard/styles";
+import MainHeader from "../../components/MainHeader";
+import Aside from "../../components/Aside";
+import { Card, Container } from "../../components/Content/styles";
+import VoltarNavagation from "../../components/VoltarNavagation";
+import { BlockTop } from "../Categorias/styles";
+import Titulos from "../../components/Titulos";
+import { Button } from "../../components/ui/Button";
+import { BlockDados } from "../Categorias/Categoria/styles";
+import { TextoDados } from "../../components/TextoDados";
+import { InputUpdate } from "../../components/ui/InputUpdate";
+import SelectUpdate from "../../components/ui/SelectUpdate";
+import { ModalDeleteGroupFiltro } from "../../components/popups/ModalDeleteGroupFiltro";
+import { ButtonSelect } from "../../components/ui/ButtonSelect";
 
 
 export type DeleteFitrosGrupo = {
-    groupFilterAtributo_id: string;
+    groupFilter_id: string;
 }
 
-const EditGroupFiltro: React.FC = () => {
+const EditGroupFiltroAtributo: React.FC = () => {
 
-    let { groupFilterAtributo_id } = useParams();
+    let { groupFilter_id } = useParams();
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
-    const [itemName, setItemName] = useState("");
+    const [atributoName, setAtributoName] = useState("");
+    const [status, setStatus] = useState("");
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+
+    const [allAtributos, setAllatributos] = useState<any[]>([]);
 
     const [modalItem, setModalItem] = useState<DeleteFitrosGrupo>();
     const [modalVisible, setModalVisible] = useState(false);
@@ -57,18 +61,34 @@ const EditGroupFiltro: React.FC = () => {
         async function findDdatesGroups() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/filterUniqueGroup?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+                const response = await apiClient.get(`/findUniqueIDGroup?groupFilter_id=${groupFilter_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setItemName(response.data.itemName || "");
+                setAtributoName(response.data.atributoName || "");
                 setSlugCategoryOrItem(response.data.slugCategoryOrItem || "");
+                setStatus(response.data.status);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
         findDdatesGroups();
-    }, [groupFilterAtributo_id]);
+    }, [groupFilter_id]);
+
+    useEffect(() => {
+        async function findAllFilterAtributos() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findManyNameFiltroAtributo?groupFilter_id=${groupFilter_id}`);
+
+                setAllatributos(response.data || []);
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        findAllFilterAtributos();
+    }, [groupFilter_id]);
 
     async function updateNameGroup() {
         try {
@@ -77,7 +97,7 @@ const EditGroupFiltro: React.FC = () => {
                 toast.error('Não deixe o nome do grupo em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateNameGrupoFiltro?groupFilterAtributo_id=${groupFilterAtributo_id}`, { nameGroup: nameGroup });
+                await apiClient.put(`/updateNameGroupFilter?groupFilter_id=${groupFilter_id}`, { nameGroup: nameGroup });
 
                 toast.success('Nome do grupo atualizado com sucesso.');
 
@@ -91,34 +111,56 @@ const EditGroupFiltro: React.FC = () => {
         }
     }
 
-    async function updateItemName() {
+    async function updateAtributoName() {
         try {
-            if (itemName === "") {
+            if (atributoName === "") {
                 toast.error('Não deixe o nome do filtro em branco!!!');
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateItemNameGrupoFiltro?groupFilterAtributo_id=${groupFilterAtributo_id}`, { itemName: itemName });
-            toast.success('Posição atualizada com sucesso.');
+            await apiClient.put(`/updateAtributoName?groupFilter_id=${groupFilter_id}`, { atributoName: atributoName });
+            toast.success('Tipo do atributo atualizado com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            /* @ts-ignore */
-            toast.error(error.response.data);
+            toast.error("Erro ao atualizar o tipo do atributo.");
         }
         setTimeout(() => {
             navigate(0);
         }, 3000);
     }
 
+    async function updateStatus() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusGroupFilter?groupFilter_id=${groupFilter_id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            toast.error('Ops erro ao atualizar a disponibilidade do grupo.');
+        }
+
+        if (status === "Inativo") {
+            toast.success(`O Grupo se encontra Disponivel.`);
+            return;
+        }
+
+        if (status === "Ativo") {
+            toast.error(`O Grupo se encontra Indisponivel.`);
+            return;
+        }
+    }
+
     async function updateSlugGroup() {
         const apiClient = setupAPIClient();
         try {
-            await apiClient.put(`/updateSlugCategoryGrupoFiltro?groupFilterAtributo_id=${groupFilterAtributo_id}`, { slugCategoryOrItem: slugCategoryOrItem });
+            await apiClient.put(`/updateSlugGroupFilter?groupFilter_id=${groupFilter_id}`, { slugCategoryOrItem: slugCategoryOrItem });
             toast.success('Caminho atualizado com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            /* @ts-ignore */
-            toast.error(error.response.data);
+            toast.error("Erro ao atualizar a posição do grupo.");
         }
         setTimeout(() => {
             navigate(0);
@@ -129,15 +171,20 @@ const EditGroupFiltro: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(groupFilterAtributo_id: string) {
-        const apiClient = setupAPIClient();
-        const response = await apiClient.get('/filterUniqueGroup', {
-            params: {
-                groupFilterAtributo_id: groupFilterAtributo_id,
-            }
-        });
-        setModalItem(response.data || "");
-        setModalVisible(true);
+    async function handleOpenModalDelete(groupFilter_id: string) {
+        if (allAtributos.length < 1) {
+            toast.error("Delete todos os filtros desse grupo antes de deletar esse grupo!!!");
+            return;
+        } else {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/findUniqueIDGroup', {
+                params: {
+                    groupFilter_id: groupFilter_id,
+                }
+            });
+            setModalItem(response.data || "");
+            setModalVisible(true);
+        }
     }
 
     Modal.setAppElement('body');
@@ -161,7 +208,7 @@ const EditGroupFiltro: React.FC = () => {
 
                                 <Button
                                     style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDelete(groupFilterAtributo_id)}
+                                    onClick={() => handleOpenModalDelete(groupFilter_id)}
                                 >
                                     Remover grupo
                                 </Button>
@@ -187,17 +234,17 @@ const EditGroupFiltro: React.FC = () => {
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Atualizar nome do tipo do filtro"}
+                                    chave={"Atualizar nome do tipo de atributo"}
                                     dados={
                                         <InputUpdate
-                                            dado={itemName}
+                                            dado={atributoName}
                                             type="text"
                                             /* @ts-ignore */
-                                            placeholder={itemName}
-                                            value={itemName}
+                                            placeholder={atributoName}
+                                            value={atributoName}
                                             /* @ts-ignore */
-                                            onChange={(e) => setItemName(e.target.value)}
-                                            handleSubmit={updateItemName}
+                                            onChange={(e) => setAtributoName(e.target.value)}
+                                            handleSubmit={updateAtributoName}
                                         />
                                     }
                                 />
@@ -224,6 +271,20 @@ const EditGroupFiltro: React.FC = () => {
                                     }
                                 />
                             </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Disponibilidade"}
+                                    dados={
+                                        <ButtonSelect
+                                            /* @ts-ignore */
+                                            dado={status}
+                                            handleSubmit={updateStatus}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
                             {modalVisible && (
                                 <ModalDeleteGroupFiltro
                                     isOpen={modalVisible}
@@ -240,4 +301,4 @@ const EditGroupFiltro: React.FC = () => {
     )
 }
 
-export default EditGroupFiltro;
+export default EditGroupFiltroAtributo;

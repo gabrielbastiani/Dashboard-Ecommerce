@@ -49,6 +49,10 @@ import NovoAtributo from './pages/Produtos/Atributos/novoAtributo';
 import EditAtributo from './pages/Produtos/Atributos/editAtributo'; 
 import ProdutoAtributo from './pages/Produtos/ProdutoAtributo';
 import Filtros from './pages/Filtros'; 
+import NovoGrupoFiltroAtributo from './pages/Filtros/novoGrupoFiltroAtributo';
+import AtributoFiltro from './pages/Filtros/AtributoFiltro';
+import EditAtributoFiltro from './pages/Filtros/AtributoFiltro/editAtributoFiltro';
+import EditGroupFiltroAtributo from './pages/Filtros/editGroupFiltroAtributo';
 
 
 const RoutesAuth: React.FC = () => {
@@ -92,7 +96,10 @@ const RoutesAuth: React.FC = () => {
             <Route path='/atributo/:atributo_id' element={<EditAtributo />} />
 
             <Route path='/filterGrupos' element={<Filtros />} />
-           
+            <Route path='/grupoFiltro/atributos/novo' element={<NovoGrupoFiltroAtributo />} />
+            <Route path='/grupoFiltroAtributo/edit/:groupFilter_id' element={<EditGroupFiltroAtributo />} />
+            <Route path='/grupoFiltro/atributos/:groupFilter_id' element={<AtributoFiltro />} />
+            <Route path='/filtroAtributo/edit/:filterAtributo_id' element={<EditAtributoFiltro />} />
 
             <Route path='/banners' element={<Banners />} />
             <Route path='/banners/novo' element={<NovoBanner />} />

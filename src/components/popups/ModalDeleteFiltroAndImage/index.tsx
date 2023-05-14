@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteFiltroAndImage } from '../../../pages/Atributos/GrupoFiltro/editFiltro';
+import { DeleteFiltroAndImage } from '../../../pages/Filtros/AtributoFiltro/editAtributoFiltro';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -35,11 +35,8 @@ export function ModalDeleteFiltroAndImage({ isOpen, onRequestClose, relationIDS,
     async function handleDeleteFiltroAndImage() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const groupFilterAtributo_id = relationIDS.id;
 
-            await apiClient.delete(`/deleteImageFiltro?imageAtributoGroup_id=${idGroupImage}`);
-            await apiClient.delete(`/deleteImagesAndFiltroAtributo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+            await apiClient.delete(`/deleteImageFiltroAtributo?imageFilterAtributo_id=${idGroupImage}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -55,9 +52,9 @@ export function ModalDeleteFiltroAndImage({ isOpen, onRequestClose, relationIDS,
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const groupFilterAtributo_id = relationIDS.id;
+            const filterAtributo_id = relationIDS.id;
 
-            await apiClient.delete(`/deleteFiltroAtributo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+            await apiClient.delete(`/deleteFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
             toast.success(`Filtro/atributo deletado com sucesso.`);
 
             navigate('/filterGrupos');

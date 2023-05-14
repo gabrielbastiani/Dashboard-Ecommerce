@@ -5,7 +5,7 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ContainerContent, ContainerButton, TextModal, ButtonClose } from './styles';
-import { DeleteFitrosGrupo } from '../../../pages/Atributos/GrupoFiltro/editGroupFiltro';
+import { DeleteFitrosGrupo } from '../../../pages/Filtros/editGroupFiltroAtributo';
 
 
 interface DeleteIDGrupos {
@@ -35,9 +35,9 @@ export function ModalDeleteGroupFiltro({ isOpen, onRequestClose, groupId }: Dele
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const groupFilterAtributo_id = groupId.id;
+            const groupFilter_id = groupId.id;
 
-            await apiClient.delete(`/deleteFiltroGrupo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+            await apiClient.delete(`/deleteGroupFilter?groupFilter_id=${groupFilter_id}`);
             toast.success(`Grupo de filtro deletado com sucesso.`);
 
             onRequestClose();

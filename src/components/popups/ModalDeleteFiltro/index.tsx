@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteFiltro } from '../../../pages/Atributos/GrupoFiltro/editFiltro';
+import { DeleteFiltro } from '../../../pages/Filtros/AtributoFiltro/editAtributoFiltro';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -35,9 +35,9 @@ export function ModalDeleteFiltro({ isOpen, onRequestClose, relationIDS }: Modal
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const groupFilterAtributo_id = relationIDS.id;
+            const filterAtributo_id = relationIDS.id;
 
-            await apiClient.delete(`/deleteFiltroAtributo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+            await apiClient.delete(`/deleteFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
             toast.success(`Filtro/atributo deletado com sucesso.`);
 
             navigate('/filterGrupos');

@@ -6,28 +6,28 @@ import Modal from 'react-modal';
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { BlockTop, Container } from "../../Categorias/styles";
-import { Card } from "../../../components/Content/styles";
+import { Card, Container } from "../../../components/Content/styles";
 import VoltarNavagation from "../../../components/VoltarNavagation";
+import { BlockTop } from "../../Categorias/styles";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
-import { InputUpdate } from "../../../components/ui/InputUpdate";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/TextosInstitucionais/Texto/ImagemTexto/styles";
 import { MdFileUpload } from "react-icons/md";
 import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import { ModalDeleteFiltro } from "../../../components/popups/ModalDeleteFiltro";
 import { ModalDeleteFiltroAndImage } from "../../../components/popups/ModalDeleteFiltroAndImage";
 import { ModalDeleteImagemFiltro } from "../../../components/popups/ModalDeleteImagemFiltro";
-import { ModalDeleteFiltro } from "../../../components/popups/ModalDeleteFiltro";
 
 
 export type DeleteFiltro = {
-    groupFilterAtributo_id: string;
+    filterAtributo_id: string;
 }
 
 export type DeleteImagemAtributo = {
@@ -35,13 +35,13 @@ export type DeleteImagemAtributo = {
 }
 
 export type DeleteFiltroAndImage = {
-    groupFilterAtributo_id: string;
+    filterAtributo_id: string;
     iDImage: string;
 }
 
-const EditFiltro: React.FC = () => {
+const EditAtributoFiltro: React.FC = () => {
 
-    let { groupFilterAtributo_id } = useParams();
+    let { filterAtributo_id } = useParams();
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
@@ -78,36 +78,36 @@ const EditFiltro: React.FC = () => {
         async function loadItemDate() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/filterUniqueGroup?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+                const response = await apiClient.get(`/findUniqueFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
 
-                setOrder(data.order);
-                setStatus(data.status);
-                setImageAtributoLoad(data.imageAtributoGroups ? data.imageAtributoGroups[0].imageAtributo : data.imageAtributoGroups.imageAtributo);
-                setImageAtributoUpload(data.imageAtributoGroups ? data.imageAtributoGroups[0].imageAtributo : data.imageAtributoGroups.imageAtributo);
+                setNameGroup(response.data.groupFilter.nameGroup);
+                setOrder(response.data.order);
+                setStatus(response.data.status);
+                setImageAtributoLoad(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].imageAtributo : response.data.imagefilteratributos.imageAtributo);
+                setImageAtributoUpload(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].imageAtributo : response.data.imagefilteratributos.imageAtributo);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadItemDate();
-    }, [groupFilterAtributo_id]);
+    }, [filterAtributo_id]);
 
     useEffect(() => {
         async function loadMoreDates() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/filterUniqueGroup?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+                const response = await apiClient.get(`/findUniqueFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
 
-                setValor(data.atributo.valor);
-                setNameGroup(data.nameGroup || "");
-                setIDImage(data.imageAtributoGroups ? data.imageAtributoGroups[0].id : data.imageAtributoGroups.id);
+                setValor(response.data.valor);
+                setIDImage(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].id : response.data.imagefilteratributos.id);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadMoreDates();
-    }, [groupFilterAtributo_id]);
+    }, [filterAtributo_id]);
 
     useEffect(() => {
         async function loadAtributos() {
@@ -129,7 +129,7 @@ const EditFiltro: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateAtributoValorFilterGrupo?groupFilterAtributo_id=${groupFilterAtributo_id}`, { atributo_id: atributosSelected });
+            await apiClient.put(`/updateFiltroValorAtributo?filterAtributo_id=${filterAtributo_id}`, { valor: atributosSelected });
 
             toast.success('O valor foi atualizado com sucesso.');
 
@@ -150,7 +150,7 @@ const EditFiltro: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderFiltro?groupFilterAtributo_id=${groupFilterAtributo_id}`, { order: Number(order) });
+                await apiClient.put(`/updateFiltroOrderAtributo?filterAtributo_id=${filterAtributo_id}`, { order: Number(order) });
                 toast.success('Ordem do valor no grupo/filtro atualizado com sucesso.');
                 setTimeout(() => {
                     navigate(0);
@@ -165,7 +165,7 @@ const EditFiltro: React.FC = () => {
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusFiltroGrupo?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+            await apiClient.put(`/updateFiltroStatusAtributo?filterAtributo_id=${filterAtributo_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -192,10 +192,10 @@ const EditFiltro: React.FC = () => {
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', imageAtributo);/* @ts-ignore */
-            data.append('groupFilterAtributo_id', groupFilterAtributo_id);
+            data.append('filterAtributo_id', filterAtributo_id);
 
             const apiClient = setupAPIClient();
-            await apiClient.post(`/createImageFitroAtributoGrupo`, data);
+            await apiClient.post(`/createImageFilterAtributo`, data);
 
             toast.success('Imagem cadastrada com sucesso.');
 
@@ -235,7 +235,7 @@ const EditFiltro: React.FC = () => {
             data.append('file', imageAtributoUpload);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageFitroAtributoGrupo?imageAtributoGroup_id=${iDImage}`, data);
+            await apiClient.put(`/updateImageFilterAtributo?imageFilterAtributo_id=${iDImage}`, data);
 
             toast.success('Imagem atualizada com sucesso.');
 
@@ -271,11 +271,11 @@ const EditFiltro: React.FC = () => {
         setModalVisibleItens(false);
     }
 
-    async function handleOpenModalDeleteFiltro(groupFilterAtributo_id: string) {
+    async function handleOpenModalDeleteFiltro(filterAtributo_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/filterUniqueGroup', {
+        const response = await apiClient.get('/findUniqueFiltroAtributo', {
             params: {
-                groupFilterAtributo_id: groupFilterAtributo_id,
+                filterAtributo_id: filterAtributo_id,
             }
         });
         setModalItens(response.data || "");
@@ -286,15 +286,15 @@ const EditFiltro: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(groupFilterAtributo_id: string) {
+    async function handleOpenModalDelete(filterAtributo_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/filterUniqueGroup', {
+        const response = await apiClient.get('/findUniqueFiltroAtributo', {
             params: {
-                groupFilterAtributo_id: groupFilterAtributo_id,
+                filterAtributo_id: filterAtributo_id,
             }
         });
         setModalItem(response.data || "");
-        setIDImage(response.data.imageAtributoGroups[0].id || "");
+        setIDImage(response.data.imagefilteratributos[0].id || "");
         setModalVisible(true);
     }
 
@@ -302,14 +302,14 @@ const EditFiltro: React.FC = () => {
         setModalVisibleImagem(false);
     }
 
-    async function handleOpenModalDeleteImagem(groupFilterAtributo_id: string) {
+    async function handleOpenModalDeleteImagem(filterAtributo_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/filterUniqueGroup', {
+        const response = await apiClient.get('/findUniqueFiltroAtributo', {
             params: {
-                groupFilterAtributo_id: groupFilterAtributo_id,
+                filterAtributo_id: filterAtributo_id,
             }
         });
-        setModalItemImagem(response.data.imageAtributoGroups[0].id || "");
+        setModalItemImagem(response.data.imagefilteratributos[0].id || "");
         setModalVisibleImagem(true);
     }
 
@@ -340,14 +340,14 @@ const EditFiltro: React.FC = () => {
                             {imageAtributoLoad ? (
                                 <Button
                                     style={{ backgroundColor: 'red' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDelete(groupFilterAtributo_id)}
+                                    onClick={() => handleOpenModalDelete(filterAtributo_id)}
                                 >
                                     Deletar filtro
                                 </Button>
                             ) :
                                 <Button
                                     style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDeleteFiltro(groupFilterAtributo_id)}
+                                    onClick={() => handleOpenModalDeleteFiltro(filterAtributo_id)}
                                 >
                                     Deletar filtro
                                 </Button>
@@ -369,7 +369,7 @@ const EditFiltro: React.FC = () => {
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(atributos || []).map((item) => ({ label: item.valor, value: item.id }))
+                                                        ...(atributos || []).map((item) => ({ label: item.valor, value: item.valor }))
                                                     ]
                                                 }/* @ts-ignore */
                                                 onChange={handleChangeValorAtributo}
@@ -413,7 +413,7 @@ const EditFiltro: React.FC = () => {
                                 {imageAtributoLoad ? (
                                     <Button
                                         /* @ts-ignore */
-                                        onClick={() => handleOpenModalDeleteImagem(groupFilterAtributo_id)}
+                                        onClick={() => handleOpenModalDeleteImagem(filterAtributo_id)}
                                     >
                                         Deletar imagem
                                     </Button>
@@ -527,4 +527,4 @@ const EditFiltro: React.FC = () => {
     )
 }
 
-export default EditFiltro;
+export default EditAtributoFiltro;

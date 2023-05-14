@@ -1,17 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
-import { setupAPIClient } from "../../../services/api";
+import { setupAPIClient } from "../../services/api";
 import { Link } from "react-router-dom";
-import { Button } from "../../../components/ui/Button";
-import { Grid } from "../../Dashboard/styles";
-import MainHeader from "../../../components/MainHeader";
-import Aside from "../../../components/Aside";
-import { AddButton, ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
-import { Card } from "../../../components/Content/styles";
-import Titulos from "../../../components/Titulos";
+import { Button } from "../../components/ui/Button";
+import { Grid } from "../Dashboard/styles";
+import MainHeader from "../../components/MainHeader";
+import Aside from "../../components/Aside";
+import { Card, Container } from "../../components/Content/styles";
+import Titulos from "../../components/Titulos";
+import { AddButton, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../Categorias/styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { Avisos } from "../../../components/Avisos";
-import Select from "../../../components/ui/Select";
-import TabelaSimples from "../../../components/Tabelas";
+import { Avisos } from "../../components/Avisos";
+import Select from "../../components/ui/Select";
+import TabelaSimples from "../../components/Tabelas";
+
 
 
 const Filtros: React.FC = () => {
@@ -28,7 +29,7 @@ const Filtros: React.FC = () => {
         async function allGroups() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/listPageFilterGroups?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pagesGroupFilter?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -39,7 +40,7 @@ const Filtros: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.filter || []);
+                setSearch(data.filtrosGroups || []);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -57,12 +58,12 @@ const Filtros: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Cod. Grupo": item.groupNumber,
             "Nome do Grupo/Filtro": item.nameGroup,
-            "Posição Filtro": item.slugCategoryOrItem,
+            "Tipo de Filtro": item.atributoName ? "Atributos de Produtos = " + item.atributoName : "Categorias de Produtos",
+            "Pág. do Grupo do Filtro": item.slugCategoryOrItem,
             "Ativo?": item.status,
-            "Editar Grupo/Filtro": <Link to={`/grupoFiltro/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
-            "botaoDetalhes": `/grupoFiltro/${item.id}/${item.groupNumber}`
+            "Editar Grupo/Filtro": item.atributoName ? <Link to={`/grupoFiltroAtributo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link> : <Link to={`/grupoFiltroCategoria/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
+            "botaoDetalhes": item.atributoName ? `/grupoFiltro/atributos/${item.id}` : `/grupoFiltro/categorias/${item.id}`
         });
     });
 
@@ -76,20 +77,27 @@ const Filtros: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Grupos de atributos/filtros"
+                        titulo="Grupos de filtros"
                     />
 
                     <AddButton>
                         <AiOutlinePlusCircle />
-                        <Link to="/grupoFiltro/novo" >
-                            <SpanText>Novo Grupo/Filtro</SpanText>
+                        <Link to="/grupoFiltro/atributos/novo" >
+                            <SpanText>Novo Grupo/Filtro Para Atributos</SpanText>
+                        </Link>
+                    </AddButton>
+
+                    <AddButton>
+                        <AiOutlinePlusCircle />
+                        <Link to="/grupoFiltro/categorias/novo" >
+                            <SpanText>Novo Grupo/Filtro Para Categorias</SpanText>
                         </Link>
                     </AddButton>
 
                     {search.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há grupos de atributos/filtros cadastrados na loja ainda..."
+                                texto="Não há grupos/filtros cadastrados na loja ainda..."
                             />
                         </>
                     ) :
@@ -107,9 +115,9 @@ const Filtros: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Cod. Grupo", "Nome do Grupo/Filtro", "Posição Filtro", "Ativo?", "Editar Grupo/Filtro"]}
+                                cabecalho={["Nome do Grupo/Filtro", "Tipo de Filtro", "Pág. do Grupo do Filtro", "Ativo?", "Editar Grupo/Filtro"]}
                                 dados={dados}
-                                textbutton={"Ver itens do grupo"}
+                                textbutton={"Ver filtros desse grupo"}
                             />
 
                             <ContainerPagination>

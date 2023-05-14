@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteImagemAtributo } from '../../../pages/Atributos/GrupoFiltro/editFiltro';
+import { DeleteImagemAtributo } from '../../../pages/Filtros/AtributoFiltro/editAtributoFiltro';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -35,9 +35,9 @@ export function ModalDeleteImagemFiltro({ isOpen, onRequestClose, idImage }: Mod
     async function handleDeleteImageFiltro() {
         try {
             const apiClient = setupAPIClient();
-            const imageAtributoGroup_id = idImage;
+            const imageFilterAtributo_id = idImage;
 
-            await apiClient.delete(`/deleteImageFiltro?imageAtributoGroup_id=${imageAtributoGroup_id}`);
+            await apiClient.delete(`/deleteImageFiltroAtributo?imageFilterAtributo_id=${imageFilterAtributo_id}`);
 
             toast.success('Imagem do filtro deletada com sucesso');
 

@@ -20,25 +20,22 @@ import { BlockDados, TextButton } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 
 
+const AtributoFiltro: React.FC = () => {
 
-const AtributosGrupo: React.FC = () => {
-
-    let { groupFilterAtributo_id, groupNumber } = useParams();
+    let { groupFilter_id } = useParams();
 
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [loja_id] = useState(user.loja_id);
-
     const [nameGroup, setNameGroup] = useState("");
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState("");
+    const [ideGroupFilter, setIdGroupFilter] = useState("");
+    const [atributoName, setAtributoName] = useState("");
     const [atributos, setAtributos] = useState<any[]>([]);
     const [atributosSelected, setAtributosSelected] = useState();
     const [order, setOrder] = useState(Number);
-    const [itemName] = useState("");
-    const [nameItem, setNameItem] = useState("");
+    const [loja_id] = useState(user.loja_id);
 
-    const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);
+    const [loadGruop, setLoadGruop] = useState<any[]>([]);
 
 
     function handleChangeAtributos(e: any) {
@@ -49,18 +46,33 @@ const AtributosGrupo: React.FC = () => {
         async function findGroupDate() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/filterUniqueGroup?groupFilterAtributo_id=${groupFilterAtributo_id}`);
+                const response = await apiClient.get(`/findUniqueIDGroup?groupFilter_id=${groupFilter_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setNameItem(response.data.itemName || "");
-                setSlugCategoryOrItem(response.data.slugCategoryOrItem || "");
+                setAtributoName(response.data.atributoName || "");
+                setIdGroupFilter(response.data.id || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
         findGroupDate();
-    }, [groupFilterAtributo_id]);
+    }, [groupFilter_id]);
+
+    useEffect(() => {
+        async function findGroupDate() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findManyNameFiltroAtributo?atributoName=${atributoName}`);
+
+                setLoadGruop(response.data || []);
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        findGroupDate();
+    }, [atributoName]);
 
     useEffect(() => {
         async function loadAtributos() {
@@ -82,15 +94,10 @@ const AtributosGrupo: React.FC = () => {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
-            await apiClient.post('/createFilter', {
-                groupNumber: Number(groupNumber),
-                nameGroup: nameGroup,
-                itemName: itemName,
-                atributo_id: atributosSelected,
-                groupId: groupFilterAtributo_id,
-                slugCategoryOrItem: slugCategoryOrItem,
+            await apiClient.post('/createFiltroAtributo', {
+                groupFilter_id: ideGroupFilter,
+                valor: atributosSelected,
                 order: Number(order),
-                nivel: 1,
                 loja_id: loja_id
             });
 
@@ -107,23 +114,6 @@ const AtributosGrupo: React.FC = () => {
         }
     }
 
-    useEffect(() => {
-        async function findLoadIDGroup() {
-            try {
-                const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findIDGroupFilter?groupId=${groupFilterAtributo_id}`);
-
-                setLoadIDGroup(response.data || []);
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        findLoadIDGroup();
-    }, [groupFilterAtributo_id]);
-
-
-
 
     return (
         <>
@@ -135,20 +125,29 @@ const AtributosGrupo: React.FC = () => {
                         <VoltarNavagation />
                         <BlockTop>
 
-                            {nameItem ? (
-                                <Titulos
-                                    tipo="h1"
-                                    titulo={`Insira novos atributos/filtros em = ${nameItem}`}
-                                />
+                            {atributoName ? (
+                                <>
+                                    <div>
+                                        <Titulos
+                                            tipo="h1"
+                                            titulo={`Escolha um atributo/filtro para o grupo = ${nameGroup}`}
+                                        />
+                                        <Titulos
+                                            tipo="h3"
+                                            titulo={`Insira novos atributos/filtros em = ${atributoName}`}
+                                        />
+                                    </div>
+                                </>
                             ) :
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Escolha uma atributos/filtros para o grupo = ${nameGroup}`}
+                                    titulo={`Escolha um atributo/filtro para o grupo = ${nameGroup}`}
                                 />
                             }
 
                         </BlockTop>
-
+                        <br />
+                        <br />
                         <Etiqueta>Escolha um valor de atributo:</Etiqueta>
                         <Select
                             value={atributosSelected}
@@ -157,7 +156,7 @@ const AtributosGrupo: React.FC = () => {
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(atributos || []).map((item) => ({ label: item.valor, value: item.id }))
+                                    ...(atributos || []).map((item) => ({ label: item.valor, value: item.valor }))
                                 ]
                             }
                         />
@@ -179,22 +178,22 @@ const AtributosGrupo: React.FC = () => {
                         </Button>
                         <br />
                         <br />
-                        {LoadIDGroup.map((item) => {
+                        {loadGruop.map((item) => {
                             return (
                                 <>
                                     <Card>
                                         <Titulos
                                             tipo="h2"
-                                            titulo={item.atributo.valor}
+                                            titulo={item.valor}
                                         />
                                         <br />
                                         <br />
                                         <GridDate key={item.id}>
 
                                             <SectionDate>
-                                                {item.imageAtributoGroups[0] ? (
+                                                {item.imagefilteratributos[0] ? (
                                                     <ImagensCategorys
-                                                        src={"http://localhost:3333/files/" + item.imageAtributoGroups[0].imageAtributo}
+                                                        src={"http://localhost:3333/files/" + item.imagefilteratributos[0].imageAtributo}
                                                         width={170}
                                                         height={80}
                                                     />
@@ -229,7 +228,7 @@ const AtributosGrupo: React.FC = () => {
                                                 <Button
                                                     style={{ backgroundColor: '#FB451E', padding: '5px' }}
                                                 >
-                                                    <Link to={`/grupo/filtroAtributo/edit/${item.id}`}
+                                                    <Link to={`/filtroAtributo/edit/${item.id}`}
                                                     >
                                                         <TextButton>Editar filtro</TextButton>
                                                     </Link>
@@ -247,4 +246,4 @@ const AtributosGrupo: React.FC = () => {
     )
 }
 
-export default AtributosGrupo;
+export default AtributoFiltro;

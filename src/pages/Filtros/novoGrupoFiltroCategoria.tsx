@@ -1,40 +1,38 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { setupAPIClient } from "../../../services/api";
+import { AuthContext } from "../../contexts/AuthContext";
+import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
-import { Grid } from "../../Dashboard/styles";
-import MainHeader from "../../../components/MainHeader";
-import Aside from "../../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
-import { Card } from "../../../components/Content/styles";
-import { BlockCategory, TextButton } from "../../Produtos/styles";
-import { Button } from "../../../components/ui/Button";
+import { Grid } from "../Dashboard/styles";
+import MainHeader from "../../components/MainHeader";
+import Aside from "../../components/Aside";
+import { Card, Container } from "../../components/Content/styles";
+import { BlockCategory, TextButton } from "../Categorias/Categoria/styles";
+import { Button } from "../../components/ui/Button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import Voltar from "../../../components/Voltar";
-import Titulos from "../../../components/Titulos";
-import { InputPost } from "../../../components/ui/InputPost";
-import Select from "../../../components/ui/Select";
+import Voltar from "../../components/Voltar";
+import { Block, BlockTop, Etiqueta } from "../Categorias/styles";
+import Titulos from "../../components/Titulos";
+import { InputPost } from "../../components/ui/InputPost";
+import Select from "../../components/ui/Select";
 
 
 
-const NovoGrupoFiltro: React.FC = () => {
+const NovoGrupoFiltroCategoria: React.FC = () => {
 
     const { user } = useContext(AuthContext);
 
-    const [groupNumber, setGroupNumber] = useState(Number);
     const [nameGroup, setNameGroup] = useState('');
-    const [itemName, setItemName] = useState('');
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
 
     const [lojaID] = useState(user.loja_id);
 
-    const [showAtributos, setShowAtributos] = useState(false);
+    const [showCategories, setShowCategories] = useState(false);
 
     const showOrHideCategory = () => {
-        setShowAtributos(!showAtributos);
+        setShowCategories(!showCategories);
     }
 
     const [findFirstGroup, setFindFirstGroup] = useState("");
@@ -66,37 +64,30 @@ const NovoGrupoFiltro: React.FC = () => {
         }
     }
 
-    async function handleRegisterGroup() {
+    async function handleRegisterGroupCategory() {
         try {
-            if (nameGroup === "" || itemName === "") {
+            if (nameGroup === "") {
                 toast.error('Não deixe campo em branco!!!');
                 return
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/createFilter', {
-                groupNumber: Number(groupNumber),
+            await apiClient.post('/createGroupFilter', {
                 nameGroup: nameGroup,
                 slugCategoryOrItem: slugCategoryOrItem,
-                itemName: itemName,
-                groupId: "",
-                nivel: 0,
-                order: 0,
                 loja_id: lojaID
             });
 
             toast.success('Grupo/Filtro cadastrado com sucesso');
 
             setNameGroup("");
-            setItemName("");
 
             loadGroup();
             showOrHideCategory();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            /* @ts-ignore */
-            toast.error(`${error.response.data.error}`);
+            toast.error("Erro ao cadastrar o grupo.");
         }
 
     }
@@ -108,15 +99,15 @@ const NovoGrupoFiltro: React.FC = () => {
             <Aside />
             <Container>
 
-                {showAtributos ? (
+                {showCategories ? (
                     <Card>
                         <BlockCategory>
                             <Button
                                 style={{ backgroundColor: 'green' }}
                             >
                                 <AiOutlinePlusCircle size={25} />
-                                <Link to={`/grupoFiltro/${findFirstGroup}/${groupNumber}`} >
-                                    <TextButton>Clique aqui, para cadastrar os atributos para esse grupo/filtro</TextButton>
+                                <Link to={`/grupoFiltro/categorias/${findFirstGroup}`} >
+                                    <TextButton>Clique aqui, para cadastrar as categorias para esse grupo/filtro</TextButton>
                                 </Link>
                             </Button>
                         </BlockCategory>
@@ -134,21 +125,11 @@ const NovoGrupoFiltro: React.FC = () => {
                             <Button
                                 type="submit"
                                 style={{ backgroundColor: 'green' }}
-                                onClick={handleRegisterGroup}
+                                onClick={handleRegisterGroupCategory}
                             >
                                 Salvar
                             </Button>
                         </BlockTop>
-
-                        <Block>
-                            <Etiqueta>Código desse grupo (ATENÇÃO: Não insira mesmos códigos de grupos existentes):</Etiqueta>
-                            <InputPost
-                                type="number"
-                                placeholder="0"
-                                value={groupNumber}/* @ts-ignore */
-                                onChange={(e) => setGroupNumber(e.target.value)}
-                            />
-                        </Block>
 
                         <Block>
                             <Etiqueta>Nome do grupo/filtro:</Etiqueta>
@@ -161,17 +142,7 @@ const NovoGrupoFiltro: React.FC = () => {
                         </Block>
 
                         <Block>
-                            <Etiqueta>Nome do tipo do filtro:</Etiqueta>
-                            <InputPost
-                                type="text"
-                                placeholder="Digite o tipo aqui..."
-                                value={itemName}
-                                onChange={(e) => setItemName(e.target.value)}
-                            />
-                        </Block>
-
-                        <Block>
-                            <Etiqueta>Indique em qual página esse grupo de filtro de atributos vai aparecer:</Etiqueta>
+                            <Etiqueta>Indique em qual página esse grupo de filtro vai aparecer:</Etiqueta>
                             <Select
                                 value={slugCategoryOrItem}
                                 /* @ts-ignore */
@@ -194,4 +165,4 @@ const NovoGrupoFiltro: React.FC = () => {
 
 }
 
-export default NovoGrupoFiltro;
+export default NovoGrupoFiltroCategoria;
