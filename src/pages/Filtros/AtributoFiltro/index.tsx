@@ -18,6 +18,7 @@ import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { BlockDados, TextButton } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
+import { Avisos } from "../../../components/Avisos";
 
 
 const AtributoFiltro: React.FC = () => {
@@ -63,7 +64,7 @@ const AtributoFiltro: React.FC = () => {
         async function findGroupDate() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findManyNameFiltroAtributo?atributoName=${atributoName}`);
+                const response = await apiClient.get(`/findManyNameFiltroAtributo?groupFilter_id=${groupFilter_id}`);
 
                 setLoadGruop(response.data || []);
 
@@ -72,7 +73,7 @@ const AtributoFiltro: React.FC = () => {
             }
         }
         findGroupDate();
-    }, [atributoName]);
+    }, [groupFilter_id]);
 
     useEffect(() => {
         async function loadAtributos() {
@@ -178,67 +179,77 @@ const AtributoFiltro: React.FC = () => {
                         </Button>
                         <br />
                         <br />
-                        {loadGruop.map((item) => {
-                            return (
-                                <>
-                                    <Card>
-                                        <Titulos
-                                            tipo="h2"
-                                            titulo={item.valor}
-                                        />
-                                        <br />
-                                        <br />
-                                        <GridDate key={item.id}>
+                        {loadGruop.length < 1 ? (
+                            <>
+                                <Avisos
+                                    texto="Não há filtros cadastrados nesse grupo ainda..."
+                                />
+                            </>
+                        ) :
+                            <>
+                                {loadGruop.map((item) => {
+                                    return (
+                                        <>
+                                            <Card>
+                                                <Titulos
+                                                    tipo="h2"
+                                                    titulo={item.valor}
+                                                />
+                                                <br />
+                                                <br />
+                                                <GridDate key={item.id}>
 
-                                            <SectionDate>
-                                                {item.imagefilteratributos[0] ? (
-                                                    <ImagensCategorys
-                                                        src={"http://localhost:3333/files/" + item.imagefilteratributos[0].imageAtributo}
-                                                        width={170}
-                                                        height={80}
-                                                    />
-                                                ) :
-                                                    <ImagensCategorys
-                                                        src={noImage}
-                                                        width={170}
-                                                        height={80}
-                                                    />
-                                                }
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        {item.imagefilteratributos[0] ? (
+                                                            <ImagensCategorys
+                                                                src={"http://localhost:3333/files/" + item.imagefilteratributos[0].imageAtributo}
+                                                                width={170}
+                                                                height={80}
+                                                            />
+                                                        ) :
+                                                            <ImagensCategorys
+                                                                src={noImage}
+                                                                width={170}
+                                                                height={80}
+                                                            />
+                                                        }
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <BlockDados>
-                                                    <TextoDados
-                                                        chave={"Ordem"}
-                                                        dados={item.order}
-                                                    />
-                                                </BlockDados>
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        <BlockDados>
+                                                            <TextoDados
+                                                                chave={"Ordem"}
+                                                                dados={item.order}
+                                                            />
+                                                        </BlockDados>
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <BlockDados>
-                                                    <TextoDados
-                                                        chave={"Ativo?"}
-                                                        dados={item.status}
-                                                    />
-                                                </BlockDados>
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        <BlockDados>
+                                                            <TextoDados
+                                                                chave={"Ativo?"}
+                                                                dados={item.status}
+                                                            />
+                                                        </BlockDados>
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <Button
-                                                    style={{ backgroundColor: '#FB451E', padding: '5px' }}
-                                                >
-                                                    <Link to={`/filtroAtributo/edit/${item.id}`}
-                                                    >
-                                                        <TextButton>Editar filtro</TextButton>
-                                                    </Link>
-                                                </Button>
-                                            </SectionDate>
-                                        </GridDate>
-                                    </Card>
-                                </>
-                            )
-                        })}
+                                                    <SectionDate>
+                                                        <Button
+                                                            style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                                        >
+                                                            <Link to={`/filtroAtributo/edit/${item.id}`}
+                                                            >
+                                                                <TextButton>Editar filtro</TextButton>
+                                                            </Link>
+                                                        </Button>
+                                                    </SectionDate>
+                                                </GridDate>
+                                            </Card>
+                                        </>
+                                    )
+                                })}
+                            </>
+                        }
                     </Card>
                 </Container>
             </Grid>
