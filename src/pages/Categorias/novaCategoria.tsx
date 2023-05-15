@@ -42,8 +42,6 @@ const NovaCategoria: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.post('/category', {
                 categoryName: categoryName,
-                order: 0,
-                posicao: "",
                 loja_id: lojaID
             });
 

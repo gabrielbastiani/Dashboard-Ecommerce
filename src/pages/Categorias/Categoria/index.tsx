@@ -44,7 +44,6 @@ const Categoria: React.FC = () => {
     const navigate = useNavigate();
 
     const [categoryNames, setCategoryNames] = useState("");
-    const [order, setOrder] = useState(Number);
     const [disponibilidades, setDisponibilidades] = useState('');
 
     const [search, setSearch] = useState<any[]>([]);
@@ -68,7 +67,6 @@ const Categoria: React.FC = () => {
             const apiClient = setupAPIClient();
             const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
             setCategoryNames(response.data.categoryName || "");
-            setOrder(response.data.order);
             setDisponibilidades(response.data.disponibilidade || "");
             setImageCategories(response.data.imagecategories[0].categoryImage);
             setCategoryImageUpload(response.data.imagecategories[0].categoryImage);
@@ -93,24 +91,6 @@ const Categoria: React.FC = () => {
             }
         } catch (err) {
             toast.error('Ops erro ao atualizar o nome da categoria.');
-        }
-    }
-
-    async function updateOrderCategory() {
-        try {
-            const apiClient = setupAPIClient();
-            if (order === null) {
-                toast.error('Não deixe a ordem em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateOrderCategory?category_id=${category_id}`, { order: Number(order) });
-                toast.success('Ordem atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
-            }
-        } catch (err) {
-            toast.error('Ops erro ao atualizar a ordem da categoria.');
         }
     }
 
@@ -286,24 +266,6 @@ const Categoria: React.FC = () => {
                                                 /* @ts-ignore */
                                                 onChange={(e) => setCategoryNames(e.target.value)}
                                                 handleSubmit={updateCategoryName}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Ordem"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={order}
-                                                type="number"
-                                                /* @ts-ignore */
-                                                placeholder={order}
-                                                value={order}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setOrder(e.target.value)}
-                                                handleSubmit={updateOrderCategory}
                                             />
                                         }
                                     />

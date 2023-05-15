@@ -49,10 +49,6 @@ const NewNivelCategoryProduct: React.FC = () => {
     const [iDsPai] = useState(IDRelation);
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [allPhotos, setAllPhotos] = useState<any[]>([]);
-
-    const photosProduct = allPhotos.map((item) => {return item.id });
-
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value)
@@ -71,21 +67,6 @@ const NewNivelCategoryProduct: React.FC = () => {
         loadCategorys();
     }, []);
 
-    useEffect(() => {
-        async function loadAllPhotosProduct() {
-            const apiClient = setupAPIClient();
-            try {
-                const responseProduct = await apiClient.get(`/allPhotosProducts?product_id=${product_id}`)
-
-                setAllPhotos(responseProduct.data);
-
-            } catch (error) {/* @ts-ignore */
-                console.log(error.response.data);
-            }
-        }
-        loadAllPhotosProduct();
-    }, [product_id]);
-
     async function handleRelations() {
         const apiClient = setupAPIClient();
         try {
@@ -95,8 +76,6 @@ const NewNivelCategoryProduct: React.FC = () => {
             }
             await apiClient.post('/createRelation', {
                 product_id: product_id,
-                photoProduct_id: photosProduct[0] || null,
-                photoProduct_id1: photosProduct[1] || null,
                 category_id: categorySelected,
                 posicao: "",
                 order: Number(order),
