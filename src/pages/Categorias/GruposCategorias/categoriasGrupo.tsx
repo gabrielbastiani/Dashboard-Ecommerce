@@ -19,6 +19,7 @@ import { SectionDate } from "../../Configuracoes/styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { BlockDados, TextButton } from "../Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
+import { Avisos } from "../../../components/Avisos";
 
 
 const CategoriasGrupo: React.FC = () => {
@@ -37,7 +38,7 @@ const CategoriasGrupo: React.FC = () => {
     const [itemName, setItemName] = useState("");
     const [nameItem, setNameItem] = useState("");
 
-    const [LoadIDGroup, setLoadIDGroup] = useState<any[]>([]);
+    const [loadIDGroup, setLoadIDGroup] = useState<any[]>([]);
 
 
     function handleChangeCategory(e: any) {
@@ -138,12 +139,12 @@ const CategoriasGrupo: React.FC = () => {
                             {nameItem ? (
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Insira novos itens/categorias em = ${nameItem}`}
+                                    titulo={`Insira novas categorias em = ${nameItem}`}
                                 />
                             ) :
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Escolha uma categoria/item para o grupo = ${nameGroup}`}
+                                    titulo={`Escolha uma categoria para o grupo = ${nameGroup}`}
                                 />
                             }
 
@@ -189,86 +190,96 @@ const CategoriasGrupo: React.FC = () => {
                         </Button>
                         <br />
                         <br />
-                        {LoadIDGroup.map((item) => {
-                            return (
-                                <>
-                                    <Card>
-                                        <Titulos
-                                            tipo="h3"
-                                            titulo={item.itemName}
-                                        />
+                        {loadIDGroup.length < 1 ? (
+                            <>
+                                <Avisos
+                                    texto="Não há categorias cadastrados nesse menu ainda..."
+                                />
+                            </>
+                        ) :
+                            <>
+                                {loadIDGroup.map((item) => {
+                                    return (
+                                        <>
+                                            <Card>
+                                                <Titulos
+                                                    tipo="h3"
+                                                    titulo={item.itemName}
+                                                />
 
-                                        <GridDate key={item.id}>
+                                                <GridDate key={item.id}>
 
-                                            <SectionDate>
-                                                {item.imagegroupcategories[0] ? (
-                                                    <ImagensCategorys
-                                                        src={"http://localhost:3333/files/" + item.imagegroupcategories[0].imageGroup}
-                                                        width={170}
-                                                        height={80}
-                                                    />
-                                                ) :
-                                                    <ImagensCategorys
-                                                        src={noImage}
-                                                        width={170}
-                                                        height={80}
-                                                    />
-                                                }
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        {item.imagegroupcategories[0] ? (
+                                                            <ImagensCategorys
+                                                                src={"http://localhost:3333/files/" + item.imagegroupcategories[0].imageGroup}
+                                                                width={170}
+                                                                height={80}
+                                                            />
+                                                        ) :
+                                                            <ImagensCategorys
+                                                                src={noImage}
+                                                                width={170}
+                                                                height={80}
+                                                            />
+                                                        }
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <Button
-                                                    style={{ backgroundColor: 'green' }}
-                                                >
-                                                    <AiOutlinePlusCircle />
-                                                    <Link to={`/grupo/${item.id}`} >
-                                                        <TextButton>Item</TextButton>
-                                                    </Link>
-                                                </Button>
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        <Button
+                                                            style={{ backgroundColor: 'green' }}
+                                                        >
+                                                            <AiOutlinePlusCircle />
+                                                            <Link to={`/grupo/${item.id}`} >
+                                                                <TextButton>Item</TextButton>
+                                                            </Link>
+                                                        </Button>
+                                                    </SectionDate>
 
-                                            <SectionDate style={{ width: '780px' }} >
-                                                <BlockDados>
-                                                    <TextoDados
-                                                        chave={"Categoria"}
-                                                        dados={item.category.categoryName}
-                                                    />
-                                                </BlockDados>
-                                            </SectionDate>
+                                                    <SectionDate style={{ width: '780px' }} >
+                                                        <BlockDados>
+                                                            <TextoDados
+                                                                chave={"Categoria"}
+                                                                dados={item.category.categoryName}
+                                                            />
+                                                        </BlockDados>
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <BlockDados>
-                                                    <TextoDados
-                                                        chave={"Ordem"}
-                                                        dados={item.order}
-                                                    />
-                                                </BlockDados>
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        <BlockDados>
+                                                            <TextoDados
+                                                                chave={"Ordem"}
+                                                                dados={item.order}
+                                                            />
+                                                        </BlockDados>
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <BlockDados>
-                                                    <TextoDados
-                                                        chave={"Ativo?"}
-                                                        dados={item.status}
-                                                    />
-                                                </BlockDados>
-                                            </SectionDate>
+                                                    <SectionDate>
+                                                        <BlockDados>
+                                                            <TextoDados
+                                                                chave={"Ativo?"}
+                                                                dados={item.status}
+                                                            />
+                                                        </BlockDados>
+                                                    </SectionDate>
 
-                                            <SectionDate>
-                                                <Button
-                                                    style={{ backgroundColor: '#FB451E', padding: '5px' }}
-                                                >
-                                                    <Link to={`/grupo/item/edit/${item.id}`}
-                                                    >
-                                                        <TextButton>Editar item</TextButton>
-                                                    </Link>
-                                                </Button>
-                                            </SectionDate>
-                                        </GridDate>
-                                    </Card>
-                                </>
-                            )
-                        })}
+                                                    <SectionDate>
+                                                        <Button
+                                                            style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                                        >
+                                                            <Link to={`/grupo/item/edit/${item.id}`}
+                                                            >
+                                                                <TextButton>Editar item</TextButton>
+                                                            </Link>
+                                                        </Button>
+                                                    </SectionDate>
+                                                </GridDate>
+                                            </Card>
+                                        </>
+                                    )
+                                })}
+                            </>
+                        }
                     </Card>
                 </Container>
             </Grid>

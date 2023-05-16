@@ -91,7 +91,7 @@ const ProdutoAtributo: React.FC = () => {
         async function loadAtributos() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/allAtributos');
+                const response = await apiClient.get('/listAtributosNotDistinct');
                 setAtributo(response.data || []);
             } catch (error) {
                 console.log(error);

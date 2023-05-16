@@ -80,7 +80,7 @@ const AtributoFiltro: React.FC = () => {
         async function loadAtributos() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/allAtributos');
+                const response = await apiClient.get('/listAtributosNotDistinct');
                 setAtributos(response.data || []);
             } catch (error) {
                 console.log(error);
