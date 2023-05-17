@@ -46,11 +46,13 @@ const EditItem: React.FC = () => {
 
     const [nameGroup, setNameGroup] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
-    const [categorySelected, setCategorySelected] = useState();
+    const [categorySelected, setCategorySelected] = useState("");
     const [categoryName, setCategoryName] = useState("");
     const [order, setOrder] = useState(Number);
     const [status, setStatus] = useState("");
     const [itemName, setItemName] = useState("");
+
+    const valueArray = categorySelected.split(",");
 
     const [categoryImage, setCategoryImage] = useState(null);
     const [categoryImageUrl, setCategoryImageUrl] = useState('');
@@ -131,7 +133,8 @@ const EditItem: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateCategoryGroup?groupCategoy_id=${groupCategoy_id}`, { category_id: categorySelected });
+            await apiClient.put(`/updateItemName?groupCategoy_id=${groupCategoy_id}`, { itemName: valueArray[1] });
+            await apiClient.put(`/updateCategoryGroup?groupCategoy_id=${groupCategoy_id}`, { category_id: valueArray[0] });
 
             toast.success('Categoria atualizada com sucesso.');
 
@@ -142,27 +145,6 @@ const EditItem: React.FC = () => {
         } catch (error) {
             console.log(error);
             toast.error('Ops erro ao atualizar a categoria.');
-        }
-    }
-
-    async function updateItemName() {
-        try {
-            const apiClient = setupAPIClient();
-            if (itemName === "") {
-                toast.error('Não deixe o nome do item em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/updateItemName?groupCategoy_id=${groupCategoy_id}`, { itemName: itemName });
-
-                toast.success('Nome do item atualizado com sucesso.');
-
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o nome do grupo.');
         }
     }
 
@@ -382,24 +364,6 @@ const EditItem: React.FC = () => {
                             <SectionDate>
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Nome do item"}
-                                        dados={
-                                            <InputUpdate
-                                                dado={itemName}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={itemName}
-                                                value={itemName}
-                                                /* @ts-ignore */
-                                                onChange={(e) => setItemName(e.target.value)}
-                                                handleSubmit={updateItemName}
-                                            />
-                                        }
-                                    />
-                                </BlockDados>
-
-                                <BlockDados>
-                                    <TextoDados
                                         chave={"Categoria"}
                                         dados={
                                             <SelectUpdate
@@ -409,7 +373,7 @@ const EditItem: React.FC = () => {
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: [item.id, item.categoryName] }))
                                                     ]
                                                 }/* @ts-ignore */
                                                 onChange={handleChangeCategory}
@@ -461,7 +425,7 @@ const EditItem: React.FC = () => {
                                 }
 
                             </SectionDate>
-
+                            
                             <SectionDate>
                                 {imageCategories ? (
                                     <>
@@ -530,6 +494,9 @@ const EditItem: React.FC = () => {
                                 }
                             </SectionDate>
                         </GridDate>
+                        <br />
+                        <br />
+                        <br />
                     </Card>
                 </Container>
             </Grid >

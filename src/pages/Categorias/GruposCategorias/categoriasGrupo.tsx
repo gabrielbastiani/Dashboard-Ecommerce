@@ -33,12 +33,13 @@ const CategoriasGrupo: React.FC = () => {
     const [nameGroup, setNameGroup] = useState("");
     const [posicao, setPosicao] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
-    const [categorySelected, setCategorySelected] = useState();
+    const [categorySelected, setCategorySelected] = useState("");
     const [order, setOrder] = useState(Number);
-    const [itemName, setItemName] = useState("");
     const [nameItem, setNameItem] = useState("");
 
     const [loadIDGroup, setLoadIDGroup] = useState<any[]>([]);
+
+    const valueArray = categorySelected.split(",");
 
 
     function handleChangeCategory(e: any) {
@@ -80,14 +81,14 @@ const CategoriasGrupo: React.FC = () => {
     async function handleGroupCategories() {
         const apiClient = setupAPIClient();
         try {
-            if (categorySelected === undefined || categorySelected === null || categorySelected === "" || itemName === "") {
+            if (categorySelected === undefined || categorySelected === null || categorySelected === "") {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
             await apiClient.post('/group', {
                 nameGroup: nameGroup,
-                itemName: itemName,
-                category_id: categorySelected,
+                itemName: valueArray[1],
+                category_id: valueArray[0],
                 groupId: groupCategoy_id,
                 posicao: posicao,
                 order: Number(order),
@@ -150,16 +151,6 @@ const CategoriasGrupo: React.FC = () => {
 
                         </BlockTop>
 
-                        <Block>
-                            <Etiqueta>Nome da categoria ou item:</Etiqueta>
-                            <InputPost
-                                type="text"
-                                placeholder="Digite o nome aqui..."
-                                value={itemName}
-                                onChange={(e) => setItemName(e.target.value)}
-                            />
-                        </Block>
-
                         <Etiqueta>Escolha uma categoria:</Etiqueta>
                         <Select
                             value={categorySelected}
@@ -168,7 +159,7 @@ const CategoriasGrupo: React.FC = () => {
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: [item.id, item.categoryName] }))
                                 ]
                             }
                         />

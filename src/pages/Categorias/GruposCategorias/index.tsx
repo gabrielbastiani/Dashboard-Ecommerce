@@ -91,7 +91,7 @@ const GruposCategorias: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Grupos de categorias/itens"
+                        titulo="Menu de categorias"
                     />
 
                     {search.length < 1 ? (
