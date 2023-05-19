@@ -21,7 +21,7 @@ import { TextoDados } from "../../../components/TextoDados";
 import { Avisos } from "../../../components/Avisos";
 
 
-const AtributoFiltro: React.FC = () => {
+const CategoryFiltro: React.FC = () => {
 
     let { groupFilter_id } = useParams();
 
@@ -30,17 +30,15 @@ const AtributoFiltro: React.FC = () => {
 
     const [nameGroup, setNameGroup] = useState("");
     const [idGroupFilter, setIdGroupFilter] = useState("");
-    const [atributoName, setAtributoName] = useState("");
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState("");
-    const [atributos, setAtributos] = useState<any[]>([]);
-    const [atributosSelected, setAtributosSelected] = useState();
+    const [categories, setCategories] = useState<any[]>([]);
+    const [categorySelected, setCategorySelected] = useState();
     const [order, setOrder] = useState(Number);
     const [loja_id] = useState(user.loja_id);
 
     const [loadGruop, setLoadGruop] = useState<any[]>([]);
 
-    function handleChangeAtributos(e: any) {
-        setAtributosSelected(e.target.value);
+    function handleChangeCategorie(e: any) {
+        setCategorySelected(e.target.value);
     }
 
     useEffect(() => {
@@ -50,9 +48,7 @@ const AtributoFiltro: React.FC = () => {
                 const response = await apiClient.get(`/findUniqueIDGroup?groupFilter_id=${groupFilter_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setAtributoName(response.data.atributoName || "");
                 setIdGroupFilter(response.data.id || "");
-                setSlugCategoryOrItem(response.data.slugCategoryOrItem || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -65,7 +61,7 @@ const AtributoFiltro: React.FC = () => {
         async function findGroupDate() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findManyNameFiltroAtributo?groupFilter_id=${groupFilter_id}`);
+                const response = await apiClient.get(`/findManyNameFiltroCategory?groupFilter_id=${groupFilter_id}`);
 
                 setLoadGruop(response.data || []);
 
@@ -77,30 +73,29 @@ const AtributoFiltro: React.FC = () => {
     }, [groupFilter_id]);
 
     useEffect(() => {
-        async function loadAtributos() {
+        async function loadCategorys() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/listAtributosNotDistinct');
-                setAtributos(response.data || []);
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
             } catch (error) {
                 console.log(error);
             }
         }
-        loadAtributos();
+        loadCategorys();
     }, []);
 
-    async function handleFiltrosAtributos() {
+    async function handleFiltrosCategoy() {
         const apiClient = setupAPIClient();
         try {
-            if (atributosSelected === "" || atributosSelected === undefined || atributosSelected === null) {
+            if (categorySelected === "" || categorySelected === undefined || categorySelected === null) {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
-            await apiClient.post('/createFiltroAtributo', {
+            await apiClient.post('/createFiltroCategory', {
                 groupFilter_id: idGroupFilter,
-                valor: atributosSelected,
+                categoryName: categorySelected,
                 order: Number(order),
-                slugCategoryOrItem: slugCategoryOrItem,
                 loja_id: loja_id
             });
 
@@ -128,38 +123,23 @@ const AtributoFiltro: React.FC = () => {
                         <VoltarNavagation />
                         <BlockTop>
 
-                            {atributoName ? (
-                                <>
-                                    <div>
-                                        <Titulos
-                                            tipo="h1"
-                                            titulo={`Escolha um atributo/filtro para o grupo = ${nameGroup}`}
-                                        />
-                                        <Titulos
-                                            tipo="h3"
-                                            titulo={`Insira novos atributos/filtros em = ${atributoName}`}
-                                        />
-                                    </div>
-                                </>
-                            ) :
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Escolha um atributo/filtro para o grupo = ${nameGroup}`}
+                                    titulo={`Escolha uma categoria/filtro para o grupo = ${nameGroup}`}
                                 />
-                            }
-
+                            
                         </BlockTop>
                         <br />
                         <br />
-                        <Etiqueta>Escolha um valor de atributo:</Etiqueta>
+                        <Etiqueta>Escolha uma categoria:</Etiqueta>
                         <Select
-                            value={atributosSelected}
+                            value={categorySelected}
                             /* @ts-ignore */
-                            onChange={handleChangeAtributos}
+                            onChange={handleChangeCategorie}
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(atributos || []).map((item) => ({ label: item.valor, value: item.valor }))
+                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.categoryName }))
                                 ]
                             }
                         />
@@ -175,9 +155,9 @@ const AtributoFiltro: React.FC = () => {
                         </Block>
                         <br />
                         <Button
-                            onClick={handleFiltrosAtributos}
+                            onClick={handleFiltrosCategoy}
                         >
-                            Cadastrar atributo/filtro
+                            Cadastrar categoria/filtro
                         </Button>
                         <br />
                         <br />
@@ -195,16 +175,16 @@ const AtributoFiltro: React.FC = () => {
                                             <Card>
                                                 <Titulos
                                                     tipo="h2"
-                                                    titulo={item.valor}
+                                                    titulo={item.categoryName}
                                                 />
                                                 <br />
                                                 <br />
                                                 <GridDate key={item.id}>
 
                                                     <SectionDate>
-                                                        {item.imagefilteratributos[0] ? (
+                                                        {item.imageFilterCategory[0] ? (
                                                             <ImagensCategorys
-                                                                src={"http://localhost:3333/files/" + item.imagefilteratributos[0].imageAtributo}
+                                                                src={"http://localhost:3333/files/" + item.imageFilterCategory[0].imageCategory}
                                                                 width={170}
                                                                 height={80}
                                                             />
@@ -239,7 +219,7 @@ const AtributoFiltro: React.FC = () => {
                                                         <Button
                                                             style={{ backgroundColor: '#FB451E', padding: '5px' }}
                                                         >
-                                                            <Link to={`/filtroAtributo/edit/${item.id}`}
+                                                            <Link to={`/filtroCategory/edit/${item.id}`}
                                                             >
                                                                 <TextButton>Editar filtro</TextButton>
                                                             </Link>
@@ -259,4 +239,4 @@ const AtributoFiltro: React.FC = () => {
     )
 }
 
-export default AtributoFiltro;
+export default CategoryFiltro;

@@ -142,7 +142,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
                         </Block>
 
                         <Block>
-                            <Etiqueta>Indique em qual página esse grupo de filtro vai aparecer:</Etiqueta>
+                            <Etiqueta>Indique em qual página esse grupo de filtro de categorias vai aparecer:</Etiqueta>
                             <Select
                                 value={slugCategoryOrItem}
                                 /* @ts-ignore */
