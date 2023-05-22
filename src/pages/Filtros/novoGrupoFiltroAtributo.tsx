@@ -25,7 +25,7 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
     const [atributoName, setAtributoName] = useState('');
 
     const [categories, setCategories] = useState<any[]>([]);
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategoryOrItem] = useState();
 
     const [lojaID] = useState(user.loja_id);
 
@@ -74,7 +74,7 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.post('/createGroupFilter', {
                 nameGroup: nameGroup,
-                slugCategoryOrItem: slugCategoryOrItem,
+                slugCategory: slugCategory,
                 atributoName: atributoName,
                 loja_id: lojaID
             });
@@ -155,7 +155,7 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
                         <Block>
                             <Etiqueta>Indique em qual página esse grupo de filtro vai aparecer:</Etiqueta>
                             <Select
-                                value={slugCategoryOrItem}
+                                value={slugCategory}
                                 /* @ts-ignore */
                                 onChange={handleChangeSlug}
                                 opcoes={

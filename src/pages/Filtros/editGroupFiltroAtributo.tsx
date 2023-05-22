@@ -33,7 +33,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
     const [status, setStatus] = useState("");
 
     const [categories, setCategories] = useState<any[]>([]);
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategoryOrItem] = useState();
 
     const [allAtributos, setAllatributos] = useState<any[]>([]);
 
@@ -65,7 +65,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
 
                 setNameGroup(response.data.nameGroup || "");
                 setAtributoName(response.data.atributoName || "");
-                setSlugCategoryOrItem(response.data.slugCategoryOrItem || "");
+                setSlugCategoryOrItem(response.data.slugCategory || "");
                 setStatus(response.data.status);
 
             } catch (error) {/* @ts-ignore */
@@ -156,7 +156,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
     async function updateSlugGroup() {
         const apiClient = setupAPIClient();
         try {
-            await apiClient.put(`/updateSlugGroupFilter?groupFilter_id=${groupFilter_id}`, { slugCategoryOrItem: slugCategoryOrItem });
+            await apiClient.put(`/updateSlugGroupFilter?groupFilter_id=${groupFilter_id}`, { slugCategory: slugCategory });
             toast.success('Caminho atualizado com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -254,8 +254,8 @@ const EditGroupFiltroAtributo: React.FC = () => {
                                     chave={"Atualizar página de categoria que esse grupo de filtro vai aparecer"}
                                     dados={
                                         <SelectUpdate
-                                            dado={slugCategoryOrItem}
-                                            value={slugCategoryOrItem}
+                                            dado={slugCategory}
+                                            value={slugCategory}
                                             /* @ts-ignore */
                                             onChange={handleChangeSlug}
                                             opcoes={

@@ -25,7 +25,7 @@ const NovoGrupo: React.FC = () => {
     const [selectedPosicao, setSelectedPosicao] = useState();
 
     const [categories, setCategories] = useState<any[]>([]);
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategoryOrItem] = useState();
 
     const [lojaID] = useState(user.loja_id);
 
@@ -78,7 +78,7 @@ const NovoGrupo: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.post('/group', {
                 nameGroup: nameGroup,
-                slugCategoryOrItem: slugCategoryOrItem,
+                slugCategory: slugCategory,
                 itemName: "",
                 groupId: "",
                 nivel: 0,
@@ -170,7 +170,7 @@ const NovoGrupo: React.FC = () => {
                         <Block>
                             <Etiqueta>Indique em qual página de categoria esse grupo vai aparecer:</Etiqueta>
                             <Select
-                                value={slugCategoryOrItem}
+                                value={slugCategory}
                                 /* @ts-ignore */
                                 onChange={handleChangeSlug}
                                 opcoes={

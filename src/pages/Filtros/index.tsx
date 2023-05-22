@@ -60,7 +60,7 @@ const Filtros: React.FC = () => {
         dados.push({
             "Nome do Grupo/Filtro": item.nameGroup,
             "Tipo de Filtro": item.atributoName ? "Atributos de Produtos = " + item.atributoName : "Categorias de Produtos",
-            "Pág. do Grupo do Filtro": item.slugCategoryOrItem,
+            "Pág. do Grupo do Filtro": item.slugCategory,
             "Ativo?": item.status,
             "Editar Grupo/Filtro": item.atributoName ? <Link to={`/grupoFiltroAtributo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link> : <Link to={`/grupoFiltroCategoria/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
             "botaoDetalhes": item.atributoName ? `/grupoFiltro/atributos/${item.id}` : `/grupoFiltro/categorias/${item.id}`

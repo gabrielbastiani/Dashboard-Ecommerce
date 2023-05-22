@@ -31,7 +31,7 @@ const AtributoFiltro: React.FC = () => {
     const [nameGroup, setNameGroup] = useState("");
     const [idGroupFilter, setIdGroupFilter] = useState("");
     const [atributoName, setAtributoName] = useState("");
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState("");
+    const [slugCategory, setSlugCategoryOrItem] = useState("");
     const [atributos, setAtributos] = useState<any[]>([]);
     const [atributosSelected, setAtributosSelected] = useState();
     const [order, setOrder] = useState(Number);
@@ -52,7 +52,7 @@ const AtributoFiltro: React.FC = () => {
                 setNameGroup(response.data.nameGroup || "");
                 setAtributoName(response.data.atributoName || "");
                 setIdGroupFilter(response.data.id || "");
-                setSlugCategoryOrItem(response.data.slugCategoryOrItem || "");
+                setSlugCategoryOrItem(response.data.slugCategory || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -100,7 +100,7 @@ const AtributoFiltro: React.FC = () => {
                 groupFilter_id: idGroupFilter,
                 valor: atributosSelected,
                 order: Number(order),
-                slugCategoryOrItem: slugCategoryOrItem,
+                slugCategory: slugCategory,
                 loja_id: loja_id
             });
 

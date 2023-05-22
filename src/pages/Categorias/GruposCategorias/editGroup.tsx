@@ -33,7 +33,7 @@ const EditGroup: React.FC = () => {
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slug, setSlug] = useState("");
-    const [slugCategoryOrItem, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategoryOrItem] = useState();
 
     const [modalItem, setModalItem] = useState<DeleteGroups>();
     const [modalVisible, setModalVisible] = useState(false);
@@ -67,7 +67,7 @@ const EditGroup: React.FC = () => {
 
                 setNameGroup(response.data.nameGroup || "");
                 setPosicao(response.data.posicao || "");
-                setSlug(response.data.slugCategoryOrItem || "");
+                setSlug(response.data.slugCategory || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -119,7 +119,7 @@ const EditGroup: React.FC = () => {
     async function updateSlugGroup() {
         const apiClient = setupAPIClient();
         try {
-            await apiClient.put(`/updateSlugGroup?groupCategoy_id=${groupCategoy_id}`, { slugCategoryOrItem: slugCategoryOrItem });
+            await apiClient.put(`/updateSlugGroup?groupCategoy_id=${groupCategoy_id}`, { slugCategory: slugCategory });
             toast.success('Caminho atualizado com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -220,7 +220,7 @@ const EditGroup: React.FC = () => {
                                     dados={
                                         <SelectUpdate
                                             dado={slug}
-                                            value={slugCategoryOrItem}
+                                            value={slugCategory}
                                             /* @ts-ignore */
                                             onChange={handleChangeSlug}
                                             opcoes={
