@@ -25,10 +25,10 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 const NewNivelCategory: React.FC = () => {
 
     let { IDRelation } = useParams();
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
 
     const [categoryName, setCategoryName] = useState('');
     const [order, setOrder] = useState(Number);
@@ -72,7 +72,7 @@ const NewNivelCategory: React.FC = () => {
                 categoryName: categoryName.replace(/[/]/g, "-"),
                 posicao: "",
                 order: 0,
-                loja_id: lojaID
+                store_id: lojaID
             })
 
             setCategoryName('');
@@ -96,7 +96,7 @@ const NewNivelCategory: React.FC = () => {
                 order: Number(order),
                 nivel: 0,
                 relationId: IDRelation,
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Subcategoria cadastrada com sucesso!');

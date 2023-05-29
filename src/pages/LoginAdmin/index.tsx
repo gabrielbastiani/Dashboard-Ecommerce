@@ -129,7 +129,7 @@ const LoginAdmin: React.FC = () => {
 					<TextLink>Não possui uma conta? Cadastre-se</TextLink>
 				</a>
 
-				<a href="/recoveryPassword">
+				<a href="/recoveryPasswordAdmin">
 					<TextLink>Esqueceu sua senha?</TextLink>
 				</a>
 

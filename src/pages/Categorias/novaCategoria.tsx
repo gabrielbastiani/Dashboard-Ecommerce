@@ -21,11 +21,11 @@ import { useNavigate } from 'react-router-dom';
 
 const NovaCategoria: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [categoryName, setCategoryName] = useState('');
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
 
     async function handleRegisterCategory() {
         try {
@@ -42,7 +42,7 @@ const NovaCategoria: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.post('/category', {
                 categoryName: categoryName,
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Categoria cadastrada com sucesso');

@@ -13,7 +13,7 @@ import { ContLogin, ContainerCenter, Formulario, LogImg, Recaptcha, TextH1, Text
 
 const SignupAdmin: React.FC = () => {
 
-    const [nameComplete, setNameComplete] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ const SignupAdmin: React.FC = () => {
                 return;
             }
 
-            if (nameComplete === '' || email === '' || password === '') {
+            if (name === '' || email === '' || password === '') {
                 toast.warning('Preencha todos os campos!');
                 console.log("Preencha todos os campos!");
                 return;
@@ -58,7 +58,7 @@ const SignupAdmin: React.FC = () => {
 
             const apiClient = setupAPIClient();
 
-            await apiClient.post('/createAdmin', { nameComplete: nameComplete, email: email, password: password });
+            await apiClient.post('/admin/createAdmin', { name: name, email: email, password: password });
 
             toast.success('Cadastro de usuario ADMINISTRADOR feito com sucesso!')
 
@@ -105,8 +105,8 @@ const SignupAdmin: React.FC = () => {
                     <Input
                         placeholder="Digite seu nome"
                         type="text"
-                        value={nameComplete}
-                        onChange={(e) => setNameComplete(e.target.value)}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
 
                     <Input
@@ -145,7 +145,7 @@ const SignupAdmin: React.FC = () => {
                     <TextLink>Já possui uma conta? Faça login!</TextLink>
                 </a>
 
-                <a href="/recoveryPassword">
+                <a href="/recoveryPasswordAdmin">
                     <TextLink>Esqueceu sua senha?</TextLink>
                 </a>
 

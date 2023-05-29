@@ -33,10 +33,10 @@ export type DeleteIDSRelations = {
 const NewNivelCategoryProduct: React.FC = () => {
 
     let { product_id, IDRelation } = useParams();
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [loja_id] = useState(user.loja_id);
+    const [store_id] = useState(admin.store_id);
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
@@ -81,7 +81,7 @@ const NewNivelCategoryProduct: React.FC = () => {
                 order: Number(order),
                 nivel: 1,
                 relationId: IDRelation,
-                loja_id: loja_id
+                store_id: store_id
             });
 
             toast.success('Subcategoria cadastrada com sucesso!');

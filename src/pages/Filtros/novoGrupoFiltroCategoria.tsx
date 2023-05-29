@@ -20,14 +20,14 @@ import Select from "../../components/ui/Select";
 
 const NovoGrupoFiltroCategoria: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
     const [nameGroup, setNameGroup] = useState('');
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategoryOrItem] = useState();
 
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
 
     const [showCategories, setShowCategories] = useState(false);
 
@@ -75,7 +75,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
             await apiClient.post('/createGroupFilter', {
                 nameGroup: nameGroup,
                 slugCategory: slugCategory,
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Grupo/Filtro cadastrado com sucesso');

@@ -19,12 +19,12 @@ import { AuthContext } from "../../../contexts/AuthContext";
 
 const NovoTexto: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [order, setOrder] = useState(Number);
-    const [posicaoSelected, setPosicaoSelected] = useState();
+    const [positionSelected, setPositionSelected] = useState();
     const [description, setDescription] = useState('');
 
 
@@ -36,13 +36,13 @@ const NovoTexto: React.FC = () => {
                 return;
             }
 
-            await apiClient.post(`/createTextoInstitucional`, {
+            await apiClient.post(`/createInstitutionalText`, {
                 title: title,
                 order: Number(order),
-                posicao: posicaoSelected,
+                position: positionSelected,
                 description: description,
-                loja_id: user.loja_id
-                }
+                store_id: admin.store_id
+            }
             );
 
             toast.success('Texto institucional cadastrado com sucesso.');
@@ -60,8 +60,8 @@ const NovoTexto: React.FC = () => {
         }
     }
 
-    function handleChangePosicao(e: any) {
-        setPosicaoSelected(e.target.value);
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value);
     }
 
     return (
@@ -109,7 +109,7 @@ const NovoTexto: React.FC = () => {
                     <Block>
                         <Etiqueta>Posição desse texto:</Etiqueta>
                         <Select
-                            value={posicaoSelected}
+                            value={positionSelected}
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },
@@ -120,7 +120,7 @@ const NovoTexto: React.FC = () => {
                                     { label: "Página Sobre", value: "Página Sobre" }
                                 ]
                             }/* @ts-ignore */
-                            onChange={handleChangePosicao}
+                            onChange={handleChangePosition}
                         />
                     </Block>
 

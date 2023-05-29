@@ -16,7 +16,7 @@ import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 
 const MainHeader: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const { toggleTheme, theme } = useTheme();
 
     const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
@@ -46,7 +46,7 @@ const MainHeader: React.FC = () => {
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>
-                <UserName href='/perfil'>{user?.nameComplete}</UserName>
+                <UserName href='/perfil'>{admin?.name}</UserName>
             </Profile>
         </Container>
     );

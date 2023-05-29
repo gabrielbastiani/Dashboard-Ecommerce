@@ -4,17 +4,17 @@ import { toast } from 'react-toastify';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
 
 type AuthContextData = {
-    user: UserProps;
+    admin: AdminProps;
     isAuthenticated: boolean;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
     signOut(): void;
 }
 
-type UserProps = {
+type AdminProps = {
     id: string;
-    nameComplete: string;
+    name: string;
     email: string;
-    loja_id: string;
+    store_id: string;
 }
 
 type SignInProps = {
@@ -30,9 +30,9 @@ export const AuthContext = createContext({} as AuthContextData);
 
 export const signOut = () => {
     try {
-        destroyCookie(undefined, '@lojabuilder.token');
-        toast.success('Usúario deslogado com sucesso!');
-        console.log('Usúario deslogado com sucesso!');
+        destroyCookie(undefined, '@storebuilder.token');
+        toast.success('Administrador deslogado com sucesso!');
+        console.log('Administrador deslogado com sucesso!');
     } catch {
         toast.error('Erro ao deslogar!');
         console.log('erro ao deslogar');
@@ -41,22 +41,22 @@ export const signOut = () => {
 
 export function AuthProvider({ children }: AuthProviderProps) {
 
-    const [user, setUser] = useState<UserProps>()
-    const isAuthenticated = !!user;
+    const [admin, setAdmin] = useState<AdminProps>()
+    const isAuthenticated = !!admin;
 
     useEffect(() => {
 
-        const { '@lojabuilder.token': token } = parseCookies();
+        const { '@storebuilder.token': token } = parseCookies();
 
         if (token) {
-            api.get('/me').then(response => {
-                const { id, nameComplete, email, loja_id } = response.data;
+            api.get('/admin/me').then(response => {
+                const { id, name, email, store_id } = response.data;
 
-                setUser({
+                setAdmin({
                     id,
-                    nameComplete,
+                    name,
                     email,
-                    loja_id
+                    store_id
                 })
 
             })
@@ -67,23 +67,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     async function signInAdmin({ email, password }: SignInProps) {
         try {
-            const response = await api.post('/sessionAdmin', {
+            const response = await api.post('/admin/session', {
                 email,
                 password
             })
 
-            const { id, nameComplete, loja_id, token } = response.data;
+            const { id, name, store_id, token } = response.data;
 
-            setCookie(undefined, '@lojabuilder.token', token, {
+            setCookie(undefined, '@storebuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
                 path: "/" // Quais caminhos terao acesso ao cookie
             })
 
-            setUser({
+            setAdmin({
                 id,
-                nameComplete,
+                name,
                 email,
-                loja_id
+                store_id
             })
 
             //Passar para proximas requisiçoes o nosso token
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     return (/* @ts-ignore */
-        <AuthContext.Provider value={{ user, isAuthenticated, signInAdmin, signOut }}>
+        <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut }}>
             {children}
         </AuthContext.Provider>
     )

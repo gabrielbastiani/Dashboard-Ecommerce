@@ -36,9 +36,9 @@ export function ModalDeleteRedeSocial({ isOpen, onRequestClose, rede }: ModalRed
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const redesocial_id = rede.id;
+            const socialMedia_id = rede.id;
 
-            await apiClient.delete(`/deleteRedeSocial?redesocial_id=${redesocial_id}`);
+            await apiClient.delete(`/deleteSocialMedia?socialMedia_id=${socialMedia_id}`);
             toast.success(`Categoria deletada com sucesso.`);
             
             navigate('/configuracoes');

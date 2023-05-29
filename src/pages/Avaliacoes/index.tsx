@@ -61,7 +61,7 @@ const Avaliacoes: React.FC = () => {
     const dados: any = [];
     (avaliations || []).forEach((item) => {
         dados.push({
-            "Cliente": item.user.nameComplete,
+            "Cliente": item.admin.name,
             "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "botaoDetalhes": `/avaliacao/${item.product.slug}/${item.id}`
         });

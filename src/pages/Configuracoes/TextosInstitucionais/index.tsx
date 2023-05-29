@@ -19,10 +19,10 @@ const TextosInstitucionais: React.FC = () => {
     const [search, setSearch] = useState<any[]>([]);
 
     useEffect(() => {
-        async function allTextos() {
+        async function allTexts() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/listAllTextos`);
+                const response = await apiClient.get(`/listAllText`);
 
                 setSearch(response.data || []);
                 setInitialFilter(response.data);
@@ -31,7 +31,7 @@ const TextosInstitucionais: React.FC = () => {
                 console.error(error);
             }
         }
-        allTextos();
+        allTexts();
     }, []);
 
     /* @ts-ignore */
@@ -42,19 +42,17 @@ const TextosInstitucionais: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterTextos = search.filter((filt) => filt.title.toLowerCase().includes(target.value));
-        setSearch(filterTextos);
+        const filterTexts = search.filter((filt) => filt.title.toLowerCase().includes(target.value));
+        setSearch(filterTexts);
     }
 
-    /* @ts-ignore */
-    const dados = [];
+    const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Possui Imagens?": item.imagesloja ? item.imagesloja.length + " imagem" : "SEM IMAGEM",
             "Titulo": item.title,
             "Ordem": String(item.order),
-            "Posição no Site": item.posicao,
-            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
+            "Posição no Site": item.position,
+            "Disponivel?": item.status === "Disponivel" ? "SIM" : "NÃO",
             "botaoDetalhes": `/texto/${item.id}`
         });
     });
@@ -96,8 +94,7 @@ const TextosInstitucionais: React.FC = () => {
                         </>
                     ) :
                         <TabelaSimples
-                            cabecalho={["Possui Imagens?", "Titulo", "Ordem", "Posição no Site", "Disponivel?"]}
-                            /* @ts-ignore */
+                            cabecalho={["Titulo", "Ordem", "Posição no Site", "Disponivel?"]}
                             dados={dados}
                             textbutton={"Detalhes"}
                         />

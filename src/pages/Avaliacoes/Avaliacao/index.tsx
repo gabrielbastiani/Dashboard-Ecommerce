@@ -30,7 +30,7 @@ const Avaliacao: React.FC = () => {
     let { slug, avaliacao_id } = useParams();
     const navigate = useNavigate();
 
-    const [user_id, setUser_id] = useState('');
+    const [admin_id, setUser_id] = useState('');
     const [clientName, setClientName] = useState('');
     const [slugCliente, setSlugCliente] = useState('');
     const [email, setEmail] = useState("");
@@ -52,10 +52,10 @@ const Avaliacao: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const response = await apiClient.get(`/avaliacaoDados?avaliacao_id=${avaliacao_id}`);
 
-                setUser_id(response.data.user.id || "");
-                setClientName(response.data.user.nameComplete || "");
-                setSlugCliente(response.data.user.slug || "");
-                setEmail(response.data.user.email || "");
+                setUser_id(response.data.admin.id || "");
+                setClientName(response.data.admin.name || "");
+                setSlugCliente(response.data.admin.slug || "");
+                setEmail(response.data.admin.email || "");
                 setPontuacao(response.data.pontuacao || "");
                 setStatus(response.data.status || "");
                 setDescription(response.data.description);
@@ -150,7 +150,7 @@ const Avaliacao: React.FC = () => {
 
                         <BlockDados>
                             <Perfil
-                                href={`/cliente/${slugCliente}/${user_id}`}
+                                href={`/cliente/${slugCliente}/${admin_id}`}
                             >
                                 Ver Perfil do Cliente
                             </Perfil>

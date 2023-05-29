@@ -5,8 +5,6 @@ import {
     MdExitToApp,
     MdClose,
     MdMenu,
-    MdDescription,
-    MdPeople,
     MdOutlineCategory,
     MdOutlineProductionQuantityLimits,
     MdSettingsSuggest,
@@ -99,16 +97,6 @@ const Aside: React.FC = () => {
                 <MenuItemLink href="/painel">
                     <MdDashboard />
                     Painel
-                </MenuItemLink>
-
-                <MenuItemLink href="/pedidos">
-                    <MdDescription />
-                    Pedidos
-                </MenuItemLink>
-
-                <MenuItemLink href="/clientes">
-                    <MdPeople />
-                    Clientes
                 </MenuItemLink>
 
                 <MenuItemLink onClick={handleSubMenu2} style={{ cursor: 'pointer' }} >

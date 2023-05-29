@@ -25,10 +25,10 @@ import { Avisos } from "../../../components/Avisos";
 const CategoriasGrupo: React.FC = () => {
 
     let { groupCategoy_id } = useParams();
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [loja_id] = useState(user.loja_id);
+    const [store_id] = useState(admin.store_id);
 
     const [nameGroup, setNameGroup] = useState("");
     const [posicao, setPosicao] = useState("");
@@ -93,7 +93,7 @@ const CategoriasGrupo: React.FC = () => {
                 posicao: posicao,
                 order: Number(order),
                 nivel: 1,
-                loja_id: loja_id
+                store_id: store_id
             });
 
             toast.success('Item de categoria cadastrada com sucesso no grupo!');

@@ -40,90 +40,90 @@ import TabelaSimples from "../../components/Tabelas";
 
 const Configuracoes: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [logoLoja, setLogoLoja] = useState(null);
-    const [lojaUrl, setLojaUrl] = useState('');
-    const [nameLoja, setNameLoja] = useState('');
-    const [cnpjLoja, setCnpjLoja] = useState('');
-    const [emailLoja, setEmailLoja] = useState('');
-    const [phoneLoja, setPhoneLoja] = useState('');
-    const [cell, setCell] = useState('');
-    const [ruaLoja, setRuaLoja] = useState('');
-    const [numeroLoja, setNumeroLoja] = useState('');
-    const [bairroLoja, setBairroLoja] = useState('');
-    const [cepLoja, setCepLoja] = useState('');
-    const [cityLoja, setCityLoja] = useState('');
-    const [stateLoja, setStateLoja] = useState([]);
-    const [stateLojaSelected, setStateLojaSelected] = useState();
+    const [logo, setLogo] = useState(null);
+    const [logoUrl, setLogoUrl] = useState('');
+    const [name, setName] = useState('');
+    const [cnpj, setCnpj] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [cellPhone, setCellPhone] = useState('');
+    const [address, setAddress] = useState('');
+    const [number, setNumber] = useState('');
+    const [neighborhood, setNeighborhood] = useState('');
+    const [cep, setCep] = useState('');
+    const [city, setCity] = useState('');
+    const [state, seState] = useState([]);
+    const [stateSelected, setStateSelected] = useState();
 
     const [nameRede, setNameRede] = useState('');
     const [redeImage, setRedeImage] = useState(null);
     const [redeImageUrl, setRedeImageUrl] = useState('');
-    const [redeLink, setRedeLink] = useState('');
-    const [redeOrder, setRedeOrder] = useState(Number);
-    const [redePosicaoSelected, setRedePosicaoSelected] = useState();
+    const [link, setLink] = useState('');
+    const [order, setOrder] = useState(Number);
+    const [positionSelected, setPositionSelected] = useState();
 
     const [loading, setLoading] = useState(false);
 
-    const [redesSocias, setRedesSocias] = useState<any[]>([]);
+    const [socialMedia, setSocialMedia] = useState<any[]>([]);
 
 
-    function handleChangeEstado(e: any) {
-        setStateLojaSelected(e.target.value)
+    function handleChangeState(e: any) {
+        setStateSelected(e.target.value);
     }
 
-    function isEmail(emailLoja: string) {
+    function isEmail(email: string) {
         // eslint-disable-next-line no-control-regex
-        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emailLoja)
+        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(email)
     }
 
     useEffect(() => {
         async function loadStore() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/userLoja?loja_id=${user.loja_id}`);
+                const response = await apiClient.get(`/userStore?store_id=${admin.store_id}`);
 
-                setLogoLoja(response.data.logoLoja || "");
-                setNameLoja(response.data.nameLoja || "");
-                setCnpjLoja(response.data.cnpjLoja || "");
-                setEmailLoja(response.data.emailLoja || "");
-                setPhoneLoja(response.data.phoneLoja || "");
-                setCell(response.data.cellPhoneLoja || "");
-                setRuaLoja(response.data.ruaLoja || "");
-                setNumeroLoja(response.data.numeroLoja || "");
-                setBairroLoja(response.data.bairroLoja || "");
-                setCepLoja(response.data.cepLoja || "");
-                setCityLoja(response.data.cityLoja || "");
-                setStateLoja(response.data.stateLoja || "");
+                setLogo(response.data.logo || "");
+                setName(response.data.name || "");
+                setCnpj(response.data.cnpj || "");
+                setEmail(response.data.email || "");
+                setPhone(response.data.phone || "");
+                setCellPhone(response.data.cellPhone || "");
+                setAddress(response.data.address || "");
+                setNumber(response.data.number || "");
+                setNeighborhood(response.data.neighborhood || "");
+                setCep(response.data.cep || "");
+                setCity(response.data.city || "");
+                seState(response.data.state || "");
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadStore();
-    }, [user.loja_id]);
+    }, [admin.store_id]);
 
-    async function handleLoja(event: FormEvent) {
+    async function handleStore(event: FormEvent) {
         event.preventDefault();
         const apiClient = setupAPIClient();
         try {
-            if (nameLoja === "" ||
-                cnpjLoja === "" ||
-                emailLoja === "" ||
-                phoneLoja === "" ||
-                ruaLoja === "" ||
-                numeroLoja === "" ||
-                bairroLoja === "" ||
-                cepLoja === "" ||
-                cityLoja === ""
+            if (name === "" ||
+                cnpj === "" ||
+                email === "" ||
+                phone === "" ||
+                address === "" ||
+                number === "" ||
+                neighborhood === "" ||
+                cep === "" ||
+                city === ""
             ) {
-                toast.error('Não deixe o campo em branco!')
+                toast.error('Não deixe o campo em branco!');
                 return;
             }
 
-            if (!isEmail(emailLoja)) {
+            if (!isEmail(email)) {
 
                 toast.error('Por favor digite um email valido!');
 
@@ -132,37 +132,37 @@ const Configuracoes: React.FC = () => {
 
             const data = new FormData();
             /* @ts-ignore */
-            data.append('file', logoLoja);
-            data.append('nameLoja', nameLoja);
-            data.append('cnpjLoja', cnpjLoja);
-            data.append('emailLoja', emailLoja);
-            data.append('phoneLoja', phoneLoja);
-            data.append('cellPhoneLoja', cell);
-            data.append('ruaLoja', ruaLoja);
-            data.append('numeroLoja', numeroLoja);
-            data.append('bairroLoja', bairroLoja);
-            data.append('cepLoja', cepLoja);
-            data.append('cityLoja', cityLoja);/* @ts-ignore */
-            data.append('stateLoja', stateLojaSelected);
+            data.append('file', logo);
+            data.append('name', name);
+            data.append('cnpj', cnpj);
+            data.append('email', email);
+            data.append('phone', phone);
+            data.append('cellPhone', cellPhone);
+            data.append('address', address);
+            data.append('number', number);
+            data.append('neighborhood', neighborhood);
+            data.append('cep', cep);
+            data.append('city', city);/* @ts-ignore */
+            data.append('state', stateSelected);
 
-            await apiClient.post(`/loja`, data);
+            await apiClient.post(`/createStore`, data);
 
             setLoading(true);
 
             toast.success('Loja cadastrada com sucesso.');
 
-            setNameLoja("");
-            setCnpjLoja("");
-            setEmailLoja("");
-            setPhoneLoja("");
-            setCell("");
-            setRuaLoja("");
-            setNumeroLoja("");
-            setBairroLoja("");
-            setCepLoja("");
-            setCityLoja("");
+            setName("");
+            setCnpj("");
+            setEmail("");
+            setPhone("");
+            setCellPhone("");
+            setAddress("");
+            setNumber("");
+            setNeighborhood("");
+            setCep("");
+            setCity("");
 
-            loadIDloja();
+            loadIDstore();
 
         } catch (error) {
             console.log(error);
@@ -173,14 +173,14 @@ const Configuracoes: React.FC = () => {
 
     }
 
-    async function loadIDloja() {
+    async function loadIDstore() {
         try {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get('/lojaCreateFind');
+            const response = await apiClient.get('/findFirstStoreUser');
 
-            const lojaID = response.data.id;
+            const storeID = response.data.id;
 
-            await apiClient.put(`/updateAllDateUser?user_id=${user.id}`, { loja_id: lojaID });
+            await apiClient.put(`/admin/updateDateAdmin?admin_id=${admin.id}`, { store_id: storeID });
 
             navigate(0);
 
@@ -201,8 +201,8 @@ const Configuracoes: React.FC = () => {
 
         if (image.type === 'image/jpeg' || image.type === 'image/png') {
             /* @ts-ignore */
-            setLogoLoja(image)
-            setLojaUrl(URL.createObjectURL(image))
+            setLogo(image)
+            setLogoUrl(URL.createObjectURL(image))
         }
 
     }
@@ -212,17 +212,17 @@ const Configuracoes: React.FC = () => {
         try {
             const data = new FormData();
 
-            if (logoLoja === null) {
+            if (logo === null) {
                 toast.error('Carregue uma imagem!')
                 console.log("Carregue uma imagem!");
                 return;
             }
 
             setLoading(true);
-            data.append('file', logoLoja);
+            data.append('file', logo);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/logoLojaUpdate?loja_id=${user.loja_id}`, data);
+            await apiClient.put(`/logoStoreUpdate?store_id=${admin.store_id}`, data);
 
             toast.success('Logomarca atualizada com sucesso');
 
@@ -239,39 +239,39 @@ const Configuracoes: React.FC = () => {
 
     }
 
-    async function handleUpdateDataLoja() {
+    async function handleUpdateDataStore() {
         const apiClient = setupAPIClient();
         try {
-            if (nameLoja === "" ||
-                cnpjLoja === "" ||
-                emailLoja === "" ||
-                phoneLoja === "" ||
-                ruaLoja === "" ||
-                numeroLoja === "" ||
-                bairroLoja === "" ||
-                cepLoja === "" ||
-                cityLoja === ""
+            if (name === "" ||
+                cnpj === "" ||
+                email === "" ||
+                phone === "" ||
+                address === "" ||
+                number === "" ||
+                neighborhood === "" ||
+                cep === "" ||
+                city === ""
             ) {
                 toast.error('Não deixe o campo em branco!')
                 return;
             }
 
-            if (!isEmail(emailLoja)) {
+            if (!isEmail(email)) {
                 toast.error('Por favor digite um email valido!');
                 return;
             }
 
-            await apiClient.put(`/updateAllDateLoja?loja_id=${user.loja_id}`, {
-                nameLoja: nameLoja,
-                cnpjLoja: cnpjLoja,
-                emailLoja: emailLoja,
-                phoneLoja: phoneLoja,
-                cellPhoneLoja: cell,
-                ruaLoja: ruaLoja,
-                numeroLoja: numeroLoja,
-                bairroLoja: bairroLoja,
-                cepLoja: cepLoja,
-                cityLoja: cityLoja,
+            await apiClient.put(`/updateAllDateStore?store_id=${admin.store_id}`, {
+                name: name,
+                cnpj: cnpj,
+                email: email,
+                phone: phone,
+                cellPhone: cellPhone,
+                address: address,
+                number: number,
+                neighborhood: neighborhood,
+                cep: cep,
+                city: city,
             });
             toast.success('Dado da loja atualizado com sucesso.');
         } catch (error) {
@@ -280,14 +280,14 @@ const Configuracoes: React.FC = () => {
         }
     }
 
-    async function updateEstado() {
+    async function updateState() {
         try {
-            if (stateLojaSelected === "") {
+            if (stateSelected === "") {
                 toast.error(`Selecione o estado, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateAllDateLoja?loja_id=${user.loja_id}`, { stateLoja: stateLojaSelected });
+            await apiClient.put(`/updateAllDateStore?store_id=${admin.store_id}`, { state: stateSelected });
             toast.success('Estado atualizado com sucesso.');
         } catch (error) {
             console.log(error);
@@ -298,53 +298,53 @@ const Configuracoes: React.FC = () => {
         }, 3000);
     }
 
-    // -------- REDE SOCIAL ------------ //
+    // -------- SOCIAL MEDIA ------------ //
 
     useEffect(() => {
-        async function loadRedesSociais() {
+        async function loadSocialMedia() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listAllRedesSociais`);
+                const response = await apiClient.get(`/listAllSocialMedia`);
 
-                setRedesSocias(response.data || []);
+                setSocialMedia(response.data || []);
 
             } catch (error) {
                 console.log(error);
             }
         }
-        loadRedesSociais();
+        loadSocialMedia();
     }, []);
 
-    function handleChangePosicao(e: any) {
-        setRedePosicaoSelected(e.target.value)
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value);
     }
 
-    async function handleRedeSocial(event: FormEvent) {
+    async function handleSocialMedia(event: FormEvent) {
         event.preventDefault();
         const apiClient = setupAPIClient();
         try {
-            if (nameRede === "" || redeLink === "") {
-                toast.error('Não deixe o link em branco!')
+            if (nameRede === "" || link === "") {
+                toast.error('Não deixe campo em branco!');
                 return;
             }
 
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', redeImage);
-            data.append('redeName', nameRede);
-            data.append('link', redeLink);/* @ts-ignore */
-            data.append('order', Number(redeOrder));/* @ts-ignore */
-            data.append('posicao', redePosicaoSelected);
-            data.append('loja_id', user.loja_id);
+            data.append('name', nameRede);
+            data.append('link', link);/* @ts-ignore */
+            data.append('order', Number(order));/* @ts-ignore */
+            data.append('position', positionSelected);
+            data.append('store_id', admin.store_id);
 
-            await apiClient.post(`/createRedeSocialLoja`, data);
+            await apiClient.post(`/createSocialMedia`, data);
 
             setLoading(true);
 
             toast.success('Rede Social cadastrada com sucesso.');
 
             setNameRede("");
-            setRedeLink("");
+            setLink("");
 
             setTimeout(() => {
                 navigate(0);
@@ -359,7 +359,7 @@ const Configuracoes: React.FC = () => {
 
     }
 
-    function handleFileRede(e: ChangeEvent<HTMLInputElement>) {
+    function handleFileSocialMedia(e: ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) {
             return
         }
@@ -377,15 +377,14 @@ const Configuracoes: React.FC = () => {
 
     }
 
-    /* @ts-ignore */
-    const dados = [];
-    (redesSocias || []).forEach((item) => {
+    const dados: any = [];
+    (socialMedia || []).forEach((item) => {
         dados.push({
-            "Imagem": <ImgRedes src={"http://localhost:3333/files/" + item.imageRede} alt={item.redeName} />,
-            "Rede Social": item.redeName,
+            "Imagem": <ImgRedes src={"http://localhost:3333/files/" + item.image} alt={item.name} />,
+            "Rede Social": item.name,
             "Ordem": String(item.order),
-            "Posição no Site": item.posicao,
-            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
+            "Posição no Site": item.position,
+            "Disponivel?": item.status === "Disponivel" ? "SIM" : "NÃO",
             "botaoDetalhes": `/rede/${item.id}`
         });
     });
@@ -397,7 +396,7 @@ const Configuracoes: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    {user.loja_id ? (
+                    {admin.store_id ? (
                         <>
                             <BlockTop>
                                 <Titulos
@@ -411,10 +410,10 @@ const Configuracoes: React.FC = () => {
                                         <MdFileUpload size={20} />
                                     </IconSpan>
                                     <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="logomarca" />
-                                    {lojaUrl ? (
+                                    {logoUrl ? (
                                         <>
                                             <LogoLojaImgUrl
-                                                src={lojaUrl}
+                                                src={logoUrl}
                                                 alt="logomarca da loja"
                                                 width={170}
                                                 height={80}
@@ -427,7 +426,7 @@ const Configuracoes: React.FC = () => {
                                             </Button>
                                         </>
                                     ) :
-                                        <LogoLojaImg src={"http://localhost:3333/files/" + logoLoja} alt="logomarca da loja" />
+                                        <LogoLojaImg src={"http://localhost:3333/files/" + logo} alt="logomarca da loja" />
                                     }
                                 </EtiquetaLogo>
                             </FormUploadLogo>
@@ -439,14 +438,14 @@ const Configuracoes: React.FC = () => {
                                             chave={"Nome da loja"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={nameLoja}
+                                                    dado={name}
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={nameLoja}
-                                                    value={nameLoja}
+                                                    placeholder={name}
+                                                    value={name}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setNameLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -457,18 +456,18 @@ const Configuracoes: React.FC = () => {
                                             chave={"CNPJ"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={cnpjLoja}
+                                                    dado={cnpj}
                                                     /* @ts-ignore */
                                                     as={IMaskInput}
                                                     /* @ts-ignore */
                                                     mask="00.000.000/0000-00"
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={cnpjLoja}
-                                                    value={cnpjLoja}
+                                                    placeholder={cnpj}
+                                                    value={cnpj}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setCnpjLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setCnpj(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -479,14 +478,14 @@ const Configuracoes: React.FC = () => {
                                             chave={"E-mail"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={emailLoja}
+                                                    dado={email}
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={emailLoja}
-                                                    value={emailLoja}
+                                                    placeholder={email}
+                                                    value={email}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setEmailLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -497,18 +496,18 @@ const Configuracoes: React.FC = () => {
                                             chave={"Telefone"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={phoneLoja}
+                                                    dado={phone}
                                                     /* @ts-ignore */
                                                     as={IMaskInput}
                                                     /* @ts-ignore */
                                                     mask="(00) 0000-0000"
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={phoneLoja}
-                                                    value={phoneLoja}
+                                                    placeholder={phone}
+                                                    value={phone}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setPhoneLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setPhone(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -519,18 +518,18 @@ const Configuracoes: React.FC = () => {
                                             chave={"Celular"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={cell}
+                                                    dado={cellPhone}
                                                     /* @ts-ignore */
                                                     as={IMaskInput}
                                                     /* @ts-ignore */
                                                     mask="(00) 0000-0000"
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={cell}
-                                                    value={cell}
+                                                    placeholder={cellPhone}
+                                                    value={cellPhone}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setCell(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setCellPhone(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -541,14 +540,14 @@ const Configuracoes: React.FC = () => {
                                             chave={"Endereço"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={ruaLoja}
+                                                    dado={address}
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={ruaLoja}
-                                                    value={ruaLoja}
+                                                    placeholder={address}
+                                                    value={address}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setRuaLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setAddress(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -562,14 +561,14 @@ const Configuracoes: React.FC = () => {
                                             chave={"Número"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={numeroLoja}
+                                                    dado={number}
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={numeroLoja}
-                                                    value={numeroLoja}
+                                                    placeholder={number}
+                                                    value={number}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setNumeroLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setNumber(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -580,14 +579,14 @@ const Configuracoes: React.FC = () => {
                                             chave={"Bairro"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={bairroLoja}
+                                                    dado={neighborhood}
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={bairroLoja}
-                                                    value={bairroLoja}
+                                                    placeholder={neighborhood}
+                                                    value={neighborhood}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setBairroLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setNeighborhood(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -598,14 +597,14 @@ const Configuracoes: React.FC = () => {
                                             chave={"Cidade"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={cityLoja}
+                                                    dado={city}
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={cityLoja}
-                                                    value={cityLoja}
+                                                    placeholder={city}
+                                                    value={city}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setCityLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setCity(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -616,10 +615,10 @@ const Configuracoes: React.FC = () => {
                                             chave={"Estado"}
                                             dados={
                                                 <SelectUpdate
-                                                    dado={stateLoja}
-                                                    value={stateLojaSelected}
+                                                    dado={state}
+                                                    value={stateSelected}
                                                     /* @ts-ignore */
-                                                    onChange={handleChangeEstado}
+                                                    onChange={handleChangeState}
                                                     opcoes={
                                                         [
                                                             { label: "Selecionar...", value: "" },
@@ -652,7 +651,7 @@ const Configuracoes: React.FC = () => {
                                                             { label: "Tocantins", value: "Tocantins" }
                                                         ]
                                                     }
-                                                    handleSubmit={updateEstado}
+                                                    handleSubmit={updateState}
                                                 />
                                             }
                                         />
@@ -663,18 +662,18 @@ const Configuracoes: React.FC = () => {
                                             chave={"CEP"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={cepLoja}
+                                                    dado={cep}
                                                     /* @ts-ignore */
                                                     as={IMaskInput}
                                                     /* @ts-ignore */
                                                     mask="00000-000"
                                                     type="text"
                                                     /* @ts-ignore */
-                                                    placeholder={cepLoja}
-                                                    value={cepLoja}
+                                                    placeholder={cep}
+                                                    value={cep}
                                                     /* @ts-ignore */
-                                                    onChange={(e) => setCepLoja(e.target.value)}
-                                                    handleSubmit={handleUpdateDataLoja}
+                                                    onChange={(e) => setCep(e.target.value)}
+                                                    handleSubmit={handleUpdateDataStore}
                                                 />
                                             }
                                         />
@@ -682,7 +681,7 @@ const Configuracoes: React.FC = () => {
                                 </SectionDate>
                             </GridDate>
 
-                            {redesSocias.length < 1 ? (
+                            {socialMedia.length < 1 ? (
                                 null
                             ) :
                                 <>
@@ -705,14 +704,14 @@ const Configuracoes: React.FC = () => {
                             />
                             <br />
                             <br />
-                            <GridDateForm onSubmit={handleRedeSocial}>
+                            <GridDateForm onSubmit={handleSocialMedia}>
                                 <SectionDate>
                                     <BlockLogomarca>
                                         <EtiquetaLogo>
                                             <IconSpan>
                                                 <MdFileUpload size={30} />
                                             </IconSpan>
-                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileRede} alt="rede social loja virtual" />
+                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileSocialMedia} alt="rede social loja virtual" />
                                             {redeImageUrl ? (
                                                 <PreviewImageRede
                                                     src={redeImageUrl}
@@ -743,7 +742,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite aqui..."
-                                            onChange={(e) => setRedeLink(e.target.value)}
+                                            onChange={(e) => setLink(e.target.value)}
                                         />
                                     </Block>
 
@@ -754,7 +753,7 @@ const Configuracoes: React.FC = () => {
                                     <Block>
                                         <Etiqueta>Posição dessa rede:</Etiqueta>
                                         <Select
-                                            value={redePosicaoSelected}
+                                            value={positionSelected}
                                             opcoes={
                                                 [
                                                     { label: "Selecionar...", value: "" },
@@ -765,7 +764,7 @@ const Configuracoes: React.FC = () => {
                                                     { label: "Página Sobre", value: "Página Sobre" }
                                                 ]
                                             }/* @ts-ignore */
-                                            onChange={handleChangePosicao}
+                                            onChange={handleChangePosition}
                                         />
                                     </Block>
 
@@ -774,7 +773,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="number"
                                             placeholder="0"/* @ts-ignore */
-                                            onChange={(e) => setRedeOrder(e.target.value)}
+                                            onChange={(e) => setOrder(e.target.value)}
                                         />
                                     </Block>
 
@@ -806,7 +805,7 @@ const Configuracoes: React.FC = () => {
                                 </Button>
                             </BlockTop>
 
-                            <GridDateForm id="form-loja" onSubmit={handleLoja}>
+                            <GridDateForm id="form-loja" onSubmit={handleStore}>
                                 <SectionDate>
                                     <BlockLogomarca>
                                         <EtiquetaLogo>
@@ -814,16 +813,16 @@ const Configuracoes: React.FC = () => {
                                                 <MdFileUpload size={30} />
                                             </IconSpan>
                                             <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="logomarca" />
-                                            {lojaUrl ? (
+                                            {logoUrl ? (
                                                 <LogoLojaImgUrl
-                                                    src={lojaUrl}
+                                                    src={logoUrl}
                                                     alt="logomarca da loja"
                                                     width={170}
                                                     height={80}
                                                 />
                                             ) :
                                                 <>
-                                                    <LogoLojaImg src={"http://localhost:3333/files/" + logoLoja} />
+                                                    <LogoLojaImg src={"http://localhost:3333/files/" + logo} />
                                                     <TextLogo>Clique na seta e insira<br /> uma logomarca</TextLogo>
                                                 </>
                                             }
@@ -835,7 +834,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite o nome da loja"
-                                            onChange={(e) => setNameLoja(e.target.value)}
+                                            onChange={(e) => setName(e.target.value)}
                                         />
                                     </Block>
 
@@ -848,7 +847,7 @@ const Configuracoes: React.FC = () => {
                                             mask="00.000.000/0000-00"
                                             type="text"
                                             placeholder="00.000.000/0000-00"
-                                            onChange={(e) => setCnpjLoja(e.target.value)}
+                                            onChange={(e) => setCnpj(e.target.value)}
                                         />
                                     </Block>
 
@@ -857,7 +856,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Ex: email@email.com"
-                                            onChange={(e) => setEmailLoja(e.target.value)}
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </Block>
 
@@ -870,7 +869,7 @@ const Configuracoes: React.FC = () => {
                                             mask="(00) 0000-0000"
                                             type="text"
                                             placeholder="(00) 0000-0000"
-                                            onChange={(e) => setPhoneLoja(e.target.value)}
+                                            onChange={(e) => setPhone(e.target.value)}
                                         />
                                     </Block>
 
@@ -883,7 +882,7 @@ const Configuracoes: React.FC = () => {
                                             mask="(00) 0000-0000"
                                             type="text"
                                             placeholder="(00) 0000-0000"
-                                            onChange={(e) => setCell(e.target.value)}
+                                            onChange={(e) => setCellPhone(e.target.value)}
                                         />
                                     </Block>
 
@@ -896,7 +895,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite o endereço da loja"
-                                            onChange={(e) => setRuaLoja(e.target.value)}
+                                            onChange={(e) => setAddress(e.target.value)}
                                         />
                                     </Block>
 
@@ -905,7 +904,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite o número da loja"
-                                            onChange={(e) => setNumeroLoja(e.target.value)}
+                                            onChange={(e) => setNumber(e.target.value)}
                                         />
                                     </Block>
 
@@ -914,7 +913,7 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite o bairro da loja"
-                                            onChange={(e) => setBairroLoja(e.target.value)}
+                                            onChange={(e) => setNeighborhood(e.target.value)}
                                         />
                                     </Block>
 
@@ -923,14 +922,14 @@ const Configuracoes: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite a cidade da loja"
-                                            onChange={(e) => setCityLoja(e.target.value)}
+                                            onChange={(e) => setCity(e.target.value)}
                                         />
                                     </Block>
 
                                     <Block>
                                         <Etiqueta>Estado:</Etiqueta>
                                         <Select
-                                            value={stateLojaSelected}
+                                            value={stateSelected}
                                             opcoes={
                                                 [
                                                     { label: "Selecionar...", value: "" },
@@ -963,7 +962,7 @@ const Configuracoes: React.FC = () => {
                                                     { label: "Tocantins", value: "Tocantins" }
                                                 ]
                                             }/* @ts-ignore */
-                                            onChange={handleChangeEstado}
+                                            onChange={handleChangeState}
                                         />
                                     </Block>
 
@@ -976,7 +975,7 @@ const Configuracoes: React.FC = () => {
                                             mask="00000-000"
                                             type="text"
                                             placeholder="00000-000"
-                                            onChange={(e) => setCepLoja(e.target.value)}
+                                            onChange={(e) => setCep(e.target.value)}
                                         />
                                     </Block>
                                 </SectionDate>

@@ -17,12 +17,12 @@ import { InputPost } from "../../../components/ui/InputPost";
 
 const NovoAtributo: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [tipo, setTipo] = useState('');
     const [valor, setValor] = useState('');
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
 
     const [atributo, setAtributo] = useState([]);
     const [selectedAtributo, setSelectedAtributo] = useState();
@@ -60,7 +60,7 @@ const NovoAtributo: React.FC = () => {
             await apiClient.post('/createAtributo', {
                 tipo: tipo || selectedAtributo,
                 valor: valor,
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Atributo cadastrado com sucesso');

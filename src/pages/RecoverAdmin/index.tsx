@@ -10,13 +10,13 @@ import { useTheme } from '../../contexts/theme';
 import { ContLogin, ContainerCenter, Formulario, LogImg, TextLink } from '../LoginAdmin/styles';
 
 
-const Recover: React.FC = () => {
+const RecoverAdmin: React.FC = () => {
 
     const [newPassword, setNewPassword] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { theme } = useTheme();
-    let { recovery_id } = useParams();
+    let { passwordRecoveryAdmin_id } = useParams();
 
 
     async function handleRecovery(event: FormEvent) {
@@ -29,11 +29,9 @@ const Recover: React.FC = () => {
                 return;
             }
 
-            // AJUSTAR PARAMETRO PARA PEGAR DA QUERY
-
             const apiClient = setupAPIClient()
 
-            await apiClient.put(`/recover?recovery_id=${recovery_id}`, { password })
+            await apiClient.put(`/admin/recoverAdmin?passwordRecoveryAdmin_id=${passwordRecoveryAdmin_id}`, { password })
 
             toast.success('Senha atualizada com sucesso.');
 
@@ -99,4 +97,4 @@ const Recover: React.FC = () => {
     )
 }
 
-export default Recover;
+export default RecoverAdmin;

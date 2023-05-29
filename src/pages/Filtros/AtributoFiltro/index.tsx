@@ -25,7 +25,7 @@ const AtributoFiltro: React.FC = () => {
 
     let { groupFilter_id } = useParams();
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
@@ -35,7 +35,7 @@ const AtributoFiltro: React.FC = () => {
     const [atributos, setAtributos] = useState<any[]>([]);
     const [atributosSelected, setAtributosSelected] = useState();
     const [order, setOrder] = useState(Number);
-    const [loja_id] = useState(user.loja_id);
+    const [store_id] = useState(admin.store_id);
 
     const [loadGruop, setLoadGruop] = useState<any[]>([]);
 
@@ -101,7 +101,7 @@ const AtributoFiltro: React.FC = () => {
                 valor: atributosSelected,
                 order: Number(order),
                 slugCategory: slugCategory,
-                loja_id: loja_id
+                store_id: store_id
             });
 
             toast.success('Filtro cadastrado com sucesso no grupo!');

@@ -22,24 +22,24 @@ import { ModalDeleteRedeSocial } from '../../../components/popups/ModalDeleteRed
 
 
 export type DeleteRede = {
-    redesocial_id: string;
+    socialMedia_id: string;
 }
 
 const Rede: React.FC = () => {
 
     const navigate = useNavigate();
-    let { redesocial_id } = useParams();
+    let { socialMedia_id } = useParams();
 
     const [redeImage, setRedeImage] = useState(null);
     const [redeImageUrl, setRedeImageUrl] = useState('');
 
-    const [redeName, setRedeName] = useState('');
+    const [name, setName] = useState('');
     const [link, setLink] = useState('');
     const [order, setOrder] = useState();
-    const [posicao, setPosicao] = useState('');
-    const [disponibilidade, setDisponibilidade] = useState('');
+    const [position, setPosition] = useState('');
+    const [status, setStatus] = useState('');
 
-    const [redePosicaoSelected, setRedePosicaoSelected] = useState();
+    const [positionSelected, setPositionSelected] = useState();
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -48,33 +48,33 @@ const Rede: React.FC = () => {
 
 
     useEffect(() => {
-        async function loadRede() {
+        async function loadSocialMedia() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listExactRedesSociais?redesocial_id=${redesocial_id}`);
+                const response = await apiClient.get(`/findUniqueSocialMedia?socialMedia_id=${socialMedia_id}`);
 
-                setRedeName(response.data.redeName || "");
+                setName(response.data.name || "");
                 setLink(response.data.link || "");
-                setRedeImage(response.data.imageRede || "");
+                setRedeImage(response.data.image || "");
                 setOrder(response.data.order);
-                setPosicao(response.data.posicao || "");
-                setDisponibilidade(response.data.disponibilidade);
+                setPosition(response.data.position || "");
+                setStatus(response.data.status);
 
             } catch (error) {
                 console.log(error);
             }
         }
-        loadRede();
-    }, [redesocial_id]);
+        loadSocialMedia();
+    }, [socialMedia_id]);
 
-    async function updateNameRede() {
+    async function updateNameSocialMedia() {
         try {
             const apiClient = setupAPIClient();
-            if (redeName === "") {
+            if (name === "") {
                 toast.error('Não deixe o nome da rede em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateRedeName?redesocial_id=${redesocial_id}`, { redeName: redeName });
+                await apiClient.put(`/updateSocialMediaName?socialMedia_id=${socialMedia_id}`, { name: name });
                 toast.success('Nome da rede atualizada com sucesso.');
             }
         } catch (error) {
@@ -83,14 +83,14 @@ const Rede: React.FC = () => {
         }
     }
 
-    async function updateLinkRede() {
+    async function updateLinkSocialMedia() {
         try {
             const apiClient = setupAPIClient();
             if (link === "") {
                 toast.error('Não deixe o link da rede em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateLinkRedeSocial?redesocial_id=${redesocial_id}`, { link: link });
+                await apiClient.put(`/updateLinkSocialMedia?socialMedia_id=${socialMedia_id}`, { link: link });
                 toast.success('Link da rede atualizado com sucesso.');
             }
         } catch (error) {
@@ -99,14 +99,14 @@ const Rede: React.FC = () => {
         }
     }
 
-    async function updateOrder() {
+    async function updateOrderSocialMedia() {
         try {
             const apiClient = setupAPIClient();
             if (order === null) {
                 toast.error('Não deixe a ordem da rede em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderRedeSocial?redesocial_id=${redesocial_id}`, { order: Number(order) });
+                await apiClient.put(`/updateOrderSocialMedia?socialMedia_id=${socialMedia_id}`, { order: Number(order) });
                 toast.success('Ordem da rede atualizada com sucesso.');
             }
         } catch (error) {
@@ -115,18 +115,18 @@ const Rede: React.FC = () => {
         }
     }
 
-    function handleChangePosicao(e: any) {
-        setRedePosicaoSelected(e.target.value)
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value)
     }
 
-    async function updatePosicao() {
+    async function updatePositionSocialMedia() {
         try {
-            if (redePosicaoSelected === "") {
+            if (positionSelected === "") {
                 toast.error(`Selecione uma posição, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePosicaoRedeSocial?redesocial_id=${redesocial_id}`, { posicao: redePosicaoSelected });
+            await apiClient.put(`/updatePositionSocialMedia?socialMedia_id=${socialMedia_id}`, { position: positionSelected });
             toast.success('Posição atualizada com sucesso.');
         } catch (error) {
             console.log(error);
@@ -155,7 +155,7 @@ const Rede: React.FC = () => {
 
     }
 
-    async function handleImageRede(event: FormEvent) {
+    async function handleImageSocialMedia(event: FormEvent) {
         event.preventDefault();
         try {
             const data = new FormData();
@@ -171,7 +171,7 @@ const Rede: React.FC = () => {
             setLoading(true);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageRedeSocial?redesocial_id=${redesocial_id}`, data);
+            await apiClient.put(`/updateImageSocialMedia?socialMedia_id=${socialMedia_id}`, data);
 
             toast.success('Image da rede atualizada com sucesso');
 
@@ -188,17 +188,17 @@ const Rede: React.FC = () => {
 
     }
 
-    async function updateDisponibilidade() {
+    async function updateStatusSocialMedia() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateDisponibilidadeRedeSocial?redesocial_id=${redesocial_id}`);
+            await apiClient.put(`/updateStatusSocialMedia?socialMedia_id=${socialMedia_id}`);
 
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a disponibilidade da rede.');
+            toast.error('Ops erro ao atualizar a status da rede.');
         }
 
-        if (disponibilidade === "Indisponivel") {
+        if (status === "Indisponivel") {
             toast.success(`Essa rede social está disponivel em sua posição agora.`);
             setTimeout(() => {
                 navigate(0);
@@ -206,7 +206,7 @@ const Rede: React.FC = () => {
             }, 2000);
         }
 
-        if (disponibilidade === "Disponivel") {
+        if (status === "Disponivel") {
             toast.error(`Essa rede social NÃO está disponivel em sua posição agora.`);
             setTimeout(() => {
                 navigate(0);
@@ -219,11 +219,11 @@ const Rede: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(redesocial_id: string) {
+    async function handleOpenModalDelete(socialMedia_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/listExactRedesSociais', {
+        const responseDelete = await apiClient.get('/findUniqueSocialMedia', {
             params: {
-                redesocial_id: redesocial_id,
+                socialMedia_id: socialMedia_id,
             }
         });
         setModalItem(responseDelete.data);
@@ -252,13 +252,13 @@ const Rede: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(redesocial_id)}
+                                onClick={() => handleOpenModalDelete(socialMedia_id)}
                             >
                                 Remover
                             </Button>
                         </BlockTop>
 
-                        <FormUploadLogo onSubmit={handleImageRede}>
+                        <FormUploadLogo onSubmit={handleImageSocialMedia}>
                             <EtiquetaLogo>
                                 <IconSpan>
                                     <MdFileUpload size={20} />
@@ -290,14 +290,14 @@ const Rede: React.FC = () => {
                                 chave={"Nome da rede social"}
                                 dados={
                                     <InputUpdate
-                                        dado={redeName}
+                                        dado={name}
                                         type="text"
                                         /* @ts-ignore */
-                                        placeholder={redeName}
-                                        value={redeName}
+                                        placeholder={name}
+                                        value={name}
                                         /* @ts-ignore */
-                                        onChange={(e) => setRedeName(e.target.value)}
-                                        handleSubmit={updateNameRede}
+                                        onChange={(e) => setName(e.target.value)}
+                                        handleSubmit={updateNameSocialMedia}
                                     />
                                 }
                             />
@@ -315,7 +315,7 @@ const Rede: React.FC = () => {
                                         value={link}
                                         /* @ts-ignore */
                                         onChange={(e) => setLink(e.target.value)}
-                                        handleSubmit={updateLinkRede}
+                                        handleSubmit={updateLinkSocialMedia}
                                     />
                                 }
                             />
@@ -326,10 +326,10 @@ const Rede: React.FC = () => {
                                 chave={"Posição dessa rede"}
                                 dados={
                                     <SelectUpdate
-                                        dado={posicao}
-                                        value={redePosicaoSelected}
+                                        dado={position}
+                                        value={positionSelected}
                                         /* @ts-ignore */
-                                        onChange={handleChangePosicao}
+                                        onChange={handleChangePosition}
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
@@ -340,7 +340,7 @@ const Rede: React.FC = () => {
                                                 { label: "Página Sobre", value: "Página Sobre" }
                                             ]
                                         }
-                                        handleSubmit={updatePosicao}
+                                        handleSubmit={updatePositionSocialMedia}
                                     />
                                 }
                             />
@@ -358,7 +358,7 @@ const Rede: React.FC = () => {
                                         value={order}
                                         /* @ts-ignore */
                                         onChange={(e) => setOrder(e.target.value)}
-                                        handleSubmit={updateOrder}
+                                        handleSubmit={updateOrderSocialMedia}
                                     />
                                 }
                             />
@@ -370,8 +370,8 @@ const Rede: React.FC = () => {
                                 dados={
                                     <ButtonSelect
                                         /* @ts-ignore */
-                                        dado={disponibilidade}
-                                        handleSubmit={updateDisponibilidade}
+                                        dado={status}
+                                        handleSubmit={updateStatusSocialMedia}
                                     />
                                 }
                             />

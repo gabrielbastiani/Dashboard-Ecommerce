@@ -3,8 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 
 import Dashboard from './pages/Dashboard';
 import Painel from './pages/Painel';
-import Pedidos from './pages/Pedidos';
-import Clientes from './pages/Clientes';
 import Categorias from './pages/Categorias';
 import Produtos from './pages/Produtos';
 import Configuracoes from './pages/Configuracoes';
@@ -16,8 +14,6 @@ import ProdutoCategoria from './pages/Produtos/ProdutoCategoria';
 import Produto from './pages/Produtos/Produto';
 import Avaliacoes from './pages/Avaliacoes';
 import Avaliacao from './pages/Avaliacoes/Avaliacao';
-import Cliente from './pages/Clientes/Cliente';
-import Pedido from './pages/Pedidos/Pedido';
 import Newsletters from './pages/Newsletters';
 import Newsletter from './pages/Newsletters/Newsletter';
 import Contatos from './pages/Contatos';
@@ -64,13 +60,6 @@ const RoutesAuth: React.FC = () => {
         <Routes>
             <Route path='/' element={<Dashboard />} />
             <Route path='/painel' element={<Painel />} />
-            <Route path='/painel' element={<Painel />} />
-
-            <Route path='/pedidos' element={<Pedidos />} />
-            <Route path='/pedido/:pedido_id' element={<Pedido />} />
-
-            <Route path='/clientes' element={<Clientes />} />
-            <Route path='/cliente/:slug/:user_id' element={<Cliente />} />
 
             <Route path='/categorias' element={<Categorias />} />
             <Route path='/categoria/nova' element={<NovaCategoria />} />
@@ -118,11 +107,11 @@ const RoutesAuth: React.FC = () => {
             <Route path='/contato/:contato_id' element={<Contato />} />
 
             <Route path='/configuracoes' element={<Configuracoes />} />
-            <Route path='/rede/:redesocial_id' element={<Rede />} />
+            <Route path='/rede/:socialMedia_id' element={<Rede />} />
             <Route path='/textosInstitucionais' element={<TextosInstitucionais />} />
             <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
-            <Route path='/texto/:textoinstitucional_id' element={<Texto />} />
-            <Route path='/ImagemTexto/:imageloja_id' element={<ImagemTexto />} />
+            <Route path='/texto/:institutionalText_id' element={<Texto />} />
+            <Route path='/imagemTexto/:imageloja_id' element={<ImagemTexto />} />
             <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
             <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />
             <Route path='/imagem/:imageloja_id' element={<Imagem />} />

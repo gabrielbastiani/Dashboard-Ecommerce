@@ -23,9 +23,9 @@ import { BlockCategory } from "../Categorias/Categoria/styles";
 
 const NovoProduto: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
-    const [loja_id] = useState(user.loja_id);
+    const [store_id] = useState(admin.store_id);
     const [nameProduct, setNameProduct] = useState('');
     const [order] = useState(0);
     const [posicao] = useState("");
@@ -67,7 +67,7 @@ const NovoProduto: React.FC = () => {
                 return
             }
 
-            if (loja_id === null) {
+            if (store_id === null) {
                 toast.error('Cadastre os dados da sua loja antes de cadastrar um produto');
                 return;
             }
@@ -86,7 +86,7 @@ const NovoProduto: React.FC = () => {
                 order: order,
                 posicao: posicao,
                 promocao: Number(promocao.replace(/[^\d]+/g, '')),
-                loja_id: loja_id
+                store_id: store_id
             })
 
             toast.success('Produto cadastrado com sucesso');

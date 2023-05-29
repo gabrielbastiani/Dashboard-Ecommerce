@@ -1,9 +1,9 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "../../../Dashboard/styles";
 import MainHeader from "../../../../components/MainHeader";
 import Aside from "../../../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../../../Categorias/styles";
+import { BlockTop, Container } from "../../../Categorias/styles";
 import { Card } from "../../../../components/Content/styles";
 import Voltar from "../../../../components/Voltar";
 import Titulos from "../../../../components/Titulos";
@@ -15,50 +15,26 @@ import SelectUpdate from "../../../../components/ui/SelectUpdate";
 import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
 import { setupAPIClient } from "../../../../services/api";
 import { toast } from "react-toastify";
-import { DivisorHorizontal } from "../../../../components/ui/DivisorHorizontal";
-import { InputPost } from "../../../../components/ui/InputPost";
-import { GridDateForm, SectionDate, TextLogo } from "../../styles";
-import { MdFileUpload } from "react-icons/md";
-import {
-    AreaTexto,
-    BlockImagem,
-    EtiquetaImagem,
-    IconSpanImage,
-    InputLogoImagem,
-    PreviewImagem,
-    ImagemTextoInsti,
-    ImgTextos
-} from "./styles";
-import TabelaSimples from "../../../../components/Tabelas";
+import { AreaTexto } from "./styles";
 import Modal from 'react-modal';
 import { ModalDeleteTextoInstitucional } from "../../../../components/popups/ModalDeleteTextoInstitucional"; 
 
 
-
 export type DeleteTexto = {
-    textoinstitucional_id: string;
+    institutionalText_id: string;
 }
 
 const Texto: React.FC = () => {
 
     const navigate = useNavigate();
-    let { textoinstitucional_id } = useParams();
+    let { institutionalText_id } = useParams();
 
     const [title, setTitle] = useState('');
     const [order, setOrder] = useState(Number);
-    const [posicaoSelected, setPosicaoSelected] = useState();
-    const [posicao, setPosicao] = useState('');
-    const [disponibilidade, setDisponibilidade] = useState('');
+    const [positionSelected, setPositionSelected] = useState();
+    const [position, setPosition] = useState('');
+    const [status, setStatus] = useState('');
     const [description, setDescription] = useState('');
-
-    const [titleImage, setTitleImage] = useState('');
-    const [imageText, setImageText] = useState(null);
-    const [imageTextUrl, setImageTextUrl] = useState('');
-    const [orderImage, setOrderImage] = useState(Number);
-
-    const [imagesTextos, setImagesTextos] = useState<any[]>([]);
-
-    const [loading, setLoading] = useState(false);
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -68,12 +44,12 @@ const Texto: React.FC = () => {
         async function loadTexto() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listExactTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`);
+                const response = await apiClient.get(`/findUniqueInstitutionalText?institutionalText_id=${institutionalText_id}`);
 
                 setTitle(response.data.title || "");
                 setOrder(response.data.order);
-                setPosicao(response.data.posicao || "");
-                setDisponibilidade(response.data.disponibilidade);
+                setPosition(response.data.position || "");
+                setStatus(response.data.status);
                 setDescription(response.data.description);
 
             } catch (error) {
@@ -81,22 +57,7 @@ const Texto: React.FC = () => {
             }
         }
         loadTexto();
-    }, [textoinstitucional_id]);
-
-    useEffect(() => {
-        async function loadImagesText() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/allImagesTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`);
-
-                setImagesTextos(response.data || []);
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        loadImagesText();
-    }, [textoinstitucional_id]);
+    }, [institutionalText_id]);
 
     async function updateTitle() {
         try {
@@ -105,7 +66,7 @@ const Texto: React.FC = () => {
                 toast.error('Não deixe o titulo do texto em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateTitleTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`, { title: title });
+                await apiClient.put(`/updateTitleInstitutionalText?institutionalText_id=${institutionalText_id}`, { title: title });
                 toast.success('Titulo do texto atualizado com sucesso.');
             }
         } catch (error) {
@@ -121,7 +82,7 @@ const Texto: React.FC = () => {
                 toast.error('Não deixe a ordem do texto em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`, { order: Number(order) });
+                await apiClient.put(`/updateOrderInstitutionalText?institutionalText_id=${institutionalText_id}`, { order: Number(order) });
                 toast.success('Ordem do texto atualizado com sucesso.');
             }
         } catch (error) {
@@ -130,18 +91,18 @@ const Texto: React.FC = () => {
         }
     }
 
-    function handleChangePosicao(e: any) {
-        setPosicaoSelected(e.target.value);
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value);
     }
 
-    async function updatePosicao() {
+    async function updatePosition() {
         try {
-            if (posicaoSelected === "") {
+            if (positionSelected === "") {
                 toast.error(`Selecione uma posição, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePosicaoTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`, { posicao: posicaoSelected });
+            await apiClient.put(`/updatePositionInstitutionalText?institutionalText_id=${institutionalText_id}`, { position: positionSelected });
 
             toast.success('Posição atualizada com sucesso.');
         } catch (error) {
@@ -150,14 +111,14 @@ const Texto: React.FC = () => {
         }
         setTimeout(() => {
             navigate(0);
-        }, 2000);
+        }, 3000);
     }
 
     async function updateDescription() {
         try {
             const apiClient = setupAPIClient();
 
-            await apiClient.put(`/updateDescriptionTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`, { description: description });
+            await apiClient.put(`/updateDescriptionInstitutionalText?institutionalText_id=${institutionalText_id}`, { description: description });
             toast.success('Descrição do texto atualizado com sucesso.');
 
         } catch (error) {
@@ -166,17 +127,17 @@ const Texto: React.FC = () => {
         }
     }
 
-    async function updateDisponibilidade() {
+    async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateDisponibilidadeTexto?textoinstitucional_id=${textoinstitucional_id}`);
+            await apiClient.put(`/updateStatusInstitutionalText?institutionalText_id=${institutionalText_id}`);
 
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a disponibilidade do texto.');
+            toast.error('Ops erro ao atualizar a status do texto.');
         }
 
-        if (disponibilidade === "Indisponivel") {
+        if (status === "Indisponivel") {
             toast.success(`Esse texto está disponivel em sua posição agora.`);
             setTimeout(() => {
                 navigate(0);
@@ -184,7 +145,7 @@ const Texto: React.FC = () => {
             }, 2000);
         }
 
-        if (disponibilidade === "Disponivel") {
+        if (status === "Disponivel") {
             toast.error(`Esse texto NÃO está disponivel em sua posição agora.`);
             setTimeout(() => {
                 navigate(0);
@@ -193,86 +154,15 @@ const Texto: React.FC = () => {
         }
     }
 
-    // ------- IMAGENS -------- //
-
-
-    function handleFile(e: ChangeEvent<HTMLInputElement>) {
-        if (!e.target.files) {
-            return
-        }
-
-        const image = e.target.files[0]
-        if (!image) {
-            return
-        }
-
-        if (image.type === 'image/jpeg' || image.type === 'image/png') {
-            /* @ts-ignore */
-            setImageText(image)
-            setImageTextUrl(URL.createObjectURL(image));
-        }
-
-    }
-
-    async function handleImagenTexto(event: FormEvent) {
-        event.preventDefault();
-        const apiClient = setupAPIClient();
-        try {
-            if (titleImage === "") {
-                toast.error('Não deixe o titulo em branco!');
-                return;
-            }
-
-            const data = new FormData();
-            /* @ts-ignore */
-            data.append('file', imageText);
-            data.append('titleImage', titleImage);/* @ts-ignore */
-            data.append('order', Number(orderImage));/* @ts-ignore */
-            data.append('posicao', "");/* @ts-ignore */
-            data.append('textoinstitucional_id', textoinstitucional_id);
-
-            setLoading(true);
-
-            await apiClient.post(`/createImageTextoInstitucional`, data);
-
-            toast.success('Imagem cadastrada com sucesso.');
-
-            setTitleImage('');
-
-            setTimeout(() => {
-                navigate(0);
-            }, 2000);
-
-        } catch (error) {/* @ts-ignore */
-            console.log(error.response.data);
-            toast.error('Erro ao cadastrar a imagem.');
-        }
-
-        setLoading(false);
-
-    }
-
-    /* @ts-ignore */
-    const dados = [];
-    (imagesTextos || []).forEach((item) => {
-        dados.push({
-            "Imagem": <ImgTextos src={"http://localhost:3333/files/" + item.image} alt={item.titleImage} />,
-            "Titulo da Imagem": item.titleImage,
-            "Ordem": String(item.order),
-            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
-            "botaoDetalhes": `/imagemTexto/${item.id}`
-        });
-    });
-
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(textoinstitucional_id: string) {
+    async function handleOpenModalDelete(institutionalText_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/listExactTextoInstitucional', {
+        const responseDelete = await apiClient.get('/findUniqueInstitutionalText', {
             params: {
-                textoinstitucional_id: textoinstitucional_id,
+                institutionalText_id: institutionalText_id,
             }
         });
         setModalItem(responseDelete.data || "");
@@ -301,7 +191,7 @@ const Texto: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(textoinstitucional_id)}
+                                onClick={() => handleOpenModalDelete(institutionalText_id)}
                             >
                                 Remover
                             </Button>
@@ -348,10 +238,10 @@ const Texto: React.FC = () => {
                                 chave={"Posição desse texto"}
                                 dados={
                                     <SelectUpdate
-                                        dado={posicao}
-                                        value={posicaoSelected}
+                                        dado={position}
+                                        value={positionSelected}
                                         /* @ts-ignore */
-                                        onChange={handleChangePosicao}
+                                        onChange={handleChangePosition}
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
@@ -362,7 +252,7 @@ const Texto: React.FC = () => {
                                                 { label: "Página Sobre", value: "Página Sobre" }
                                             ]
                                         }
-                                        handleSubmit={updatePosicao}
+                                        handleSubmit={updatePosition}
                                     />
                                 }
                             />
@@ -374,8 +264,8 @@ const Texto: React.FC = () => {
                                 dados={
                                     <ButtonSelect
                                         /* @ts-ignore */
-                                        dado={disponibilidade}
-                                        handleSubmit={updateDisponibilidade}
+                                        dado={status}
+                                        handleSubmit={updateStatus}
                                     />
                                 }
                             />
@@ -399,93 +289,9 @@ const Texto: React.FC = () => {
                                 Atualizar descrição
                             </Button>
                         </BlockDados>
-
-                        {imagesTextos.length < 1 ? (
-                            null
-                        ) :
-                            <>
-                                <DivisorHorizontal />
-
-                                <TabelaSimples
-                                    cabecalho={["Imagem", "Titulo da Imagem", "Disponivel?", "Ordem"]}
-                                    /* @ts-ignore */
-                                    dados={dados}
-                                    textbutton={"Detalhes"}
-                                />
-                            </>
-                        }
-
-                        <DivisorHorizontal />
-
-                        <Titulos
-                            tipo="h2"
-                            titulo='Insira imagens para esse texto'
-                        />
-                        <br />
-                        <br />
-                        <GridDateForm onSubmit={handleImagenTexto}>
-                            <SectionDate>
-                                <Block>
-                                    <Etiqueta>Titulo da imagem:</Etiqueta>
-                                    <InputPost
-                                        type="text"
-                                        placeholder="Digite o titulo da imagem..."
-                                        value={titleImage}
-                                        onChange={(e) => setTitleImage(e.target.value)}
-                                    />
-                                </Block>
-
-                                <Block>
-                                    <Etiqueta>Ordem:</Etiqueta>
-                                    <InputPost
-                                        type="number"
-                                        placeholder="0"
-                                        value={orderImage}/* @ts-ignore */
-                                        onChange={(e) => setOrderImage(e.target.value)}
-                                    />
-                                </Block>
-
-                            </SectionDate>
-
-                            <SectionDate>
-
-                                <BlockImagem>
-                                    {imageTextUrl ? (
-                                        <>
-                                            <Button
-                                                type="submit"
-                                                loading={loading}
-                                                style={{ backgroundColor: 'green', width: '100%' }}
-                                            >
-                                                Salvar imagem
-                                            </Button>
-                                        </>
-                                    ) :
-                                        null
-                                    }
-                                    <EtiquetaImagem>
-                                        <IconSpanImage>
-                                            <MdFileUpload size={40} />
-                                        </IconSpanImage>
-                                        <InputLogoImagem type="file" accept="image/png, image/jpeg" onChange={handleFile} />
-                                        {imageTextUrl ? (
-                                            <PreviewImagem
-                                                src={imageTextUrl}
-                                            />
-                                        ) :
-                                            <>
-                                                <ImagemTextoInsti src={"http://localhost:3333/files/" + imageText} />
-                                                <TextLogo>Clique na seta e insira<br /> uma imagem</TextLogo>
-                                            </>
-                                        }
-                                    </EtiquetaImagem>
-                                </BlockImagem>
-                            </SectionDate>
-                        </GridDateForm>
                     </Card>
                 </Container>
             </Grid>
-
             {modalVisible && (
                 <ModalDeleteTextoInstitucional
                     isOpen={modalVisible}

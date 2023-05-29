@@ -19,7 +19,7 @@ import Select from "../../components/ui/Select";
 
 const NovoGrupoFiltroAtributo: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
     const [nameGroup, setNameGroup] = useState('');
     const [atributoName, setAtributoName] = useState('');
@@ -27,7 +27,7 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategoryOrItem] = useState();
 
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
 
     const [showAtributos, setShowAtributos] = useState(false);
 
@@ -76,7 +76,7 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
                 nameGroup: nameGroup,
                 slugCategory: slugCategory,
                 atributoName: atributoName,
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Grupo/Filtro cadastrado com sucesso');

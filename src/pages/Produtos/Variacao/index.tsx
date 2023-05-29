@@ -18,9 +18,9 @@ interface VariacaoRequest {
 const NovaVariacao = ({ product_id }: VariacaoRequest) => {
 
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
-    const [loja_id] = useState(user.loja_id);
+    const [store_id] = useState(admin.store_id);
     const [product_ids] = useState(product_id);
     const [nameVariacao, setNameVariacao] = useState('');
     const [descriptionVariacao1, setDescriptionVariacao1] = useState('');
@@ -51,7 +51,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                 larguraCm === '' ||
                 profundidadeCm === '' ||
                 alturaCm === '' ||
-                loja_id === '' ||
+                store_id === '' ||
                 product_ids === ''
             ) {
                 toast.error('Preencha todos os campos')
@@ -75,7 +75,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                 profundidadeCm: profundidadeCm,
                 alturaCm: alturaCm,
                 promocao: Number(promocao.replace(/[^\d]+/g, '')),
-                loja_id: loja_id,
+                store_id: store_id,
                 product_id: product_ids,
                 order: order,
                 posicao: posicao,

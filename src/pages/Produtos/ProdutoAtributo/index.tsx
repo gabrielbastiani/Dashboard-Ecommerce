@@ -34,13 +34,13 @@ const ProdutoAtributo: React.FC = () => {
     let { variacao_id, productId } = useParams();
     const navigate = useNavigate();
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
     const [nameVariacao, setNameVariacao] = useState("");
     const [atributo, setAtributo] = useState<any>([]);
     const [selectedAtributo, setSelectedAtributo] = useState();
     const [order, setOrder] = useState(Number);
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
     const [allRelationAtributos, setAllRelationAtributos] = useState<any[]>([]);
 
     const [atributoID, setAtributoID] = useState();
@@ -113,7 +113,7 @@ const ProdutoAtributo: React.FC = () => {
                 variacao_id: variacao_id,
                 atributo_id: selectedAtributo,
                 order: Number(order),
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Atributo cadastrado com sucesso!');

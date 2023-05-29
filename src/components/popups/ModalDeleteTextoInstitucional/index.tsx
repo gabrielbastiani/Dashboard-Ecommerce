@@ -31,31 +31,13 @@ export function ModalDeleteTextoInstitucional({ isOpen, onRequestClose, texto }:
         }
     };
 
-    async function handleDeleteTextoAndImages() {
-        try {
-            const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const textoinstitucional_id = texto.id;
-
-            await apiClient.delete(`/deleteAllImagesTextos?textoinstitucional_id=${textoinstitucional_id}`);
-
-        } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
-        }
-
-        setTimeout(() => {
-            handleDeleteTexto();
-        }, 2000);
-
-    }
-
     async function handleDeleteTexto() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const textoinstitucional_id = texto.id;
+            const institutionalText_id = texto.id;
 
-            await apiClient.delete(`/deleteTextoInstitucional?textoinstitucional_id=${textoinstitucional_id}`);
+            await apiClient.delete(`/deleteInstitutionalText?institutionalText_id=${institutionalText_id}`);
             toast.success(`Texto institucional deletado com sucesso.`);
 
             navigate('/textosInstitucionais');
@@ -88,12 +70,12 @@ export function ModalDeleteTextoInstitucional({ isOpen, onRequestClose, texto }:
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar esse texto institucional? Será deletada<br /> todas as imagens viculadas a esse texto também.</TextModal>
+                <TextModal>Deseja mesmo deletar esse texto institucional?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={handleDeleteTextoAndImages}
+                        onClick={handleDeleteTexto}
                     >
                         Deletar
                     </Button>

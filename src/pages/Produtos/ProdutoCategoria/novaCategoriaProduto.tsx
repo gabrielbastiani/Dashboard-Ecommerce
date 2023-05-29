@@ -19,9 +19,9 @@ import Voltar from "../../../components/Voltar";
 const NovaCategoriaProduto: React.FC = () => {
 
     let { product_id } = useParams();
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
-    const [loja_id] = useState(user.loja_id);
+    const [store_id] = useState(admin.store_id);
 
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState();
@@ -59,7 +59,7 @@ const NovaCategoriaProduto: React.FC = () => {
                 order: Number(order),
                 nivel: 0,
                 relationId: "",
-                loja_id: loja_id
+                store_id: store_id
             });
 
             toast.success('Categoria cadastrada com sucesso!');

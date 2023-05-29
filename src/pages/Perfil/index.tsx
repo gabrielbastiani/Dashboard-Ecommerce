@@ -19,12 +19,12 @@ import { toast } from "react-toastify";
 
 const Perfil: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
-    const [userNames, setUserNames] = useState(user.nameComplete);
+    const [userNames, setUserNames] = useState(admin.name);
     const [dataName, setDataName] = useState('');
 
-    const [emails, setEmails] = useState(user.email);
+    const [emails, setEmails] = useState(admin.email);
     const [dataEmail, setDataEmail] = useState('');
 
     const [showElement, setShowElement] = useState(false);
@@ -42,7 +42,7 @@ const Perfil: React.FC = () => {
                 toast.error('Não deixe o nome em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/nameUserUpdate?user_id=${user.id}`, { nameComplete: userNames || dataName });
+                await apiClient.put(`/nameUserUpdate?admin_id=${admin.id}`, { name: userNames || dataName });
                 toast.success('Nome do usuario atualizado com sucesso.');
                 refreshUserLoad();
             }
@@ -58,7 +58,7 @@ const Perfil: React.FC = () => {
                 toast.error('Não deixe email em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/emailUserUpdate?user_id=${user.id}`, { email: emails || dataEmail });
+                await apiClient.put(`/emailUserUpdate?admin_id=${admin.id}`, { email: emails || dataEmail });
                 toast.success('Email do usuario atualizado com sucesso.');
                 refreshUserLoad();
             }
@@ -70,19 +70,19 @@ const Perfil: React.FC = () => {
     useEffect(() => {
         async function refreshUser() {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get(`/listExactUser?user_id=${user.id}`)
-            setUserNames(response?.data?.nameComplete);
-            setDataName(response?.data?.nameComplete);
+            const response = await apiClient.get(`/listExactUser?admin_id=${admin.id}`)
+            setUserNames(response?.data?.name);
+            setDataName(response?.data?.name);
             setDataEmail(response?.data?.email);
         }
         refreshUser();
-    }, [user.id])
+    }, [admin.id])
 
     async function refreshUserLoad() {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get(`/listExactUser?user_id=${user.id}`)
-        setUserNames(response?.data?.nameComplete);
-        setDataName(response?.data?.nameComplete);
+        const response = await apiClient.get(`/listExactUser?admin_id=${admin.id}`)
+        setUserNames(response?.data?.name);
+        setDataName(response?.data?.name);
         setDataEmail(response?.data?.email);
     }
 
@@ -90,7 +90,7 @@ const Perfil: React.FC = () => {
         const apiClient = setupAPIClient();
         try {
             setLoading(true);
-            await apiClient.post('/recoverDashboard', { email: user.email });
+            await apiClient.post('/recoverDashboard', { email: admin.email });
             setLoading(false);
 
             showOrHide();
@@ -190,7 +190,7 @@ const Perfil: React.FC = () => {
                                             dado={dataName}
                                             type="text"
                                             /* @ts-ignore */
-                                            placeholder={user.nameComplete}
+                                            placeholder={admin.name}
                                             value={userNames}
                                             /* @ts-ignore */
                                             onChange={(e) => setUserNames(e.target.value)}
@@ -208,7 +208,7 @@ const Perfil: React.FC = () => {
                                             dado={dataEmail}
                                             type="text"
                                             /* @ts-ignore */
-                                            placeholder={user.email}
+                                            placeholder={admin.email}
                                             value={emails}
                                             /* @ts-ignore */
                                             onChange={(e) => setEmails(e.target.value)}

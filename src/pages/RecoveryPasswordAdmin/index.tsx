@@ -11,7 +11,7 @@ import { useTheme } from '../../contexts/theme';
 import { ContLogin, ContainerCenter, Formulario, LogImg, Recaptcha, TextLink } from '../LoginAdmin/styles';
 
 
-const RecoveryPassword: React.FC = () => {
+const RecoveryPasswordAdmin: React.FC = () => {
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ const RecoveryPassword: React.FC = () => {
             setLoading(true);
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/recover', {
+            await apiClient.post('/admin/recoverPasswordEmail', {
                 email: email
             });
 
@@ -122,4 +122,4 @@ const RecoveryPassword: React.FC = () => {
     )
 }
 
-export default RecoveryPassword;
+export default RecoveryPasswordAdmin;

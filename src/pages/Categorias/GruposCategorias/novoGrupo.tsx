@@ -19,7 +19,7 @@ import Select from "../../../components/ui/Select";
 
 const NovoGrupo: React.FC = () => {
 
-    const { user } = useContext(AuthContext);
+    const { admin } = useContext(AuthContext);
 
     const [nameGroup, setNameGroup] = useState('');
     const [selectedPosicao, setSelectedPosicao] = useState();
@@ -27,7 +27,7 @@ const NovoGrupo: React.FC = () => {
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategoryOrItem] = useState();
 
-    const [lojaID] = useState(user.loja_id);
+    const [lojaID] = useState(admin.store_id);
 
     const [showCategory, setShowCategory] = useState(false);
 
@@ -84,7 +84,7 @@ const NovoGrupo: React.FC = () => {
                 nivel: 0,
                 order: 0,
                 posicao: selectedPosicao,
-                loja_id: lojaID
+                store_id: lojaID
             });
 
             toast.success('Grupo cadastrado com sucesso');
