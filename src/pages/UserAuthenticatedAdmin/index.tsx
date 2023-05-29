@@ -16,7 +16,7 @@ const UserAuthenticatedAdmin: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
 
-            await apiClient.put(`/authenticated?admin_id=${authenticated}`);
+            await apiClient.put(`/admin/authenticatedEmailAdmin?admin_id=${authenticated}`);
 
             toast.success('Seu cadastro de administrador esta ativo para acessar o Dashboard.');
 

@@ -16,27 +16,35 @@ import { BlockDados } from "../../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../../components/TextoDados";
 import { InputUpdate } from "../../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
-import { EtiquetaTextImagem, FormUpdateImage, IconSpanTextImage, ImageTextPhoto, InputLogoTextImagem, PreviewTextImagem, TextPhoto } from "../../TextosInstitucionais/Texto/ImagemTexto/styles";
 import { MdFileUpload } from "react-icons/md";
 import SelectUpdate from "../../../../components/ui/SelectUpdate";
+import {
+    EtiquetaTextImagem,
+    FormUpdateImage,
+    IconSpanTextImage,
+    ImageTextPhoto,
+    InputLogoTextImagem,
+    PreviewTextImagem,
+    TextPhoto
+} from "./styles";
 
 
 export type ImagemDelete = {
-    imageloja_id: string;
+    imageStore_id: string;
 }
 
 const Imagem: React.FC = () => {
 
     const navigate = useNavigate();
-    let { imageloja_id } = useParams();
+    let { imageStore_id } = useParams();
 
     const [titleImage, setTitleImage] = useState('');
     const [imageTexto, setImageTexto] = useState(null);
     const [imageTextoUrl, setImageTextoUrl] = useState('');
     const [order, setOrder] = useState(Number);
-    const [disponibilidade, setDisponibilidade] = useState('');
-    const [posicao, setPosicao] = useState('');
-    const [imagemPosicaoSelected, setImagemPosicaoSelected] = useState();
+    const [status, setStatus] = useState('');
+    const [position, setPosition] = useState('');
+    const [imagePositionSelected, setImagePositionSelected] = useState();
 
     const [loading, setLoading] = useState(false);
 
@@ -48,20 +56,20 @@ const Imagem: React.FC = () => {
         async function loadImage() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listExactPhotoTextoInstitucional?imageloja_id=${imageloja_id}`);
+                const response = await apiClient.get(`/findUniqueImageStore?imageStore_id=${imageStore_id}`);
 
                 setTitleImage(response.data.titleImage || "");
                 setImageTexto(response.data.image || null);
                 setOrder(response.data.order);
-                setDisponibilidade(response.data.disponibilidade);
-                setPosicao(response.data.posicao || "");
+                setStatus(response.data.status);
+                setPosition(response.data.position || "");
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadImage();
-    }, [imageloja_id]);
+    }, [imageStore_id]);
 
     async function updateTitle() {
         try {
@@ -70,7 +78,7 @@ const Imagem: React.FC = () => {
                 toast.error('Não deixe o titulo da imagem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateTitleImageTextoInstitucional?imageloja_id=${imageloja_id}`, { titleImage: titleImage });
+                await apiClient.put(`/updateTitleImageStore?imageStore_id=${imageStore_id}`, { titleImage: titleImage });
                 toast.success('Titulo da imagem atualizado com sucesso.');
             }
         } catch (error) {
@@ -86,7 +94,7 @@ const Imagem: React.FC = () => {
                 toast.error('Não deixe a ordem da imagem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderImageTextoInstitucional?imageloja_id=${imageloja_id}`, { order: Number(order) });
+                await apiClient.put(`/updateOrderImageStore?imageStore_id=${imageStore_id}`, { order: Number(order) });
                 toast.success('Ordem da imagem atualizada com sucesso.');
             }
         } catch (error) {
@@ -129,7 +137,7 @@ const Imagem: React.FC = () => {
             setLoading(true);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageTextoInstitucional?imageloja_id=${imageloja_id}`, data);
+            await apiClient.put(`/updateImageStore?imageStore_id=${imageStore_id}`, data);
 
             toast.success('Image atualizada com sucesso');
 
@@ -146,17 +154,17 @@ const Imagem: React.FC = () => {
 
     }
 
-    async function updateDisponibilidade() {
+    async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateDisponibilidadePhotoTexto?imageloja_id=${imageloja_id}`);
+            await apiClient.put(`/updateStatusImageStore?imageStore_id=${imageStore_id}`);
 
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a disponibilidade da imagem.');
+            toast.error('Ops erro ao atualizar a status da imagem.');
         }
 
-        if (disponibilidade === "Indisponivel") {
+        if (status === "Indisponivel") {
             toast.success(`Essa imagem está disponivel para o texto agora.`);
             setTimeout(() => {
                 navigate(0);
@@ -164,7 +172,7 @@ const Imagem: React.FC = () => {
             }, 3000);
         }
 
-        if (disponibilidade === "Disponivel") {
+        if (status === "Disponivel") {
             toast.error(`Essa imagem NÃO está disponivel para o texto agora.`);
             setTimeout(() => {
                 navigate(0);
@@ -173,18 +181,18 @@ const Imagem: React.FC = () => {
         }
     }
 
-    function handleChangePosicao(e: any) {
-        setImagemPosicaoSelected(e.target.value)
+    function handleChangePosition(e: any) {
+        setImagePositionSelected(e.target.value)
     }
 
-    async function updatePosicao() {
+    async function updatePosition() {
         try {
-            if (imagemPosicaoSelected === "") {
+            if (imagePositionSelected === "") {
                 toast.error(`Selecione uma posição, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePosicaoImageTextoInstitucional?imageloja_id=${imageloja_id}`, { posicao: imagemPosicaoSelected });
+            await apiClient.put(`/updatePositionImageTextoInstitucional?imageStore_id=${imageStore_id}`, { position: imagePositionSelected });
             toast.success('Posição atualizada com sucesso.');
         } catch (error) {
             console.log(error);
@@ -199,11 +207,11 @@ const Imagem: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(imageloja_id: string) {
+    async function handleOpenModalDelete(imageStore_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/listExactPhotoTextoInstitucional', {
+        const responseDelete = await apiClient.get('/findUniqueImageStore', {
             params: {
-                imageloja_id: imageloja_id,
+                imageStore_id: imageStore_id,
             }
         });
         setModalItem(responseDelete.data || "");
@@ -233,7 +241,7 @@ const Imagem: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(imageloja_id)}
+                                onClick={() => handleOpenModalDelete(imageStore_id)}
                             >
                                 Remover
                             </Button>
@@ -280,10 +288,10 @@ const Imagem: React.FC = () => {
                                 chave={"Posição dessa imagem"}
                                 dados={
                                     <SelectUpdate
-                                        dado={posicao}
-                                        value={imagemPosicaoSelected}
+                                        dado={position}
+                                        value={imagePositionSelected}
                                         /* @ts-ignore */
-                                        onChange={handleChangePosicao}
+                                        onChange={handleChangePosition}
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
@@ -294,7 +302,7 @@ const Imagem: React.FC = () => {
                                                 { label: "Página Sobre", value: "Página Sobre" }
                                             ]
                                         }
-                                        handleSubmit={updatePosicao}
+                                        handleSubmit={updatePosition}
                                     />
                                 }
                             />
@@ -306,8 +314,8 @@ const Imagem: React.FC = () => {
                                 dados={
                                     <ButtonSelect
                                         /* @ts-ignore */
-                                        dado={disponibilidade}
-                                        handleSubmit={updateDisponibilidade}
+                                        dado={status}
+                                        handleSubmit={updateStatus}
                                     />
                                 }
                             />
@@ -346,7 +354,6 @@ const Imagem: React.FC = () => {
                     </Card>
                 </Container>
             </Grid>
-
             {modalVisible && (
                 <ModalDeleteImagem
                     isOpen={modalVisible}

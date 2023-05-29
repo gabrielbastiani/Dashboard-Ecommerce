@@ -49,8 +49,6 @@ const Produtos: React.FC = () => {
         }
     });
 
-
-
     useEffect(() => {
         async function allProducts() {
             try {
@@ -116,12 +114,23 @@ const Produtos: React.FC = () => {
         setSearch(filterProducts);
     }
 
+    console.log(search.map((item) => {
+        return(/* @ts-ignore */
+            item.relationproductatributos.map((atr) => {
+                return(/* @ts-ignore */
+                    atr.atributo.tipo
+                )
+            })
+        )
+    }))
+
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
             "Imagem": item.photoproducts[0] ? <ImgRedes src={"http://localhost:3333/files/" + item.photoproducts[0].photo} /> : "Sem imagem",
             "Produto": item.nameProduct,
             "Qtd. de Categorias": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem categoria",
+            /* "Atributos": */ 
             "Status": item.disponibilidade,
             "botaoDetalhes": `/produto/${item.slug}/${item.id}`
         });
@@ -196,7 +205,7 @@ const Produtos: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Produto", "Qtd. de Categorias", "Status"]}
+                                cabecalho={["Imagem", "Produto", "Qtd. de Categorias", "Atributos", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

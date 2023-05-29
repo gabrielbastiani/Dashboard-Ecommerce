@@ -19,10 +19,10 @@ const ImagensInstitucionais: React.FC = () => {
     const [search, setSearch] = useState<any[]>([]);
 
     useEffect(() => {
-        async function allImagensInstitucionais() {
+        async function allImageStore() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/allImages`);
+                const response = await apiClient.get(`/allImagesStore`);
 
                 setSearch(response.data || []);
 
@@ -30,7 +30,7 @@ const ImagensInstitucionais: React.FC = () => {
                 console.error(error);
             }
         }
-        allImagensInstitucionais();
+        allImageStore();
     }, []);
 
     const dados: any = [];
@@ -39,8 +39,8 @@ const ImagensInstitucionais: React.FC = () => {
             "Imagem": <ImgInstitucional src={"http://localhost:3333/files/" + item.image} alt={item.titleImage} />,
             "Titulo da Imagem": item.titleImage,
             "Ordem": String(item.order),
-            "Disponivel?": item.disponibilidade === "Disponivel" ? "SIM" : "NÃO",
-            "Posição no Site": item.posicao,
+            "Disponivel?": item.status === "Disponivel" ? "SIM" : "NÃO",
+            "Posição no Site": item.position,
             "botaoDetalhes": `/imagem/${item.id}`
         });
     });

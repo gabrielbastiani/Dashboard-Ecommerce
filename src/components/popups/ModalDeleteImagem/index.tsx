@@ -35,9 +35,9 @@ export function ModalDeleteImagem({ isOpen, onRequestClose, imagem }: ModalImage
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const imageloja_id = imagem.id;
+            const imageStore_id = imagem.id;
 
-            await apiClient.delete(`/deleteImageTextoInstitucional?imageloja_id=${imageloja_id}`);
+            await apiClient.delete(`/deleteImageStore?imageStore_id=${imageStore_id}`);
             toast.success(`Imagem deletada com sucesso.`);
 
             navigate(`/ImagensInstitucionais`);

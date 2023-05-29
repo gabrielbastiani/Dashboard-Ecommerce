@@ -24,13 +24,13 @@ const NovaImagem: React.FC = () => {
     const [images, setImages] = useState(null);
     const [imagesUrl, setImagesUrl] = useState('');
     const [order, setOrder] = useState(Number);
-    const [posicaoSelected, setPosicaoSelected] = useState();
+    const [positionSelected, setPositionSelected] = useState();
 
     const [loading, setLoading] = useState(false);
 
 
-    function handleChangePosicao(e: any) {
-        setPosicaoSelected(e.target.value);
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value);
     }
 
     function handleFile(e: ChangeEvent<HTMLInputElement>) {
@@ -51,7 +51,7 @@ const NovaImagem: React.FC = () => {
 
     }
 
-    async function handleImagen(event: FormEvent) {
+    async function handleRegisterImage(event: FormEvent) {
         event.preventDefault();
         const apiClient = setupAPIClient();
         try {
@@ -65,11 +65,11 @@ const NovaImagem: React.FC = () => {
             data.append('file', images);
             data.append('titleImage', titleImage);/* @ts-ignore */
             data.append('order', Number(order));/* @ts-ignore */
-            data.append('posicao', posicaoSelected);
+            data.append('position', positionSelected);
 
             setLoading(true);
 
-            await apiClient.post(`/createImageTextoInstitucional`, data);
+            await apiClient.post(`/createImageStore`, data);
 
             toast.success('Imagem cadastrada com sucesso.');
 
@@ -108,7 +108,7 @@ const NovaImagem: React.FC = () => {
                             </Button>
                         </BlockTop>
 
-                        <FormImagens id="form-imagem" onSubmit={handleImagen}>
+                        <FormImagens id="form-imagem" onSubmit={handleRegisterImage}>
                             <Block>
                                 <Etiqueta>Titulo da imagem:</Etiqueta>
                                 <InputPost
@@ -130,7 +130,7 @@ const NovaImagem: React.FC = () => {
                             <Block>
                                 <Etiqueta>Posição desse texto:</Etiqueta>
                                 <Select
-                                    value={posicaoSelected}
+                                    value={positionSelected}
                                     opcoes={
                                         [
                                             { label: "Selecionar...", value: "" },
@@ -141,7 +141,7 @@ const NovaImagem: React.FC = () => {
                                             { label: "Página Sobre", value: "Página Sobre" }
                                         ]
                                     }/* @ts-ignore */
-                                    onChange={handleChangePosicao}
+                                    onChange={handleChangePosition}
                                 />
                             </Block>
 
