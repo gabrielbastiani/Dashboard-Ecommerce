@@ -25,9 +25,9 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
     const [nameGroup, setNameGroup] = useState('');
 
     const [categories, setCategories] = useState<any[]>([]);
-    const [slugCategory, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategory] = useState();
 
-    const [lojaID] = useState(admin.store_id);
+    const [storeID] = useState(admin.store_id);
 
     const [showCategories, setShowCategories] = useState(false);
 
@@ -38,7 +38,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
     const [findFirstGroup, setFindFirstGroup] = useState("");
 
     function handleChangeSlug(e: any) {
-        setSlugCategoryOrItem(e.target.value);
+        setSlugCategory(e.target.value);
     }
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
             await apiClient.post('/createGroupFilter', {
                 nameGroup: nameGroup,
                 slugCategory: slugCategory,
-                store_id: lojaID
+                store_id: storeID
             });
 
             toast.success('Grupo/Filtro cadastrado com sucesso');

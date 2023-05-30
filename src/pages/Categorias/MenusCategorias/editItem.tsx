@@ -2,9 +2,9 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
-import { ModalDeleteIDSCategoryGroup } from "../../../components/popups/ModalDeleteIDSCategoryGroup";
-import { ModalDeleteCategoryGroup } from "../../../components/popups/ModalDeleteCategoryGroup";
-import { ModalDeleteImagemCategoryGroup } from "../../../components/popups/ModalDeleteImagemCategoryGroup";
+import { ModalDeleteIDSCategoryMenu } from "../../../components/popups/ModalDeleteIDSCategoryMenu";
+import { ModalDeleteCategoryMenu } from "../../../components/popups/ModalDeleteCategoryMenu";
+import { ModalDeleteImagemCategoryMenu } from "../../../components/popups/ModalDeleteImagemCategoryMenu";
 import Modal from 'react-modal';
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -31,26 +31,26 @@ export type DeleteImagemItem = {
 }
 
 export type DeleteCategoriesGroups = {
-    groupCategoy_id: string;
+    menuCategory_id: string;
     iDImage: string;
 }
 
 export type DeleteItens = {
-    groupCategoy_id: string;
+    menuCategory_id: string;
 }
 
 const EditItem: React.FC = () => {
 
-    let { groupCategoy_id } = useParams();
+    let { menuCategory_id } = useParams();
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState("");
-    const [categoryName, setCategoryName] = useState("");
+    const [name, setName] = useState("");
     const [order, setOrder] = useState(Number);
     const [status, setStatus] = useState("");
-    const [itemName, setItemName] = useState("");
+    const [categoryName, setCategoryName] = useState("");
 
     const valueArray = categorySelected.split(",");
 
@@ -81,37 +81,37 @@ const EditItem: React.FC = () => {
         async function loadItemDate() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+                const { data } = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
 
-                setItemName(data.itemName || "");
+                setCategoryName(data.categoryName || "");
                 setOrder(data.order);
                 setStatus(data.status);
-                setImageCategories(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
-                setCategoryImageUpload(data.imagegroupcategories ? data.imagegroupcategories[0].imageGroup : data.imagegroupcategories.imageGroup);
+                setImageCategories(data.imagemenucategories ? data.imagemenucategories[0].image : data.imagemenucategories.image);
+                setCategoryImageUpload(data.imagemenucategories ? data.imagemenucategories[0].image : data.imagemenucategories.image);
                 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadItemDate();
-    }, [groupCategoy_id]);
+    }, [menuCategory_id]);
 
     useEffect(() => {
         async function loadCategory() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+                const { data } = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
 
-                setCategoryName(data.category.categoryName);
+                setName(data.category.name);
                 setNameGroup(data.nameGroup || "");
-                setIDImage(data.imagegroupcategories ? data.imagegroupcategories[0].id : data.imagegroupcategories.id);
+                setIDImage(data.imagemenucategories ? data.imagemenucategories[0].id : data.imagemenucategories.id);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadCategory();
-    }, [groupCategoy_id]);
+    }, [menuCategory_id]);
 
     useEffect(() => {
         async function loadCategorys() {
@@ -133,8 +133,8 @@ const EditItem: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateItemName?groupCategoy_id=${groupCategoy_id}`, { itemName: valueArray[1] });
-            await apiClient.put(`/updateCategoryGroup?groupCategoy_id=${groupCategoy_id}`, { category_id: valueArray[0] });
+            await apiClient.put(`/updateItemNameCategory?menuCategory_id=${menuCategory_id}`, { categoryName: valueArray[1] });
+            await apiClient.put(`/updateNameCategory?menuCategory_id=${menuCategory_id}`, { name: valueArray[1] });
 
             toast.success('Categoria atualizada com sucesso.');
 
@@ -155,38 +155,38 @@ const EditItem: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderItemGroup?groupCategoy_id=${groupCategoy_id}`, { order: Number(order) });
-                toast.success('Ordem da categoria no grupo atualizada com sucesso.');
+                await apiClient.put(`/updateOrderCategoryMenu?menuCategory_id=${menuCategory_id}`, { order: Number(order) });
+                toast.success('Ordem da categoria no menu atualizada com sucesso.');
                 setTimeout(() => {
                     navigate(0);
                 }, 3000);
             }
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a ordem da categoria no grupo.');
+            toast.error('Ops erro ao atualizar a ordem da categoria no menu.');
         }
     }
 
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusGroup?groupCategoy_id=${groupCategoy_id}`);
+            await apiClient.put(`/updateStatusMenu?menuCategory_id=${menuCategory_id}`);
 
             setTimeout(() => {
                 navigate(0);
             }, 3000);
 
         } catch (error) {
-            toast.error('Ops erro ao atualizar a disponibilidade do item categoria nesse grupo.');
+            toast.error('Ops erro ao atualizar a disponibilidade do item categoria nesse menu.');
         }
 
-        if (status === "Inativo") {
-            toast.success(`O item categoria se encontra Disponivel no grupo.`);
+        if (status === "Indisponivel") {
+            toast.success(`O item categoria se encontra Disponivel no menu.`);
             return;
         }
 
-        if (status === "Ativo") {
-            toast.error(`O item categoria se encontra Indisponivel no grupo.`);
+        if (status === "Disponivel") {
+            toast.error(`O item categoria se encontra Indisponivel no menu.`);
             return;
         }
     }
@@ -197,10 +197,10 @@ const EditItem: React.FC = () => {
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', categoryImage);/* @ts-ignore */
-            data.append('groupCategoy_id', groupCategoy_id);
+            data.append('menuCategory_id', menuCategory_id);
 
             const apiClient = setupAPIClient();
-            await apiClient.post(`/createImageGroup`, data);
+            await apiClient.post(`/createImageMenuCategory`, data);
 
             toast.success('Imagem cadastrada com sucesso.');
 
@@ -240,7 +240,7 @@ const EditItem: React.FC = () => {
             data.append('file', categoryImageUpload);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageGroup?imageGroupCategory_id=${iDImage}`, data);
+            await apiClient.put(`/updateImageMenuCategory?imageMenuCategory_id=${iDImage}`, data);
 
             toast.success('Imagem atualizada com sucesso.');
 
@@ -276,15 +276,15 @@ const EditItem: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(groupCategoy_id: string) {
+    async function handleOpenModalDelete(menuCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueGroup', {
+        const response = await apiClient.get('/findUniqueMenu', {
             params: {
-                groupCategoy_id: groupCategoy_id,
+                menuCategory_id: menuCategory_id,
             }
         });
         setModalItem(response.data || "");
-        setIDImage(response.data.imagegroupcategories[0].id || "")
+        setIDImage(response.data.imagemenucategories[0].id || "");
         setModalVisible(true);
     }
 
@@ -292,11 +292,11 @@ const EditItem: React.FC = () => {
         setModalVisibleItens(false);
     }
 
-    async function handleOpenModalDeleteItens(groupCategoy_id: string) {
+    async function handleOpenModalDeleteItens(menuCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueGroup', {
+        const response = await apiClient.get('/findUniqueMenu', {
             params: {
-                groupCategoy_id: groupCategoy_id,
+                menuCategory_id: menuCategory_id,
             }
         });
         setModalItens(response.data || "");
@@ -307,14 +307,14 @@ const EditItem: React.FC = () => {
         setModalVisibleImagem(false);
     }
 
-    async function handleOpenModalDeleteImagem(groupCategoy_id: string) {
+    async function handleOpenModalDeleteImagem(menuCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueGroup', {
+        const response = await apiClient.get('/findUniqueMenu', {
             params: {
-                groupCategoy_id: groupCategoy_id,
+                menuCategory_id: menuCategory_id,
             }
         });
-        setModalItemImagem(response.data.imagegroupcategories[0].id || "");
+        setModalItemImagem(response.data.imagemenucategories[0].id || "");
         setModalVisibleImagem(true);
     }
 
@@ -339,20 +339,20 @@ const EditItem: React.FC = () => {
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo={`Editar item - ${itemName}`}
+                                titulo={`Editar item - ${categoryName}`}
                             />
 
                             {imageCategories ? (
                                 <Button
                                     style={{ backgroundColor: 'red' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDelete(groupCategoy_id)}
+                                    onClick={() => handleOpenModalDelete(menuCategory_id)}
                                 >
                                     Deletar item
                                 </Button>
                             ) :
                                 <Button
                                     style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDeleteItens(groupCategoy_id)}
+                                    onClick={() => handleOpenModalDeleteItens(menuCategory_id)}
                                 >
                                     Deletar item
                                 </Button>
@@ -367,13 +367,13 @@ const EditItem: React.FC = () => {
                                         chave={"Categoria"}
                                         dados={
                                             <SelectUpdate
-                                                dado={categoryName}
+                                                dado={name}
                                                 handleSubmit={updateCategory}
                                                 value={categorySelected}
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: [item.id, item.categoryName] }))
+                                                        ...(categories || []).map((item) => ({ label: item.name, value: [item.id, item.name] }))
                                                     ]
                                                 }/* @ts-ignore */
                                                 onChange={handleChangeCategory}
@@ -416,7 +416,7 @@ const EditItem: React.FC = () => {
                                 {imageCategories ? (
                                     <Button
                                         /* @ts-ignore */
-                                        onClick={() => handleOpenModalDeleteImagem(groupCategoy_id)}
+                                        onClick={() => handleOpenModalDeleteImagem(menuCategory_id)}
                                     >
                                         Deletar imagem
                                     </Button>
@@ -501,7 +501,7 @@ const EditItem: React.FC = () => {
                 </Container>
             </Grid >
             {modalVisible && (
-                <ModalDeleteIDSCategoryGroup
+                <ModalDeleteIDSCategoryMenu
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
@@ -512,7 +512,7 @@ const EditItem: React.FC = () => {
             )}
 
             {modalVisibleItens && (
-                <ModalDeleteCategoryGroup
+                <ModalDeleteCategoryMenu
                     isOpen={modalVisibleItens}
                     onRequestClose={handleCloseModalDeleteItens}
                     /* @ts-ignore */
@@ -521,7 +521,7 @@ const EditItem: React.FC = () => {
             )}
 
             {modalVisibleImagem && (
-                <ModalDeleteImagemCategoryGroup
+                <ModalDeleteImagemCategoryMenu
                     isOpen={modalVisibleImagem}
                     onRequestClose={handleCloseModalDeleteImagem}
                     /* @ts-ignore */

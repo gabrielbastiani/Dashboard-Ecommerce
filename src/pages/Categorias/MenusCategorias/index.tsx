@@ -4,7 +4,19 @@ import Select from "../../../components/ui/Select";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { AddButton, ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../styles";
+import {
+    AddButton,
+    ButtonPage,
+    Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    SpanText,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
 import Pesquisa from "../../../components/Pesquisa";
@@ -16,7 +28,7 @@ import { Button } from "../../../components/ui/Button";
 
 
 
-const GruposCategorias: React.FC = () => {
+const MenusCategorias: React.FC = () => {
 
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
@@ -28,10 +40,10 @@ const GruposCategorias: React.FC = () => {
 
 
     useEffect(() => {
-        async function allGroups() {
+        async function allMenus() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageGroups?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageMenu?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -42,14 +54,14 @@ const GruposCategorias: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.gruops || []);
-                setInitialFilter(data.gruops);
+                setSearch(data.menus || []);
+                setInitialFilter(data.menus);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
-        allGroups();
+        allMenus();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -66,18 +78,18 @@ const GruposCategorias: React.FC = () => {
             return;
         }
 
-        const filterGroups = search.filter((filt) => filt.nameGroup.toLowerCase().includes(target.value));
-        setSearch(filterGroups);
+        const filterMenus = search.filter((filt) => filt.nameGroup.toLowerCase().includes(target.value));
+        setSearch(filterMenus);
     }
 
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Nome do Grupo": item.nameGroup,
-            "Posição": item.posicao,
+            "Nome do Menu": item.nameGroup,
+            "Posição": item.position,
             "Ativo?": item.status,
-            "Editar Grupo": <Link to={`/grupo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
-            "botaoDetalhes": `/grupo/${item.id}`
+            "Editar Menu": <Link to={`/menu/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
+            "botaoDetalhes": `/menu/${item.id}`
         });
     });
 
@@ -98,7 +110,7 @@ const GruposCategorias: React.FC = () => {
                         null
                     ) :
                         <Pesquisa
-                            placeholder={"Pesquise aqui pelo nome do grupo..."}
+                            placeholder={"Pesquise aqui pelo nome do menu..."}
                             /* @ts-ignore */
                             onChange={handleChange}
                         />
@@ -106,15 +118,15 @@ const GruposCategorias: React.FC = () => {
 
                     <AddButton>
                         <AiOutlinePlusCircle />
-                        <Link to="/grupo/novo" >
-                            <SpanText>Novo Grupo</SpanText>
+                        <Link to="/menu/novo" >
+                            <SpanText>Novo Menu</SpanText>
                         </Link>
                     </AddButton>
 
                     {search.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há grupos de categorias/itens cadastrados na loja ainda..."
+                                texto="Não há menus de categorias cadastrados na loja ainda..."
                             />
                         </>
                     ) :
@@ -125,21 +137,21 @@ const GruposCategorias: React.FC = () => {
                                 /* @ts-ignore */
                                 onChange={limits}
                                 opcoes={[
-                                    { label: "Todos grupos", value: "999999" },
+                                    { label: "Todos menus", value: "999999" },
                                     { label: "4", value: "4" },
                                     { label: "8", value: "8" }
                                 ]}
                             />
 
                             <TabelaSimples
-                                cabecalho={["Nome do Grupo", "Posição", "Ativo?", "Editar Grupo"]}
+                                cabecalho={["Nome do Menu", "Posição", "Ativo?", "Editar Menu"]}
                                 dados={dados}
-                                textbutton={"Ver itens do grupo"}
+                                textbutton="Ver"
                             />
 
                             <ContainerPagination>
                                 <TotalBoxItems key={total}>
-                                    <TextTotal>Total de grupos: {total}</TextTotal>
+                                    <TextTotal>Total de menus: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
                                     {currentPage > 1 && (
@@ -177,4 +189,4 @@ const GruposCategorias: React.FC = () => {
     )
 }
 
-export default GruposCategorias;
+export default MenusCategorias;

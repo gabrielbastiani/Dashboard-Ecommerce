@@ -33,7 +33,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
     const [status, setStatus] = useState("");
 
     const [categories, setCategories] = useState<any[]>([]);
-    const [slugCategory, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategory] = useState();
 
     const [allAtributos, setAllatributos] = useState<any[]>([]);
 
@@ -41,7 +41,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     function handleChangeSlug(e: any) {
-        setSlugCategoryOrItem(e.target.value);
+        setSlugCategory(e.target.value);
     }
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
 
                 setNameGroup(response.data.nameGroup || "");
                 setAtributoName(response.data.atributoName || "");
-                setSlugCategoryOrItem(response.data.slugCategory || "");
+                setSlugCategory(response.data.slugCategory || "");
                 setStatus(response.data.status);
 
             } catch (error) {/* @ts-ignore */

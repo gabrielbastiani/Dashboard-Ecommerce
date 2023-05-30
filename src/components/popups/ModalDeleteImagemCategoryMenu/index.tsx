@@ -5,17 +5,16 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteCategoriesGroups } from '../../../pages/Categorias/GruposCategorias/editItem';
+import { DeleteImagemItem } from '../../../pages/Categorias/MenusCategorias/editItem';
 
 
-interface DeleteRelationsCategorys {
+interface DeleteItemImagem {
     isOpen: boolean;
     onRequestClose: () => void;
-    relationIDS: DeleteCategoriesGroups;
-    idGroupImage: DeleteCategoriesGroups;
+    idImage: DeleteImagemItem;
 }
 
-export function ModalDeleteIDSCategoryGroup({ isOpen, onRequestClose, relationIDS, idGroupImage }: DeleteRelationsCategorys) {
+export function ModalDeleteImagemCategoryMenu({ isOpen, onRequestClose, idImage }: DeleteItemImagem) {
 
     const navigate = useNavigate();
 
@@ -32,27 +31,23 @@ export function ModalDeleteIDSCategoryGroup({ isOpen, onRequestClose, relationID
         }
     };
 
-    async function handleDeleteItemsGroupsAndImage() {
+    async function handleDeleteImagemMenu() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const groupCategoy_id = relationIDS.id;
-            await apiClient.delete(`/deleteImageGroup?imageGroupCategory_id=${idGroupImage}`);
-            await apiClient.delete(`/deleteCategoriesGroups?groupCategoy_id=${groupCategoy_id}`);
+            await apiClient.delete(`/deleteImageMenuCategory?imageMenuCategory_id=${idImage}`);
 
-            toast.success(`Categoria item do grupo deletada com sucesso.`);
+            toast.success(`imagem deletada da categoria do menu deletada com sucesso.`);
 
             onRequestClose();
 
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
         } catch (error) {
-            /* @ts-ignore */
-            toast.error(`${error.response.data.error}`);
             /* @ts-ignore */
             console.log(error.response.data);
         }
-        setTimeout(() => {
-            navigate(-1);
-        }, 3000);
     }
 
 
@@ -72,12 +67,12 @@ export function ModalDeleteIDSCategoryGroup({ isOpen, onRequestClose, relationID
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar categoria/item desse grupo?</TextModal>
+                <TextModal>Deseja mesmo deletar a imagem dessa categoria desse menu?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={handleDeleteItemsGroupsAndImage}
+                        onClick={handleDeleteImagemMenu}
                     >
                         Deletar
                     </Button>

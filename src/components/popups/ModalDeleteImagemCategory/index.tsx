@@ -4,17 +4,17 @@ import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { ContainerContent, ContainerButton, TextModal, ButtonClose } from './styles';
-import { DeleteGroups } from '../../../pages/Categorias/GruposCategorias/editGroup';
+import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
+import { DeleteCategoryImage } from '../../../pages/Categorias/Categoria';
 
 
-interface DeleteGroupsID {
+interface DeleteItemImagem {
     isOpen: boolean;
     onRequestClose: () => void;
-    groupId: DeleteGroups;
+    idImage: DeleteCategoryImage;
 }
 
-export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGroupsID) {
+export function ModalDeleteImagemCategory({ isOpen, onRequestClose, idImage }: DeleteItemImagem) {
 
     const navigate = useNavigate();
 
@@ -31,28 +31,23 @@ export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGrou
         }
     };
 
-    async function handleDeleteGroup() {
+    async function handleDeleteImageCategory() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const groupCategoy_id = groupId.id;
+            await apiClient.delete(`/deleteImageCategory?imageCategory_id=${idImage}`);
 
-            await apiClient.delete(`/deleteGroups?groupCategoy_id=${groupCategoy_id}`);
-            toast.success(`Grupo deletado com sucesso.`);
+            toast.success(`imagem da categoria deletada com sucesso.`);
 
             onRequestClose();
 
             setTimeout(() => {
-                navigate('/groups');
+                navigate(0);
             }, 3000);
 
         } catch (error) {
             /* @ts-ignore */
-            toast.error(`${error.response.data.error}`);
-            /* @ts-ignore */
             console.log(error.response.data);
         }
-
     }
 
 
@@ -62,7 +57,6 @@ export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGrou
             onRequestClose={onRequestClose}
             style={customStyles}
         >
-
             <ButtonClose
                 type='button'
                 onClick={onRequestClose}
@@ -73,12 +67,12 @@ export function ModalDeleteGroup({ isOpen, onRequestClose, groupId }: DeleteGrou
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar esse grupo?</TextModal>
+                <TextModal>Deseja mesmo deletar a imagem dessa categoria?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteGroup()}
+                        onClick={handleDeleteImageCategory}
                     >
                         Deletar
                     </Button>

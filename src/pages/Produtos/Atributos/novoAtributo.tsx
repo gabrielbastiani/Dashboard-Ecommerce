@@ -22,7 +22,7 @@ const NovoAtributo: React.FC = () => {
 
     const [tipo, setTipo] = useState('');
     const [valor, setValor] = useState('');
-    const [lojaID] = useState(admin.store_id);
+    const [storeID] = useState(admin.store_id);
 
     const [atributo, setAtributo] = useState([]);
     const [selectedAtributo, setSelectedAtributo] = useState();
@@ -51,7 +51,7 @@ const NovoAtributo: React.FC = () => {
                 return
             }
 
-            if (lojaID === null) {
+            if (storeID === null) {
                 toast.error('Cadastre os dados da sua loja antes de cadastrar um atributo!');
                 return;
             }
@@ -60,7 +60,7 @@ const NovoAtributo: React.FC = () => {
             await apiClient.post('/createAtributo', {
                 tipo: tipo || selectedAtributo,
                 valor: valor,
-                store_id: lojaID
+                store_id: storeID
             });
 
             toast.success('Atributo cadastrado com sucesso');

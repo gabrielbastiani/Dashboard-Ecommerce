@@ -22,22 +22,22 @@ import { TextoDados } from "../../../components/TextoDados";
 import { Avisos } from "../../../components/Avisos";
 
 
-const CategoriasGrupo: React.FC = () => {
+const CategoriasMenu: React.FC = () => {
 
-    let { groupCategoy_id } = useParams();
+    let { menuCategory_id } = useParams();
     const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [store_id] = useState(admin.store_id);
 
     const [nameGroup, setNameGroup] = useState("");
-    const [posicao, setPosicao] = useState("");
+    const [position, setPosition] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
     const [categorySelected, setCategorySelected] = useState("");
     const [order, setOrder] = useState(Number);
-    const [nameItem, setNameItem] = useState("");
+    const [categoryName, setCategoryName] = useState("");
 
-    const [loadIDGroup, setLoadIDGroup] = useState<any[]>([]);
+    const [loadIDMenu, setloadIDMenu] = useState<any[]>([]);
 
     const valueArray = categorySelected.split(",");
 
@@ -50,18 +50,18 @@ const CategoriasGrupo: React.FC = () => {
         async function findGroupDate() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+                const response = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setNameItem(response.data.itemName || "");
-                setPosicao(response.data.posicao || "");
+                setCategoryName(response.data.categoryName || "");
+                setPosition(response.data.position || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
         findGroupDate();
-    }, [groupCategoy_id]);
+    }, [menuCategory_id]);
 
     useEffect(() => {
         async function loadCategorys() {
@@ -76,8 +76,6 @@ const CategoriasGrupo: React.FC = () => {
         loadCategorys();
     }, []);
 
-    console.log(categorySelected)
-
     async function handleGroupCategories() {
         const apiClient = setupAPIClient();
         try {
@@ -85,44 +83,44 @@ const CategoriasGrupo: React.FC = () => {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
-            await apiClient.post('/group', {
+            await apiClient.post('/createMenuCategory', {
                 nameGroup: nameGroup,
-                itemName: valueArray[1],
-                category_id: valueArray[0],
-                groupId: groupCategoy_id,
-                posicao: posicao,
+                categoryName: valueArray[1],
+                name: valueArray[1],
+                parentId: menuCategory_id,
+                position: position,
                 order: Number(order),
                 nivel: 1,
                 store_id: store_id
             });
 
-            toast.success('Item de categoria cadastrada com sucesso no grupo!');
+            toast.success('Item de categoria cadastrada com sucesso no menu!');
 
             setTimeout(() => {
                 navigate(0);
             }, 3000);
 
         } catch (error) {
-            toast.error('Erro ao cadastrar o item categoria no grupo!!!');
+            toast.error('Erro ao cadastrar o item categoria no menu!!!');
             /* @ts-ignore */
             console.log(error.response.data);
         }
     }
 
     useEffect(() => {
-        async function findLoadIDGroup() {
+        async function findLoadIDMenu() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findGroupID?groupId=${groupCategoy_id}`);
+                const response = await apiClient.get(`/findMenuID?parentId=${menuCategory_id}`);
 
-                setLoadIDGroup(response.data || []);
+                setloadIDMenu(response.data || []);
 
             } catch (error) {
                 console.error(error);
             }
         }
-        findLoadIDGroup();
-    }, [groupCategoy_id]);
+        findLoadIDMenu();
+    }, [menuCategory_id]);
 
 
 
@@ -137,15 +135,15 @@ const CategoriasGrupo: React.FC = () => {
                         <VoltarNavagation />
                         <BlockTop>
 
-                            {nameItem ? (
+                            {categoryName ? (
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Insira novas categorias em = ${nameItem}`}
+                                    titulo={`Insira novas categorias em = ${categoryName}`}
                                 />
                             ) :
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Escolha uma categoria para o grupo = ${nameGroup}`}
+                                    titulo={`Escolha uma categoria para o menu = ${nameGroup}`}
                                 />
                             }
 
@@ -159,7 +157,7 @@ const CategoriasGrupo: React.FC = () => {
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: [item.id, item.categoryName] }))
+                                    ...(categories || []).map((item) => ({ label: item.name, value: [item.id, item.name] }))
                                 ]
                             }
                         />
@@ -177,11 +175,11 @@ const CategoriasGrupo: React.FC = () => {
                         <Button
                             onClick={handleGroupCategories}
                         >
-                            Cadastrar categoria/item
+                            Cadastrar categoria
                         </Button>
                         <br />
                         <br />
-                        {loadIDGroup.length < 1 ? (
+                        {loadIDMenu.length < 1 ? (
                             <>
                                 <Avisos
                                     texto="Não há categorias cadastrados nesse menu ainda..."
@@ -189,21 +187,21 @@ const CategoriasGrupo: React.FC = () => {
                             </>
                         ) :
                             <>
-                                {loadIDGroup.map((item) => {
+                                {loadIDMenu.map((item) => {
                                     return (
                                         <>
                                             <Card>
                                                 <Titulos
                                                     tipo="h3"
-                                                    titulo={item.itemName}
+                                                    titulo={item.categoryName}
                                                 />
 
                                                 <GridDate key={item.id}>
 
                                                     <SectionDate>
-                                                        {item.imagegroupcategories[0] ? (
+                                                        {item.imagemenucategories[0] ? (
                                                             <ImagensCategorys
-                                                                src={"http://localhost:3333/files/" + item.imagegroupcategories[0].imageGroup}
+                                                                src={"http://localhost:3333/files/" + item.imagemenucategories[0].image}
                                                                 width={170}
                                                                 height={80}
                                                             />
@@ -221,19 +219,10 @@ const CategoriasGrupo: React.FC = () => {
                                                             style={{ backgroundColor: 'green' }}
                                                         >
                                                             <AiOutlinePlusCircle />
-                                                            <Link to={`/grupo/${item.id}`} >
+                                                            <Link to={`/menu/${item.id}`} >
                                                                 <TextButton>Item</TextButton>
                                                             </Link>
                                                         </Button>
-                                                    </SectionDate>
-
-                                                    <SectionDate style={{ width: '780px' }} >
-                                                        <BlockDados>
-                                                            <TextoDados
-                                                                chave={"Categoria"}
-                                                                dados={item.category.categoryName}
-                                                            />
-                                                        </BlockDados>
                                                     </SectionDate>
 
                                                     <SectionDate>
@@ -258,7 +247,7 @@ const CategoriasGrupo: React.FC = () => {
                                                         <Button
                                                             style={{ backgroundColor: '#FB451E', padding: '5px' }}
                                                         >
-                                                            <Link to={`/grupo/item/edit/${item.id}`}
+                                                            <Link to={`/menu/categoriaMenu/edit/${item.id}`}
                                                             >
                                                                 <TextButton>Editar item</TextButton>
                                                             </Link>
@@ -278,4 +267,4 @@ const CategoriasGrupo: React.FC = () => {
     )
 }
 
-export default CategoriasGrupo;
+export default CategoriasMenu;

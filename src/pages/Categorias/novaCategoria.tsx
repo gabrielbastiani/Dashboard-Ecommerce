@@ -17,6 +17,7 @@ import Voltar from '../../components/Voltar';
 import { InputPost } from '../../components/ui/InputPost';
 import { Card } from '../../components/Content/styles';
 import { useNavigate } from 'react-router-dom';
+import { TextArea } from '../../components/ui/Input';
 
 
 const NovaCategoria: React.FC = () => {
@@ -24,30 +25,33 @@ const NovaCategoria: React.FC = () => {
     const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [categoryName, setCategoryName] = useState('');
-    const [lojaID] = useState(admin.store_id);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [storeID] = useState(admin.store_id);
 
     async function handleRegisterCategory() {
         try {
-            if (categoryName === '') {
+            if (name === '') {
                 toast.error('Não deixe o nome em branco!!!')
                 return
             }
 
-            if (lojaID === null) {
+            if (storeID === null) {
                 toast.error('Cadastre os dados da sua loja antes de cadastrar uma categoria!');
                 return;
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/category', {
-                categoryName: categoryName,
-                store_id: lojaID
+            await apiClient.post('/createCategory', {
+                name: name,
+                description: description,
+                nivel: 0,
+                store_id: storeID
             });
 
             toast.success('Categoria cadastrada com sucesso');
 
-            setCategoryName("");
+            setName("");
 
             setTimeout(() => {
                 navigate('/categorias');
@@ -88,8 +92,18 @@ const NovaCategoria: React.FC = () => {
                         <InputPost
                             type="text"
                             placeholder="Digite o nome da categoria"
-                            value={categoryName}
-                            onChange={(e) => setCategoryName(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Block>
+
+                    <Block>
+                        <Etiqueta>Descrição da categoria:</Etiqueta>
+                        <TextArea
+                            style={{ height: '250px', padding: '15px' }}
+                            placeholder="Digite aqui..."
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                     </Block>
                 </Card>

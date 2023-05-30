@@ -5,16 +5,16 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteImagemItem } from '../../../pages/Categorias/GruposCategorias/editItem';
+import { DeleteItens } from '../../../pages/Categorias/MenusCategorias/editItem';
 
 
-interface DeleteItemImagem {
+interface DeleteItenss {
     isOpen: boolean;
     onRequestClose: () => void;
-    idImage: DeleteImagemItem;
+    itensIds: DeleteItens;
 }
 
-export function ModalDeleteImagemCategoryGroup({ isOpen, onRequestClose, idImage }: DeleteItemImagem) {
+export function ModalDeleteCategoryMenu({ isOpen, onRequestClose, itensIds }: DeleteItenss) {
 
     const navigate = useNavigate();
 
@@ -31,23 +31,26 @@ export function ModalDeleteImagemCategoryGroup({ isOpen, onRequestClose, idImage
         }
     };
 
-    async function handleDeleteImagemGroup() {
+    async function handleDeleteItens() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.delete(`/deleteImageGroup?imageGroupCategory_id=${idImage}`);
+            /* @ts-ignore */
+            const menuCategory_id = itensIds.id;
+            await apiClient.delete(`/deleteCategoryMenu?menuCategory_id=${menuCategory_id}`);
 
-            toast.success(`imagem deletada da categoria/item do grupo deletada com sucesso.`);
+            toast.success(`Categoria item do menu deletada com sucesso.`);
 
             onRequestClose();
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-
         } catch (error) {
+            /* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
             /* @ts-ignore */
             console.log(error.response.data);
         }
+        setTimeout(() => {
+            navigate(-1);
+        }, 3000);
     }
 
 
@@ -67,12 +70,12 @@ export function ModalDeleteImagemCategoryGroup({ isOpen, onRequestClose, idImage
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar a imagem dessa categoria/item desse grupo?</TextModal>
+                <TextModal>Deseja mesmo deletar a categoria desse menu?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={handleDeleteImagemGroup}
+                        onClick={handleDeleteItens}
                     >
                         Deletar
                     </Button>

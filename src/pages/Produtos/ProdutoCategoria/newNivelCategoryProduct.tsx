@@ -32,7 +32,7 @@ export type DeleteIDSRelations = {
 
 const NewNivelCategoryProduct: React.FC = () => {
 
-    let { product_id, IDRelation } = useParams();
+    let { product_id, parentId } = useParams();
     const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -46,7 +46,7 @@ const NewNivelCategoryProduct: React.FC = () => {
     const [allRelationIDOrderAsc, setAllRelationIDOrderAsc] = useState<any[]>([]);
 
     const [modalItem, setModalItem] = useState('');
-    const [iDsPai] = useState(IDRelation);
+    const [iDsPai] = useState(parentId);
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -80,7 +80,7 @@ const NewNivelCategoryProduct: React.FC = () => {
                 posicao: "",
                 order: Number(order),
                 nivel: 1,
-                relationId: IDRelation,
+                relationId: parentId,
                 store_id: store_id
             });
 
@@ -100,7 +100,7 @@ const NewNivelCategoryProduct: React.FC = () => {
         async function findLoadRelation() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${IDRelation}`);
+                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${parentId}`);
 
                 setAllRelationIDOrderAsc(data.allRelationIDOrderAsc || []);
 
@@ -109,7 +109,7 @@ const NewNivelCategoryProduct: React.FC = () => {
             }
         }
         findLoadRelation();
-    }, [IDRelation]);
+    }, [parentId]);
 
     async function updateOrder(id: string) {
         try {

@@ -4,14 +4,13 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../styles";
+import { Block, BlockTop, Container, Etiqueta, ImagensCategorys } from "../styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/ui/Button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import Voltar from "../../../components/Voltar";
 import { InputPost } from "../../../components/ui/InputPost";
 import { BlockDados, TextButton } from "./styles";
 import { TextoDados } from "../../../components/TextoDados";
@@ -19,95 +18,59 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
+import { TextArea } from "../../../components/ui/Input";
+import VoltarNavagation from "../../../components/VoltarNavagation";
+import noImage from '../../../assets/semfoto.png';
 
 
+const SubCategoria: React.FC = () => {
 
-const NewNivelCategory: React.FC = () => {
-
-    let { IDRelation } = useParams();
+    let { parentId } = useParams();
     const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [lojaID] = useState(admin.store_id);
+    const [storeID] = useState(admin.store_id);
 
-    const [categoryName, setCategoryName] = useState('');
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
     const [order, setOrder] = useState(Number);
     const [orderUpdate, setOrderUpdate] = useState();
 
-    const [categoryID, setCategoryID] = useState("");
-
-    const [allRelationIDOrderAsc, setAllRelationIDOrderAsc] = useState<any[]>([]);
-
-    const [buttonRelation, setButtonRelation] = useState(false);
-
-    const showButton = () => {
-        setButtonRelation(!buttonRelation);
-    }
-
-
-    async function loadCategory() {
-        const apiClient = setupAPIClient();
-        try {
-            const response = await apiClient.get('/findFirstCategory');
-            setCategoryID(response.data.id);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const [parentIdCategories, setParentIdCategories] = useState<any[]>([]);
 
     async function handleRegisterCategory() {
         try {
-            if (categoryName === '') {
+            if (name === '') {
                 toast.error('Digite algum nome para sua categoria!');
                 return;
             }
 
-            if (lojaID === null) {
+            if (storeID === null) {
                 toast.error('Cadastre os dados da sua loja antes de cadastrar uma categoria!');
                 return;
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/category', {
-                categoryName: categoryName.replace(/[/]/g, "-"),
-                posicao: "",
-                order: 0,
-                store_id: lojaID
-            })
-
-            setCategoryName('');
-
-            setTimeout(() => {
-                loadCategory();
-                showButton();
-            }, 2000);
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async function handleRelations() {
-        const apiClient = setupAPIClient();
-        try {
-            await apiClient.post('/createRelation', {
-                category_id: categoryID,
-                posicao: "",
+            await apiClient.post('/createCategory', {
+                name: name,
+                description: description,
                 order: Number(order),
-                nivel: 0,
-                relationId: IDRelation,
-                store_id: lojaID
+                nivel: 1,
+                parentId: parentId,
+                store_id: storeID
             });
 
-            toast.success('Subcategoria cadastrada com sucesso!');
+            toast.success('Subcategoria cadastrada com sucesso');
+
+            setName('');
+            setDescription('');
 
             setTimeout(() => {
                 navigate(0);
-            }, 2800);
+            }, 3000);
 
         } catch (error) {
-            toast.error('Erro ao cadastrar a subcategoria no produto!!!');
-            console.log(error);
+            console.log(error)
         }
     }
 
@@ -115,16 +78,16 @@ const NewNivelCategory: React.FC = () => {
         async function findLoadRelation() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findLastIdRelations?relationId=${IDRelation}`);
+                const response = await apiClient.get(`/parentIDCategoryAll?parentId=${parentId}`);
 
-                setAllRelationIDOrderAsc(data.allRelationIDOrderAsc || []);
+                setParentIdCategories(response.data || []);
 
             } catch (error) {
                 console.error(error);
             }
         }
         findLoadRelation();
-    }, [IDRelation]);
+    }, [parentId]);
 
     async function updateOrder(id: string) {
         try {
@@ -133,11 +96,11 @@ const NewNivelCategory: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderRelation?relationProductCategory_id=${id}`, { order: Number(orderUpdate) });
+                await apiClient.put(`/updateOrderCategory?category_id=${id}`, { order: Number(orderUpdate) });
                 toast.success('Ordem da categoria atualizada com sucesso.');
                 setTimeout(() => {
                     navigate(0);
-                }, 2800);
+                }, 3000);
             }
         } catch (error) {
             console.log(error);
@@ -148,25 +111,25 @@ const NewNivelCategory: React.FC = () => {
     async function updateStatus(id: string, status: string) {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusRelation?relationProductCategory_id=${id}`);
+            await apiClient.put(`/updateStatusCategory?category_id=${id}`);
 
         } catch (err) {
             toast.error('Ops erro ao ativar a relação de categoria.');
         }
 
-        if (status === "Inativo") {
-            toast.success(`A relação de categoria se encontra ativa.`);
+        if (status === "Indisponivel") {
+            toast.success(`A subcategoria se encontra ativa.`);
             setTimeout(() => {
                 navigate(0);
             }, 2000);
             return;
         }
 
-        if (status === "Ativo") {
-            toast.error(`A relação de categoria se encontra inativa.`);
+        if (status === "Disponivel") {
+            toast.error(`A subcategoria se encontra desativada.`);
             setTimeout(() => {
                 navigate(0);
-            }, 2000);
+            }, 3000);
             return;
         }
     }
@@ -179,23 +142,40 @@ const NewNivelCategory: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-                    <Voltar
-                        url={`/categorias`}
-                    />
+
+                    <VoltarNavagation />
+
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo={`Cadastre uma categoria`}
+                            titulo={`Cadastre uma subcategoria`}
                         />
+                        <Button
+                            type="submit"
+                            style={{ backgroundColor: 'green' }}
+                            onClick={handleRegisterCategory}
+                        >
+                            Salvar
+                        </Button>
                     </BlockTop>
 
                     <Block>
                         <Etiqueta>Nome:</Etiqueta>
                         <InputPost
                             type="text"
-                            placeholder="Digite o nome da categoria"
-                            value={categoryName}
-                            onChange={(e) => setCategoryName(e.target.value)}
+                            placeholder="Digite o nome da subcategoria"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Block>
+
+                    <Block>
+                        <Etiqueta>Descrição da categoria:</Etiqueta>
+                        <TextArea
+                            style={{ height: '150px', padding: '15px' }}
+                            placeholder="Digite aqui..."
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                     </Block>
                     <br />
@@ -209,41 +189,39 @@ const NewNivelCategory: React.FC = () => {
                         />
                     </Block>
                     <br />
-                    {buttonRelation ? (
-                        <Button
-                            type="submit"
-                            style={{ backgroundColor: 'green' }}
-                            onClick={handleRelations}
-                        >
-                            Confirme
-                        </Button>
-                    ) :
-                        <Button
-                            type="submit"
-                            style={{ backgroundColor: 'orange' }}
-                            onClick={handleRegisterCategory}
-                        >
-                            Salvar
-                        </Button>
-                    }
                     <br />
-                    <br />
-                    {allRelationIDOrderAsc.map((item) => {
+                    {parentIdCategories.map((item) => {
                         return (
                             <>
                                 <Card>
                                     <Titulos
                                         tipo="h3"
-                                        titulo={item.category.categoryName}
+                                        titulo={item.name}
                                     />
                                     <GridDate>
+                                        <SectionDate>
+                                            {item.imagecategories[0] ? (
+                                                <ImagensCategorys
+                                                    src={"http://localhost:3333/files/" + item.imagecategories[0].image}
+                                                    width={170}
+                                                    height={80}
+                                                />
+                                            ) :
+                                                <ImagensCategorys
+                                                    src={noImage}
+                                                    width={170}
+                                                    height={80}
+                                                />
+                                            }
+                                        </SectionDate>
+
                                         <SectionDate>
                                             <Button
                                                 style={{ backgroundColor: 'green' }}
                                             >
                                                 <AiOutlinePlusCircle />
-                                                <Link to={`/categoria/newNivel/${item.id}`} >
-                                                    <TextButton>Cadastre um novo nivel</TextButton>
+                                                <Link to={`/categoria/subCategoria/${item.id}`} >
+                                                    <TextButton>Cadastre uma<br />nova subcategoria</TextButton>
                                                 </Link>
                                             </Button>
                                         </SectionDate>
@@ -282,6 +260,17 @@ const NewNivelCategory: React.FC = () => {
                                                 />
                                             </BlockDados>
                                         </SectionDate>
+
+                                        <SectionDate>
+                                            <Button
+                                                style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                            >
+                                                <Link to={`/categoria/subCategoria/edit/${item.id}`}
+                                                >
+                                                    <TextButton>Editar subcategoria</TextButton>
+                                                </Link>
+                                            </Button>
+                                        </SectionDate>
                                     </GridDate>
                                 </Card>
                             </>
@@ -293,4 +282,4 @@ const NewNivelCategory: React.FC = () => {
     )
 }
 
-export default NewNivelCategory;
+export default SubCategoria;

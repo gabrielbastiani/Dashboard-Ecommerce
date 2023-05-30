@@ -111,7 +111,7 @@ const Aside: React.FC = () => {
                             Categorias
                         </SubMenuItemLink>
 
-                        <SubMenuItemLink href='/groups' >
+                        <SubMenuItemLink href='/menus' >
                             <MdPlayArrow />
                             Menus de Categorias
                         </SubMenuItemLink>

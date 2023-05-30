@@ -17,17 +17,17 @@ import { InputPost } from "../../../components/ui/InputPost";
 import Select from "../../../components/ui/Select";
 
 
-const NovoGrupo: React.FC = () => {
+const NovoMenu: React.FC = () => {
 
     const { admin } = useContext(AuthContext);
 
     const [nameGroup, setNameGroup] = useState('');
-    const [selectedPosicao, setSelectedPosicao] = useState();
+    const [selectedPosition, setSelectedPosition] = useState();
 
     const [categories, setCategories] = useState<any[]>([]);
-    const [slugCategory, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategory] = useState();
 
-    const [lojaID] = useState(admin.store_id);
+    const [storeID] = useState(admin.store_id);
 
     const [showCategory, setShowCategory] = useState(false);
 
@@ -35,14 +35,14 @@ const NovoGrupo: React.FC = () => {
         setShowCategory(!showCategory);
     }
 
-    const [findFirstGroup, setFindFirstGroup] = useState("");
+    const [findFirstMenu, setFindFirstMenu] = useState("");
 
-    function handleChangePosicao(e: any) {
-        setSelectedPosicao(e.target.value);
+    function handleChangePosition(e: any) {
+        setSelectedPosition(e.target.value);
     }
 
     function handleChangeSlug(e: any) {
-        setSlugCategoryOrItem(e.target.value);
+        setSlugCategory(e.target.value);
     }
 
     useEffect(() => {
@@ -58,40 +58,38 @@ const NovoGrupo: React.FC = () => {
         loadCategorys();
     }, []);
 
-    async function loadGroup() {
+    async function loadMenu() {
         const apiClient = setupAPIClient();
         try {
-            const response = await apiClient.get('/findFirstGroup');
-            setFindFirstGroup(response.data.id || "");
+            const response = await apiClient.get('/findFirstMenu');
+            setFindFirstMenu(response.data.id || "");
         } catch (error) {
             console.log(error);
         }
     }
 
-    async function handleRegisterGroup() {
+    async function handleRegisterMenu() {
         try {
             if (nameGroup === '') {
-                toast.error('Não deixe o nome do grupo em branco!!!')
+                toast.error('Não deixe o nome do menu em branco!!!')
                 return
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/group', {
+            await apiClient.post('/createMenuCategory', {
                 nameGroup: nameGroup,
                 slugCategory: slugCategory,
-                itemName: "",
-                groupId: "",
+                categoryName: "",
                 nivel: 0,
-                order: 0,
-                posicao: selectedPosicao,
-                store_id: lojaID
+                position: selectedPosition,
+                store_id: storeID
             });
 
-            toast.success('Grupo cadastrado com sucesso');
+            toast.success('Menu cadastrado com sucesso');
 
             setNameGroup("");
 
-            loadGroup();
+            loadMenu();
             showOrHideCategory();
 
         } catch (error) {/* @ts-ignore */
@@ -116,8 +114,8 @@ const NovoGrupo: React.FC = () => {
                                 style={{ backgroundColor: 'green' }}
                             >
                                 <AiOutlinePlusCircle size={25} />
-                                <Link to={`/grupo/${findFirstGroup}`} >
-                                    <TextButton>Clique aqui, para cadastrar as categorias para esse grupo</TextButton>
+                                <Link to={`/menu/${findFirstMenu}`} >
+                                    <TextButton>Clique aqui, para cadastrar as categorias para esse menu</TextButton>
                                 </Link>
                             </Button>
                         </BlockCategory>
@@ -125,24 +123,24 @@ const NovoGrupo: React.FC = () => {
                 ) :
                     <Card>
 
-                        <Voltar url='/groups' />
+                        <Voltar url='/menus' />
 
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo="Novo Grupo"
+                                titulo="Novo Menu"
                             />
                             <Button
                                 type="submit"
                                 style={{ backgroundColor: 'green' }}
-                                onClick={handleRegisterGroup}
+                                onClick={handleRegisterMenu}
                             >
                                 Salvar
                             </Button>
                         </BlockTop>
 
                         <Block>
-                            <Etiqueta>Nome do grupo:</Etiqueta>
+                            <Etiqueta>Nome do menu:</Etiqueta>
                             <InputPost
                                 type="text"
                                 placeholder="Digite o nome aqui..."
@@ -152,9 +150,9 @@ const NovoGrupo: React.FC = () => {
                         </Block>
 
                         <Block>
-                            <Etiqueta>Posição desse grupo:</Etiqueta>
+                            <Etiqueta>Posição desse menu:</Etiqueta>
                             <Select
-                                value={selectedPosicao}
+                                value={selectedPosition}
                                 opcoes={
                                     [
                                         { label: "Selecione...", value: "" },
@@ -163,12 +161,12 @@ const NovoGrupo: React.FC = () => {
                                         { label: "Home Page", value: "Home Page" }
                                     ]
                                 }/* @ts-ignore */
-                                onChange={handleChangePosicao}
+                                onChange={handleChangePosition}
                             />
                         </Block>
 
                         <Block>
-                            <Etiqueta>Indique em qual página de categoria esse grupo vai aparecer:</Etiqueta>
+                            <Etiqueta>Indique em qual página de categoria esse menu vai aparecer:</Etiqueta>
                             <Select
                                 value={slugCategory}
                                 /* @ts-ignore */
@@ -192,4 +190,4 @@ const NovoGrupo: React.FC = () => {
 
 }
 
-export default NovoGrupo;
+export default NovoMenu;

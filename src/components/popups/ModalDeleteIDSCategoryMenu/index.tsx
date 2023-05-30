@@ -5,16 +5,17 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteItens } from '../../../pages/Categorias/GruposCategorias/editItem';
+import { DeleteCategoriesGroups } from '../../../pages/Categorias/MenusCategorias/editItem';
 
 
-interface DeleteItenss {
+interface DeleteRelationsCategorys {
     isOpen: boolean;
     onRequestClose: () => void;
-    itensIds: DeleteItens;
+    relationIDS: DeleteCategoriesGroups;
+    idGroupImage: DeleteCategoriesGroups;
 }
 
-export function ModalDeleteCategoryGroup({ isOpen, onRequestClose, itensIds }: DeleteItenss) {
+export function ModalDeleteIDSCategoryMenu({ isOpen, onRequestClose, relationIDS, idGroupImage }: DeleteRelationsCategorys) {
 
     const navigate = useNavigate();
 
@@ -31,14 +32,15 @@ export function ModalDeleteCategoryGroup({ isOpen, onRequestClose, itensIds }: D
         }
     };
 
-    async function handleDeleteItens() {
+    async function handleDeleteItemsMenusAndImage() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const groupCategoy_id = itensIds.id;
-            await apiClient.delete(`/deleteCategoriesGroups?groupCategoy_id=${groupCategoy_id}`);
+            const menuCategory_id = relationIDS.id;
+            await apiClient.delete(`/deleteImageMenuCategory?imageMenuCategory_id=${idGroupImage}`);
+            await apiClient.delete(`/deleteCategoryMenu?menuCategory_id=${menuCategory_id}`);
 
-            toast.success(`Categoria item do grupo deletada com sucesso.`);
+            toast.success(`Categoria item do menu deletada com sucesso.`);
 
             onRequestClose();
 
@@ -70,12 +72,12 @@ export function ModalDeleteCategoryGroup({ isOpen, onRequestClose, itensIds }: D
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar categoria/item desse grupo?</TextModal>
+                <TextModal>Deseja mesmo deletar a categoria desse menu?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={handleDeleteItens}
+                        onClick={handleDeleteItemsMenusAndImage}
                     >
                         Deletar
                     </Button>

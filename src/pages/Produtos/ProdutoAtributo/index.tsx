@@ -40,7 +40,7 @@ const ProdutoAtributo: React.FC = () => {
     const [atributo, setAtributo] = useState<any>([]);
     const [selectedAtributo, setSelectedAtributo] = useState();
     const [order, setOrder] = useState(Number);
-    const [lojaID] = useState(admin.store_id);
+    const [storeID] = useState(admin.store_id);
     const [allRelationAtributos, setAllRelationAtributos] = useState<any[]>([]);
 
     const [atributoID, setAtributoID] = useState();
@@ -113,7 +113,7 @@ const ProdutoAtributo: React.FC = () => {
                 variacao_id: variacao_id,
                 atributo_id: selectedAtributo,
                 order: Number(order),
-                store_id: lojaID
+                store_id: storeID
             });
 
             toast.success('Atributo cadastrado com sucesso!');
@@ -241,15 +241,15 @@ const ProdutoAtributo: React.FC = () => {
                         </>
                     ) :
                         <>
-                            {allRelationAtributos.map((IDRelation) => {
+                            {allRelationAtributos.map((parentId) => {
                                 return (
                                     <>
-                                        <Card key={IDRelation.id}>
+                                        <Card key={parentId.id}>
                                             <GridDate>
                                                 <SectionDate>
                                                     <Titulos
                                                         tipo="h2"
-                                                        titulo={IDRelation.atributo.tipo + " = " + IDRelation.atributo.valor}
+                                                        titulo={parentId.atributo.tipo + " = " + parentId.atributo.valor}
                                                     />
 
                                                     <BlockDados>
@@ -257,8 +257,8 @@ const ProdutoAtributo: React.FC = () => {
                                                             chave={"Atualize o atributo"}
                                                             dados={
                                                                 <SelectUpdate
-                                                                    dado={IDRelation.atributo.tipo + " = " + IDRelation.atributo.valor}
-                                                                    handleSubmit={() => updateAtributo(IDRelation.id)}
+                                                                    dado={parentId.atributo.tipo + " = " + parentId.atributo.valor}
+                                                                    handleSubmit={() => updateAtributo(parentId.id)}
                                                                     value={atributoID}
                                                                     opcoes={
                                                                         [
@@ -279,14 +279,14 @@ const ProdutoAtributo: React.FC = () => {
                                                             chave={"Ordem"}
                                                             dados={
                                                                 <InputUpdate
-                                                                    dado={String(IDRelation.order)}
+                                                                    dado={String(parentId.order)}
                                                                     type="number"
                                                                     /* @ts-ignore */
-                                                                    placeholder={String(IDRelation.order)}
+                                                                    placeholder={String(parentId.order)}
                                                                     value={orderUpdate}
                                                                     /* @ts-ignore */
                                                                     onChange={(e) => setOrderUpdate(e.target.value)}
-                                                                    handleSubmit={() => updateOrder(IDRelation.id)}
+                                                                    handleSubmit={() => updateOrder(parentId.id)}
                                                                 />
                                                             }
                                                         />
@@ -295,7 +295,7 @@ const ProdutoAtributo: React.FC = () => {
 
                                                 <SectionDate>
                                                     <BsTrash
-                                                        onClick={() => handleOpenModalDelete(IDRelation.id)}
+                                                        onClick={() => handleOpenModalDelete(parentId.id)}
                                                         style={{ cursor: 'pointer' }}
                                                         color="red"
                                                         size={35}

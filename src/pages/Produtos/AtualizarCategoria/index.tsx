@@ -194,13 +194,13 @@ const AtualizarCategoria: React.FC = () => {
                         </Button>
                     </BlockTop>
 
-                    {allFindOrderRelationIDAsc.map((IDRelation) => {
+                    {allFindOrderRelationIDAsc.map((parentId) => {
                         return (
                             <>
-                                <Card key={IDRelation.id}>
+                                <Card key={parentId.id}>
                                     <Titulos
                                         tipo="h3"
-                                        titulo={IDRelation.category.categoryName}
+                                        titulo={parentId.category.categoryName}
                                     />
 
                                     <GridDate>
@@ -209,7 +209,7 @@ const AtualizarCategoria: React.FC = () => {
                                                 style={{ backgroundColor: 'orange' }}
                                             >
                                                 <AiOutlinePlusCircle />
-                                                <Link to={`/produto/atualizar/categorias/updateNivelCategoryProduct/${product_id}/${IDRelation.id}`} >
+                                                <Link to={`/produto/atualizar/categorias/updateNivelCategoryProduct/${product_id}/${parentId.id}`} >
                                                     <TextButton>Niveis da categorias</TextButton>
                                                 </Link>
                                             </Button>
@@ -221,8 +221,8 @@ const AtualizarCategoria: React.FC = () => {
                                                     chave={"Categoria"}
                                                     dados={
                                                         <SelectUpdate
-                                                            dado={IDRelation.category.categoryName}
-                                                            handleSubmit={() => updateCategory(IDRelation.id)}
+                                                            dado={parentId.category.categoryName}
+                                                            handleSubmit={() => updateCategory(parentId.id)}
                                                             value={categorySelected}
                                                             opcoes={
                                                                 [
@@ -243,14 +243,14 @@ const AtualizarCategoria: React.FC = () => {
                                                     chave={"Ordem"}
                                                     dados={
                                                         <InputUpdate
-                                                            dado={String(IDRelation.order)}
+                                                            dado={String(parentId.order)}
                                                             type="number"
                                                             /* @ts-ignore */
-                                                            placeholder={String(IDRelation.order)}
+                                                            placeholder={String(parentId.order)}
                                                             value={orderUpdate}
                                                             /* @ts-ignore */
                                                             onChange={(e) => setOrderUpdate(e.target.value)}
-                                                            handleSubmit={() => updateOrder(IDRelation.id)}
+                                                            handleSubmit={() => updateOrder(parentId.id)}
                                                         />
                                                     }
                                                 />
@@ -264,8 +264,8 @@ const AtualizarCategoria: React.FC = () => {
                                                     dados={
                                                         <ButtonSelect
                                                             /* @ts-ignore */
-                                                            dado={IDRelation.status}
-                                                            handleSubmit={() => updateStatus(IDRelation.id, IDRelation.status)}
+                                                            dado={parentId.status}
+                                                            handleSubmit={() => updateStatus(parentId.id, parentId.status)}
                                                         />
                                                     }
                                                 />
@@ -274,7 +274,7 @@ const AtualizarCategoria: React.FC = () => {
 
                                         <SectionDate>
                                             <BsTrash
-                                                onClick={() => handleOpenModalDelete(IDRelation.id)}
+                                                onClick={() => handleOpenModalDelete(parentId.id)}
                                                 style={{ cursor: 'pointer' }}
                                                 color="red"
                                                 size={35}

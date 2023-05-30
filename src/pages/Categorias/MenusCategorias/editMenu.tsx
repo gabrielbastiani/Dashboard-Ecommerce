@@ -15,35 +15,35 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
 import SelectUpdate from "../../../components/ui/SelectUpdate";
-import { ModalDeleteGroup } from "../../../components/popups/ModalDeleteGroup";
+import { ModalDeleteMenu } from "../../../components/popups/ModalDeleteMenu";
 
 
 export type DeleteGroups = {
-    groupCategoy_id: string;
+    menuCategory_id: string;
 }
 
-const EditGroup: React.FC = () => {
+const EditMenu: React.FC = () => {
 
-    let { groupCategoy_id } = useParams();
+    let { menuCategory_id } = useParams();
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
-    const [posicao, setPosicao] = useState([]);
-    const [posicaoSelected, setPosicaoSelected] = useState();
+    const [position, setPosition] = useState([]);
+    const [positionSelected, setPositionSelected] = useState();
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slug, setSlug] = useState("");
-    const [slugCategory, setSlugCategoryOrItem] = useState();
+    const [slugCategory, setSlugCategory] = useState();
 
     const [modalItem, setModalItem] = useState<DeleteGroups>();
     const [modalVisible, setModalVisible] = useState(false);
 
-    function handleChangePosicao(e: any) {
-        setPosicaoSelected(e.target.value)
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value)
     }
 
     function handleChangeSlug(e: any) {
-        setSlugCategoryOrItem(e.target.value);
+        setSlugCategory(e.target.value);
     }
 
     useEffect(() => {
@@ -60,32 +60,32 @@ const EditGroup: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        async function findDdatesGroups() {
+        async function findDdatesMenus() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findUniqueGroup?groupCategoy_id=${groupCategoy_id}`);
+                const response = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setPosicao(response.data.posicao || "");
+                setPosition(response.data.position || "");
                 setSlug(response.data.slugCategory || "");
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
-        findDdatesGroups();
-    }, [groupCategoy_id]);
+        findDdatesMenus();
+    }, [menuCategory_id]);
 
-    async function updateNameGroup() {
+    async function updateNameMenus() {
         try {
             const apiClient = setupAPIClient();
             if (nameGroup === "") {
-                toast.error('Não deixe o nome do grupo em branco!!!');
+                toast.error('Não deixe o nome do menu em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateNameGroup?groupCategoy_id=${groupCategoy_id}`, { nameGroup: nameGroup });
+                await apiClient.put(`/updateNameMenu?menuCategory_id=${menuCategory_id}`, { nameGroup: nameGroup });
 
-                toast.success('Nome do grupo atualizado com sucesso.');
+                toast.success('Nome do menu atualizado com sucesso.');
 
                 setTimeout(() => {
                     navigate(0);
@@ -93,18 +93,18 @@ const EditGroup: React.FC = () => {
             }
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar o nome do grupo.');
+            toast.error('Ops erro ao atualizar o nome do menu.');
         }
     }
 
-    async function updatePosicao() {
+    async function updatePosition() {
         try {
-            if (posicaoSelected === "") {
+            if (positionSelected === "") {
                 toast.error(`Selecione a posição, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePosicaoGroup?groupCategoy_id=${groupCategoy_id}`, { posicao: posicaoSelected });
+            await apiClient.put(`/updatePositionMenu?menuCategory_id=${menuCategory_id}`, { position: positionSelected });
             toast.success('Posição atualizada com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -116,10 +116,10 @@ const EditGroup: React.FC = () => {
         }, 3000);
     }
 
-    async function updateSlugGroup() {
+    async function updateSlugMenu() {
         const apiClient = setupAPIClient();
         try {
-            await apiClient.put(`/updateSlugGroup?groupCategoy_id=${groupCategoy_id}`, { slugCategory: slugCategory });
+            await apiClient.put(`/updateSlugMenu?menuCategory_id=${menuCategory_id}`, { slugCategory: slugCategory });
             toast.success('Caminho atualizado com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -135,11 +135,11 @@ const EditGroup: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(groupCategoy_id: string) {
+    async function handleOpenModalDelete(menuCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueGroup', {
+        const response = await apiClient.get('/findUniqueMenu', {
             params: {
-                groupCategoy_id: groupCategoy_id,
+                menuCategory_id: menuCategory_id,
             }
         });
         setModalItem(response.data || "");
@@ -162,20 +162,20 @@ const EditGroup: React.FC = () => {
                             <BlockTop>
                                 <Titulos
                                     tipo="h1"
-                                    titulo={`Editar grupo = ${nameGroup}`}
+                                    titulo={`Editar menu = ${nameGroup}`}
                                 />
 
                                 <Button
                                     style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDelete(groupCategoy_id)}
+                                    onClick={() => handleOpenModalDelete(menuCategory_id)}
                                 >
-                                    Remover grupo
+                                    Remover menu
                                 </Button>
                             </BlockTop>
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Atualizar nome do grupo"}
+                                    chave={"Atualizar nome do menu"}
                                     dados={
                                         <InputUpdate
                                             dado={nameGroup}
@@ -185,7 +185,7 @@ const EditGroup: React.FC = () => {
                                             value={nameGroup}
                                             /* @ts-ignore */
                                             onChange={(e) => setNameGroup(e.target.value)}
-                                            handleSubmit={updateNameGroup}
+                                            handleSubmit={updateNameMenus}
                                         />
                                     }
                                 />
@@ -193,13 +193,13 @@ const EditGroup: React.FC = () => {
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Atualizar posição do grupo"}
+                                    chave={"Atualizar posição do menu"}
                                     dados={
                                         <SelectUpdate
-                                            dado={posicao}
-                                            value={posicaoSelected}
+                                            dado={position}
+                                            value={positionSelected}
                                             /* @ts-ignore */
-                                            onChange={handleChangePosicao}
+                                            onChange={handleChangePosition}
                                             opcoes={
                                                 [
                                                     { label: "Selecione...", value: "" },
@@ -208,7 +208,7 @@ const EditGroup: React.FC = () => {
                                                     { label: "Home Page", value: "Home Page" }
                                                 ]
                                             }
-                                            handleSubmit={updatePosicao}
+                                            handleSubmit={updatePosition}
                                         />
                                     }
                                 />
@@ -216,7 +216,7 @@ const EditGroup: React.FC = () => {
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Atualizar página de categoria que esse grupo vai aparecer"}
+                                    chave={"Atualizar página de categoria que esse menu vai aparecer"}
                                     dados={
                                         <SelectUpdate
                                             dado={slug}
@@ -230,13 +230,13 @@ const EditGroup: React.FC = () => {
                                                     ...(categories || []).map((item) => ({ label: item.slug, value: item.slug }))
                                                 ]
                                             }
-                                            handleSubmit={updateSlugGroup}
+                                            handleSubmit={updateSlugMenu}
                                         />
                                     }
                                 />
                             </BlockDados>
                             {modalVisible && (
-                                <ModalDeleteGroup
+                                <ModalDeleteMenu
                                     isOpen={modalVisible}
                                     onRequestClose={handleCloseModalDelete}
                                     /* @ts-ignore */
@@ -251,4 +251,4 @@ const EditGroup: React.FC = () => {
     )
 }
 
-export default EditGroup;
+export default EditMenu;

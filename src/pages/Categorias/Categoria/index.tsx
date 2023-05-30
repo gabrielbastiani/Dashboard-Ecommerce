@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
+import Modal from 'react-modal';
 import {
     BlockTop,
     ButtonPage,
@@ -18,7 +19,6 @@ import {
     BlockDados, IconSpanCatgoryImagens, ImagensCategoryPreviewUrl, ImagensCategoryUpload,
 } from "./styles"
 import Titulos from "../../../components/Titulos";
-import Voltar from "../../../components/Voltar";
 import { toast } from 'react-toastify';
 import { setupAPIClient } from "../../../services/api";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,16 +35,21 @@ import { MdFileUpload } from "react-icons/md";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/ImagensInstitucionais/Imagem/styles";
+import { ModalDeleteImagemCategory } from "../../../components/popups/ModalDeleteImagemCategory";
+import VoltarNavagation from "../../../components/VoltarNavagation";
 
 
+export type DeleteCategoryImage = {
+    iDImage: string;
+}
 
 const Categoria: React.FC = () => {
 
     let { category_id } = useParams();
     const navigate = useNavigate();
 
-    const [categoryNames, setCategoryNames] = useState("");
-    const [disponibilidades, setDisponibilidades] = useState('');
+    const [name, setName] = useState("");
+    const [status, setStatus] = useState('');
 
     const [search, setSearch] = useState<any[]>([]);
 
@@ -62,14 +67,17 @@ const Categoria: React.FC = () => {
     const [imageCategories, setImageCategories] = useState("");
     const [iDImage, setIDImage] = useState("");
 
+    const [modalItemImagem, setModalItemImagem] = useState("");
+    const [modalVisibleImagem, setModalVisibleImagem] = useState(false);
+
     useEffect(() => {
         async function refreshCategoryLoad() {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get(`/exactCategory?category_id=${category_id}`);
-            setCategoryNames(response.data.categoryName || "");
-            setDisponibilidades(response.data.disponibilidade || "");
-            setImageCategories(response.data.imagecategories[0].categoryImage);
-            setCategoryImageUpload(response.data.imagecategories[0].categoryImage);
+            const response = await apiClient.get(`/finduniqueCategory?category_id=${category_id}`);
+            setName(response.data.name || "");
+            setStatus(response.data.status || "");
+            setImageCategories(response.data.imagecategories[0].image);
+            setCategoryImageUpload(response.data.imagecategories[0].image);
             setIDImage(response.data.imagecategories[0].id);
         }
         refreshCategoryLoad();
@@ -78,11 +86,11 @@ const Categoria: React.FC = () => {
     async function updateCategoryName() {
         try {
             const apiClient = setupAPIClient();
-            if (categoryNames === '') {
+            if (name === '') {
                 toast.error('Não deixe o nome da categoria em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { categoryName: categoryNames });
+                await apiClient.put(`/categoryNameUpdate?category_id=${category_id}`, { name: name });
                 toast.success('Nome da categoria atualizada com sucesso.');
 
                 setTimeout(() => {
@@ -97,22 +105,22 @@ const Categoria: React.FC = () => {
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateDisponibilidadeCategory?category_id=${category_id}`);
+            await apiClient.put(`/updateStatusCategory?category_id=${category_id}`);
 
             setTimeout(() => {
                 navigate(0);
             }, 3000);
 
         } catch (error) {
-            toast.error('Ops erro ao atualizar a disponibilidade da categoria.');
+            toast.error('Ops erro ao atualizar a status da categoria.');
         }
 
-        if (disponibilidades === "Indisponivel") {
+        if (status === "Indisponivel") {
             toast.success(`A categoria se encontra Disponivel.`);
             return;
         }
 
-        if (disponibilidades === "Disponivel") {
+        if (status === "Disponivel") {
             toast.error(`A categoria se encontra Indisponivel.`);
             return;
         }
@@ -156,7 +164,7 @@ const Categoria: React.FC = () => {
             toast.success('Imagem cadastrada com sucesso.');
 
             setTimeout(() => {
-                navigate('/categorias');
+                navigate(0);
             }, 3000);
 
         } catch (error) {/* @ts-ignore */
@@ -226,12 +234,29 @@ const Categoria: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Produto": item.product.nameProduct,
+            "Produto": item.product.name,
             "SKU": item.product.sku,
-            "Disponibilidade": item.product.disponibilidade,
+            "Disponibilidade": item.product.status,
             "botaoDetalhes": `/produto/${item.product.slug}/${item.product.id}`
         });
     });
+
+    function handleCloseModalDeleteImagem() {
+        setModalVisibleImagem(false);
+    }
+
+    async function handleOpenModalImageDelete(category_id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/finduniqueCategory', {
+            params: {
+                category_id: category_id,
+            }
+        });
+        setModalItemImagem(response.data.imagecategories[0].id || "");
+        setModalVisibleImagem(true);
+    }
+
+    Modal.setAppElement('body');
 
 
     return (
@@ -241,13 +266,13 @@ const Categoria: React.FC = () => {
                 <Aside />
                 <Container>
                     <Card>
-                        <Voltar
-                            url="/categorias"
-                        />
+                        
+                        <VoltarNavagation />
+                        
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo={`Editar categoria - ${categoryNames}`}
+                                titulo={`Editar categoria - ${name}`}
                             />
                         </BlockTop>
 
@@ -258,13 +283,13 @@ const Categoria: React.FC = () => {
                                         chave={"Nome"}
                                         dados={
                                             <InputUpdate
-                                                dado={categoryNames}
+                                                dado={name}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={categoryNames}
-                                                value={categoryNames}
+                                                placeholder={name}
+                                                value={name}
                                                 /* @ts-ignore */
-                                                onChange={(e) => setCategoryNames(e.target.value)}
+                                                onChange={(e) => setName(e.target.value)}
                                                 handleSubmit={updateCategoryName}
                                             />
                                         }
@@ -277,12 +302,24 @@ const Categoria: React.FC = () => {
                                         dados={
                                             <ButtonSelect
                                                 /* @ts-ignore */
-                                                dado={disponibilidades}
+                                                dado={status}
                                                 handleSubmit={updateStatus}
                                             />
                                         }
                                     />
                                 </BlockDados>
+
+                                {imageCategories ? (
+                                    <Button
+                                        /* @ts-ignore */
+                                        onClick={() => handleOpenModalImageDelete(category_id)}
+                                    >
+                                        Deletar imagem
+                                    </Button>
+                                ) :
+                                    null
+                                }
+
                             </SectionDate>
 
                             <SectionDate>
@@ -414,6 +451,14 @@ const Categoria: React.FC = () => {
                     </Card>
                 </Container>
             </Grid>
+            {modalVisibleImagem && (
+                <ModalDeleteImagemCategory
+                    isOpen={modalVisibleImagem}
+                    onRequestClose={handleCloseModalDeleteImagem}
+                    /* @ts-ignore */
+                    idImage={modalItemImagem}
+                />
+            )}
         </>
     )
 }

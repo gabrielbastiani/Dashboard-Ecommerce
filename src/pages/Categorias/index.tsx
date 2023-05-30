@@ -25,6 +25,7 @@ import { Card } from "../../components/Content/styles";
 import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
 import { ImgInstitucional } from "../Configuracoes/ImagensInstitucionais/styles";
+import { Button } from "../../components/ui/Button";
 
 
 const Categorias: React.FC = () => {
@@ -77,17 +78,18 @@ const Categorias: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterCategory = search.filter((filt) => filt.categoryName.toLowerCase().includes(target.value));
+        const filterCategory = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
         setSearch(filterCategory);
     }
 
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Imagem": item.imagecategories[0] ? <ImgInstitucional src={"http://localhost:3333/files/" + item.imagecategories[0].categoryImage} /> : "Sem Imagem",
-            "Categoria": item.categoryName,
-            "Qtd. de Produtos": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem produto(s)",
-            "Status": item.disponibilidade,
+            "Imagem": item.imagecategories[0] ? <ImgInstitucional src={"http://localhost:3333/files/" + item.imagecategories[0].image} /> : "Sem Imagem",
+            "Categoria": item.name,
+            "Subcategoria(s)": <Link to={`/categoria/subCategoria/${item.id}`}><Button style={{ padding: '5px' }} >Ver</Button></Link>,
+            "Qtd. de Produtos": item.productcategories ? String(item.productcategories.length) : "Sem produto(s)",
+            "Status": item.status,
             "botaoDetalhes": `/categoria/${item.id}`
         });
     });
@@ -143,7 +145,7 @@ const Categorias: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Categoria", "Qtd. de Produtos", "Status"]}
+                                cabecalho={["Imagem", "Categoria", "Subcategoria(s)", "Qtd. de Produtos", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

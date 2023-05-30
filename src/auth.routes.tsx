@@ -27,18 +27,17 @@ import ImagensLoja from './pages/Configuracoes/ImagensInstitucionais';
 import Imagem from './pages/Configuracoes/ImagensInstitucionais/Imagem';
 import NovaImagem from './pages/Configuracoes/ImagensInstitucionais/novaImagem';
 import NovaCategoriaProduto from './pages/Produtos/ProdutoCategoria/novaCategoriaProduto';
-import NewNivelCategory from './pages/Categorias/Categoria/newNivelCategory';
+import SubCategoria from './pages/Categorias/Categoria/subCategoria';
 import NewNivelCategoryProduct from './pages/Produtos/ProdutoCategoria/newNivelCategoryProduct';
 import AtualizarCategoria from './pages/Produtos/AtualizarCategoria';
 import UpdateNivelCategoryProduct from './pages/Produtos/AtualizarCategoria/updateNivelCategoryProduct';
 import TodasAvaliacoes from './pages/Avaliacoes/TodasAvaliacoes';
 import NovoBanner from './pages/Banners/novoBanner';
 import Banner from './pages/Banners/Banner';
-import GruposCategorias from './pages/Categorias/GruposCategorias';
-import NovoGrupo from './pages/Categorias/GruposCategorias/novoGrupo';
-import CategoriasGrupo from './pages/Categorias/GruposCategorias/categoriasGrupo';
-import EditItem from './pages/Categorias/GruposCategorias/editItem';
-import EditGroup from './pages/Categorias/GruposCategorias/editGroup';
+import GruposCategorias from './pages/Categorias/MenusCategorias';
+import NovoMenu from './pages/Categorias/MenusCategorias/novoMenu';
+import CategoriasMenu from './pages/Categorias/MenusCategorias/categoriasMenu';
+import EditMenu from './pages/Categorias/MenusCategorias/editMenu';
 import Atributos from './pages/Produtos/Atributos'; 
 import NovoAtributo from './pages/Produtos/Atributos/novoAtributo'; 
 import EditAtributo from './pages/Produtos/Atributos/editAtributo'; 
@@ -51,6 +50,7 @@ import EditGroupFiltroAtributo from './pages/Filtros/editGroupFiltroAtributo';
 import NovoGrupoFiltroCategoria from './pages/Filtros/novoGrupoFiltroCategoria';
 import CategoryFiltro from './pages/Filtros/CategoryFiltro';
 import EditCategoryFiltro from './pages/Filtros/CategoryFiltro/editCategoryFiltro';
+import EditItem from './pages/Categorias/MenusCategorias/editItem';
 
 
 const RoutesAuth: React.FC = () => {
@@ -63,20 +63,21 @@ const RoutesAuth: React.FC = () => {
             <Route path='/categorias' element={<Categorias />} />
             <Route path='/categoria/nova' element={<NovaCategoria />} />
             <Route path='/categoria/:category_id' element={<Categoria />} />
-            <Route path='/categoria/newNivelCategory/:IDRelation' element={<NewNivelCategory />} />
-            <Route path='/groups' element={<GruposCategorias />} />
-            <Route path='/grupo/novo' element={<NovoGrupo />} />
-            <Route path='/grupo/edit/:groupCategoy_id' element={<EditGroup />} />
-            <Route path='/grupo/:groupCategoy_id' element={<CategoriasGrupo />} />
-            <Route path='/grupo/item/edit/:groupCategoy_id' element={<EditItem />} />
+            <Route path='/categoria/subCategoria/:parentId' element={<SubCategoria />} />
+            <Route path='/categoria/subCategoria/edit/:category_id' element={<Categoria />} />
+            <Route path='/menus' element={<GruposCategorias />} />
+            <Route path='/menu/novo' element={<NovoMenu />} />
+            <Route path='/menu/edit/:menuCategory_id' element={<EditMenu />} />
+            <Route path='/menu/:menuCategory_id' element={<CategoriasMenu />} />
+            <Route path='/menu/categoriaMenu/edit/:menuCategory_id' element={<EditItem />} />
 
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />
             <Route path='/produto/novo/categorias/:product_id' element={<ProdutoCategoria />} />
             <Route path='/produto/novo/categorias/novaCategoriaProduto/:product_id' element={<NovaCategoriaProduto />} />
-            <Route path='/produto/categorias/newNivelCategoryProduct/:product_id/:IDRelation' element={<NewNivelCategoryProduct />} />
+            <Route path='/produto/categorias/newNivelCategoryProduct/:product_id/:parentId' element={<NewNivelCategoryProduct />} />
             <Route path='/produto/atualizar/categorias/:product_id' element={<AtualizarCategoria />} />
-            <Route path='/produto/atualizar/categorias/updateNivelCategoryProduct/:product_id/:IDRelation' element={<UpdateNivelCategoryProduct />} />
+            <Route path='/produto/atualizar/categorias/updateNivelCategoryProduct/:product_id/:parentId' element={<UpdateNivelCategoryProduct />} />
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
