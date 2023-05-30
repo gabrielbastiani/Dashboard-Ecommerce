@@ -34,7 +34,7 @@ import UpdateNivelCategoryProduct from './pages/Produtos/AtualizarCategoria/upda
 import TodasAvaliacoes from './pages/Avaliacoes/TodasAvaliacoes';
 import NovoBanner from './pages/Banners/novoBanner';
 import Banner from './pages/Banners/Banner';
-import GruposCategorias from './pages/Categorias/MenusCategorias';
+import MenusCategorias from './pages/Categorias/MenusCategorias';
 import NovoMenu from './pages/Categorias/MenusCategorias/novoMenu';
 import CategoriasMenu from './pages/Categorias/MenusCategorias/categoriasMenu';
 import EditMenu from './pages/Categorias/MenusCategorias/editMenu';
@@ -65,7 +65,8 @@ const RoutesAuth: React.FC = () => {
             <Route path='/categoria/:category_id' element={<Categoria />} />
             <Route path='/categoria/subCategoria/:parentId' element={<SubCategoria />} />
             <Route path='/categoria/subCategoria/edit/:category_id' element={<Categoria />} />
-            <Route path='/menus' element={<GruposCategorias />} />
+
+            <Route path='/menus' element={<MenusCategorias />} />
             <Route path='/menu/novo' element={<NovoMenu />} />
             <Route path='/menu/edit/:menuCategory_id' element={<EditMenu />} />
             <Route path='/menu/:menuCategory_id' element={<CategoriasMenu />} />

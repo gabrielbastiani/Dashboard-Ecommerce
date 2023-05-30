@@ -4,11 +4,13 @@ import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import Modal from 'react-modal';
 import {
+    Block,
     BlockTop,
     ButtonPage,
     Container,
     ContainerCategoryPage,
     ContainerPagination,
+    Etiqueta,
     Next,
     Previus,
     TextPage,
@@ -37,6 +39,8 @@ import { SectionDate } from "../../Configuracoes/styles";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/ImagensInstitucionais/Imagem/styles";
 import { ModalDeleteImagemCategory } from "../../../components/popups/ModalDeleteImagemCategory";
 import VoltarNavagation from "../../../components/VoltarNavagation";
+import { AreaTexto } from "../../Configuracoes/TextosInstitucionais/Texto/styles";
+import { TextArea } from "../../../components/ui/Input";
 
 
 export type DeleteCategoryImage = {
@@ -49,6 +53,7 @@ const Categoria: React.FC = () => {
     const navigate = useNavigate();
 
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [status, setStatus] = useState('');
 
     const [search, setSearch] = useState<any[]>([]);
@@ -76,6 +81,7 @@ const Categoria: React.FC = () => {
             const response = await apiClient.get(`/finduniqueCategory?category_id=${category_id}`);
             setName(response.data.name || "");
             setStatus(response.data.status || "");
+            setDescription(response.data.description || "");
             setImageCategories(response.data.imagecategories[0].image);
             setCategoryImageUpload(response.data.imagecategories[0].image);
             setIDImage(response.data.imagecategories[0].id);
@@ -123,6 +129,19 @@ const Categoria: React.FC = () => {
         if (status === "Disponivel") {
             toast.error(`A categoria se encontra Indisponivel.`);
             return;
+        }
+    }
+
+    async function updateDescription() {
+        try {
+            const apiClient = setupAPIClient();
+
+            await apiClient.put(`/updateDescription?category_id=${category_id}`, { description: description });
+            toast.success('Descrição do categoria atualizada com sucesso.');
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a descrição da categoria.');
         }
     }
 
@@ -266,9 +285,9 @@ const Categoria: React.FC = () => {
                 <Aside />
                 <Container>
                     <Card>
-                        
+
                         <VoltarNavagation />
-                        
+
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
@@ -319,6 +338,24 @@ const Categoria: React.FC = () => {
                                 ) :
                                     null
                                 }
+                                <br />
+                                <br />
+                                <br />
+                                <Block>
+                                    <Etiqueta>Descrição da categoria:</Etiqueta>
+                                    <TextArea
+                                        style={{ height: '250px', padding: '15px' }}
+                                        placeholder="Digite aqui..."
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                </Block>
+                                <br />
+                                <Button
+                                    onClick={updateDescription}
+                                >
+                                    Atualizar descrição
+                                </Button>
 
                             </SectionDate>
 

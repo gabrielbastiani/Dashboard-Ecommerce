@@ -262,6 +262,10 @@ const SubCategoria: React.FC = () => {
                                         </SectionDate>
 
                                         <SectionDate>
+                                            <TextButton>{item.category.productcategories}</TextButton>
+                                        </SectionDate>
+
+                                        <SectionDate>
                                             <Button
                                                 style={{ backgroundColor: '#FB451E', padding: '5px' }}
                                             >
