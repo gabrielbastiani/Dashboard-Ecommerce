@@ -42,8 +42,8 @@ const Perfil: React.FC = () => {
                 toast.error('Não deixe o nome em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/nameUserUpdate?admin_id=${admin.id}`, { name: userNames || dataName });
-                toast.success('Nome do usuario atualizado com sucesso.');
+                await apiClient.put(`/admin/updateNameAdminOrEmployee?admin_id=${admin.id}`, { name: userNames || dataName });
+                toast.success('Nome do administrador atualizado com sucesso.');
                 refreshUserLoad();
             }
         } catch (err) {
@@ -58,8 +58,8 @@ const Perfil: React.FC = () => {
                 toast.error('Não deixe email em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/emailUserUpdate?admin_id=${admin.id}`, { email: emails || dataEmail });
-                toast.success('Email do usuario atualizado com sucesso.');
+                await apiClient.put(`/admin/updateDateAdmin?admin_id=${admin.id}`, { email: emails || dataEmail });
+                toast.success('Email do administrador atualizado com sucesso.');
                 refreshUserLoad();
             }
         } catch (err) {
@@ -70,7 +70,7 @@ const Perfil: React.FC = () => {
     useEffect(() => {
         async function refreshUser() {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get(`/listExactUser?admin_id=${admin.id}`)
+            const response = await apiClient.get(`/admin/listExactAdminID?admin_id=${admin.id}`)
             setUserNames(response?.data?.name);
             setDataName(response?.data?.name);
             setDataEmail(response?.data?.email);
@@ -80,7 +80,7 @@ const Perfil: React.FC = () => {
 
     async function refreshUserLoad() {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get(`/listExactUser?admin_id=${admin.id}`)
+        const response = await apiClient.get(`/admin/listExactAdminID?admin_id=${admin.id}`)
         setUserNames(response?.data?.name);
         setDataName(response?.data?.name);
         setDataEmail(response?.data?.email);
@@ -90,7 +90,7 @@ const Perfil: React.FC = () => {
         const apiClient = setupAPIClient();
         try {
             setLoading(true);
-            await apiClient.post('/recoverDashboard', { email: admin.email });
+            await apiClient.post('/admin/recoverPasswordDashboard', { email: admin.email });
             setLoading(false);
 
             showOrHide();
@@ -104,10 +104,10 @@ const Perfil: React.FC = () => {
         const apiClient = setupAPIClient();
         try {
             setLoading(true);
-            const response = await apiClient.get('/recoverFind');
+            const response = await apiClient.get('/admin/findFirstAdmin');
             const recoverID = response?.data?.id;
 
-            await apiClient.delete(`/deleteRecoverID?recovery_id=${recoverID}`);
+            await apiClient.delete(`/admin/deleteRecoveryIDAdmin?passwordRecoveryAdmin_id=${recoverID}`);
 
             setLoading(false);
 
@@ -126,10 +126,10 @@ const Perfil: React.FC = () => {
                 toast.error('Senhas diferentes')
                 return;
             }
-            const response = await apiClient.get('/recoverFind');
+            const response = await apiClient.get('/admin/findFirstAdmin');
             const recoverID = response?.data?.id;
 
-            await apiClient.put(`/recover?recovery_id=${recoverID}`, { password });
+            await apiClient.put(`/admin/recoverAdmin?passwordRecoveryAdmin_id=${recoverID}`, { password: password });
 
             toast.success('Senha atualizada com sucesso.');
 
@@ -137,7 +137,7 @@ const Perfil: React.FC = () => {
             setPassword("");
 
             if (!recoverID) {
-                await apiClient.delete(`/deleteRecoverID?recovery_id=${recoverID}`);
+                await apiClient.delete(`/admin/deleteRecoveryIDAdmin?passwordRecoveryAdmin_id=${recoverID}`);
                 return;
             }
 

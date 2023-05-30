@@ -7,7 +7,18 @@ import Titulos from "../../components/Titulos";
 import { Link } from "react-router-dom";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Card, Container } from "../../components/Content/styles";
-import { AddButton, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../Categorias/styles";
+import {
+    AddButton,
+    ButtonPage,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    SpanText,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../Categorias/styles";
 import { ImgInstitucional } from "../Configuracoes/ImagensInstitucionais/styles";
 import Pesquisa from "../../components/Pesquisa";
 import TabelaSimples from "../../components/Tabelas";
@@ -75,10 +86,10 @@ const Banners: React.FC = () => {
         dados.push({
             "Imagem": item.banner ? <ImgInstitucional src={"http://localhost:3333/files/" + item.banner} /> : "Sem banner",
             "Titulo": item.title,
-            "Data Inicio": item.dateInicio ? moment(item.dateInicio).format('DD/MM/YYYY - HH:mm') : "Sem Programação",
-            "Data Fim": item.dateInicio ? moment(item.dateFim).format('DD/MM/YYYY - HH:mm') : "Sem Programação",
+            "Data Inicio": item.startDate ? moment(item.startDate).format('DD/MM/YYYY - HH:mm') : "Sem Programação",
+            "Data Fim": item.startDate ? moment(item.endDate).format('DD/MM/YYYY - HH:mm') : "Sem Programação",
             "Ordem": String(item.order),
-            "Posição": item.posicao,
+            "Posição": item.position,
             "Ativado?": item.active,
             "botaoDetalhes": `/banner/${item.id}`
         });

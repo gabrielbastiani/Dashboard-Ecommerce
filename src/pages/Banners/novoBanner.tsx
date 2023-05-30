@@ -13,8 +13,22 @@ import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { InputPost } from "../../components/ui/InputPost";
 import Select from "../../components/ui/Select";
-import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "./styles";
-import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from "../Configuracoes/ImagensInstitucionais/styles";
+import {
+    BlockInputs,
+    BoxActive,
+    EtiquetaInput,
+    RadioBotton
+} from "./styles";
+import {
+    BlockImagem,
+    EtiquetaImagens,
+    FormImagens,
+    IconSpanImagens,
+    ImagensPreviewUrl,
+    ImagensUpload,
+    InputImagens,
+    TextImagens
+} from "../Configuracoes/ImagensInstitucionais/styles";
 import { MdFileUpload } from "react-icons/md";
 import { GridDate } from "../Perfil/styles";
 
@@ -26,13 +40,13 @@ const NovoBanner: React.FC = () => {
     const [title, setTitle] = useState("");
     const [width, setWidth] = useState("");
     const [height, setHeight] = useState("");
-    const [dateInicio, setDateInicio] = useState("");
-    const [dateFim, setDateFim] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const [banner, setBanner] = useState(null);
     const [bannerUrl, setBannerUrl] = useState("");
     const [order, setOrder] = useState(Number);
     const [url, setUrl] = useState("");
-    const [posicaoSelected, setPosicaoSelected] = useState();
+    const [positionSelected, setPositionSelected] = useState();
 
     const [loading, setLoading] = useState(false);
 
@@ -55,11 +69,11 @@ const NovoBanner: React.FC = () => {
             data.append('title', title);
             data.append('width', width);
             data.append('height', height);
-            data.append('dateInicio', dateInicio);
-            data.append('dateFim', dateFim);/* @ts-ignore */
+            data.append('startDate', startDate);
+            data.append('endDate', endDate);/* @ts-ignore */
             data.append('order', Number(order));
             data.append('url', url);/* @ts-ignore */
-            data.append('posicao', posicaoSelected);
+            data.append('position', positionSelected);
             data.append('active', active);
 
             await apiClient.post(`/createBanner`, data);
@@ -98,8 +112,8 @@ const NovoBanner: React.FC = () => {
         }
     }
 
-    function handleChangePosicao(e: any) {
-        setPosicaoSelected(e.target.value);
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value);
     }
 
     setInterval(() => {
@@ -156,7 +170,7 @@ const NovoBanner: React.FC = () => {
                                 <Block>
                                     <Etiqueta>Posição desse banner:</Etiqueta>
                                     <Select
-                                        value={posicaoSelected}
+                                        value={positionSelected}
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
@@ -170,11 +184,11 @@ const NovoBanner: React.FC = () => {
                                                 { label: "Banner Páginas", value: "Banner Páginas" }
                                             ]
                                         }/* @ts-ignore */
-                                        onChange={handleChangePosicao}
+                                        onChange={handleChangePosition}
                                     />
                                 </Block>
 
-                                {posicaoSelected === "Banner Topo" ? (
+                                {positionSelected === "Banner Topo" ? (
                                     null
                                 ) :
                                     <>
@@ -242,8 +256,8 @@ const NovoBanner: React.FC = () => {
                                             <Etiqueta>Data de início:</Etiqueta>
                                             <InputPost
                                                 type="datetime-local"
-                                                placeholder={dateInicio}
-                                                onChange={(e) => setDateInicio(e.target.value)}
+                                                placeholder={startDate}
+                                                onChange={(e) => setStartDate(e.target.value)}
                                             />
                                         </Block>
 
@@ -251,8 +265,8 @@ const NovoBanner: React.FC = () => {
                                             <Etiqueta>Data do fim:</Etiqueta>
                                             <InputPost
                                                 type="datetime-local"
-                                                placeholder={dateFim}
-                                                onChange={(e) => setDateFim(e.target.value)}
+                                                placeholder={endDate}
+                                                onChange={(e) => setEndDate(e.target.value)}
                                             />
                                         </Block>
                                     </>

@@ -32,15 +32,15 @@ export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteCo
     };
 
 
-    async function handleDeleteContato() {
+    async function handleDeleteContact() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const contato_id = contato.id;
+            const contact_id = contato.id;
 
-            await apiClient.delete(`/deleteContato?contato_id=${contato_id}`);
+            await apiClient.delete(`/deleteContact?contact_id=${contact_id}`);
             toast.success(`Contato deletada com sucesso.`);
-            
+
             navigate('/contatos');
 
             onRequestClose();
@@ -76,7 +76,7 @@ export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteCo
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteContato()}
+                        onClick={() => handleDeleteContact()}
                     >
                         Deletar
                     </Button>

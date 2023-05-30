@@ -4,7 +4,17 @@ import moment from "moment";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
-import { ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../Categorias/styles";
+import {
+    ButtonPage,
+    Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../Categorias/styles";
 import { Card } from "../../components/Content/styles";
 import Titulos from "../../components/Titulos";
 import Pesquisa from "../../components/Pesquisa";

@@ -32,7 +32,7 @@ const SignupAdmin: React.FC = () => {
         event.preventDefault();
         try {/* @ts-ignore */
             if (captcha.current.getValue()) {
-                console.log('Usuario válido!')
+                console.log('Administrador válido!')
                 setUserValid(true)
             } else {
                 console.log('Por favor, acerte o recaptcha!')
@@ -79,7 +79,7 @@ const SignupAdmin: React.FC = () => {
     const onChange = () => {
         /* @ts-ignore */
         if (captcha.current.getValue()) {
-            console.log('Usuario não é um robo!')
+            console.log('Administrador não é um robo!')
         }
     }
 

@@ -4,7 +4,16 @@ import moment from "moment";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
-import { ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../Categorias/styles";
+import {
+    ButtonPage,
+    Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next, Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../Categorias/styles";
 import { Card } from "../../components/Content/styles";
 import Titulos from "../../components/Titulos";
 import Pesquisa from "../../components/Pesquisa";
@@ -35,10 +44,10 @@ const Contatos: React.FC = () => {
     }
 
     useEffect(() => {
-        async function allContatos() {
+        async function allContacts() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageContato?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageContact?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -49,14 +58,14 @@ const Contatos: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.contatos || []);
-                setInitialFilter(data.contatos);
+                setSearch(data.contacts || []);
+                setInitialFilter(data.contacts);
 
             } catch (error) {
                 console.error(error);
             }
         }
-        allContatos();
+        allContacts();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -73,8 +82,8 @@ const Contatos: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterContatos = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
-        setSearch(filterContatos);
+        const filterContact = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
+        setSearch(filterContact);
     }
 
     const dados: any = [];
@@ -87,29 +96,31 @@ const Contatos: React.FC = () => {
         });
     });
 
-    async function handleExportContatos() {
+    async function handleExportContacts() {
         try {
             setLoading(true);
             const apiClient = setupAPIClient();
-            await apiClient.get('/exportContatos');
+            await apiClient.get('/exportContacts');
             toast.success('Lista de contatos gerada com sucesso!');
             setLoading(false);
 
             showOrHide();
+
         } catch (error) {
             console.log(error);
         }
     }
 
-    async function handleExportContatoEmail() {
+    async function handleExportContactEmail() {
         try {
             setLoading(true);
             const apiClient = setupAPIClient();
-            await apiClient.get('/sendEmailContatos');
+            await apiClient.get('/sendEmailContact');
             toast.success('Lista de contatos exportada para seu EMAIL com sucesso!');
             setLoading(false);
 
             showOrHide();
+
         } catch (error) {
             console.log(error);
         }
@@ -148,7 +159,7 @@ const Contatos: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={handleExportContatoEmail}
+                                            onClick={handleExportContactEmail}
                                         >
                                             Exportar arquivo para o seu email
                                         </Button>
@@ -161,7 +172,7 @@ const Contatos: React.FC = () => {
                                             type="submit"
                                             /* @ts-ignore */
                                             loading={loading}
-                                            onClick={handleExportContatos}
+                                            onClick={handleExportContacts}
                                         >
                                             Gerar arquivo para exportar contatos
                                         </Button>
@@ -232,7 +243,7 @@ const Contatos: React.FC = () => {
                             </>
                         }
                     </Card>
-                </Container >
+                </Container>
             </Grid >
         </>
     )

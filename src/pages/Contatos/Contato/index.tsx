@@ -20,52 +20,52 @@ import { RiMailSendLine } from 'react-icons/ri';
 
 
 export type DeleteContato = {
-    contato_id: string;
+    contact_id: string;
 }
 
 const Contato: React.FC = () => {
 
-    let { contato_id } = useParams();
+    let { contact_id } = useParams();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [empresa, setEmpresa] = useState('');
-    const [setor, setSetor] = useState('');
-    const [mensagem, setMensagem] = useState('');
+    const [company, setCompany] = useState('');
+    const [sector, setSector] = useState('');
+    const [message, setMessage] = useState('');
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
-        async function loadContato() {
+        async function loadContact() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/listExactContato?contato_id=${contato_id}`);
+                const response = await apiClient.get(`/findUniqueContact?contact_id=${contact_id}`);
 
                 setName(response.data.name);
                 setEmail(response.data.email);
                 setPhone(response.data.phone);
-                setEmpresa(response.data.empresa);
-                setSetor(response.data.setor);
-                setMensagem(response.data.mensagem);
+                setCompany(response.data.company);
+                setSector(response.data.sector);
+                setMessage(response.data.message);
 
             } catch (error) {
                 console.log(error);
             }
         }
-        loadContato();
-    }, [contato_id]);
+        loadContact();
+    }, [contact_id]);
 
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(contato_id: string) {
+    async function handleOpenModalDelete(contact_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/listExactContato', {
+        const responseDelete = await apiClient.get('/findUniqueContact', {
             params: {
-                contato_id: contato_id,
+                contact_id: contact_id,
             }
         });
         setModalItem(responseDelete.data || "");
@@ -95,7 +95,7 @@ const Contato: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(contato_id)}
+                                onClick={() => handleOpenModalDelete(contact_id)}
                             >
                                 Remover
                             </Button>
@@ -132,14 +132,14 @@ const Contato: React.FC = () => {
                                 <BlockDados>
                                     <TextoDados
                                         chave={'Empresa'}
-                                        dados={empresa}
+                                        dados={company}
                                     />
                                 </BlockDados>
 
                                 <BlockDados>
                                     <TextoDados
                                         chave={'Setor'}
-                                        dados={setor}
+                                        dados={sector}
                                     />
                                 </BlockDados>
                             </SectionDate>
@@ -149,7 +149,7 @@ const Contato: React.FC = () => {
                                     <LabelMensagem>Mensagem:</LabelMensagem>
                                     <br />
                                     <Mensagem
-                                        value={mensagem}
+                                        value={message}
                                     ></Mensagem>
                                 </BlockDados>
                             </SectionDate>

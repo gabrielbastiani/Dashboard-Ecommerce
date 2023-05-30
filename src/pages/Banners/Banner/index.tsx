@@ -6,7 +6,16 @@ import Titulos from "../../../components/Titulos";
 import Voltar from "../../../components/Voltar";
 import { Button } from "../../../components/ui/Button";
 import { BlockTop, Container, Etiqueta } from "../../Categorias/styles";
-import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
+import {
+    BlockImagem,
+    EtiquetaImagens,
+    FormImagens,
+    IconSpanImagens,
+    ImagensPreviewUrl,
+    ImagensUpload,
+    InputImagens,
+    TextImagens
+} from "../../Configuracoes/ImagensInstitucionais/styles";
 import { SectionDate } from "../../Configuracoes/styles";
 import { Grid } from "../../Dashboard/styles";
 import { GridDate } from "../../Perfil/styles";
@@ -37,14 +46,14 @@ const Banner: React.FC = () => {
     const [title, setTitle] = useState("");
     const [width, setWidth] = useState("");
     const [height, setHeight] = useState("");
-    const [dateInicio, setDateInicio] = useState("");
-    const [dateFim, setDateFim] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const [banner, setBanner] = useState(null);
     const [bannerUrl, setBannerUrl] = useState("");
     const [order, setOrder] = useState(Number);
     const [url, setUrl] = useState("");
-    const [posicao, setPosicao] = useState("");
-    const [posicaoSelected, setPosicaoSelected] = useState();
+    const [position, setPosition] = useState("");
+    const [positionSelected, setPositionSelected] = useState();
     const [active, setActive] = useState("");
 
     const [modalItem, setModalItem] = useState('');
@@ -63,9 +72,9 @@ const Banner: React.FC = () => {
                 setBanner(response.data.banner || null);
                 setOrder(response.data.order);
                 setUrl(response.data.url || "");
-                setDateInicio(response.data.dateInicio || "");
-                setDateFim(response.data.dateFim || "");
-                setPosicao(response.data.posicao || "");
+                setStartDate(response.data.startDate || "");
+                setEndDate(response.data.endDate || "");
+                setPosition(response.data.position || "");
                 setActive(response.data.active || "");
 
             } catch (error) {/* @ts-ignore */
@@ -75,8 +84,8 @@ const Banner: React.FC = () => {
         loadBanner();
     }, [banner_id]);
 
-    function handleChangePosicao(e: any) {
-        setPosicaoSelected(e.target.value);
+    function handleChangePosition(e: any) {
+        setPositionSelected(e.target.value);
     }
 
     async function bannerPublish() {
@@ -102,8 +111,8 @@ const Banner: React.FC = () => {
                         title: title,
                         width: width,
                         height: height,
-                        dateInicio: dateInicio,
-                        dateFim: dateFim,
+                        startDate: startDate,
+                        endDate: endDate,
                         order: Number(order),
                         url: url,
                         active: active
@@ -119,14 +128,14 @@ const Banner: React.FC = () => {
         }
     }
 
-    async function updatePosicao() {
+    async function updatePosition() {
         try {
-            if (posicaoSelected === "") {
+            if (positionSelected === "") {
                 toast.error(`Selecione uma posição, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePosicaoBanner?banner_id=${banner_id}`, { posicao: posicaoSelected });
+            await apiClient.put(`/updatePositionBanner?banner_id=${banner_id}`, { position: positionSelected });
             toast.success('Posição atualizada com sucesso.');
         } catch (error) {
             console.log(error);
@@ -294,10 +303,10 @@ const Banner: React.FC = () => {
                                         chave={"Posição desse banner"}
                                         dados={
                                             <SelectUpdate
-                                                dado={posicao}
-                                                value={posicaoSelected}
+                                                dado={position}
+                                                value={positionSelected}
                                                 /* @ts-ignore */
-                                                onChange={handleChangePosicao}
+                                                onChange={handleChangePosition}
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },
@@ -311,13 +320,13 @@ const Banner: React.FC = () => {
                                                         { label: "Banner Páginas", value: "Banner Páginas" }
                                                     ]
                                                 }
-                                                handleSubmit={updatePosicao}
+                                                handleSubmit={updatePosition}
                                             />
                                         }
                                     />
                                 </BlockDados>
 
-                                {posicao === "Banner Topo" ? (
+                                {position === "Banner Topo" ? (
                                     null
                                 ) :
                                     <>
@@ -412,13 +421,13 @@ const Banner: React.FC = () => {
                                                 chave={"Data de início"}
                                                 dados={
                                                     <InputUpdate
-                                                        dado={dateInicio ? moment(dateInicio).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
+                                                        dado={startDate ? moment(startDate).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
                                                         type="datetime-local"
                                                         /* @ts-ignore */
-                                                        placeholder={dateInicio}
-                                                        value={dateInicio}
+                                                        placeholder={startDate}
+                                                        value={startDate}
                                                         /* @ts-ignore */
-                                                        onChange={(e) => setDateInicio(e.target.value)}
+                                                        onChange={(e) => setStartDate(e.target.value)}
                                                         handleSubmit={updateBannerData}
                                                     />
                                                 }
@@ -430,13 +439,13 @@ const Banner: React.FC = () => {
                                                 chave={"Data do fim"}
                                                 dados={
                                                     <InputUpdate
-                                                        dado={dateFim ? moment(dateFim).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
+                                                        dado={endDate ? moment(endDate).format('DD/MM/YYYY - HH:mm') : "Sem Programação"}
                                                         type="datetime-local"
                                                         /* @ts-ignore */
-                                                        placeholder={dateFim}
-                                                        value={dateFim}
+                                                        placeholder={endDate}
+                                                        value={endDate}
                                                         /* @ts-ignore */
-                                                        onChange={(e) => setDateFim(e.target.value)}
+                                                        onChange={(e) => setEndDate(e.target.value)}
                                                         handleSubmit={updateBannerData}
                                                     />
                                                 }
