@@ -52,13 +52,10 @@ const NovaCategoriaProduto: React.FC = () => {
                 return;
             }
 
-            await apiClient.post('/createRelation', {
+            await apiClient.post('/createProductCategory', {
                 product_id: product_id,
-                category_id: categorySelected,
-                posicao: "",
+                name: categorySelected,
                 order: Number(order),
-                nivel: 0,
-                relationId: "",
                 store_id: store_id
             });
 
@@ -104,7 +101,7 @@ const NovaCategoriaProduto: React.FC = () => {
                         opcoes={
                             [
                                 { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                ...(categories || []).map((item) => ({ label: item.name, value: item.name }))
                             ]
                         }
                     />

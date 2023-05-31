@@ -40,7 +40,7 @@ const Produtos: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [order, setOrder] = useState(() => {
-        const orderSaved = localStorage.getItem('@lojasaveorderproduct');
+        const orderSaved = localStorage.getItem('@storeorderproduct');
 
         if (orderSaved) {
             return String(orderSaved);
@@ -84,19 +84,19 @@ const Produtos: React.FC = () => {
     switch (order) {/* @ts-ignore */
         case "alfabeticaAZ":
             search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
-            localStorage.setItem('@lojasaveorderproduct', String(order));
+            localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "alfabeticaZA":
             search.sort((a, z) => z.nameProduct.localeCompare(a.nameProduct));
-            localStorage.setItem('@lojasaveorderproduct', String(order));
+            localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "precoCrescente":
             search.sort((n1, n9) => n9.preco - n1.preco);
-            localStorage.setItem('@lojasaveorderproduct', String(order));
+            localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "precoDecrescente":
             search.sort((n1, n9) => n1.preco - n9.preco);
-            localStorage.setItem('@lojasaveorderproduct', String(order));
+            localStorage.setItem('@storeorderproduct', String(order));
             break;
         default:
             search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
@@ -110,28 +110,17 @@ const Produtos: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterProducts = search.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
+        const filterProducts = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
         setSearch(filterProducts);
     }
-
-    console.log(search.map((item) => {
-        return(/* @ts-ignore */
-            item.relationproductatributos.map((atr) => {
-                return(/* @ts-ignore */
-                    atr.atributo.tipo
-                )
-            })
-        )
-    }))
 
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Imagem": item.photoproducts[0] ? <ImgRedes src={"http://localhost:3333/files/" + item.photoproducts[0].photo} /> : "Sem imagem",
-            "Produto": item.nameProduct,
-            "Qtd. de Categorias": item.relationproductcategories ? String(item.relationproductcategories.length) : "Sem categoria",
-            /* "Atributos": */ 
-            "Status": item.disponibilidade,
+            "Imagem": item.photoproducts[0] ? <ImgRedes src={"http://localhost:3333/files/" + item.photoproducts[0].image} /> : "Sem imagem",
+            "Produto": item.name,
+            "Qtd. de Categorias": item.productcategories ? String(item.productcategories.length) : "Sem categoria",
+            "Status": item.status,
             "botaoDetalhes": `/produto/${item.slug}/${item.id}`
         });
     });
@@ -205,7 +194,7 @@ const Produtos: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Imagem", "Produto", "Qtd. de Categorias", "Atributos", "Status"]}
+                                cabecalho={["Imagem", "Produto", "Qtd. de Categorias", "Status"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

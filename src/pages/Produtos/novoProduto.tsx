@@ -13,8 +13,6 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
-import DescriptionsProduct from "../../components/ui/DescriptionsProduct";
-import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 import { TextButton } from "./styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
@@ -26,18 +24,16 @@ const NovoProduto: React.FC = () => {
     const { admin } = useContext(AuthContext);
 
     const [store_id] = useState(admin.store_id);
-    const [nameProduct, setNameProduct] = useState('');
-    const [order] = useState(0);
-    const [posicao] = useState("");
-    const [descriptionProduct1, setDescriptionProduct1] = useState('');
-    const [descriptionProduct2, setDescriptionProduct2] = useState('');
-    const [descriptionProduct3, setDescriptionProduct3] = useState('');
-    const [descriptionProduct4, setDescriptionProduct4] = useState('');
-    const [descriptionProduct5, setDescriptionProduct5] = useState('');
-    const [descriptionProduct6, setDescriptionProduct6] = useState('');
-    const [preco, setPreco] = useState('');
+    const [name, setName] = useState('');
+    const [price, setPrice] = useState('');
     const [sku, setSku] = useState('');
-    const [promocao, setPromocao] = useState('');
+    const [promotion, setPromotion] = useState('');
+    const [stock, setStock] = useState();
+    const [weight, setWeight] = useState('');
+    const [width, setWidth] = useState('');
+    const [height, setHeight] = useState('');
+    const [depth, setDepth] = useState('');
+    const [urlVideo, setUrlVideo] = useState('');
 
     const [findFirstProduct, setFindFirstProduct] = useState("");
 
@@ -59,8 +55,8 @@ const NovoProduto: React.FC = () => {
 
     async function handleRegisterProduct() {
         try {
-            if (nameProduct === '' ||
-                preco === null ||
+            if (name === '' ||
+                price === null ||
                 sku === ''
             ) {
                 toast.error('Preencha todos os campos')
@@ -74,33 +70,28 @@ const NovoProduto: React.FC = () => {
 
             const apiClient = setupAPIClient();
             await apiClient.post('/createProduct', {
-                nameProduct: nameProduct,
-                descriptionProduct1: descriptionProduct1,
-                descriptionProduct2: descriptionProduct2,
-                descriptionProduct3: descriptionProduct3,
-                descriptionProduct4: descriptionProduct4,
-                descriptionProduct5: descriptionProduct5,
-                descriptionProduct6: descriptionProduct6,
-                preco: Number(preco.replace(/[^\d]+/g, '')),
+                name: name,
                 sku: sku,
-                order: order,
-                posicao: posicao,
-                promocao: Number(promocao.replace(/[^\d]+/g, '')),
+                stock: Number(stock),
+                weight: weight,
+                width: width,
+                height: height,
+                depth: depth,
+                urlVideo: urlVideo,
+                price: Number(price.replace(/[^\d]+/g, '')),
+                promotion: Number(promotion.replace(/[^\d]+/g, '')),
                 store_id: store_id
-            })
+            });
 
             toast.success('Produto cadastrado com sucesso');
 
-            setNameProduct('');
-            setDescriptionProduct1('');
-            setDescriptionProduct2('');
-            setDescriptionProduct3('');
-            setDescriptionProduct4('');
-            setDescriptionProduct5('');
-            setDescriptionProduct6('');
-            setPreco('');
+            setName('');
+            setPrice('');
             setSku('');
-            setPromocao('');
+            setPromotion('');
+            setDepth('');
+            setHeight('');
+            setUrlVideo('');
 
             loadProduct();
             showOrHideCategory();
@@ -158,8 +149,8 @@ const NovoProduto: React.FC = () => {
                                         <InputPost
                                             type="text"
                                             placeholder="Digite o nome do produto"
-                                            value={nameProduct}
-                                            onChange={(e) => setNameProduct(e.target.value)}
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
                                         />
                                     </Block>
 
@@ -173,9 +164,69 @@ const NovoProduto: React.FC = () => {
                                         />
                                     </Block>
 
+                                    <Block>
+                                        <Etiqueta>Estoque:</Etiqueta>
+                                        <InputPost
+                                            type="number"
+                                            placeholder="Digite o estoque do produto"
+                                            value={stock}/* @ts-ignore */
+                                            onChange={(e) => setStock(e.target.value)}
+                                        />
+                                    </Block>
+
+                                    <Block>
+                                        <Etiqueta>Peso:</Etiqueta>
+                                        <InputPost
+                                            type="text"
+                                            placeholder="Digite o peso do produto"
+                                            value={weight}
+                                            onChange={(e) => setWeight(e.target.value)}
+                                        />
+                                    </Block>
+
+                                    <Block>
+                                        <Etiqueta>Largura (Cm):</Etiqueta>
+                                        <InputPost
+                                            type="text"
+                                            placeholder="Digite a largura do produto"
+                                            value={width}
+                                            onChange={(e) => setWidth(e.target.value)}
+                                        />
+                                    </Block>
+
                                 </SectionDate>
 
                                 <SectionDate>
+
+                                    <Block>
+                                        <Etiqueta>Altura (Cm):</Etiqueta>
+                                        <InputPost
+                                            type="text"
+                                            placeholder="Digite a altura do produto"
+                                            value={height}
+                                            onChange={(e) => setHeight(e.target.value)}
+                                        />
+                                    </Block>
+
+                                    <Block>
+                                        <Etiqueta>Comprimento (Cm):</Etiqueta>
+                                        <InputPost
+                                            type="text"
+                                            placeholder="Digite o comprimento do produto"
+                                            value={depth}
+                                            onChange={(e) => setDepth(e.target.value)}
+                                        />
+                                    </Block>
+
+                                    <Block>
+                                        <Etiqueta>Link video apresentação:</Etiqueta>
+                                        <InputPost
+                                            type="text"
+                                            placeholder="Ex: https://www.video.com.br"
+                                            value={urlVideo}
+                                            onChange={(e) => setUrlVideo(e.target.value)}
+                                        />
+                                    </Block>
 
                                     <Block>
                                         <Etiqueta>Preço:</Etiqueta>
@@ -183,8 +234,8 @@ const NovoProduto: React.FC = () => {
                                             style={{ maxWidth: "310px" }}
                                             maxLength={10}
                                             placeholder="Digite aqui o valor sem pontos e sem virgulas"/* @ts-ignore */
-                                            value={preco}/* @ts-ignore */
-                                            onChange={(e) => setPreco(e.target.value)}
+                                            value={price}/* @ts-ignore */
+                                            onChange={(e) => setPrice(e.target.value)}
                                         />
                                     </Block>
 
@@ -194,42 +245,13 @@ const NovoProduto: React.FC = () => {
                                             style={{ maxWidth: "310px" }}
                                             maxLength={10}
                                             placeholder="Digite aqui o valor sem pontos e sem virgulas"
-                                            value={promocao}/* @ts-ignore */
-                                            onChange={(e) => setPromocao(e.target.value)}
+                                            value={promotion}/* @ts-ignore */
+                                            onChange={(e) => setPromotion(e.target.value)}
                                         />
                                     </Block>
 
                                 </SectionDate>
                             </GridDate>
-
-                            <DivisorHorizontal />
-
-                            <DescriptionsProduct
-                                valor1={descriptionProduct1}
-                                valor2={descriptionProduct2}
-                                valor3={descriptionProduct3}
-                                valor4={descriptionProduct4}
-                                valor5={descriptionProduct5}
-                                valor6={descriptionProduct6}
-                                /* @ts-ignore */
-                                onChange1={(e) => setDescriptionProduct1(e.target.value)}
-                                /* @ts-ignore */
-                                onChange2={(e) => setDescriptionProduct2(e.target.value)}
-                                /* @ts-ignore */
-                                onChange3={(e) => setDescriptionProduct3(e.target.value)}
-                                /* @ts-ignore */
-                                onChange4={(e) => setDescriptionProduct4(e.target.value)}
-                                /* @ts-ignore */
-                                onChange5={(e) => setDescriptionProduct5(e.target.value)}
-                                /* @ts-ignore */
-                                onChange6={(e) => setDescriptionProduct6(e.target.value)}
-                                placeholder1="Digite aqui a 1º descrição"
-                                placeholder2="Digite aqui a 2º descrição"
-                                placeholder3="Digite aqui a 3º descrição"
-                                placeholder4="Digite aqui a 4º descrição"
-                                placeholder5="Digite aqui a 5º descrição"
-                                placeholder6="Digite aqui a 6º descrição"
-                            />
                         </Card>
                     </>
                 }

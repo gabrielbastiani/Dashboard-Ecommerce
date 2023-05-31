@@ -37,14 +37,13 @@ export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation
             /* @ts-ignore */
             const relationProductCategory_id = relation.id;
 
-            await apiClient.delete(`/deleteNivelPrincipal?relationProductCategory_id=${relationProductCategory_id}`);
-            toast.success(`Relação de categoria deletada com sucesso.`);
+            await apiClient.delete(`/deleteCategoryProduct?productCategory_id=${relationProductCategory_id}`);
+            toast.success(`Categoria deletada do produto com sucesso.`);
 
             onRequestClose();
 
         } catch (error) {
-            /* @ts-ignore */
-            toast.error(`${error.response.data.error}`);
+            toast.error('Erro ao deletar a categoria desse produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
@@ -70,7 +69,7 @@ export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa relação de categoria?</TextModal>
+                <TextModal>Deseja mesmo deletar essa categoria deste produto?</TextModal>
 
                 <ContainerButton>
                     <Button
