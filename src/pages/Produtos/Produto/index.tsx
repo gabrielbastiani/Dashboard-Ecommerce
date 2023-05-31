@@ -665,7 +665,8 @@ const Produto: React.FC = () => {
                                 <>
                                     <DescriptionsProduct
                                         product_id={product_id}
-                                        handleSubmit={() => alert('clicou')}
+                                        handleSubmit={() => alert('atualizar')}
+                                        handleSubmitDelete={() => alert('deletar')}
                                     />
                                 </>
                             }

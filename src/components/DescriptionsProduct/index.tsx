@@ -16,9 +16,10 @@ import { GiConfirmed } from "react-icons/gi";
 interface DescriptionRequest {
     product_id: any;
     handleSubmit: () => void;
+    handleSubmitDelete: () => void;
 }
 
-const DescriptionsProduct = ({ product_id, handleSubmit }: DescriptionRequest) => {
+const DescriptionsProduct = ({ product_id, handleSubmit, handleSubmitDelete }: DescriptionRequest) => {
 
     const [activeTab, setActiveTab] = useState("");
 
@@ -76,9 +77,13 @@ const DescriptionsProduct = ({ product_id, handleSubmit }: DescriptionRequest) =
                                     <TextAreaDescription>
                                         {item.description}
                                     </TextAreaDescription>
+                                    <br />
+                                    <br />
                                     <EditBox>
                                         <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
                                         <ButtonConfirm type="submit" onClick={handleSubmit}><GiConfirmed /></ButtonConfirm>
+                                        <ValueText style={{ marginBottom: '12px' }}>Deletar descrição acima:</ValueText>
+                                        <ButtonConfirm type="submit" onClick={handleSubmitDelete}><GiConfirmed /></ButtonConfirm>
                                     </EditBox>
                                 </TabContents>
                                     : null}
