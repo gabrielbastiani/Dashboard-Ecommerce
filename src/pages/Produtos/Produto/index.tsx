@@ -647,7 +647,7 @@ const Produto: React.FC = () => {
                             <ContatinerButton>
                                 <Link to={`/produto/descricao/nova/${slug}/${product_id}`}>
                                     <Button
-                                        style={{ width: '310px' }}
+                                        style={{ width: '350px' }}
                                     >
                                         Cadastrar descrição para o produto
                                     </Button>
