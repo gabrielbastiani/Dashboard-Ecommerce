@@ -115,11 +115,16 @@ export const NameCategory = styled.span`
 
 export const TextNotFound = styled.span`
   color: ${(props) => props?.theme?.colors?.black};
-`
+`;
 
-export const ContatinerDescription = styled.div`
+export const ContatinerButton = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+`;
+
+export const ContatinerDescription = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

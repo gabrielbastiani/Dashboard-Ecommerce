@@ -18,7 +18,7 @@ import DescriptionsProduct from "../../../components/DescriptionsProduct";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer, TextNotFound, ContatinerDescription } from "../styles";
+import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer, TextNotFound, ContatinerDescription, ContatinerButton } from "../styles";
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
@@ -644,14 +644,17 @@ const Produto: React.FC = () => {
                         <br />
                         <br />
                         <ContatinerDescription>
-                            <Link to={`/produto/descricao/nova/${slug}/${product_id}`}>
-                                <Button
-                                    style={{ width: '310px' }}
-                                >
-                                    Cadastrar descrição para o produto
-                                </Button>
-                            </Link>
-
+                            <ContatinerButton>
+                                <Link to={`/produto/descricao/nova/${slug}/${product_id}`}>
+                                    <Button
+                                        style={{ width: '310px' }}
+                                    >
+                                        Cadastrar descrição para o produto
+                                    </Button>
+                                </Link>
+                            </ContatinerButton>
+                            <br />
+                            <br />
                             <br />
                             <br />
                             {descriptions.length < 1 ? (
@@ -662,7 +665,7 @@ const Produto: React.FC = () => {
                                 <>
                                     <DescriptionsProduct
                                         product_id={product_id}
-                                        handleSubmit={ () => alert('clicou') }
+                                        handleSubmit={() => alert('clicou')}
                                     />
                                 </>
                             }

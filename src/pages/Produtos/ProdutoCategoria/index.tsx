@@ -50,7 +50,7 @@ const ProdutoCategoria: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     function handleChangeCategory(e: any) {
-        setCategorySelected(e.target.value)
+        setCategorySelected(e.target.value);
     }
 
     useEffect(() => {

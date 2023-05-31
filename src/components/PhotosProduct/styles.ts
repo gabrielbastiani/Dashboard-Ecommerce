@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   grid-gap: 10px;
   padding: 10px;
   border-collapse: collapse;
@@ -12,30 +12,28 @@ export const GridContainer = styled.div`
   -webkit-overflow-scrolling: touch;
 
   ::-webkit-scrollbar {
-        width: 10px;
-    }
+    width: 10px;
+  }
 
-    ::-webkit-scrollbar-thumb {
-        background-color: ${(props) => props?.theme?.colors?.info};
-        border-radius: 10px;
-    }
+  ::-webkit-scrollbar-thumb {
+    background-color: ${(props) => props?.theme?.colors?.info};
+    border-radius: 10px;
+  }
 
-    ::-webkit-scrollbar-track {
-        background-color: ${(props) => props?.theme?.colors?.tertiary};
-        border-radius: 10px;
-    }
-  
-    @media (max-width: 1532px) {
-      grid-template-columns: 200px 200px;
-      grid-gap: unset;
-      padding: unset;
-    }
+  ::-webkit-scrollbar-track {
+    background-color: ${(props) => props?.theme?.colors?.tertiary};
+    border-radius: 10px;
+  }
 
-    @media (max-width: 1225px) {
-      grid-template-columns: 200px;
-      justify-content: center;
-    }
-}
+  @media (max-width: 1532px) {
+    grid-template-columns: 200px;
+    grid-gap: unset;
+    padding: unset;
+  }
+
+  @media (max-width: 1225px) {
+    justify-content: center;
+  }
 `;
 
 export const ClickPhoto = styled.span`

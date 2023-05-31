@@ -123,7 +123,6 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
 
     return (
-
         <>
             <FormPhotoProduct onSubmit={handlePhoto}>
                 <EtiquetaPhotoProductInsert>
