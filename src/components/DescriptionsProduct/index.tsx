@@ -77,9 +77,9 @@ const DescriptionsProduct = ({ product_id, handleSubmit }: DescriptionRequest) =
                                         {item.description}
                                     </TextAreaDescription>
                                     <EditBox>
-                            <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
-                            <ButtonConfirm type="submit" onClick={handleSubmit}><GiConfirmed /></ButtonConfirm>
-                        </EditBox>
+                                        <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
+                                        <ButtonConfirm type="submit" onClick={handleSubmit}><GiConfirmed /></ButtonConfirm>
+                                    </EditBox>
                                 </TabContents>
                                     : null}
                             </>
