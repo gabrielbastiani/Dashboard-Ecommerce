@@ -7,7 +7,7 @@ import Titulos from "../../../components/Titulos";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../../services/api";
-import DescriptionsProduct from "../../../components/ui/DescriptionsProduct";
+import DescriptionsProduct from "../../../components/descriptions/DescriptionsProduct";
 import { useNavigate } from "react-router-dom";
 
 

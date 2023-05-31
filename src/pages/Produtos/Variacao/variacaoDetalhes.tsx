@@ -4,7 +4,7 @@ import { TextoDados } from "../../../components/TextoDados";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
-import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProductUpdate";
+import DescriptionsProductUpdate from "../../../components/descriptions/DescriptionsProductUpdate"; 
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { setupAPIClient } from "../../../services/api";
 import { BlockDados } from "../../Categorias/Categoria/styles";

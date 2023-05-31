@@ -14,7 +14,7 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
-import DescriptionsProductUpdate from "../../../components/ui/DescriptionsProductUpdate";
+import DescriptionsProductUpdate from "../../../components/descriptions/DescriptionsProductUpdate"; 
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";

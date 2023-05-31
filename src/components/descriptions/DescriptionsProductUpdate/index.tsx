@@ -12,8 +12,8 @@ import {
 } from './styles';
 import TabNavItem from "./TabNavItem";
 import TabContent from "./TabContent";
-import { ButtonConfirm, EditBox, ValueText } from "../InputUpdate/styles";
 import { GiConfirmed } from "react-icons/gi";
+import { ButtonConfirm, EditBox, ValueText } from "../../ui/InputUpdate/styles";
 
 
 interface DescriptionRequest {
