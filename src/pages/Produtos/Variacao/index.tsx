@@ -7,7 +7,7 @@ import Titulos from "../../../components/Titulos";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../../services/api";
-import DescriptionsProduct from "../../../components/descriptions/DescriptionsProduct";
+import DescriptionsProduct from "../../../components/DescriptionsProduct";
 import { useNavigate } from "react-router-dom";
 
 
@@ -223,32 +223,7 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
                 </SectionDate>
             </GridDateForm>
             <br />
-            <DescriptionsProduct
-                valor1={descriptionVariacao1}
-                valor2={descriptionVariacao2}
-                valor3={descriptionVariacao3}
-                valor4={descriptionVariacao4}
-                valor5={descriptionVariacao5}
-                valor6={descriptionVariacao6}
-                /* @ts-ignore */
-                onChange1={(e) => setDescriptionVariacao1(e.target.value)}
-                /* @ts-ignore */
-                onChange2={(e) => setDescriptionVariacao2(e.target.value)}
-                /* @ts-ignore */
-                onChange3={(e) => setDescriptionVariacao3(e.target.value)}
-                /* @ts-ignore */
-                onChange4={(e) => setDescriptionVariacao4(e.target.value)}
-                /* @ts-ignore */
-                onChange5={(e) => setDescriptionVariacao5(e.target.value)}
-                /* @ts-ignore */
-                onChange6={(e) => setDescriptionVariacao6(e.target.value)}
-                placeholder1="Digite aqui a 1º descrição"
-                placeholder2="Digite aqui a 2º descrição"
-                placeholder3="Digite aqui a 3º descrição"
-                placeholder4="Digite aqui a 4º descrição"
-                placeholder5="Digite aqui a 5º descrição"
-                placeholder6="Digite aqui a 6º descrição"
-            />
+            
         </>
     )
 }

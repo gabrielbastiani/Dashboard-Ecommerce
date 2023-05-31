@@ -14,11 +14,11 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
-import DescriptionsProductUpdate from "../../../components/descriptions/DescriptionsProductUpdate"; 
+import DescriptionsProduct from "../../../components/DescriptionsProduct";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer, TextNotFound } from "../styles";
+import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer, TextNotFound, ContatinerDescription } from "../styles";
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
@@ -53,6 +53,7 @@ const Produto: React.FC = () => {
     const [offer, setOffer] = useState("");
 
     const [categories, setCategories] = useState<any[]>([]);
+    const [descriptions, setDescriptions] = useState<any[]>([]);
 
     const [variation, setVariation] = useState<any[]>([]);
     const [idVariation, setIdVariation] = useState("");
@@ -80,6 +81,19 @@ const Produto: React.FC = () => {
             }
         }
         loadCategorys();
+    }, [product_id]);
+
+    useEffect(() => {
+        async function loadDescriptions() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/allProductsDescriptionsStore?product_id=${product_id}`);
+                setDescriptions(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadDescriptions();
     }, [product_id]);
 
     useEffect(() => {
@@ -619,7 +633,6 @@ const Produto: React.FC = () => {
                                         }
                                     />
                                 </BlockDados>
-
                             </SectionDate>
 
                             <SectionDate>
@@ -630,7 +643,30 @@ const Produto: React.FC = () => {
                         </GridDate>
                         <br />
                         <br />
+                        <ContatinerDescription>
+                            <Link to={`/produto/descricao/nova/${slug}/${product_id}`}>
+                                <Button
+                                    style={{ width: '310px' }}
+                                >
+                                    Cadastrar descrição para o produto
+                                </Button>
+                            </Link>
 
+                            <br />
+                            <br />
+                            {descriptions.length < 1 ? (
+                                <>
+                                    <Avisos texto="Não há descrições cadastradas no produto ainda..." />
+                                </>
+                            ) :
+                                <>
+                                    <DescriptionsProduct
+                                        product_id={product_id}
+                                        handleSubmit={ () => alert('clicou') }
+                                    />
+                                </>
+                            }
+                        </ContatinerDescription>
                     </Card>
 
                     <ContainerVariacao>

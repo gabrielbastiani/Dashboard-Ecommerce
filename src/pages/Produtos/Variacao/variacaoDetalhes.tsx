@@ -4,7 +4,6 @@ import { TextoDados } from "../../../components/TextoDados";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
-import DescriptionsProductUpdate from "../../../components/descriptions/DescriptionsProductUpdate"; 
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { setupAPIClient } from "../../../services/api";
 import { BlockDados } from "../../Categorias/Categoria/styles";
@@ -734,42 +733,7 @@ const VariacaoDetalhes = ({
             </GridDate>
             <br />
             <br />
-            <DescriptionsProductUpdate
-                valor1={descriptionVariacoes1}
-                valor2={descriptionVariacoes2}
-                valor3={descriptionVariacoes3}
-                valor4={descriptionVariacoes4}
-                valor5={descriptionVariacoes5}
-                valor6={descriptionVariacoes6}
-
-                /* @ts-ignore */
-                onChange1={(e) => setDescriptionVariacoes1(e.target.value)}
-                /* @ts-ignore */
-                onChange2={(e) => setDescriptionVariacoes2(e.target.value)}
-                /* @ts-ignore */
-                onChange3={(e) => setDescriptionVariacoes3(e.target.value)}
-                /* @ts-ignore */
-                onChange4={(e) => setDescriptionVariacoes4(e.target.value)}
-                /* @ts-ignore */
-                onChange5={(e) => setDescriptionVariacoes5(e.target.value)}
-                /* @ts-ignore */
-                onChange6={(e) => setDescriptionVariacoes6(e.target.value)}
-
-                handleSubmit1={updateDescriptionsVariacao}
-                handleSubmit2={updateDescriptionsVariacao}
-                handleSubmit3={updateDescriptionsVariacao}
-                handleSubmit4={updateDescriptionsVariacao}
-                handleSubmit5={updateDescriptionsVariacao}
-                handleSubmit6={updateDescriptionsVariacao}
-
-                placeholder1={descriptionVariacao1}
-                placeholder2={descriptionVariacao2}
-                placeholder3={descriptionVariacao3}
-                placeholder4={descriptionVariacao4}
-                placeholder5={descriptionVariacao5}
-                placeholder6={descriptionVariacao6}
-            />
-
+           
             {modalVisible && (
                 <ModalDeleteVariacao
                     isOpen={modalVisible}

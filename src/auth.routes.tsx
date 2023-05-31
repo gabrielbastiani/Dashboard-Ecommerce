@@ -28,7 +28,7 @@ import Imagem from './pages/Configuracoes/ImagensInstitucionais/Imagem';
 import NovaImagem from './pages/Configuracoes/ImagensInstitucionais/novaImagem';
 import NovaCategoriaProduto from './pages/Produtos/ProdutoCategoria/novaCategoriaProduto';
 import SubCategoria from './pages/Categorias/Categoria/subCategoria';
-import AtualizarCategoria from './pages/Produtos/AtualizarCategoria';
+import AtualizarCategoria from './pages/Produtos/ProdutoCategoria/AtualizarCategoria';
 import TodasAvaliacoes from './pages/Avaliacoes/TodasAvaliacoes';
 import NovoBanner from './pages/Banners/novoBanner';
 import Banner from './pages/Banners/Banner';
@@ -49,6 +49,7 @@ import NovoGrupoFiltroCategoria from './pages/Filtros/novoGrupoFiltroCategoria';
 import CategoryFiltro from './pages/Filtros/CategoryFiltro';
 import EditCategoryFiltro from './pages/Filtros/CategoryFiltro/editCategoryFiltro';
 import EditItem from './pages/Categorias/MenusCategorias/editItem';
+import ProdutoDescricao from './pages/Produtos/ProdutoDescricao';
 
 
 const RoutesAuth: React.FC = () => {
@@ -75,6 +76,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/novo/categorias/:product_id' element={<ProdutoCategoria />} />
             <Route path='/produto/novo/categorias/novaCategoriaProduto/:product_id' element={<NovaCategoriaProduto />} />
             <Route path='/produto/atualizar/categorias/:product_id' element={<AtualizarCategoria />} />
+            <Route path='/produto/descricao/nova/:slug/:product_id' element={<ProdutoDescricao />} />
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />

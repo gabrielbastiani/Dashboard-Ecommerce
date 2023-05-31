@@ -16,7 +16,6 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../../contexts/AuthContext";
 
 
-
 const NovoTexto: React.FC = () => {
 
     const { admin } = useContext(AuthContext);
@@ -52,7 +51,7 @@ const NovoTexto: React.FC = () => {
 
             setTimeout(() => {
                 navigate('/textosInstitucionais');
-            }, 2000);
+            }, 3000);
 
         } catch (error) {
             console.log(error);
@@ -70,6 +69,7 @@ const NovoTexto: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
+                    
                     <Voltar url='/textosInstitucionais' />
 
                     <BlockTop>
