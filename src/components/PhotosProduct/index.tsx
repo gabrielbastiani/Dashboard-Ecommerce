@@ -48,7 +48,7 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
             try {
                 const responseProduct = await apiClient.get(`/allPhotosProducts?product_id=${product_id}`)
 
-                setAllPhotos(responseProduct.data);
+                setAllPhotos(responseProduct.data || []);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -88,12 +88,11 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
             data.append('file', productPhoto);
             /* @ts-ignore */
             data.append('product_id', product_id);
-            data.append('posicao', "");
 
             const apiClient = setupAPIClient();
-            await apiClient.post(`/photo`, data);
+            await apiClient.post(`/imageProduct`, data);
 
-            toast.success('Foto inserida com sucesso');
+            toast.success('Imagem cadastrada no produto com sucesso!!!');
 
             setTimeout(() => {
                 navigate(0);
@@ -150,13 +149,13 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
             {allPhotos.length !== 0 && (
                 <GridContainer>
-                    {allPhotos.map((photos) => {
+                    {allPhotos.map((item) => {
                         return (
-                            <EtiquetaPhotoProduct key={photos.id}>
-                                <IconButton onClick={() => handleOpenModalDelete(photos.id)}>
+                            <EtiquetaPhotoProduct key={item.id}>
+                                <IconButton onClick={() => handleOpenModalDelete(item.id)}>
                                     <IoIosRemoveCircle size={30} />
                                 </IconButton>
-                                <PhotoProductImg src={"http://localhost:3333/files/" + photos.photo} alt="foto do produto" />
+                                <PhotoProductImg src={"http://localhost:3333/files/" + item.image} alt="foto do produto" />
                             </EtiquetaPhotoProduct>
                         )
                     })}

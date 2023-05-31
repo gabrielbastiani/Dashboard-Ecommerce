@@ -36,44 +36,32 @@ const Produto: React.FC = () => {
     let { slug, product_id } = useParams();
     const navigate = useNavigate();
 
-    const [nameProducts, setNameProducts] = useState("");
-    const [descriptionProducts1, setDescriptionProducts1] = useState("");
-    const [descriptionProducts2, setDescriptionProducts2] = useState("");
-    const [descriptionProducts3, setDescriptionProducts3] = useState("");
-    const [descriptionProducts4, setDescriptionProducts4] = useState("");
-    const [descriptionProducts5, setDescriptionProducts5] = useState("");
-    const [descriptionProducts6, setDescriptionProducts6] = useState("");
-    const [precos, setPrecos] = useState("");
-    const [skus, setSkus] = useState("");
-    const [promocoes, setPromocoes] = useState("");
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState(Number);
+    const [sku, setSku] = useState("");
+    const [promotion, setPromotion] = useState(Number);
+    const [stock, setStock] = useState(Number);
+    const [weight, setWeight] = useState("");
+    const [width, setWidth] = useState("");
+    const [height, setHeight] = useState("");
+    const [depth, setDepth] = useState("");
+    const [urlVideo, setUrlVideo] = useState("");
+    const [freeShipping, setFreeShipping] = useState("");
+    const [buyTogether_id, setBuyTogether_id] = useState("");
+    const [status, setStatus] = useState("");
+    const [emphasis, setEmphasis] = useState("");
+    const [offer, setOffer] = useState("");
+
     const [categories, setCategories] = useState<any[]>([]);
-    const [disponibilidades, setDisponibilidades] = useState("");
-    const [order, setOrder] = useState(Number);
-    const [posicao, setPosicao] = useState("");
-    const [destaques, setDestaques] = useState("");
-    const [ofertas, setOfertas] = useState("");
 
-    const [variacoes, setVariacoes] = useState<any[]>([]);
+    const [variation, setVariation] = useState<any[]>([]);
+    const [idVariation, setIdVariation] = useState("");
 
-    const [iDVariacao, setIDVariacao] = useState("");
-
-    const [nameVariacao, setNameVariacao] = useState("");
-    const [orderVariacao, setOrderVariacao] = useState(Number);
-    const [posicaoVariacao, setPosicaoVariacao] = useState("");
-    const [descriptionVariacao1, setDescriptionVariacao1] = useState("");
-    const [descriptionVariacao2, setDescriptionVariacao2] = useState("");
-    const [descriptionVariacao3, setDescriptionVariacao3] = useState("");
-    const [descriptionVariacao4, setDescriptionVariacao4] = useState("");
-    const [descriptionVariacao5, setDescriptionVariacao5] = useState("");
-    const [descriptionVariacao6, setDescriptionVariacao6] = useState("");
-    const [precoVariacao, setPrecoVariacao] = useState("");
-    const [skuVariacao, setSkuVariacao] = useState("");
-    const [estoqueVariacao, setEstoqueVariacao] = useState("");
-    const [pesoKgVariacao, setPesoKgVariacao] = useState("");
-    const [larguraCmVariacao, setLarguraCmVariacao] = useState("");
-    const [profundidadeCmVariacao, setProfundidadeCmVariacao] = useState("");
-    const [alturaCmVariacao, setAlturaCmVariacao] = useState("");
-    const [promocaoVariacao, setPromocaoVariacao] = useState("");
+    const [productIDvariation, setProductIDvariation] = useState("");
+    const [nameVariation, setNameVariation] = useState("");
+    const [slugVariation, setSlugVariation] = useState("");
+    const [orderVariation, setOrderVariation] = useState();
+    const [statusVariation, setStatusVariation] = useState("");
 
     const [showElement, setShowElement] = useState(false);
 
@@ -85,8 +73,8 @@ const Produto: React.FC = () => {
         async function loadCategorys() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
-                setCategories(data.allFindOrderAsc || []);
+                const response = await apiClient.get(`/findAllRelationsProductAndCategory?product_id=${product_id}`);
+                setCategories(response.data || []);
             } catch (error) {
                 console.log(error);
             }
@@ -98,21 +86,23 @@ const Produto: React.FC = () => {
         async function loadProduct() {
             const apiClient = setupAPIClient();
             try {
-                const responseProduct = await apiClient.get(`/exactProduct?product_id=${product_id}`)
+                const responseProduct = await apiClient.get(`/findUniqueProduct?product_id=${product_id}`)
 
-                setNameProducts(responseProduct.data.nameProduct || "");
-                setDescriptionProducts1(responseProduct.data.descriptionProduct1 || "");
-                setDescriptionProducts2(responseProduct.data.descriptionProduct2 || "");
-                setDescriptionProducts3(responseProduct.data.descriptionProduct3 || "");
-                setDescriptionProducts4(responseProduct.data.descriptionProduct4 || "");
-                setDescriptionProducts5(responseProduct.data.descriptionProduct5 || "");
-                setDescriptionProducts6(responseProduct.data.descriptionProduct6 || "");
-                setPrecos(responseProduct.data.preco);
-                setSkus(responseProduct.data.sku || "");
-                setPromocoes(responseProduct.data.promocao);
-                setDisponibilidades(responseProduct.data.disponibilidade || "");
-                setDestaques(responseProduct.data.produtoDestaque);
-                setOfertas(responseProduct.data.produtoOferta);
+                setName(responseProduct.data.name || "");
+                setPrice(responseProduct.data.price);
+                setSku(responseProduct.data.sku || "");
+                setPromotion(responseProduct.data.promotion);
+                setStock(responseProduct.data.stock);
+                setWeight(responseProduct.data.weight || "");
+                setWidth(responseProduct.data.width || "");
+                setHeight(responseProduct.data.height || "");
+                setDepth(responseProduct.data.depth || "");
+                setUrlVideo(responseProduct.data.urlVideo || "");
+                setFreeShipping(responseProduct.data.freeShipping);
+                setBuyTogether_id(responseProduct.data.buyTogether_id);
+                setStatus(responseProduct.data.status || "");
+                setEmphasis(responseProduct.data.emphasis);
+                setOffer(responseProduct.data.offer);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -124,11 +114,11 @@ const Produto: React.FC = () => {
     async function updateNameProduct() {
         try {
             const apiClient = setupAPIClient();
-            if (nameProducts === '') {
+            if (name === '') {
                 toast.error('Não deixe o nome do produto em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { nameProduct: nameProducts });
+                await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { name: name });
                 toast.success('Nome do produto atualizado com sucesso.');
                 setTimeout(() => {
                     navigate(0);
@@ -143,31 +133,33 @@ const Produto: React.FC = () => {
     async function updateProductData() {
         try {
             const apiClient = setupAPIClient();
-            if (skus === "") {
+            if (sku === "") {
                 toast.error('Não deixe o código do produto em branco!!!');
                 return;
             } else {
                 await apiClient.put(`/updateAllDateProduct?product_id=${product_id}`,
                     {
-                        nameProduct: nameProducts,
-                        descriptionProduct1: descriptionProducts1,
-                        descriptionProduct2: descriptionProducts2,
-                        descriptionProduct3: descriptionProducts3,
-                        descriptionProduct4: descriptionProducts4,
-                        descriptionProduct5: descriptionProducts5,
-                        descriptionProduct6: descriptionProducts6,
-                        order: Number(order),
-                        preco: precos,
-                        promocao: promocoes,
-                        sku: skus
+                        name: name,
+                        price: Number(price),
+                        promotion: Number(promotion),
+                        sku: sku,
+                        stock: Number(stock),
+                        weight: weight,
+                        width: width,
+                        height: height,
+                        depth: depth,
+                        urlVideo: urlVideo,
+                        buyTogether_id: buyTogether_id
                     });
+
                 toast.success('Dado do produto atualizado com sucesso.');
+
                 setTimeout(() => {
                     navigate(0);
                 }, 3000);
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
             toast.error('Ops erro ao atualizar o dado do produto.');
         }
     }
@@ -175,7 +167,7 @@ const Produto: React.FC = () => {
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/diponibilidadeProduct?product_id=${product_id}`);
+            await apiClient.put(`/updateStatusProduct?product_id=${product_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -183,24 +175,24 @@ const Produto: React.FC = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a disponibilidade do produto.');
+            toast.error('Ops erro ao atualizar a status do produto.');
         }
 
-        if (disponibilidades === "Indisponivel") {
+        if (status === "Indisponivel") {
             toast.success(`O produto se encontra Disponivel.`);
             return;
         }
 
-        if (disponibilidades === "Disponivel") {
+        if (status === "Disponivel") {
             toast.error(`O produto se encontra Indisponivel.`);
             return;
         }
     }
 
-    async function updateDestaque() {
+    async function updateEmphasis() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/destaque?product_id=${product_id}`);
+            await apiClient.put(`/emphasis?product_id=${product_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -211,21 +203,21 @@ const Produto: React.FC = () => {
             toast.error('Ops erro ao atualizar produto destaque.');
         }
 
-        if (destaques === "Nao") {
+        if (emphasis === "Nao") {
             toast.success(`Esse produto é um destaque na loja.`);
             return;
         }
 
-        if (destaques === "Sim") {
+        if (emphasis === "Sim") {
             toast.error(`Esse produto não está como destaque na loja.`);
             return;
         }
     }
 
-    async function updateOferta() {
+    async function updateOffer() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/oferta?product_id=${product_id}`);
+            await apiClient.put(`/offer?product_id=${product_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -236,50 +228,67 @@ const Produto: React.FC = () => {
             toast.error('Ops erro ao atualizar produto oferta.');
         }
 
-        if (ofertas === "Nao") {
+        if (offer === "Nao") {
             toast.success(`Esse produto esta agora como oferta na loja.`);
             return;
         }
 
-        if (ofertas === "Sim") {
+        if (offer === "Sim") {
             toast.error(`Esse produto não está agora como oferta na loja.`);
             return;
         }
     }
 
+    async function updateFreeShipping() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateFreeShipping?product_id=${product_id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o frete grátis desse produto.');
+        }
+
+        if (freeShipping === "Nao") {
+            toast.success(`Esse produto SIM ESTÁ agora com o frete grátis.`);
+            return;
+        }
+
+        if (freeShipping === "Sim") {
+            toast.error(`Esse produto NÃO ESTÁ como frete grátis.`);
+            return;
+        }
+    }
+
     useEffect(() => {
-        async function loadVariacao() {
+        async function loadVariations() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/variacoesProduct?product_id=${product_id}`);
-                setVariacoes(response.data);
+                const response = await apiClient.get(`/allVariationProduct?product_id=${product_id}`);
+                setVariation(response.data || []);
             } catch (error) {
                 console.log(error);
             }
         }
-        loadVariacao();
+        loadVariations();
     }, [product_id]);
 
-    async function loadVariacaoProduct(id: string) {
-        setIDVariacao(id)
+    async function loadVariationProduct(id: string) {
+        setIdVariation(id)
         const apiClient = setupAPIClient();
         try {
-            const response = await apiClient.get(`/variacoes?variacao_id=${id}`);
-            setNameVariacao(response?.data?.nameVariacao);
-            setDescriptionVariacao1(response?.data?.descriptionVariacao1);
-            setDescriptionVariacao2(response?.data?.descriptionVariacao2);
-            setDescriptionVariacao3(response?.data?.descriptionVariacao3);
-            setDescriptionVariacao4(response?.data?.descriptionVariacao4);
-            setDescriptionVariacao5(response?.data?.descriptionVariacao5);
-            setDescriptionVariacao6(response?.data?.descriptionVariacao6);
-            setPrecoVariacao(response?.data?.preco);
-            setSkuVariacao(response?.data?.skuVariacao);
-            setEstoqueVariacao(response?.data?.estoqueVariacao);
-            setPesoKgVariacao(response?.data?.pesoKg);
-            setLarguraCmVariacao(response?.data?.larguraCm);
-            setProfundidadeCmVariacao(response?.data?.profundidadeCm);
-            setAlturaCmVariacao(response?.data?.alturaCm);
-            setPromocaoVariacao(response?.data?.promocao);
+            const responseVariation = await apiClient.get(`/findUniqueVariation?variation_id=${id}`);
+
+            setProductIDvariation(responseVariation.data.id || "");
+            setSlugVariation(responseVariation.data.slug || "");
+            setNameVariation(responseVariation.data.name || "");
+            setOrderVariation(responseVariation.data.order);
+            setStatusVariation(responseVariation.data.status || "");
+
         } catch (error) {
             console.log(error);
         }
@@ -303,7 +312,7 @@ const Produto: React.FC = () => {
 
     async function handleOpenModalDelete(product_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/exactProduct', {
+        const responseDelete = await apiClient.get('/findUniqueProduct', {
             params: {
                 product_id: product_id,
             }
@@ -328,7 +337,7 @@ const Produto: React.FC = () => {
                         <BlockTop>
                             <Titulos
                                 tipo="h1"
-                                titulo={nameProducts}
+                                titulo={name}
                             />
                             <Button
                                 type="submit"
@@ -355,13 +364,13 @@ const Produto: React.FC = () => {
                                         chave={"Nome"}
                                         dados={
                                             <InputUpdate
-                                                dado={nameProducts}
+                                                dado={name}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={nameProducts}
-                                                value={nameProducts}
+                                                placeholder={name}
+                                                value={name}
                                                 /* @ts-ignore */
-                                                onChange={(e) => setNameProducts(e.target.value)}
+                                                onChange={(e) => setName(e.target.value)}
                                                 handleSubmit={updateNameProduct}
                                             />
                                         }
@@ -374,7 +383,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <ButtonSelect
                                                 /* @ts-ignore */
-                                                dado={disponibilidades}
+                                                dado={status}
                                                 handleSubmit={updateStatus}
                                             />
                                         }
@@ -386,13 +395,13 @@ const Produto: React.FC = () => {
                                         chave={"SKU"}
                                         dados={
                                             <InputUpdate
-                                                dado={skus}
+                                                dado={sku}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={skus}
-                                                value={skus}
+                                                placeholder={sku}
+                                                value={sku}
                                                 /* @ts-ignore */
-                                                onChange={(e) => setSkus(e.target.value)}
+                                                onChange={(e) => setSku(e.target.value)}
                                                 handleSubmit={updateProductData}
                                             />
                                         }
@@ -405,14 +414,14 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
-                                                dado={precos.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                dado={price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={precos}
+                                                placeholder={price}
                                                 /* @ts-ignore */
-                                                value={precos}
+                                                value={price}
                                                 /* @ts-ignore */
-                                                onChange={(e) => setPrecos(e.target.value)}
+                                                onChange={(e) => setPrice(e.target.value)}
                                                 handleSubmit={updateProductData}
                                             />
                                         }
@@ -425,14 +434,14 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
-                                                dado={promocoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                dado={promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={promocoes.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                placeholder={promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                                                 /* @ts-ignore */
-                                                value={promocoes}
+                                                value={promotion}
                                                 /* @ts-ignore */
-                                                onChange={(e) => setPromocoes(e.target.value)}
+                                                onChange={(e) => setPromotion(e.target.value)}
                                                 handleSubmit={updateProductData}
                                             />
                                         }
@@ -445,8 +454,8 @@ const Produto: React.FC = () => {
                                         dados={
                                             <ButtonSelect
                                                 /* @ts-ignore */
-                                                dado={destaques}
-                                                handleSubmit={updateDestaque}
+                                                dado={emphasis}
+                                                handleSubmit={updateEmphasis}
                                             />
                                         }
                                     />
@@ -458,8 +467,26 @@ const Produto: React.FC = () => {
                                         dados={
                                             <ButtonSelect
                                                 /* @ts-ignore */
-                                                dado={ofertas}
-                                                handleSubmit={updateOferta}
+                                                dado={offer}
+                                                handleSubmit={updateOffer}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Link vídeo do produto"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={urlVideo}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={urlVideo}
+                                                value={urlVideo}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setUrlVideo(e.target.value)}
+                                                handleSubmit={updateProductData}
                                             />
                                         }
                                     />
@@ -475,7 +502,7 @@ const Produto: React.FC = () => {
                                             {categories.map((categ) => {
                                                 return (
                                                     <BoxCategory key={categ.id}>
-                                                        <NameCategory>{categ.category.categoryName}</NameCategory>
+                                                        <NameCategory>{categ.category.name}</NameCategory>
                                                     </BoxCategory>
                                                 )
                                             })}
@@ -490,6 +517,112 @@ const Produto: React.FC = () => {
                             </SectionDate>
 
                             <SectionDate>
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Fréte Grátis "}
+                                        dados={
+                                            <ButtonSelect
+                                                /* @ts-ignore */
+                                                dado={freeShipping}
+                                                handleSubmit={updateFreeShipping}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Estoque"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={stock}
+                                                type="number"
+                                                /* @ts-ignore */
+                                                placeholder={stock}
+                                                value={stock}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setStock(e.target.value)}
+                                                handleSubmit={updateProductData}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Peso (Kg)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={weight}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={weight}
+                                                value={weight}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setWeight(e.target.value)}
+                                                handleSubmit={updateProductData}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Largura (Cm)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={width}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={width}
+                                                value={width}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setWidth(e.target.value)}
+                                                handleSubmit={updateProductData}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Altura (Cm)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={height}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={height}
+                                                value={height}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setHeight(e.target.value)}
+                                                handleSubmit={updateProductData}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Comprimento (Cm)"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={depth}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                placeholder={depth}
+                                                value={depth}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setDepth(e.target.value)}
+                                                handleSubmit={updateProductData}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                            </SectionDate>
+
+                            <SectionDate>
                                 <PhotosProduct
                                     product_id={product_id}
                                 />
@@ -497,38 +630,7 @@ const Produto: React.FC = () => {
                         </GridDate>
                         <br />
                         <br />
-                        <DescriptionsProductUpdate
-                            valor1={descriptionProducts1}
-                            valor2={descriptionProducts2}
-                            valor3={descriptionProducts3}
-                            valor4={descriptionProducts4}
-                            valor5={descriptionProducts5}
-                            valor6={descriptionProducts6}
-                            /* @ts-ignore */
-                            onChange1={(e) => setDescriptionProducts1(e.target.value)}
-                            /* @ts-ignore */
-                            onChange2={(e) => setDescriptionProducts2(e.target.value)}
-                            /* @ts-ignore */
-                            onChange3={(e) => setDescriptionProducts3(e.target.value)}
-                            /* @ts-ignore */
-                            onChange4={(e) => setDescriptionProducts4(e.target.value)}
-                            /* @ts-ignore */
-                            onChange5={(e) => setDescriptionProducts5(e.target.value)}
-                            /* @ts-ignore */
-                            onChange6={(e) => setDescriptionProducts6(e.target.value)}
-                            handleSubmit1={updateProductData}
-                            handleSubmit2={updateProductData}
-                            handleSubmit3={updateProductData}
-                            handleSubmit4={updateProductData}
-                            handleSubmit5={updateProductData}
-                            handleSubmit6={updateProductData}
-                            placeholder1={""}
-                            placeholder2={""}
-                            placeholder3={""}
-                            placeholder4={""}
-                            placeholder5={""}
-                            placeholder6={""}
-                        />
+
                     </Card>
 
                     <ContainerVariacao>
@@ -542,10 +644,10 @@ const Produto: React.FC = () => {
                                 {showElement && renderOk() || renderNo()}
                             </ButtonVariacao>
 
-                            {variacoes.map((names) => {
+                            {variation.map((names) => {
                                 return (
                                     <ButtonVariacaoDetalhes key={names.id}
-                                        onClick={() => loadVariacaoProduct(names.id)}
+                                        onClick={() => loadVariationProduct(names.id)}
                                     >
                                         {names.nameVariacao}
                                     </ButtonVariacaoDetalhes>
@@ -562,40 +664,26 @@ const Produto: React.FC = () => {
                                 />
                             ) :
                                 <>
-                                    {variacoes.length < 1 && (
+                                    {variation.length < 1 && (
                                         <Avisos
                                             texto="Não há variações cadastradas para esse produto..."
                                         />
                                     )}
 
-                                    {!iDVariacao && variacoes.length >= 1 && (
+                                    {!idVariation && variation.length >= 1 && (
                                         <Titulos
                                             tipo="h3"
                                             titulo="Cadastre uma variação, ou selecione uma variação existente para ver os detalhes."
                                         />
                                     )}
 
-                                    {!!iDVariacao && (
+                                    {!!idVariation && (
                                         <VariacaoDetalhes
                                             /* @ts-ignore */
                                             productId={product_id}
-                                            variacao_id={iDVariacao}
-                                            photoVariacaoID={iDVariacao}
-                                            nameVariacao={nameVariacao}
-                                            descriptionVariacao1={descriptionVariacao1}
-                                            descriptionVariacao2={descriptionVariacao2}
-                                            descriptionVariacao3={descriptionVariacao3}
-                                            descriptionVariacao4={descriptionVariacao4}
-                                            descriptionVariacao5={descriptionVariacao5}
-                                            descriptionVariacao6={descriptionVariacao6}
-                                            preco={precoVariacao}
-                                            skuVariacao={skuVariacao}
-                                            estoqueVariacao={estoqueVariacao}
-                                            pesoKg={pesoKgVariacao}
-                                            larguraCm={larguraCmVariacao}
-                                            alturaCm={alturaCmVariacao}
-                                            profundidadeCm={profundidadeCmVariacao}
-                                            promocao={promocaoVariacao}
+                                            variacao_id={idVariation}
+                                            photoVariacaoID={idVariation}
+                                            nameVariacao={nameVariation}
                                         />
                                     )}
                                 </>

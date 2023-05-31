@@ -37,12 +37,12 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
             /* @ts-ignore */
             const product_id = product.id;
 
-            await apiClient.delete(`/deleteGrupoAtributosProduct?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAllRelationProductAttributes?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllPhotos?product_id=${product_id}`);
-            await apiClient.delete(`/deleteAllPhotosVariacao?product_id=${product_id}`);
-            await apiClient.delete(`/deleteAllVariacaoProduct?product_id=${product_id}`);
-            await apiClient.delete(`/deleteRelationProductIds?product_id=${product_id}`);
-            await apiClient.delete(`/deleteAvaliacaoProductID?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAllPhotosVariation?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAllVariationProduct?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAllCategoiesProduct?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAvalietionProductID?product_id=${product_id}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

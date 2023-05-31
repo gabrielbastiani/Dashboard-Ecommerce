@@ -7,9 +7,7 @@ import Aside from "../../../components/Aside";
 import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
-import { TextButton } from "../styles";
 import { Button } from "../../../components/ui/Button";
-import { AiOutlinePlusCircle } from "react-icons/ai";
 import { BlockDados } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
@@ -228,22 +226,11 @@ const ProdutoCategoria: React.FC = () => {
                                     <>
                                         <Card key={item.id}>
                                             <Titulos
-                                                tipo="h3"
+                                                tipo="h2"
                                                 titulo={item.category.name}
                                             />
 
                                             <GridDate>
-                                                <SectionDate>
-                                                    <Button
-                                                        style={{ backgroundColor: 'orange' }}
-                                                    >
-                                                        <AiOutlinePlusCircle />
-                                                        <Link to={`/produto/categorias/newNivelCategoryProduct/${product_id}/${item.id}`} >
-                                                            <TextButton>Cadastre um novo nivel</TextButton>
-                                                        </Link>
-                                                    </Button>
-                                                </SectionDate>
-
                                                 <SectionDate>
                                                     <BlockDados>
                                                         <TextoDados

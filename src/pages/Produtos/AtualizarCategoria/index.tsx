@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { BlockTop, Container } from "../../Categorias/styles";
+import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import Titulos from "../../../components/Titulos";
 import { TextButton } from "../styles";
@@ -21,6 +21,9 @@ import { ModalDeleteRelationsCategorys } from "../../../components/popups/ModalD
 import { BsTrash } from "react-icons/bs";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
+import { AuthContext } from "../../../contexts/AuthContext";
+import Select from "../../../components/ui/Select";
+import { InputPost } from "../../../components/ui/InputPost";
 
 
 export type DeleteRelations = {
@@ -32,8 +35,13 @@ const AtualizarCategoria: React.FC = () => {
     let { product_id } = useParams();
     const navigate = useNavigate();
 
-    const [nameProduct, setNameProduct] = useState("");
+    const { admin } = useContext(AuthContext);
+    const [store_id] = useState(admin.store_id);
+
+    const [name, setName] = useState("");
     const [slug, setSlug] = useState("");
+    const [order, setOrder] = useState(Number);
+
     const [allFindOrderRelationIDAsc, setAllFindOrderRelationIDAsc] = useState<any[]>([]);
 
     const [categories, setCategories] = useState<any[]>([]);
@@ -63,20 +71,34 @@ const AtualizarCategoria: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        async function findsRelationsProducts() {
+        async function findDataProduct() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findRelationCategoryProduct?product_id=${product_id}`);
+                const response = await apiClient.get(`/findUniqueProduct?product_id=${product_id}`);
 
-                setAllFindOrderRelationIDAsc(data.allFindOrderRelationIDAsc || []);
-                setNameProduct(data.findUniqueProduct.nameProduct || "");
-                setSlug(data.findUniqueProduct.slug || "");
+                setName(response.data.name || "");
+                setSlug(response.data.slug || "");
 
             } catch (error) {
                 console.error(error);
             }
         }
-        findsRelationsProducts();
+        findDataProduct();
+    }, [product_id]);
+
+    useEffect(() => {
+        async function findAllRelation() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findAllRelationsProductAndCategory?product_id=${product_id}`);
+
+                setAllFindOrderRelationIDAsc(response.data || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        findAllRelation();
     }, [product_id]);
 
     async function updateOrder(id: string) {
@@ -86,7 +108,7 @@ const AtualizarCategoria: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateOrderRelation?relationProductCategory_id=${id}`, { order: Number(orderUpdate) });
+                await apiClient.put(`/updateOrderRelation?productCategory_id=${id}`, { order: Number(orderUpdate) });
                 toast.success('Ordem da categoria atualizada com sucesso.');
                 setTimeout(() => {
                     navigate(0);
@@ -105,7 +127,7 @@ const AtualizarCategoria: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateCategoryIDrelation?relationProductCategory_id=${id}`, { category_id: categorySelected });
+            await apiClient.put(`/updateCategoryNameProduct?productCategory_id=${id}`, { name: categorySelected });
 
             toast.success('Categoria atualizada com sucesso.');
 
@@ -123,7 +145,7 @@ const AtualizarCategoria: React.FC = () => {
         console.log(id)
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusRelation?relationProductCategory_id=${id}`);
+            await apiClient.put(`/updateStatusCategoryProduct?productCategory_id=${id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -133,14 +155,42 @@ const AtualizarCategoria: React.FC = () => {
             toast.error('Ops erro ao atualizar o status da relação de categorias.');
         }
 
-        if (status === "Inativo") {
+        if (status === "Indisponivel") {
             toast.success(`A relação de categorias se encontra disponivel.`);
             return;
         }
 
-        if (status === "Ativo") {
+        if (status === "Disponivel") {
             toast.error(`A relação de categorias se encontra indisponivel.`);
             return;
+        }
+    }
+
+    async function handleRelations() {
+        const apiClient = setupAPIClient();
+        try {
+            if (categorySelected === "" || categorySelected === null || categorySelected === undefined) {
+                toast.error('Favor, selecione uma categoria!');
+                return;
+            }
+
+            await apiClient.post('/createProductCategory', {
+                product_id: product_id,
+                name: categorySelected,
+                order: Number(order),
+                store_id: store_id
+            });
+
+            toast.success('Categoria cadastrada com sucesso!');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
+            /* @ts-ignore */
+            console.log(error.response.data);
         }
     }
 
@@ -150,12 +200,12 @@ const AtualizarCategoria: React.FC = () => {
 
     async function handleOpenModalDelete(id: string) {
         const apiClient = setupAPIClient();
-        const { data } = await apiClient.get('/findIdsRelations', {
+        const response = await apiClient.get('/findUniqueRelationCategoryProduct', {
             params: {
-                relationProductCategory_id: id,
+                productCategory_id: id,
             }
         });
-        setModalItem(data.findUniqueRelation || "");
+        setModalItem(response.data || "");
         setModalVisible(true);
     }
 
@@ -181,53 +231,63 @@ const AtualizarCategoria: React.FC = () => {
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo={`Atualizar categoria(s) para - ${nameProduct}`}
+                            titulo={`Atualizar categoria(s) para - ${name}`}
                         />
 
                         <Button
                             style={{ backgroundColor: 'green' }}
+                            onClick={handleRelations}
                         >
-                            <AiOutlinePlusCircle />
-                            <Link to={`/produto/novo/categorias/novaCategoriaProduto/${product_id}`} >
-                                <TextButton>Cadastre uma nova categoria</TextButton>
-                            </Link>
+                            Salvar categoria no produto
                         </Button>
                     </BlockTop>
 
-                    {allFindOrderRelationIDAsc.map((parentId) => {
+                    <Etiqueta>Escolha uma categoria:</Etiqueta>
+                    <Select
+                        value={categorySelected}
+                        /* @ts-ignore */
+                        onChange={handleChangeCategory}
+                        opcoes={
+                            [
+                                { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                ...(categories || []).map((item) => ({ label: item.name, value: item.name }))
+                            ]
+                        }
+                    />
+                    <br />
+                    <Block>
+                        <Etiqueta>Ordem:</Etiqueta>
+                        <InputPost
+                            type="number"
+                            placeholder="0"
+                            value={order}/* @ts-ignore */
+                            onChange={(e) => setOrder(e.target.value)}
+                        />
+                    </Block>
+
+                    {allFindOrderRelationIDAsc.map((item) => {
                         return (
                             <>
-                                <Card key={parentId.id}>
+                                <Card key={item.id}>
                                     <Titulos
-                                        tipo="h3"
-                                        titulo={parentId.category.categoryName}
+                                        tipo="h2"
+                                        titulo={item.category.name}
                                     />
 
                                     <GridDate>
-                                        <SectionDate>
-                                            <Button
-                                                style={{ backgroundColor: 'orange' }}
-                                            >
-                                                <AiOutlinePlusCircle />
-                                                <Link to={`/produto/atualizar/categorias/updateNivelCategoryProduct/${product_id}/${parentId.id}`} >
-                                                    <TextButton>Niveis da categorias</TextButton>
-                                                </Link>
-                                            </Button>
-                                        </SectionDate>
-
                                         <SectionDate >
                                             <BlockDados style={{ marginLeft: "10px" }} >
                                                 <TextoDados
                                                     chave={"Categoria"}
                                                     dados={
                                                         <SelectUpdate
-                                                            dado={parentId.category.categoryName}
-                                                            handleSubmit={() => updateCategory(parentId.id)}
+                                                            dado={item.category.name}
+                                                            handleSubmit={() => updateCategory(item.id)}
                                                             value={categorySelected}
                                                             opcoes={
                                                                 [
                                                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.id }))
+                                                                    ...(categories || []).map((item) => ({ label: item.name, value: item.name }))
                                                                 ]
                                                             }/* @ts-ignore */
                                                             onChange={handleChangeCategory}
@@ -243,14 +303,14 @@ const AtualizarCategoria: React.FC = () => {
                                                     chave={"Ordem"}
                                                     dados={
                                                         <InputUpdate
-                                                            dado={String(parentId.order)}
+                                                            dado={String(item.order)}
                                                             type="number"
                                                             /* @ts-ignore */
-                                                            placeholder={String(parentId.order)}
+                                                            placeholder={String(item.order)}
                                                             value={orderUpdate}
                                                             /* @ts-ignore */
                                                             onChange={(e) => setOrderUpdate(e.target.value)}
-                                                            handleSubmit={() => updateOrder(parentId.id)}
+                                                            handleSubmit={() => updateOrder(item.id)}
                                                         />
                                                     }
                                                 />
@@ -264,8 +324,8 @@ const AtualizarCategoria: React.FC = () => {
                                                     dados={
                                                         <ButtonSelect
                                                             /* @ts-ignore */
-                                                            dado={parentId.status}
-                                                            handleSubmit={() => updateStatus(parentId.id, parentId.status)}
+                                                            dado={item.status}
+                                                            handleSubmit={() => updateStatus(item.id, item.status)}
                                                         />
                                                     }
                                                 />
@@ -274,7 +334,7 @@ const AtualizarCategoria: React.FC = () => {
 
                                         <SectionDate>
                                             <BsTrash
-                                                onClick={() => handleOpenModalDelete(parentId.id)}
+                                                onClick={() => handleOpenModalDelete(item.id)}
                                                 style={{ cursor: 'pointer' }}
                                                 color="red"
                                                 size={35}
