@@ -37,6 +37,8 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
             /* @ts-ignore */
             const product_id = product.id;
 
+            await apiClient.delete(`/deleteAllTagProduct?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAllDescriptionsProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllRelationProductAttributes?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllPhotos?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllPhotosVariation?product_id=${product_id}`);

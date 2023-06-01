@@ -5,23 +5,30 @@ import {
     TableAllDescription,
     TituloTop,
     TabContents,
-    TextAreaDescription
+    TextAreaDescription,
+    EditBoxDesc,
+    TextButton
 } from './styles';
 import { setupAPIClient } from "../../services/api";
-import { ButtonConfirm, EditBox } from "../ui/SelectUpdate/styles";
+import { ButtonConfirm } from "../ui/SelectUpdate/styles";
 import { ValueText } from "../ui/ButtonSelect/styles";
 import { GiConfirmed } from "react-icons/gi";
+import { GrStatusUnknown } from "react-icons/gr";
+import { Button } from "../ui/Button";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 interface DescriptionRequest {
     product_id: any;
-    handleSubmit: () => void;
-    handleSubmitDelete: () => void;
 }
 
-const DescriptionsProduct = ({ product_id, handleSubmit, handleSubmitDelete }: DescriptionRequest) => {
+const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("");
+
+    const [description, setDescription] = useState("");
 
     const [toogle, setToogle] = useState(!activeTab);
     const [cor, setCor] = useState('#999494');
@@ -50,6 +57,67 @@ const DescriptionsProduct = ({ product_id, handleSubmit, handleSubmitDelete }: D
         loadDescriptions();
     }, [product_id]);
 
+    async function handleDeleteDescription(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.delete(`/deleteDescriptionProduct?descriptionProduct_id=${id}`);
+
+            toast.success('Descrição do produto deletada com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao deletar a descrição do produto.');
+        }
+    }
+
+    async function handleUpdateDescription(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateDescriptionProduct?descriptionProduct_id=${id}`, {
+                description: description
+            });
+
+            toast.success('Descrição do produto atualizada com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a descrição do produto.');
+        }
+    }
+
+    async function handleUpdateStatus(id: string, status: string) {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStatusDescriptionProduct?descriptionProduct_id=${id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a status da descrição.');
+        }
+
+        if (status === "Indisponivel") {
+            toast.success(`A descrição se encontra Disponivel.`);
+            return;
+        }
+
+        if (status === "Disponivel") {
+            toast.error(`A descrição se encontra Indisponivel.`);
+            return;
+        }
+    }
+
     return (
         <>
             <TableSection>
@@ -73,20 +141,27 @@ const DescriptionsProduct = ({ product_id, handleSubmit, handleSubmitDelete }: D
                     {descriptions.map((item) => {
                         return (
                             <>
-                                {activeTab === item.id ? <TabContents>
-                                    <TextAreaDescription>
-                                        {item.description}
-                                    </TextAreaDescription>
-                                    <br />
-                                    <br />
-                                    <EditBox>
-                                        <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
-                                        <ButtonConfirm type="submit" onClick={handleSubmit}><GiConfirmed /></ButtonConfirm>
-                                        <ValueText style={{ marginBottom: '12px' }}>Deletar descrição acima:</ValueText>
-                                        <ButtonConfirm type="submit" onClick={handleSubmitDelete}><GiConfirmed /></ButtonConfirm>
-                                    </EditBox>
-                                </TabContents>
-                                    : null}
+                                {activeTab === item.id ?
+                                    <TabContents key={item.id}>
+                                        <TextAreaDescription
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        >
+                                            {item.description}
+                                        </TextAreaDescription>
+                                        <br />
+                                        <br />
+                                        <EditBoxDesc>
+                                            <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
+                                            <ButtonConfirm onClick={ () => handleUpdateDescription(item.id) }><GiConfirmed /></ButtonConfirm>
+                                            <ValueText style={{ marginBottom: '12px' }}>Decrição ativa?:</ValueText>
+                                            <ButtonConfirm onClick={ () => handleUpdateStatus(item.id, item.status) }><GrStatusUnknown /><TextButton>{item.status}</TextButton></ButtonConfirm>
+                                            <ValueText style={{ marginBottom: '12px' }}>Deletar descrição acima:</ValueText>&nbsp;&nbsp;
+                                            <Button onClick={ () => handleDeleteDescription(item.id) }>Deletar</Button>
+                                        </EditBoxDesc>
+                                    </TabContents>
+                                    : 
+                                    null
+                                }
                             </>
                         )
                     })}

@@ -18,13 +18,22 @@ import DescriptionsProduct from "../../../components/DescriptionsProduct";
 import { SectionDate } from "../../Configuracoes/styles";
 import { GridDate } from "../../Perfil/styles";
 import PhotosProduct from "../../../components/PhotosProduct";
-import { ContainerVariacao, ButtonVariacao, RenderOk, RenderNo, ButtonVariacaoDetalhes, ButtonUpdateCategory, BoxCategory, NameCategory, GridContainer, TextNotFound, ContatinerDescription, ContatinerButton } from "../styles";
+import {
+    ContainerVariacao,
+    ButtonVariacao,
+    RenderOk, RenderNo,
+    ButtonVariacaoDetalhes,
+    ContatinerDescription,
+    ContatinerButton
+} from "../styles";
 import NovaVariacao from "../Variacao";
 import { Avisos } from "../../../components/Avisos";
 import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
 import Modal from 'react-modal';
 import { ModalDeleteProduct } from '../../../components/popups/ModalDeleteProduct';
 import VoltarNavagation from "../../../components/VoltarNavagation";
+import CategoriesProduct from "../../../components/CategoriesProduct";
+import TagsProduct from "../../../components/TagsProduct";
 
 
 export type DeleteProduct = {
@@ -51,8 +60,8 @@ const Produto: React.FC = () => {
     const [status, setStatus] = useState("");
     const [emphasis, setEmphasis] = useState("");
     const [offer, setOffer] = useState("");
+    const [storeId, setStoreId] = useState("");
 
-    const [categories, setCategories] = useState<any[]>([]);
     const [descriptions, setDescriptions] = useState<any[]>([]);
 
     const [variation, setVariation] = useState<any[]>([]);
@@ -69,19 +78,6 @@ const Produto: React.FC = () => {
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
-
-    useEffect(() => {
-        async function loadCategorys() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/findAllRelationsProductAndCategory?product_id=${product_id}`);
-                setCategories(response.data || []);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        loadCategorys();
-    }, [product_id]);
 
     useEffect(() => {
         async function loadDescriptions() {
@@ -117,6 +113,7 @@ const Produto: React.FC = () => {
                 setStatus(responseProduct.data.status || "");
                 setEmphasis(responseProduct.data.emphasis);
                 setOffer(responseProduct.data.offer);
+                setStoreId(responseProduct.data.store_id || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -505,29 +502,6 @@ const Produto: React.FC = () => {
                                         }
                                     />
                                 </BlockDados>
-
-                                <GridContainer>
-                                    {categories.length < 1 ? (
-                                        <>
-                                            <TextNotFound>Não há categorias cadastrados no produto ainda...</TextNotFound>
-                                        </>
-                                    ) :
-                                        <>
-                                            {categories.map((categ) => {
-                                                return (
-                                                    <BoxCategory key={categ.id}>
-                                                        <NameCategory>{categ.category.name}</NameCategory>
-                                                    </BoxCategory>
-                                                )
-                                            })}
-                                        </>
-                                    }
-                                </GridContainer>
-
-                                <ButtonUpdateCategory href={`/produto/atualizar/categorias/${product_id}`}>
-                                    Atualizar Categorias
-                                </ButtonUpdateCategory>
-
                             </SectionDate>
 
                             <SectionDate>
@@ -643,34 +617,47 @@ const Produto: React.FC = () => {
                         </GridDate>
                         <br />
                         <br />
-                        <ContatinerDescription>
-                            <ContatinerButton>
-                                <Link to={`/produto/descricao/nova/${slug}/${product_id}`}>
-                                    <Button
-                                        style={{ width: '350px' }}
-                                    >
-                                        Cadastrar descrição para o produto
-                                    </Button>
-                                </Link>
-                            </ContatinerButton>
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            {descriptions.length < 1 ? (
-                                <>
-                                    <Avisos texto="Não há descrições cadastradas no produto ainda..." />
-                                </>
-                            ) :
-                                <>
-                                    <DescriptionsProduct
-                                        product_id={product_id}
-                                        handleSubmit={() => alert('atualizar')}
-                                        handleSubmitDelete={() => alert('deletar')}
-                                    />
-                                </>
-                            }
-                        </ContatinerDescription>
+                        <Card>
+                            <CategoriesProduct
+                                product_id={product_id}
+                            />
+                        </Card>
+                        <Card>
+                            <ContatinerDescription>
+                                <ContatinerButton>
+                                    <Link to={`/produto/descricao/nova/${slug}/${product_id}`}>
+                                        <Button
+                                            style={{ width: '350px', backgroundColor: 'green' }}
+                                        >
+                                            Cadastrar descrição para o produto
+                                        </Button>
+                                    </Link>
+                                </ContatinerButton>
+                                <br />
+                                <br />
+                                {descriptions.length < 1 ? (
+                                    <>
+                                        <Avisos texto="Não há descrições cadastradas no produto ainda..." />
+                                    </>
+                                ) :
+                                    <>
+                                        <DescriptionsProduct
+                                            product_id={product_id}
+                                        />
+                                    </>
+                                }
+                            </ContatinerDescription>
+                        </Card>
+
+                        <Card>
+                            
+                        </Card>
+
+                        <Card>
+                            <TagsProduct
+                                product_id={product_id}
+                            />
+                        </Card>
                     </Card>
 
                     <ContainerVariacao>

@@ -5,16 +5,16 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteRelations } from '../../CategoriesProduct';
+import { DeleteTags } from '../../TagsProduct';
 
 
-interface DeleteRelationsCategorys {
+interface TagDelete {
     isOpen: boolean;
     onRequestClose: () => void;
-    relation: DeleteRelations;
+    relation: DeleteTags;
 }
 
-export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation }: DeleteRelationsCategorys) {
+export function ModalDeleteTag({ isOpen, onRequestClose, relation }: TagDelete) {
 
     const navigate = useNavigate();
 
@@ -31,19 +31,19 @@ export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation
         }
     };
 
-    async function handleDeleteRelation() {
+    async function handleTagsDelete() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const relationProductCategory_id = relation.id;
+            const tag_id = relation.id;
 
-            await apiClient.delete(`/deleteCategoryProduct?productCategory_id=${relationProductCategory_id}`);
-            toast.success(`Categoria deletada do produto com sucesso.`);
+            await apiClient.delete(`/deleteTagProduct?tag_id=${tag_id}`);
+            toast.success(`Tag deletada do produto com sucesso.`);
 
             onRequestClose();
 
         } catch (error) {
-            toast.error('Erro ao deletar a categoria desse produto');
+            toast.error('Erro ao deletar a tag desse produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
@@ -69,12 +69,12 @@ export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa categoria deste produto?</TextModal>
+                <TextModal>Deseja mesmo deletar essa TAG deste produto?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteRelation()}
+                        onClick={() => handleTagsDelete()}
                     >
                         Deletar
                     </Button>

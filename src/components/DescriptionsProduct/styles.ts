@@ -81,6 +81,18 @@ export const TextAreaDescription = styled.textarea`
   }
 `;
 
+export const EditBoxDesc = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
+
+export const TextButton = styled.span`
+  color: ${(props) => props.theme.colors.white};
+  display: flex;
+  padding: 5px 10px;
+  text-decoration: underline;
+`;
+
 export const TableAllDescription = styled.div``;
 
 export const TabContents = styled.div``;
