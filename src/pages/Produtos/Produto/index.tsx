@@ -34,6 +34,7 @@ import { ModalDeleteProduct } from '../../../components/popups/ModalDeleteProduc
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import CategoriesProduct from "../../../components/CategoriesProduct";
 import TagsProduct from "../../../components/TagsProduct";
+import AttributesProduct from "../../../components/AttributesProduct";
 
 
 export type DeleteProduct = {
@@ -650,7 +651,9 @@ const Produto: React.FC = () => {
                         </Card>
 
                         <Card>
-                            
+                            <AttributesProduct
+                                product_id={product_id}
+                            />
                         </Card>
 
                         <Card>
