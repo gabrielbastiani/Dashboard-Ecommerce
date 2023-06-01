@@ -10,7 +10,6 @@ import Perfil from './pages/Perfil';
 import NovaCategoria from './pages/Categorias/novaCategoria';
 import Categoria from './pages/Categorias/Categoria';
 import NovoProduto from './pages/Produtos/novoProduto';
-import ProdutoCategoria from './pages/Produtos/ProdutoCategoria';
 import Produto from './pages/Produtos/Produto';
 import Avaliacoes from './pages/Avaliacoes';
 import Avaliacao from './pages/Avaliacoes/Avaliacao';
@@ -26,9 +25,7 @@ import Texto from './pages/Configuracoes/TextosInstitucionais/Texto';
 import ImagensLoja from './pages/Configuracoes/ImagensInstitucionais';
 import Imagem from './pages/Configuracoes/ImagensInstitucionais/Imagem';
 import NovaImagem from './pages/Configuracoes/ImagensInstitucionais/novaImagem';
-import NovaCategoriaProduto from './pages/Produtos/ProdutoCategoria/novaCategoriaProduto';
 import SubCategoria from './pages/Categorias/Categoria/subCategoria';
-import AtualizarCategoria from './pages/Produtos/ProdutoCategoria/AtualizarCategoria';
 import TodasAvaliacoes from './pages/Avaliacoes/TodasAvaliacoes';
 import NovoBanner from './pages/Banners/novoBanner';
 import Banner from './pages/Banners/Banner';
@@ -36,9 +33,6 @@ import MenusCategorias from './pages/Categorias/MenusCategorias';
 import NovoMenu from './pages/Categorias/MenusCategorias/novoMenu';
 import CategoriasMenu from './pages/Categorias/MenusCategorias/categoriasMenu';
 import EditMenu from './pages/Categorias/MenusCategorias/editMenu';
-import Atributos from './pages/Produtos/Atributos'; 
-import NovoAtributo from './pages/Produtos/Atributos/novoAtributo'; 
-import EditAtributo from './pages/Produtos/Atributos/editAtributo'; 
 import ProdutoAtributo from './pages/Produtos/ProdutoAtributo';
 import Filtros from './pages/Filtros'; 
 import NovoGrupoFiltroAtributo from './pages/Filtros/novoGrupoFiltroAtributo';
@@ -49,6 +43,9 @@ import NovoGrupoFiltroCategoria from './pages/Filtros/novoGrupoFiltroCategoria';
 import CategoryFiltro from './pages/Filtros/CategoryFiltro';
 import EditCategoryFiltro from './pages/Filtros/CategoryFiltro/editCategoryFiltro';
 import EditItem from './pages/Categorias/MenusCategorias/editItem';
+import TiposAtributos from './pages/Produtos/TiposAtributos';
+import EditTipoAtributo from './pages/Produtos/TiposAtributos/editTipoAtributo';
+import NovoTipoAtributo from './pages/Produtos/TiposAtributos/novoTipoAtributo';
 
 
 const RoutesAuth: React.FC = () => {
@@ -72,17 +69,14 @@ const RoutesAuth: React.FC = () => {
 
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />
-            <Route path='/produto/novo/categorias/:product_id' element={<ProdutoCategoria />} />
-            <Route path='/produto/novo/categorias/novaCategoriaProduto/:product_id' element={<NovaCategoriaProduto />} />
-            <Route path='/produto/atualizar/categorias/:product_id' element={<AtualizarCategoria />} />
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
             <Route path='/produto/atributo/:variacao_id/:productId' element={<ProdutoAtributo />} />
-            <Route path='/atributos' element={<Atributos />} />
-            <Route path='/atributo/novo' element={<NovoAtributo />} />
-            <Route path='/atributo/:atributo_id' element={<EditAtributo />} />
+            <Route path='/tiposAtributos' element={<TiposAtributos />} />
+            <Route path='/tipoAtributo/novo' element={<NovoTipoAtributo />} />
+            <Route path='/tipoAtributo/edit/:typeAttribute_id' element={<EditTipoAtributo />} />
 
             <Route path='/filterGrupos' element={<Filtros />} />
             <Route path='/grupoFiltro/atributos/novo' element={<NovoGrupoFiltroAtributo />} />
