@@ -5,7 +5,12 @@ import { Button } from "../ui/Button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound } from "../CategoriesProduct/styles";
+import {
+    ContainerCategories,
+    ContainerCategoriesBox,
+    GridContainer,
+    TextNotFound
+} from "../CategoriesProduct/styles";
 import { BsTrash } from "react-icons/bs";
 import { BlockDados } from "../../pages/Categorias/Categoria/styles";
 import { ButtonSelect } from "../ui/ButtonSelect";
@@ -35,6 +40,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
     const [typesAttributes, setTypesAttributes] = useState<any[]>([]);
     const [attributesLoad, setAttributesLoad] = useState<any[]>([]);
+    const [attributesparentId, setAttributesparentId] = useState<any[]>([]);
 
     const [typeSelected, setTypeSelected] = useState();
     const [value, setValue] = useState("");
@@ -46,11 +52,11 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const [activeTab, setActiveTab] = useState("");
-    const [toogle, setToogle] = useState(!activeTab);
+
 
     const handleClick = (id: string) => {
         setActiveTab(id);
-        setToogle(state => !state)
+        loadAttributesParentId(id);
     };
 
     function handleChangeTypeAttribute(e: any) {
@@ -75,7 +81,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         async function loadAttributes() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/findAllProductRelationAttribute?product_id=${product_id}`);
+                const response = await apiClient.get(`/allAttributeProduct?product_id=${product_id}`);
                 setAttributesLoad(response.data || []);
             } catch (error) {
                 console.log(error);
@@ -83,6 +89,16 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         }
         loadAttributes();
     }, [product_id]);
+
+    async function loadAttributesParentId(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/findManyParentIDattributes?parentId=${id}`);
+            setAttributesparentId(response.data || []);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async function handleRegisterAttributeZero() {
         const apiClient = setupAPIClient();
@@ -113,7 +129,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         }
     }
 
-    async function handleRegisterAttributeUm() {
+    async function handleRegisterAttributeUm(id: string) {
         const apiClient = setupAPIClient();
         try {
             if (value === "") {
@@ -126,18 +142,18 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                 value: value,
                 nivel: 1,
                 order: Number(order),
-                parentId: '',
+                parentId: id,
                 store_id: store_id
             });
 
-            toast.success('Tipo do atributo cadastrado com sucesso!');
+            toast.success('Valor do atributo cadastrado com sucesso!');
 
             setTimeout(() => {
                 navigate(0);
             }, 3000);
 
         } catch (error) {
-            toast.error('Erro ao cadastrar tipo de atributo');
+            toast.error('Erro ao cadastrar valo de atributo no produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
@@ -277,7 +293,8 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
             >
                 Continuar...
             </Button>
-
+            <br />
+            <br />
             <GridContainer>
                 {attributesLoad.length < 1 ? (
                     <>
@@ -288,7 +305,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                         {attributesLoad.map((item) => {
                             return (
                                 <>
-                                    <ContainerCategories>
+                                    <ContainerCategories key={item.id}>
                                         <ContainerCategoriesBox>
                                             <BlockDados
                                                 style={{ marginLeft: "10px" }}
@@ -311,22 +328,6 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                                     }
                                                 />
                                             </BlockDados>
-
-                                            {/* <BlockDados>
-                                                <TextoDados
-                                                    chave={"Valor"}
-                                                    dados={
-                                                        <InputUpdate
-                                                            dado={item.value}
-                                                            type="text"
-                                                            placeholder={item.value}
-                                                            value={valueUpdate}
-                                                            onChange={(e) => setValueUpdate(e.target.value)}
-                                                            handleSubmit={() => updateValueAttribute(item.id)}
-                                                        />
-                                                    }
-                                                />
-                                            </BlockDados> */}
 
                                             <BlockDados>
                                                 <TextoDados
@@ -366,18 +367,19 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                                 />
                                             </BlockDados>
 
-                                            <button
+                                            <Button
+                                                style={{ height: '50px', backgroundColor: 'green' }}
                                                 onClick={() => handleClick(item.id)}
                                             >
                                                 Inserir valor
-                                            </button>
+                                            </Button>
 
                                         </ContainerCategoriesBox>
                                     </ContainerCategories>
                                 </>
                             )
                         })}
-
+                        <br />
                         {attributesLoad.map((item) => {
                             return (
                                 <>
@@ -403,15 +405,70 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                                 />
                                             </Block>
 
-                                            <button
-                                                onClick={() => handleClick(item.id)}
+                                            <Button
+                                                style={{ backgroundColor: 'green' }}
+                                                onClick={() => handleRegisterAttributeUm(item.id)}
                                             >
-                                                Inserir valor
-                                            </button>
+                                                Salvar
+                                            </Button>
                                         </>
                                         :
                                         null
                                     }
+                                </>
+                            )
+                        })}
+                        <br />
+                        <br />          
+                        {attributesparentId.map((valu) => {
+                            return (
+                                <>
+                                    <ContainerCategories key={valu.id}>
+                                        <ContainerCategoriesBox>
+                                            <BlockDados>
+                                                <TextoDados
+                                                    chave={"Valor"}
+                                                    dados={
+                                                        <InputUpdate
+                                                            dado={valu.value}
+                                                            type="text"
+                                                            placeholder={valu.value}
+                                                            value={valueUpdate}
+                                                            onChange={(e) => setValueUpdate(e.target.value)}
+                                                            handleSubmit={() => updateValueAttribute(valu.id)}
+                                                        />
+                                                    }
+                                                />
+                                            </BlockDados>
+
+                                            <BlockDados>
+                                                <TextoDados
+                                                    chave={"Ordem"}
+                                                    dados={
+                                                        <InputUpdate
+                                                            dado={String(valu.order)}
+                                                            type="number"
+                                                            /* @ts-ignore */
+                                                            placeholder={String(valu.order)}
+                                                            value={orderUpdate}
+                                                            /* @ts-ignore */
+                                                            onChange={(e) => setOrderUpdate(e.target.value)}
+                                                            handleSubmit={() => updateOrder(valu.id)}
+                                                        />
+                                                    }
+                                                />
+                                            </BlockDados>
+
+                                            <BlockDados>
+                                                <BsTrash
+                                                    onClick={() => handleOpenModalDelete(valu.id)}
+                                                    style={{ cursor: 'pointer', margin: '13px 0' }}
+                                                    color="red"
+                                                    size={35}
+                                                />
+                                            </BlockDados>
+                                        </ContainerCategoriesBox>
+                                    </ContainerCategories>
                                 </>
                             )
                         })}

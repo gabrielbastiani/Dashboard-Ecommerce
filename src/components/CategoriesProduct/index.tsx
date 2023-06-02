@@ -224,7 +224,8 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
             >
                 Salvar categoria no produto
             </Button>
-
+            <br />
+            <br />
             <GridContainer>
                 {allFindOrderRelationIDAsc.length < 1 ? (
                     <>
@@ -256,6 +257,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                     }
                                                 />
                                             </BlockDados>
+                                            
                                             <BlockDados>
                                                 <TextoDados
                                                     chave={"Ordem"}

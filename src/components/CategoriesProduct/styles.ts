@@ -30,6 +30,7 @@ export const ContainerCategoriesBox = styled.div`
   display: grid;
   grid-template-columns: auto auto auto auto;
   border-bottom: solid 2px ${(props) => props?.theme?.colors?.white};
+  align-items: center;
 
   @media (max-width: 1140px) {
     grid-template-columns: auto auto;
