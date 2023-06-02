@@ -18,7 +18,7 @@ export const GridContainer = styled.div`
 `;
 
 export const TextNotFound = styled.span`
-  color: ${(props) => props?.theme?.colors?.black};
+  color: ${(props) => props?.theme?.colors?.white};
 `;
 
 export const ContainerCategories = styled.div`

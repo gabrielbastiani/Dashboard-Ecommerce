@@ -128,7 +128,6 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                 <TituloTop
                                     style={{ backgroundColor: cor }}
                                     onClick={() => handleClick(item.id)}
-                                    className={activeTab === item.id ? "active" : "desactive"}
                                 >
                                     {item.title}
                                 </TituloTop>
