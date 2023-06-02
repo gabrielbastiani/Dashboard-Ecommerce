@@ -126,6 +126,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                         return (
                             <>
                                 <TituloTop
+                                    key={item.id}
                                     style={{ backgroundColor: cor }}
                                     onClick={() => handleClick(item.id)}
                                 >

@@ -196,7 +196,7 @@ const Produtos: React.FC = () => {
                             <TabelaSimples
                                 cabecalho={["Imagem", "Produto", "Qtd. de Categorias", "Status"]}
                                 dados={dados}
-                                textbutton={"Detalhes"}
+                                textbutton="Ver produto"
                             />
 
                             <ContainerPagination>

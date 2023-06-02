@@ -5,7 +5,7 @@ import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import { ModalDeleteRelationsCategorys } from "../popups/ModalDeleteRelationsCategorys";
-import { ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound } from "./styles";
+import { BlockSub, ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound } from "./styles";
 import { Block, Etiqueta } from "../../pages/Categorias/styles";
 import Select from "../ui/Select";
 import { InputPost } from "../ui/InputPost";
@@ -38,11 +38,19 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
     const [order, setOrder] = useState(Number);
 
     const [allFindOrderRelationIDAsc, setAllFindOrderRelationIDAsc] = useState<any[]>([]);
+    const [loadSubcateg, setLoadSubcateg] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [activeTab, setActiveTab] = useState("");
+
+    const handleClick: any = (id: string) => {
+        setActiveTab(id);
+        loadSubCategories(id);
+    };
 
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value);
@@ -73,6 +81,29 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                 product_id: product_id,
                 name: categorySelected,
                 order: Number(order),
+                store_id: store_id
+            });
+
+            toast.success('Categoria cadastrada com sucesso!');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
+            /* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
+    async function handleSubCateg(name: string) {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post('/createProductCategory', {
+                product_id: product_id,
+                name: name,
+                order: 0,
                 store_id: store_id
             });
 
@@ -186,7 +217,15 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
 
     Modal.setAppElement('body');
 
-
+    async function loadSubCategories(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/parentIDCategoryAll?parentId=${id}`);
+            setLoadSubcateg(response.data || []);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -256,8 +295,39 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                         />
                                                     }
                                                 />
+
+                                                <Button
+                                                    style={{ backgroundColor: 'green' }}
+                                                    onClick={() => handleClick(item.category.id)}
+                                                >
+                                                    Possui subcategoria?
+                                                </Button>
+
+                                                <BlockSub>
+                                                    {loadSubcateg.map((sub) => {
+                                                        return (
+                                                            <>
+                                                                {activeTab === item.category.id ?
+                                                                    <>
+                                                                        <BlockSub>
+                                                                            <span>{sub.name}</span>
+                                                                            <button
+                                                                                onClick={() => handleSubCateg(sub.name)}
+                                                                            >
+                                                                                Salvar
+                                                                            </button>
+                                                                        </BlockSub>
+                                                                    </>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </>
+                                                        )
+                                                    })}
+                                                </BlockSub>
+
                                             </BlockDados>
-                                            
+
                                             <BlockDados>
                                                 <TextoDados
                                                     chave={"Ordem"}

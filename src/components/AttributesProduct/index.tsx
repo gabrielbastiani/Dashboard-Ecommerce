@@ -53,8 +53,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
     const [activeTab, setActiveTab] = useState("");
 
-
-    const handleClick = (id: string) => {
+    const handleClick: any = (id: string) => {
         setActiveTab(id);
         loadAttributesParentId(id);
     };
@@ -62,7 +61,6 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
     function handleChangeTypeAttribute(e: any) {
         setTypeSelected(e.target.value);
     }
-
 
     useEffect(() => {
         async function loadTypes() {
@@ -419,7 +417,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                             )
                         })}
                         <br />
-                        <br />          
+                        <br />
                         {attributesparentId.map((valu) => {
                             return (
                                 <>
