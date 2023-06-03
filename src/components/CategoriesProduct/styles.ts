@@ -47,3 +47,27 @@ export const BlockSub = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export const TextSub = styled.span`
+
+`;
+
+export const BlockCatSub = styled.div`
+  display: flex;
+`;
+
+export const ButtonSubCat = styled.button`
+  background-color: ${(props) => props?.theme?.colors?.info};
+  color: ${(props) => props?.theme?.colors?.black};
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+`;
+
+export const ButtonSubCatSave = styled.button`
+  background-color: ${(props) => props?.theme?.colors?.success};
+  color: ${(props) => props?.theme?.colors?.black};
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+`;

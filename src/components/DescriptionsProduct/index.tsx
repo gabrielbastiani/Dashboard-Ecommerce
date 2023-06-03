@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Modal from 'react-modal';
 import {
     TableSection,
     Cabecalho,
@@ -17,7 +18,12 @@ import { GrStatusUnknown } from "react-icons/gr";
 import { Button } from "../ui/Button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ModalDeleteDescriptionProduct } from "../popups/ModalDeleteDescriptionProduct";
 
+
+export type DeleteDescriptions = {
+    id: string;
+}
 
 interface DescriptionRequest {
     product_id: any;
@@ -32,6 +38,9 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
     const [toogle, setToogle] = useState(!activeTab);
     const [cor, setCor] = useState('#999494');
+
+    const [modalItem, setModalItem] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         setCor(toogle ? '#c3c3c3' : '');
@@ -56,23 +65,6 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         }
         loadDescriptions();
     }, [product_id]);
-
-    async function handleDeleteDescription(id: string) {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.delete(`/deleteDescriptionProduct?descriptionProduct_id=${id}`);
-
-            toast.success('Descrição do produto deletada com sucesso.');
-
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao deletar a descrição do produto.');
-        }
-    }
 
     async function handleUpdateDescription(id: string) {
         try {
@@ -118,6 +110,24 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         }
     }
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete(id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueDescriptionProduct', {
+            params: {
+                descriptionProduct_id: id,
+            }
+        });
+        setModalItem(response.data || "");
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
+    
+
     return (
         <>
             <TableSection>
@@ -156,7 +166,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                             <ValueText style={{ marginBottom: '12px' }}>Decrição ativa?:</ValueText>
                                             <ButtonConfirm onClick={ () => handleUpdateStatus(item.id, item.status) }><GrStatusUnknown /><TextButton>{item.status}</TextButton></ButtonConfirm>
                                             <ValueText style={{ marginBottom: '12px' }}>Deletar descrição acima:</ValueText>&nbsp;&nbsp;
-                                            <Button onClick={ () => handleDeleteDescription(item.id) }>Deletar</Button>
+                                            <Button onClick={ () => handleOpenModalDelete(item.id) }>Deletar</Button>
                                         </EditBoxDesc>
                                     </TabContents>
                                     : 
@@ -167,6 +177,14 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                     })}
                 </TableAllDescription>
             </TableSection>
+            {modalVisible && (
+                <ModalDeleteDescriptionProduct
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    relation={modalItem}
+                />
+            )}
         </>
     )
 }

@@ -45,6 +45,7 @@ import EditItem from './pages/Categorias/MenusCategorias/editItem';
 import TiposAtributos from './pages/Produtos/TiposAtributos';
 import EditTipoAtributo from './pages/Produtos/TiposAtributos/editTipoAtributo';
 import NovoTipoAtributo from './pages/Produtos/TiposAtributos/novoTipoAtributo';
+import ProductDescription from './pages/Produtos/ProductDescription';
 
 
 const RoutesAuth: React.FC = () => {
@@ -69,6 +70,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produtos' element={<Produtos />} />
             <Route path='/produto/novo' element={<NovoProduto />} />
             <Route path='/produto/:slug/:product_id' element={<Produto />} />
+            <Route path='/produto/descricao/nova/:slug/:product_id' element={<ProductDescription />} />
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avaliacao_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />

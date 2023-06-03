@@ -5,7 +5,7 @@ import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import { ModalDeleteRelationsCategorys } from "../popups/ModalDeleteRelationsCategorys";
-import { BlockSub, ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound } from "./styles";
+import { BlockCatSub, BlockSub, ButtonSubCat, ButtonSubCatSave, ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound, TextSub } from "./styles";
 import { Block, Etiqueta } from "../../pages/Categorias/styles";
 import Select from "../ui/Select";
 import { InputPost } from "../ui/InputPost";
@@ -37,7 +37,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
     const [categorySelected, setCategorySelected] = useState();
     const [order, setOrder] = useState(Number);
 
-    const [allFindOrderRelationIDAsc, setAllFindOrderRelationIDAsc] = useState<any[]>([]);
+    const [allCategoriesProduct, setAllCategoriesProduct] = useState<any[]>([]);
     const [loadSubcateg, setLoadSubcateg] = useState<any[]>([]);
 
     const [orderUpdate, setOrderUpdate] = useState();
@@ -46,15 +46,22 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const [activeTab, setActiveTab] = useState("");
+    const [activeTabSub, setActiveTabSub] = useState("");
+
 
     const handleClick: any = (id: string) => {
         setActiveTab(id);
         loadSubCategories(id);
     };
 
+    const handleClickSub: any = (id: string) => {
+        setActiveTabSub(id);
+        loadSubCategories(id);
+    };
+
     function handleChangeCategory(e: any) {
         setCategorySelected(e.target.value);
-    }
+    };
 
     useEffect(() => {
         async function loadCategorys() {
@@ -107,7 +114,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                 store_id: store_id
             });
 
-            toast.success('Categoria cadastrada com sucesso!');
+            toast.success('Subcategoria cadastrada com sucesso!');
 
             setTimeout(() => {
                 navigate(0);
@@ -126,7 +133,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                 const apiClient = setupAPIClient();
                 const response = await apiClient.get(`/findAllRelationsProductAndCategory?product_id=${product_id}`);
 
-                setAllFindOrderRelationIDAsc(response.data || []);
+                setAllCategoriesProduct(response.data || []);
 
             } catch (error) {
                 console.error(error);
@@ -266,13 +273,13 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
             <br />
             <br />
             <GridContainer>
-                {allFindOrderRelationIDAsc.length < 1 ? (
+                {allCategoriesProduct.length < 1 ? (
                     <>
                         <TextNotFound>Não há categorias cadastrados no produto ainda...</TextNotFound>
                     </>
                 ) :
                     <>
-                        {allFindOrderRelationIDAsc.map((item) => {
+                        {allCategoriesProduct.map((item) => {
                             return (
                                 <>
                                     <ContainerCategories>
@@ -297,34 +304,11 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                 />
 
                                                 <Button
-                                                    style={{ backgroundColor: 'green' }}
+                                                    style={{ backgroundColor: 'orange' }}
                                                     onClick={() => handleClick(item.category.id)}
                                                 >
-                                                    Possui subcategoria?
+                                                    Subcategorias?
                                                 </Button>
-
-                                                <BlockSub>
-                                                    {loadSubcateg.map((sub) => {
-                                                        return (
-                                                            <>
-                                                                {activeTab === item.category.id ?
-                                                                    <>
-                                                                        <BlockSub>
-                                                                            <span>{sub.name}</span>
-                                                                            <button
-                                                                                onClick={() => handleSubCateg(sub.name)}
-                                                                            >
-                                                                                Salvar
-                                                                            </button>
-                                                                        </BlockSub>
-                                                                    </>
-                                                                    :
-                                                                    null
-                                                                }
-                                                            </>
-                                                        )
-                                                    })}
-                                                </BlockSub>
 
                                             </BlockDados>
 
@@ -365,6 +349,57 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                 color="red"
                                                 size={35}
                                             />
+
+                                            <BlockSub>
+                                                {loadSubcateg.map((sub) => {
+                                                    return (
+                                                        <>
+                                                            {activeTab === item.category.id ?
+                                                                <>
+                                                                    <BlockSub key={sub.id}>
+                                                                        <TextSub>{sub.name}</TextSub>
+                                                                        <BlockCatSub>
+                                                                            <ButtonSubCat
+                                                                                onClick={() => handleClickSub(sub.id)}
+                                                                            >
+                                                                                Mais...
+                                                                            </ButtonSubCat>
+                                                                            <ButtonSubCatSave
+                                                                                onClick={() => handleSubCateg(sub.name)}
+                                                                            >
+                                                                                Salvar
+                                                                            </ButtonSubCatSave>
+                                                                        </BlockCatSub>
+                                                                    </BlockSub>
+                                                                </>
+                                                                :
+                                                                null
+                                                            }
+                                                            
+                                                            {activeTabSub === sub.id ?
+                                                                <BlockSub key={sub.id}>
+                                                                    <TextSub>{sub.name}</TextSub>
+                                                                    <BlockCatSub>
+                                                                        <ButtonSubCat
+                                                                            onClick={() => handleClickSub(sub.id)}
+                                                                        >
+                                                                            Mais...
+                                                                        </ButtonSubCat>
+                                                                        <ButtonSubCatSave
+                                                                            onClick={() => handleSubCateg(sub.name)}
+                                                                        >
+                                                                            Salvar
+                                                                        </ButtonSubCatSave>
+                                                                    </BlockCatSub>
+                                                                </BlockSub>
+                                                                :
+                                                                null
+                                                            }
+                                                            <br />
+                                                        </>
+                                                    )
+                                                })}
+                                            </BlockSub>
                                         </ContainerCategoriesBox>
                                     </ContainerCategories>
                                 </>
@@ -373,7 +408,6 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                     </>
                 }
             </GridContainer>
-
             {modalVisible && (
                 <ModalDeleteRelationsCategorys
                     isOpen={modalVisible}
