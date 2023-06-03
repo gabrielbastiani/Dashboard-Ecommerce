@@ -9,11 +9,7 @@ export const GridContainer = styled.div`
   background-color: ${(props) => props?.theme?.colors?.black};
 
   @media (max-width: 797px) {
-    width: 200px;
-  }
-
-  @media (max-width: 480px) {
-    width: 160px;
+    width: 100%;
   }
 `;
 
@@ -23,20 +19,20 @@ export const TextNotFound = styled.span`
 
 export const ContainerCategories = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
 `;
 
 export const ContainerCategoriesBox = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
   border-bottom: solid 2px ${(props) => props?.theme?.colors?.white};
   align-items: center;
 
-  @media (max-width: 1140px) {
-    grid-template-columns: auto auto;
+  @media (max-width: 1295px) {
+    grid-template-columns: auto auto auto;
   }
 
-  @media (max-width: 915px) {
+  @media (max-width: 1050px) {
     grid-template-columns: auto;
   }
 `;

@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import {
     TableSection,
     Cabecalho,
-    TableAllDescription,
     TituloTop,
     TabContents,
     TextAreaDescription,
@@ -126,7 +125,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
     }
 
     Modal.setAppElement('body');
-    
+
 
     return (
         <>
@@ -147,35 +146,34 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                     })}
                 </Cabecalho>
 
-                <TableAllDescription>
-                    {descriptions.map((item) => {
-                        return (
-                            <>
-                                {activeTab === item.id ?
-                                    <TabContents key={item.id}>
-                                        <TextAreaDescription
-                                            onChange={(e) => setDescription(e.target.value)}
-                                        >
-                                            {item.description}
-                                        </TextAreaDescription>
-                                        <br />
-                                        <br />
-                                        <EditBoxDesc>
-                                            <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
-                                            <ButtonConfirm onClick={ () => handleUpdateDescription(item.id) }><GiConfirmed /></ButtonConfirm>
-                                            <ValueText style={{ marginBottom: '12px' }}>Decrição ativa?:</ValueText>
-                                            <ButtonConfirm onClick={ () => handleUpdateStatus(item.id, item.status) }><GrStatusUnknown /><TextButton>{item.status}</TextButton></ButtonConfirm>
-                                            <ValueText style={{ marginBottom: '12px' }}>Deletar descrição acima:</ValueText>&nbsp;&nbsp;
-                                            <Button onClick={ () => handleOpenModalDelete(item.id) }>Deletar</Button>
-                                        </EditBoxDesc>
-                                    </TabContents>
-                                    : 
-                                    null
-                                }
-                            </>
-                        )
-                    })}
-                </TableAllDescription>
+                {descriptions.map((item) => {
+                    return (
+                        <>
+                            {activeTab === item.id ?
+                                <TabContents key={item.id}>
+                                    <TextAreaDescription
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    >
+                                        {item.description}
+                                    </TextAreaDescription>
+                                    <br />
+                                    <br />
+                                    <EditBoxDesc>
+                                        <ValueText style={{ marginBottom: '12px' }}>Salvar edição:</ValueText>
+                                        <ButtonConfirm onClick={() => handleUpdateDescription(item.id)}><GiConfirmed /></ButtonConfirm>
+                                        <ValueText style={{ marginBottom: '12px' }}>Decrição ativa?:</ValueText>
+                                        <ButtonConfirm onClick={() => handleUpdateStatus(item.id, item.status)}><GrStatusUnknown /><TextButton>{item.status}</TextButton></ButtonConfirm>
+                                        <ValueText style={{ marginBottom: '12px' }}>Deletar descrição acima:</ValueText>&nbsp;&nbsp;
+                                        <Button onClick={() => handleOpenModalDelete(item.id)}>Deletar</Button>
+                                    </EditBoxDesc>
+                                </TabContents>
+                                :
+                                null
+                            }
+                        </>
+                    )
+                })}
+
             </TableSection>
             {modalVisible && (
                 <ModalDeleteDescriptionProduct

@@ -5,7 +5,17 @@ import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import { ModalDeleteRelationsCategorys } from "../popups/ModalDeleteRelationsCategorys";
-import { BlockCatSub, BlockSub, ButtonSubCat, ButtonSubCatSave, ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound, TextSub } from "./styles";
+import {
+    BlockCatSub,
+    BlockSub,
+    ButtonSubCat,
+    ButtonSubCatSave,
+    ContainerCategories,
+    ContainerCategoriesBox,
+    GridContainer,
+    TextNotFound,
+    TextSub
+} from "./styles";
 import { Block, Etiqueta } from "../../pages/Categorias/styles";
 import Select from "../ui/Select";
 import { InputPost } from "../ui/InputPost";
@@ -302,14 +312,15 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                         />
                                                     }
                                                 />
+                                            </BlockDados>
 
-                                                <Button
+                                            <BlockDados>
+                                            <Button
                                                     style={{ backgroundColor: 'orange' }}
                                                     onClick={() => handleClick(item.category.id)}
                                                 >
                                                     Subcategorias?
                                                 </Button>
-
                                             </BlockDados>
 
                                             <BlockDados>
@@ -343,12 +354,14 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                 />
                                             </BlockDados>
 
+                                            <BlockDados>
                                             <BsTrash
                                                 onClick={() => handleOpenModalDelete(item.id)}
                                                 style={{ cursor: 'pointer', margin: '13px 0' }}
                                                 color="red"
                                                 size={35}
                                             />
+                                            </BlockDados>
 
                                             <BlockSub>
                                                 {loadSubcateg.map((sub) => {

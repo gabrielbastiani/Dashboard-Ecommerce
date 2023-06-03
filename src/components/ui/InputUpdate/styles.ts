@@ -11,6 +11,11 @@ export const InputText = styled.input`
   font-weight: bold;
   font-size: 1rem;
   display: flex;
+
+  @media (max-width: 430px) {
+    width: 85%;
+    padding: 0.6rem;
+  }
 `;
 
 export const ButtonUpdate = styled.button`
@@ -67,4 +72,8 @@ export const ValueText = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  @media (max-width: 430px) {
+    width: 25%;
+  }
 `;
