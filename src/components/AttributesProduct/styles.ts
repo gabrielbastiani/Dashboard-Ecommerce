@@ -93,6 +93,50 @@ export const TextButton = styled.span`
   text-decoration: underline;
 `;
 
+export const FormImage = styled.form``;
+
+export const EtiquetaImg = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const PreviewImageAttribute = styled.img`
+  width: 120px;
+  height: 80px;
+  margin-bottom: 5px;
+  object-fit: contain;
+`;
+
+export const ButtonImg = styled.button`
+  color: ${(props) => props.theme.colors.white};
+  background-color: green;
+  padding: 5px;
+  border-radius: 5px;
+`;
+
+export const AttributeImg = styled.img`
+  width: 120px;
+  height: 80px;
+  margin-bottom: 5px;
+  object-fit: contain;
+`;
+
+export const IconSpanUpload = styled.span`
+  z-index: 1;
+  opacity: 0.7;
+  transition: all 0.9s;
+  cursor: pointer;
+
+  svg {
+    margin: -5px 0;
+  }
+`;
+
+export const TextUpdate = styled.small`
+  cursor: pointer;
+`;
+
 export const TableAllDescription = styled.div``;
 
 export const TabContents = styled.div``;

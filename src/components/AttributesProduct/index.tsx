@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import Modal from 'react-modal';
 import { setupAPIClient } from "../../services/api";
 import { Button } from "../ui/Button";
@@ -22,6 +22,17 @@ import { InputPost } from "../ui/InputPost";
 import Select from "../ui/Select";
 import Titulos from "../Titulos";
 import { ModalDeleteAttributeProduct } from "../popups/ModalDeleteAttributeProduct";
+import {
+    AttributeImg,
+    ButtonImg,
+    EtiquetaImg,
+    FormImage,
+    IconSpanUpload,
+    PreviewImageAttribute,
+    TextUpdate
+} from "./styles";
+import { InputLogo, TextLogo } from "../../pages/Configuracoes/styles";
+import { MdFileUpload } from "react-icons/md";
 
 
 export type DeleteRelationsAttribute = {
@@ -47,6 +58,12 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
     const [valueUpdate, setValueUpdate] = useState("");
     const [order, setOrder] = useState();
     const [orderUpdate, setOrderUpdate] = useState(Number);
+
+    const [imageAttr, setImageAttr] = useState(null);
+    const [imageAttrUrl, setImageAttrUrl] = useState('');
+
+    const [imageAttrUpdate, setImageAttrUpdate] = useState(null);
+    const [imageAttrUpdateUrl, setImageAttrUpdateUrl] = useState('');
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -237,6 +254,91 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         }
     }
 
+    async function handleImageAttribute(event: FormEvent, id: string) {
+        event.preventDefault();
+        const apiClient = setupAPIClient();
+        try {
+
+            const data = new FormData();
+            /* @ts-ignore */
+            data.append('file', imageAttr);
+            data.append('relationAttributeProduct_id', id);
+
+            await apiClient.post(`/createImageAttributeProduct`, data);
+
+            toast.success('Imagem cadastrada no atributo com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao cadastrar a imagem.');
+        }
+
+    }
+
+    function handleFile(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return
+        }
+
+        const image = e.target.files[0]
+        if (!image) {
+            return
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setImageAttr(image)
+            setImageAttrUrl(URL.createObjectURL(image))
+        }
+
+    }
+
+    async function handleImageAttributeUpdate(event: FormEvent, id: string) {
+        event.preventDefault();
+        const apiClient = setupAPIClient();
+        try {
+
+            const data = new FormData();
+            /* @ts-ignore */
+            data.append('file', imageAttrUpdate);
+
+            await apiClient.put(`/updateImageAttribute?imageAttribute_id=${id}`, data);
+
+            toast.success('Imagem atualizada no atributo com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao atualizar a imagem.');
+        }
+
+    }
+
+    function handleFileUpdate(e: ChangeEvent<HTMLInputElement>) {
+        if (!e.target.files) {
+            return
+        }
+
+        const image = e.target.files[0]
+        if (!image) {
+            return
+        }
+
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+            /* @ts-ignore */
+            setImageAttrUpdate(image)
+            setImageAttrUpdateUrl(URL.createObjectURL(image))
+        }
+
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
@@ -383,7 +485,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                 <>
                                     {activeTab === item.id ?
                                         <>
-                                            <Block>
+                                            <Block key={item.id}>
                                                 <Etiqueta>Valor:</Etiqueta>
                                                 <InputPost
                                                     type="text"
@@ -423,6 +525,62 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                 <>
                                     <ContainerCategories key={valu.id}>
                                         <ContainerCategoriesBox>
+                                            <BlockDados>
+                                                {valu.imageattributes[0] ? (
+                                                    <FormImage onSubmit={(event) => handleImageAttributeUpdate(event, valu.imageattributes[0].id)} >
+                                                        <EtiquetaImg>
+
+                                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileUpdate} alt="atrbuto loja virtual" />
+                                                            {imageAttrUpdateUrl ? (
+                                                                <>
+                                                                    <PreviewImageAttribute
+                                                                        src={imageAttrUpdateUrl}
+                                                                        alt="atrbuto loja virtual"
+                                                                    />
+                                                                    <ButtonImg
+                                                                        style={{ backgroundColor: 'orange' }}
+                                                                        type="submit"
+                                                                    >
+                                                                        Atualizar
+                                                                    </ButtonImg>
+                                                                </>
+                                                            ) :
+                                                                <>
+                                                                    <TextUpdate>Atualize a imagem</TextUpdate>
+                                                                    <AttributeImg src={"http://localhost:3333/files/" + valu.imageattributes[0].image} />
+                                                                </>
+                                                            }
+                                                        </EtiquetaImg>
+                                                    </FormImage>
+                                                ) :
+                                                    <FormImage onSubmit={(event) => handleImageAttribute(event, valu.id)} >
+                                                        <EtiquetaImg>
+                                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFile} alt="atrbuto loja virtual" />
+                                                            {imageAttrUrl ? (
+                                                                <>
+                                                                    <PreviewImageAttribute
+                                                                        src={imageAttrUrl}
+                                                                        alt="atrbuto loja virtual"
+                                                                    />
+                                                                    <ButtonImg
+                                                                        type="submit"
+                                                                    >
+                                                                        Salvar
+                                                                    </ButtonImg>
+                                                                </>
+                                                            ) :
+                                                                <>
+                                                                    <IconSpanUpload>
+                                                                        <MdFileUpload size={30} />
+                                                                    </IconSpanUpload>
+                                                                    <TextLogo>Insira uma imagem</TextLogo>
+                                                                </>
+                                                            }
+                                                        </EtiquetaImg>
+                                                    </FormImage>
+                                                }
+                                            </BlockDados>
+
                                             <BlockDados>
                                                 <TextoDados
                                                     chave={"Valor"}
