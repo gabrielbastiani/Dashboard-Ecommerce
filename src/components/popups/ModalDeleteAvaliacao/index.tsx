@@ -38,9 +38,9 @@ export function ModalDeleteAvaliacao({ isOpen, onRequestClose, avaliacao, slug, 
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const avaliacao_id = avaliacao.id;
+            const avalietion_id = avaliacao.id;
 
-            await apiClient.delete(`/deleteAvaliacao?avaliacao_id=${avaliacao_id}`);
+            await apiClient.delete(`/deleteAvalietion?avalietion_id=${avalietion_id}`);
             toast.success(`Avaliação deletada com sucesso.`);
 
             navigate(`/produto/avaliacoes/${slug}/${product_id}`);

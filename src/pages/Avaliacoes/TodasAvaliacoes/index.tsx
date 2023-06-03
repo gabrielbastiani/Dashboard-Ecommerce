@@ -7,7 +7,17 @@ import Pesquisa from "../../../components/Pesquisa";
 import TabelaSimples from "../../../components/Tabelas";
 import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
-import { ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
+import {
+    ButtonPage,
+    Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../../Categorias/styles";
 import { Grid } from "../../Dashboard/styles";
 import { setupAPIClient } from "../../../services/api";
 import moment from 'moment';
@@ -28,7 +38,7 @@ const TodasAvaliacoes: React.FC = () => {
         async function allAvaliations() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/allAvaliacao?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageAllAvalietion?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -39,8 +49,8 @@ const TodasAvaliacoes: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setSearch(data.allAvaliacao || []);
-                setInitialFilter(data.allAvaliacao);
+                setSearch(data.allAvalietion || []);
+                setInitialFilter(data.allAvalietion);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -63,15 +73,15 @@ const TodasAvaliacoes: React.FC = () => {
             return;
         }
         /* @ts-ignore */
-        const filterAvaliacoes = search.filter((filt) => filt.product.nameProduct.toLowerCase().includes(target.value));
-        setSearch(filterAvaliacoes);
+        const filterAvaliation = search.filter((filt) => filt.product.name.toLowerCase().includes(target.value));
+        setSearch(filterAvaliation);
     }
 
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Produto": item.product.nameProduct,
-            "Avaliação": item.pontuacao,
+            "Produto": item.product.name,
+            "Avaliação": item.point,
             "Comentário": item.description,
             "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "Status": item.status,

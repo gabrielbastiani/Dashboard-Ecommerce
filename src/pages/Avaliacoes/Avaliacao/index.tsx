@@ -20,17 +20,17 @@ import { toast } from "react-toastify";
 
 
 export type DeleteAvaliacao = {
-    avaliacao_id: string;
+    avalietion_id: string;
     slug: string;
     product_id: string;
 }
 
 const Avaliacao: React.FC = () => {
 
-    let { slug, avaliacao_id } = useParams();
+    let { slug, avalietion_id } = useParams();
     const navigate = useNavigate();
 
-    const [admin_id, setUser_id] = useState('');
+    const [customer_id, setCustomer_id] = useState('');
     const [clientName, setClientName] = useState('');
     const [slugCliente, setSlugCliente] = useState('');
     const [email, setEmail] = useState("");
@@ -50,24 +50,24 @@ const Avaliacao: React.FC = () => {
         async function loadAvaliacao() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/avaliacaoDados?avaliacao_id=${avaliacao_id}`);
+                const response = await apiClient.get(`/avalietionData?avalietion_id=${avalietion_id}`);
 
-                setUser_id(response.data.admin.id || "");
-                setClientName(response.data.admin.name || "");
-                setSlugCliente(response.data.admin.slug || "");
-                setEmail(response.data.admin.email || "");
-                setPontuacao(response.data.pontuacao || "");
+                setCustomer_id(response.data.customer.id || "");
+                setClientName(response.data.customer.name || "");
+                setSlugCliente(response.data.customer.slug || "");
+                setEmail(response.data.customer.email || "");
+                setPontuacao(response.data.point || "");
                 setStatus(response.data.status || "");
                 setDescription(response.data.description);
                 setProduct_id(response.data.product_id || "");
-                setNameProduct(response.data.product.nameProduct || "");
+                setNameProduct(response.data.product.name || "");
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadAvaliacao();
-    }, [avaliacao_id]);
+    }, [avalietion_id]);
 
     function handleChangeStatus(e: any) {
         setStatusSelected(e.target.value);
@@ -76,7 +76,7 @@ const Avaliacao: React.FC = () => {
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusAvaliacao?avaliacao_id=${avaliacao_id}`, { status: statusSelected });
+            await apiClient.put(`/updateStatusAvalietion?avalietion_id=${avalietion_id}`, { status: statusSelected });
             toast.success('Status atualizado com sucesso.');
         } catch (error) {
             console.log(error);
@@ -91,11 +91,11 @@ const Avaliacao: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(avaliacao_id: string) {
+    async function handleOpenModalDelete(avalietion_id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/avaliacaoDados', {
+        const responseDelete = await apiClient.get('/avalietionData', {
             params: {
-                avaliacao_id: avaliacao_id,
+                avalietion_id: avalietion_id,
             }
         });
         setModalItem(responseDelete.data || "");
@@ -123,7 +123,7 @@ const Avaliacao: React.FC = () => {
                                 type="submit"
                                 style={{ backgroundColor: '#FB451E' }}
                                 /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(avaliacao_id)}
+                                onClick={() => handleOpenModalDelete(avalietion_id)}
                             >
                                 Remover
                             </Button>
@@ -150,7 +150,7 @@ const Avaliacao: React.FC = () => {
 
                         <BlockDados>
                             <Perfil
-                                href={`/cliente/${slugCliente}/${admin_id}`}
+                                href={`/cliente/${slugCliente}/${customer_id}`}
                             >
                                 Ver Perfil do Cliente
                             </Perfil>

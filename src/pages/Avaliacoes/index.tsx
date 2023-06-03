@@ -5,7 +5,16 @@ import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
 import { Card, Container } from "../../components/Content/styles";
 import Voltar from "../../components/Voltar";
-import { BlockTop, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../Categorias/styles";
+import {
+    BlockTop,
+    ButtonPage,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next, Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../Categorias/styles";
 import Titulos from "../../components/Titulos";
 import { setupAPIClient } from "../../services/api";
 import { Avisos } from "../../components/Avisos";
@@ -27,11 +36,13 @@ const Avaliacoes: React.FC = () => {
 
     const [nameProduct, setNameProduct] = useState("");
 
+    console.log(nameProduct)
+
     useEffect(() => {
         async function allAvaliations() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageAvaliacao?page=${currentPage}&limit=${limit}&product_id=${product_id}`);
+                const { data } = await apiClient.get(`/pageAvalietion?page=${currentPage}&limit=${limit}&product_id=${product_id}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -42,8 +53,7 @@ const Avaliacoes: React.FC = () => {
                 }
 
                 setPages(arrayPages);
-                setAvaliations(data.productAvaliacao || []);
-                setNameProduct(data.product.nameProduct || "");
+                setAvaliations(data.productAvalietion || []);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
@@ -51,6 +61,21 @@ const Avaliacoes: React.FC = () => {
         }
         allAvaliations();
     }, [currentPage, limit, product_id, total]);
+
+    useEffect(() => {
+        async function productLoad() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findUniqueProduct?product_id=${product_id}`);
+
+                setNameProduct(response.data.name || "");
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        productLoad();
+    }, [product_id]);
 
     /* @ts-ignore */
     const limits = useCallback((e) => {
@@ -61,7 +86,7 @@ const Avaliacoes: React.FC = () => {
     const dados: any = [];
     (avaliations || []).forEach((item) => {
         dados.push({
-            "Cliente": item.admin.name,
+            "Cliente": item.customer.name,
             "Data da avaliação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "botaoDetalhes": `/avaliacao/${item.product.slug}/${item.id}`
         });
