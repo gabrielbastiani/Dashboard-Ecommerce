@@ -33,9 +33,15 @@ import {
 } from "./styles";
 import { InputLogo, TextLogo } from "../../pages/Configuracoes/styles";
 import { MdFileUpload } from "react-icons/md";
+import { ModalDeleteImageAttributeProduct } from "../popups/ModalDeleteImageAttributeProduct";
+
 
 
 export type DeleteRelationsAttribute = {
+    id: string;
+}
+
+export type DeleteImageAttribute = {
     id: string;
 }
 
@@ -67,6 +73,9 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [modalItemImage, setModalItemImage] = useState('');
+    const [modalVisibleImage, setModalVisibleImage] = useState(false);
 
     const [activeTab, setActiveTab] = useState("");
 
@@ -291,8 +300,8 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
         if (image.type === 'image/jpeg' || image.type === 'image/png') {
             /* @ts-ignore */
-            setImageAttr(image)
-            setImageAttrUrl(URL.createObjectURL(image))
+            setImageAttr(image);
+            setImageAttrUrl(URL.createObjectURL(image));
         }
 
     }
@@ -352,6 +361,21 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         });
         setModalItem(response.data || "");
         setModalVisible(true);
+    }
+
+    function handleCloseModalDeleteImage() {
+        setModalVisibleImage(false);
+    }
+
+    async function handleOpenModalDeleteImage(id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueImageAttribute', {
+            params: {
+                imageAttribute_id: id,
+            }
+        });
+        setModalItemImage(response.data || "");
+        setModalVisibleImage(true);
     }
 
     Modal.setAppElement('body');
@@ -527,31 +551,40 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                         <ContainerCategoriesBox>
                                             <BlockDados>
                                                 {valu.imageattributes[0] ? (
-                                                    <FormImage onSubmit={(event) => handleImageAttributeUpdate(event, valu.imageattributes[0].id)} >
-                                                        <EtiquetaImg>
-
-                                                            <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileUpdate} alt="atrbuto loja virtual" />
-                                                            {imageAttrUpdateUrl ? (
-                                                                <>
-                                                                    <PreviewImageAttribute
-                                                                        src={imageAttrUpdateUrl}
-                                                                        alt="atrbuto loja virtual"
-                                                                    />
-                                                                    <ButtonImg
-                                                                        style={{ backgroundColor: 'orange' }}
-                                                                        type="submit"
-                                                                    >
-                                                                        Atualizar
-                                                                    </ButtonImg>
-                                                                </>
-                                                            ) :
-                                                                <>
-                                                                    <TextUpdate>Atualize a imagem</TextUpdate>
-                                                                    <AttributeImg src={"http://localhost:3333/files/" + valu.imageattributes[0].image} />
-                                                                </>
-                                                            }
-                                                        </EtiquetaImg>
-                                                    </FormImage>
+                                                    <>
+                                                        <FormImage onSubmit={(event) => handleImageAttributeUpdate(event, valu.imageattributes[0].id)} >
+                                                            <EtiquetaImg>
+                                                                <InputLogo type="file" accept="image/png, image/jpeg" onChange={handleFileUpdate} alt="atributo loja virtual" />
+                                                                {imageAttrUpdateUrl ? (
+                                                                    <>
+                                                                        <PreviewImageAttribute
+                                                                            src={imageAttrUpdateUrl}
+                                                                            alt="atributo loja virtual"
+                                                                        />
+                                                                        <ButtonImg
+                                                                            style={{ backgroundColor: 'orange' }}
+                                                                            type="submit"
+                                                                        >
+                                                                            Atualizar
+                                                                        </ButtonImg>
+                                                                    </>
+                                                                ) :
+                                                                    <>
+                                                                        <TextUpdate>Atualize a imagem</TextUpdate>
+                                                                        <AttributeImg src={"http://localhost:3333/files/" + valu.imageattributes[0].image} />
+                                                                    </>
+                                                                }
+                                                            </EtiquetaImg>
+                                                        </FormImage>
+                                                        &nbsp;
+                                                        &nbsp;
+                                                        <ButtonImg
+                                                            style={{ backgroundColor: 'red' }}
+                                                            onClick={() => handleOpenModalDeleteImage(valu.imageattributes[0].id)}
+                                                        >
+                                                            Deletar<br />Imagem
+                                                        </ButtonImg>
+                                                    </>
                                                 ) :
                                                     <FormImage onSubmit={(event) => handleImageAttribute(event, valu.id)} >
                                                         <EtiquetaImg>
@@ -636,6 +669,14 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                         onRequestClose={handleCloseModalDelete}
                         /* @ts-ignore */
                         relation={modalItem}
+                    />
+                )}
+                {modalVisibleImage && (
+                    <ModalDeleteImageAttributeProduct
+                        isOpen={modalVisibleImage}
+                        onRequestClose={handleCloseModalDeleteImage}
+                        /* @ts-ignore */
+                        relation={modalItemImage}
                     />
                 )}
             </GridContainer>

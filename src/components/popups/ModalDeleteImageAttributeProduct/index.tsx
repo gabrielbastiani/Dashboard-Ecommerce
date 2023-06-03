@@ -5,16 +5,16 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteRelationsAttribute } from '../../AttributesProduct';
+import { DeleteImageAttribute } from '../../AttributesProduct';
 
 
-interface DeleteAttribute {
+interface DeleteAttributeImageRequest {
     isOpen: boolean;
     onRequestClose: () => void;
-    relation: DeleteRelationsAttribute;
+    relation: DeleteImageAttribute;
 }
 
-export function ModalDeleteAttributeProduct({ isOpen, onRequestClose, relation }: DeleteAttribute) {
+export function ModalDeleteImageAttributeProduct({ isOpen, onRequestClose, relation }: DeleteAttributeImageRequest) {
 
     const navigate = useNavigate();
 
@@ -31,21 +31,20 @@ export function ModalDeleteAttributeProduct({ isOpen, onRequestClose, relation }
         }
     };
 
-    async function handleDeleteAttribute() {
+    async function handleDeleteImageAttribute() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const relationAttributeProduct_id = relation.id;
+            const imageAttribute_id = relation.id;
 
-            await apiClient.delete(`/deleteAllImageRelationAttribute?relationAttributeProduct_id=${relationAttributeProduct_id}`);
-            await apiClient.delete(`/deleteAttributeProduct?relationAttributeProduct_id=${relationAttributeProduct_id}`);
+            await apiClient.delete(`/deleteImageAttributeProduct?imageAttribute_id=${imageAttribute_id}`);
             
-            toast.success(`Atributo deletado do produto com sucesso.`);
+            toast.success(`Imagem do atributo deletado do produto com sucesso.`);
 
             onRequestClose();
 
         } catch (error) {
-            toast.error('Erro ao deletar o atributo desse produto');
+            toast.error('Erro ao deletar a imagem do atributo desse produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
@@ -71,12 +70,12 @@ export function ModalDeleteAttributeProduct({ isOpen, onRequestClose, relation }
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar esse atributo produto?</TextModal>
+                <TextModal>Deseja mesmo deletar a imagem desse atributo?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeleteAttribute()}
+                        onClick={() => handleDeleteImageAttribute()}
                     >
                         Deletar
                     </Button>
