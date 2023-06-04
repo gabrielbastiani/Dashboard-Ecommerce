@@ -27,11 +27,11 @@ export type DeletePhotoVariacao = {
 }
 
 interface PhotoVariacao {
-    variacao_id: string;
+    variation_id: string;
     product_id: string;
 }
 
-const PhotosVariacoes = ({ variacao_id, product_id }: PhotoVariacao) => {
+const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
 
     const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ const PhotosVariacoes = ({ variacao_id, product_id }: PhotoVariacao) => {
         async function loadAllPhotosVariacao() {
             const apiClient = setupAPIClient();
             try {
-                const responseVariantes = await apiClient.get(`/allPhotosVariacoes?variacao_id=${variacao_id}`);
+                const responseVariantes = await apiClient.get(`/allPhotosVariacoes?variation_id=${variation_id}`);
 
                 setAllPhotosVariantes(responseVariantes.data);
 
@@ -57,7 +57,7 @@ const PhotosVariacoes = ({ variacao_id, product_id }: PhotoVariacao) => {
             }
         }
         loadAllPhotosVariacao();
-    }, [variacao_id])
+    }, [variation_id])
 
     function handleFilePhotoVariacao(e: ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) {
@@ -89,7 +89,7 @@ const PhotosVariacoes = ({ variacao_id, product_id }: PhotoVariacao) => {
 
             data.append('file', photoVariacao);
             /* @ts-ignore */
-            data.append('variacao_id', variacao_id);
+            data.append('variation_id', variation_id);
             data.append('product_id', product_id);
             data.append('posicao', "");
 

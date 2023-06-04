@@ -13,10 +13,12 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
+import { useNavigate } from "react-router-dom";
 
 
 const NovoProduto: React.FC = () => {
 
+    const navigate = useNavigate();
     const { admin } = useContext(AuthContext);
 
     const [store_id] = useState(admin.store_id);
@@ -70,6 +72,10 @@ const NovoProduto: React.FC = () => {
             setDepth('');
             setHeight('');
             setUrlVideo('');
+
+            setTimeout(() => {
+                navigate('/produtos')
+            }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

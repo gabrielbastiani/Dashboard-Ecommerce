@@ -26,9 +26,9 @@ import {
     ContatinerDescription,
     ContatinerButton
 } from "../styles";
-import NovaVariacao from "../Variacao";
+import NovaVariacao from "../../../components/Variacao";
 import { Avisos } from "../../../components/Avisos";
-import VariacaoDetalhes from "../Variacao/variacaoDetalhes";
+import VariacaoDetalhes from "../../../components/Variacao/variacaoDetalhes";
 import Modal from 'react-modal';
 import { ModalDeleteProduct } from '../../../components/popups/ModalDeleteProduct';
 import VoltarNavagation from "../../../components/VoltarNavagation";
@@ -679,7 +679,7 @@ const Produto: React.FC = () => {
                                     <ButtonVariacaoDetalhes key={names.id}
                                         onClick={() => loadVariationProduct(names.id)}
                                     >
-                                        {names.nameVariacao}
+                                        {names.name}
                                     </ButtonVariacaoDetalhes>
                                 )
                             })}
@@ -689,7 +689,6 @@ const Produto: React.FC = () => {
                         <Card style={{ width: '100%' }}>
                             {showElement ? (
                                 <NovaVariacao
-                                    /* @ts-ignore */
                                     product_id={product_id}
                                 />
                             ) :
@@ -709,9 +708,8 @@ const Produto: React.FC = () => {
 
                                     {!!idVariation && (
                                         <VariacaoDetalhes
-                                            /* @ts-ignore */
                                             productId={product_id}
-                                            variacao_id={idVariation}
+                                            variation_id={idVariation}
                                             photoVariacaoID={idVariation}
                                             nameVariacao={nameVariation}
                                         />

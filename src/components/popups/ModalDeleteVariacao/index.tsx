@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeleteVariacao } from '../../../pages/Produtos/Variacao/variacaoDetalhes'; 
+import { DeleteVariacao } from '../../Variacao/variacaoDetalhes'; 
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -35,9 +35,9 @@ export function ModalDeleteVariacao({ isOpen, onRequestClose, variacao }: ModalD
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const variacao_id = variacao.id;
+            const variation_id = variacao.id;
 
-            await apiClient.delete(`/deleteVariacaoAllPhotos?variacao_id=${variacao_id}`);
+            await apiClient.delete(`/deleteAllPhotosVariation?variation_id=${variation_id}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
@@ -53,9 +53,9 @@ export function ModalDeleteVariacao({ isOpen, onRequestClose, variacao }: ModalD
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const variacao_id = variacao.id;
+            const variation_id = variacao.id;
 
-            await apiClient.delete(`/deleteVariacao?variacao_id=${variacao_id}`);
+            await apiClient.delete(`/deleteVariation?variation_id=${variation_id}`);
             toast.success(`Variação deletada com sucesso.`);
 
             onRequestClose();
