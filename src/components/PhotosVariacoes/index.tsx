@@ -45,18 +45,18 @@ const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
 
 
     useEffect(() => {
-        async function loadAllPhotosVariacao() {
+        async function loadAllImagesVariation() {
             const apiClient = setupAPIClient();
             try {
-                const responseVariantes = await apiClient.get(`/allPhotosVariacoes?variation_id=${variation_id}`);
+                const response = await apiClient.get(`/allVariationImages?variation_id=${variation_id}`);
 
-                setAllPhotosVariantes(responseVariantes.data);
+                setAllPhotosVariantes(response.data);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
-        loadAllPhotosVariacao();
+        loadAllImagesVariation();
     }, [variation_id])
 
     function handleFilePhotoVariacao(e: ChangeEvent<HTMLInputElement>) {
@@ -90,21 +90,20 @@ const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
             data.append('file', photoVariacao);
             /* @ts-ignore */
             data.append('variation_id', variation_id);
-            data.append('product_id', product_id);
-            data.append('posicao', "");
 
             const apiClient = setupAPIClient();
-            await apiClient.post(`/photoVariante`, data);
+            await apiClient.post(`/createImageVariation`, data);
 
-            toast.success('Foto inserida com sucesso');
+            toast.success('Imagem inserida com sucesso');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
 
         } catch (err) {/* @ts-ignore */
             console.log(err.response.data);
-            toast.error('Ops erro ao inserir a foto!');
+            toast.error('Ops erro ao inserir a imagem!');
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
     function handleCloseModalPhotoVariante() {
@@ -113,9 +112,9 @@ const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
 
     async function handleOpenModalDeleteVariante(id: string) {
         const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/photosVariacao', {
+        const responseDelete = await apiClient.get('/allImagesVariation', {
             params: {
-                photoVariacao_id: id,
+                photoVariation_id: id,
             }
         });
         setModalItem(responseDelete.data);
@@ -164,7 +163,7 @@ const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
                                 <IconButton onClick={() => handleOpenModalDeleteVariante(variantePhotos.id)}>
                                     <IoIosRemoveCircle size={30} />
                                 </IconButton>
-                                <PhotoProductImg src={"http://localhost:3333/files/" + variantePhotos.photoVariacao} alt="foto da variacao" />
+                                <PhotoProductImg src={"http://localhost:3333/files/" + variantePhotos.image} alt="foto da variacao" />
                             </EtiquetaPhotoProduct>
                         )
                     })}

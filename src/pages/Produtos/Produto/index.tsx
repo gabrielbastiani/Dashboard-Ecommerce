@@ -35,6 +35,7 @@ import VoltarNavagation from "../../../components/VoltarNavagation";
 import CategoriesProduct from "../../../components/CategoriesProduct";
 import TagsProduct from "../../../components/TagsProduct";
 import AttributesProduct from "../../../components/AttributesProduct";
+import SelectUpdate from "../../../components/ui/SelectUpdate";
 
 
 export type DeleteProduct = {
@@ -61,24 +62,40 @@ const Produto: React.FC = () => {
     const [status, setStatus] = useState("");
     const [emphasis, setEmphasis] = useState("");
     const [offer, setOffer] = useState("");
-    const [storeId, setStoreId] = useState("");
 
     const [descriptions, setDescriptions] = useState<any[]>([]);
 
     const [variation, setVariation] = useState<any[]>([]);
     const [idVariation, setIdVariation] = useState("");
 
-    const [productIDvariation, setProductIDvariation] = useState("");
     const [nameVariation, setNameVariation] = useState("");
-    const [slugVariation, setSlugVariation] = useState("");
-    const [orderVariation, setOrderVariation] = useState();
-    const [statusVariation, setStatusVariation] = useState("");
 
     const [showElement, setShowElement] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [buyTogether, setBuyTogether] = useState<any[]>([]);
+    const [buyTogetherSelected, setBuyTogetherSelected] = useState();
+
+    function handleChangeBuyTogether(e: any) {
+        setBuyTogetherSelected(e.target.value);
+    }
+
+    useEffect(() => {
+        async function findBuyTogether() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/allBuyTogether`);
+
+                setBuyTogether(response.data || []);
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        findBuyTogether();
+    }, []);
 
     useEffect(() => {
         async function loadDescriptions() {
@@ -114,7 +131,6 @@ const Produto: React.FC = () => {
                 setStatus(responseProduct.data.status || "");
                 setEmphasis(responseProduct.data.emphasis);
                 setOffer(responseProduct.data.offer);
-                setStoreId(responseProduct.data.store_id || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -161,7 +177,7 @@ const Produto: React.FC = () => {
                         height: height,
                         depth: depth,
                         urlVideo: urlVideo,
-                        buyTogether_id: buyTogether_id
+                        buyTogether_id: buyTogetherSelected
                     });
 
                 toast.success('Dado do produto atualizado com sucesso.');
@@ -295,11 +311,7 @@ const Produto: React.FC = () => {
         try {
             const responseVariation = await apiClient.get(`/findUniqueVariation?variation_id=${id}`);
 
-            setProductIDvariation(responseVariation.data.id || "");
-            setSlugVariation(responseVariation.data.slug || "");
             setNameVariation(responseVariation.data.name || "");
-            setOrderVariation(responseVariation.data.order);
-            setStatusVariation(responseVariation.data.status || "");
 
         } catch (error) {
             console.log(error);
@@ -499,6 +511,26 @@ const Produto: React.FC = () => {
                                                 /* @ts-ignore */
                                                 onChange={(e) => setUrlVideo(e.target.value)}
                                                 handleSubmit={updateProductData}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Integrar grupo compre junto para esse produto"}
+                                        dados={
+                                            <SelectUpdate
+                                                dado={"ssssssss"}
+                                                handleSubmit={updateProductData}
+                                                value={buyTogetherSelected}
+                                                opcoes={
+                                                    [
+                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                        ...(buyTogether || []).map((item) => ({ label: item.nameGroup, value: item.id }))
+                                                    ]
+                                                }/* @ts-ignore */
+                                                onChange={handleChangeBuyTogether}
                                             />
                                         }
                                     />

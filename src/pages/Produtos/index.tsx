@@ -83,11 +83,11 @@ const Produtos: React.FC = () => {
     /* @ts-ignore */
     switch (order) {/* @ts-ignore */
         case "alfabeticaAZ":
-            search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
+            search.sort((a, z) => a.name.localeCompare(z.name));
             localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "alfabeticaZA":
-            search.sort((a, z) => z.nameProduct.localeCompare(a.nameProduct));
+            search.sort((a, z) => z.name.localeCompare(a.name));
             localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "precoCrescente":
@@ -99,7 +99,7 @@ const Produtos: React.FC = () => {
             localStorage.setItem('@storeorderproduct', String(order));
             break;
         default:
-            search.sort((a, z) => a.nameProduct.localeCompare(z.nameProduct));
+            search.sort((a, z) => a.name.localeCompare(z.name));
     }
 
     /* @ts-ignore */

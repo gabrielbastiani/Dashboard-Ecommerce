@@ -1,20 +1,20 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { DeletePhotoVariacao } from '../../PhotosVariacoes';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
+import { ContainerContent, ContainerButton, TextModal, ButtonClose } from './styles';
+import { DeleteBuy } from '../../../pages/Produtos/CompreJunto/produtosGrupo';
 
 
-interface ModalPhotoDeleteVariacao {
+interface DeleteRequest {
     isOpen: boolean;
     onRequestClose: () => void;
-    photosVariante: DeletePhotoVariacao[];
+    relation: DeleteBuy;
 }
 
-export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariante }: ModalPhotoDeleteVariacao) {
+export function ModalDeleteBuyTogether({ isOpen, onRequestClose, relation }: DeleteRequest) {
 
     const navigate = useNavigate();
 
@@ -31,25 +31,29 @@ export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariant
         }
     };
 
-
-    async function handleDeletePhotoVariante() {
+    async function handleDeleteBuy() {
         try {
             const apiClient = setupAPIClient();
-            const photoVariation_id = photosVariante[0].id;
+            /* @ts-ignore */
+            const buyTogether_id = relation.id;
 
-            await apiClient.delete(`/deleteImageVariantion?photoVariation_id=${photoVariation_id}`)
-
-            toast.success('Imagem deletada com sucesso');
+            await apiClient.delete(`/deleteGroupBuyTogether?buyTogether_id=${buyTogether_id}`);
+            
+            toast.success(`Produto do grupo compre junto deletado com sucesso.`);
 
             onRequestClose();
 
-        } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
-            toast.error('Ops erro ao deletar a imagem!');
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            /* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao deletar esse produto do grupo.');
+            
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
+
     }
 
 
@@ -59,6 +63,7 @@ export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariant
             onRequestClose={onRequestClose}
             style={customStyles}
         >
+
             <ButtonClose
                 type='button'
                 onClick={onRequestClose}
@@ -69,12 +74,12 @@ export function ModalDeletePhotoVariante({ isOpen, onRequestClose, photosVariant
             </ButtonClose>
 
             <ContainerContent>
-                <TextModal>Deseja mesmo deletar essa imagem dessa variação?</TextModal>
+                <TextModal>Deseja mesmo deletar esse produto, do grupo compre junto em questão?</TextModal>
 
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={() => handleDeletePhotoVariante()}
+                        onClick={() => handleDeleteBuy()}
                     >
                         Deletar
                     </Button>
