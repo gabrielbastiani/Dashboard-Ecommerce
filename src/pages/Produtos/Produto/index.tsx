@@ -3,7 +3,7 @@ import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
 import { CardResponsive, Card, Container } from "../../../components/Content/styles";
-import { AddButton, BlockTop, SpanText } from "../../Categorias/styles";
+import { AddButton, Block, BlockTop, Etiqueta, SpanText } from "../../Categorias/styles";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { MdOutlineAssessment } from "react-icons/md";
@@ -35,7 +35,7 @@ import VoltarNavagation from "../../../components/VoltarNavagation";
 import CategoriesProduct from "../../../components/CategoriesProduct";
 import TagsProduct from "../../../components/TagsProduct";
 import AttributesProduct from "../../../components/AttributesProduct";
-import SelectUpdate from "../../../components/ui/SelectUpdate";
+import { ButtonSubCat, TextNotFound } from "../../../components/CategoriesProduct/styles";
 
 
 export type DeleteProduct = {
@@ -58,10 +58,10 @@ const Produto: React.FC = () => {
     const [depth, setDepth] = useState("");
     const [urlVideo, setUrlVideo] = useState("");
     const [freeShipping, setFreeShipping] = useState("");
-    const [buyTogether_id, setBuyTogether_id] = useState("");
     const [status, setStatus] = useState("");
     const [emphasis, setEmphasis] = useState("");
     const [offer, setOffer] = useState("");
+    const [togetherBuy, setTogetherBuy] = useState("");
 
     const [descriptions, setDescriptions] = useState<any[]>([]);
 
@@ -75,27 +75,27 @@ const Produto: React.FC = () => {
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [buyTogether, setBuyTogether] = useState<any[]>([]);
-    const [buyTogetherSelected, setBuyTogetherSelected] = useState();
+    const [buyTogether, setBuyTogether] = useState("");
+    const [nameBuy, setNameBuy] = useState("");
+    const [idBuy, setIdBuy] = useState("");
 
-    function handleChangeBuyTogether(e: any) {
-        setBuyTogetherSelected(e.target.value);
-    }
 
     useEffect(() => {
         async function findBuyTogether() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/allBuyTogether`);
+                const response = await apiClient.get(`/findProductGroupBuyTogether?product_id=${product_id}`);
 
-                setBuyTogether(response.data || []);
+                setBuyTogether(response.data || "");
+                setNameBuy(response.data.nameGroup || "");
+                setIdBuy(response.data.id || "");
 
             } catch (error) {/* @ts-ignore */
-                console.error(error.response.data);
+                console.error(error.data.response);
             }
         }
         findBuyTogether();
-    }, []);
+    }, [product_id]);
 
     useEffect(() => {
         async function loadDescriptions() {
@@ -127,10 +127,10 @@ const Produto: React.FC = () => {
                 setDepth(responseProduct.data.depth || "");
                 setUrlVideo(responseProduct.data.urlVideo || "");
                 setFreeShipping(responseProduct.data.freeShipping);
-                setBuyTogether_id(responseProduct.data.buyTogether_id);
                 setStatus(responseProduct.data.status || "");
                 setEmphasis(responseProduct.data.emphasis);
                 setOffer(responseProduct.data.offer);
+                setTogetherBuy(responseProduct.data.buyTogether_id || null);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -176,8 +176,8 @@ const Produto: React.FC = () => {
                         width: width,
                         height: height,
                         depth: depth,
-                        urlVideo: urlVideo,
-                        buyTogether_id: buyTogetherSelected
+                        urlVideo: urlVideo,/* @ts-ignore */
+                        buyTogether_id: buyTogether.id
                     });
 
                 toast.success('Dado do produto atualizado com sucesso.');
@@ -515,26 +515,66 @@ const Produto: React.FC = () => {
                                         }
                                     />
                                 </BlockDados>
+                                <br />
+                                <br />
+                                {buyTogether ?
+                                    <>
+                                        {togetherBuy === null ?
+                                            <Block>
+                                                <Etiqueta
+                                                    style={{ fontSize: '18.1px', fontWeight: '600' }}
+                                                >
+                                                    Integrar grupo compre junto para esse produto:
+                                                </Etiqueta>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={"Integrar grupo compre junto para esse produto"}
-                                        dados={
-                                            <SelectUpdate
-                                                dado={"ssssssss"}
-                                                handleSubmit={updateProductData}
-                                                value={buyTogetherSelected}
-                                                opcoes={
-                                                    [
-                                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(buyTogether || []).map((item) => ({ label: item.nameGroup, value: item.id }))
-                                                    ]
-                                                }/* @ts-ignore */
-                                                onChange={handleChangeBuyTogether}
-                                            />
+                                                <Button
+                                                    /* @ts-ignore */
+                                                    value={buyTogether.nameGroup}
+                                                    onClick={updateProductData}
+                                                >
+                                                    CLIQUE AQUI para integrar o grupo = {nameBuy}
+                                                </Button>
+                                            </Block>
+                                            :
+                                            <Block>
+                                                <Etiqueta
+                                                    style={{ fontSize: '18.1px', fontWeight: '600' }}
+                                                >
+                                                    Grupo compre junto desse produto:
+                                                </Etiqueta>
+                                                <Etiqueta>{nameBuy}</Etiqueta>
+                                                <Link to={`/compreJunto/grupo/${idBuy}`}>
+                                                    <ButtonSubCat
+                                                    >
+                                                        Ver grupo
+                                                    </ButtonSubCat>
+                                                </Link>
+                                            </Block>
                                         }
-                                    />
-                                </BlockDados>
+                                    </>
+                                    :
+                                    <>
+                                        <Etiqueta
+                                            style={{ fontSize: '18.1px', fontWeight: '600' }}
+                                        >
+                                            Integrar grupo compre junto para esse produto:
+                                        </Etiqueta>
+                                        <br />
+                                        <br />
+                                        <TextNotFound
+                                            style={{ color: 'red' }}
+                                        >
+                                            Ainda não há o grupo compre junto para esse produto
+                                        </TextNotFound>
+                                        <Link to={"/compreJunto"}>
+                                            <ButtonSubCat
+                                            >
+                                                Clique aqui para cadastrar
+                                            </ButtonSubCat>
+                                        </Link>
+                                    </>
+                                }
+
                             </SectionDate>
 
                             <SectionDate>

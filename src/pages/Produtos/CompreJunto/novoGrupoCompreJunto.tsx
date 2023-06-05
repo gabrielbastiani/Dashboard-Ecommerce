@@ -29,6 +29,8 @@ const NovoGrupoCompreJunto: React.FC = () => {
     const [products, setProducts] = useState<any[]>([]);
     const [productsSelected, setProductsSelected] = useState();
 
+    const [findProduct, setFindProduct] = useState("");
+
     const [showProducts, setShowProducts] = useState(false);
 
     const showProductsOrHide = () => {
@@ -57,6 +59,18 @@ const NovoGrupoCompreJunto: React.FC = () => {
         try {
             const response = await apiClient.get('/findFirstGroupBuyTogether');
             setFindFirstMenu(response.data.id || "");
+            setFindProduct(response.data.product_id || "");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function buyAndProduct() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateAllDateProduct?product_id=${findProduct}`,
+                {buyTogether_id: findFirstMenu}
+            );
         } catch (error) {
             console.log(error);
         }
@@ -106,7 +120,11 @@ const NovoGrupoCompreJunto: React.FC = () => {
                             >
                                 <AiOutlinePlusCircle size={25} />
                                 <Link to={`/compreJunto/grupo/${findFirstMenu}`} >
-                                    <TextButton>Clique aqui, para cadastrar os produtos para esse grupo</TextButton>
+                                    <TextButton
+                                        onClick={buyAndProduct}
+                                    >
+                                        Clique aqui, para cadastrar os produtos para esse grupo
+                                    </TextButton>
                                 </Link>
                             </Button>
                         </BlockCategory>
