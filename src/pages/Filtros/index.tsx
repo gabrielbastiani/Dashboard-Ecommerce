@@ -12,6 +12,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Avisos } from "../../components/Avisos";
 import Select from "../../components/ui/Select";
 import TabelaSimples from "../../components/Tabelas";
+import { GridDate } from "../Perfil/styles";
 
 
 
@@ -59,11 +60,11 @@ const Filtros: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Nome do Grupo/Filtro": item.nameGroup,
-            "Tipo de Filtro": item.atributoName ? "Atributos de Produtos = " + item.atributoName : "Categorias de Produtos",
+            "Tipo de Filtro": item.type ? "Atributos de Produtos = " + item.type : "Categorias de Produtos",
             "Pág. do Grupo do Filtro": item.slugCategory,
             "Ativo?": item.status,
-            "Editar Grupo/Filtro": item.atributoName ? <Link to={`/grupoFiltroAtributo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link> : <Link to={`/grupoFiltroCategoria/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
-            "botaoDetalhes": item.atributoName ? `/grupoFiltro/atributos/${item.id}` : `/grupoFiltro/categorias/${item.id}`
+            "Editar Grupo/Filtro": item.type ? <Link to={`/grupoFiltroAtributo/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link> : <Link to={`/grupoFiltroCategoria/edit/${item.id}`}><Button style={{ padding: '5px' }} >Editar</Button></Link>,
+            "botaoDetalhes": item.type ? `/grupoFiltro/atributos/${item.id}` : `/grupoFiltro/categorias/${item.id}`
         });
     });
 
@@ -80,19 +81,26 @@ const Filtros: React.FC = () => {
                         titulo="Grupos de filtros"
                     />
 
-                    <AddButton>
-                        <AiOutlinePlusCircle />
-                        <Link to="/grupoFiltro/atributos/novo" >
-                            <SpanText>Novo Grupo/Filtro Para Atributos</SpanText>
-                        </Link>
-                    </AddButton>
-
-                    <AddButton>
-                        <AiOutlinePlusCircle />
-                        <Link to="/grupoFiltro/categorias/novo" >
-                            <SpanText>Novo Grupo/Filtro Para Categorias</SpanText>
-                        </Link>
-                    </AddButton>
+                    <GridDate>
+                        <AddButton>
+                            <AiOutlinePlusCircle />
+                            <Link to="/grupoFiltro/atributos/novo" >
+                                <SpanText>Novo Grupo/Filtro Para Atributos</SpanText>
+                            </Link>
+                        </AddButton>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <AddButton>
+                            <AiOutlinePlusCircle />
+                            <Link to="/grupoFiltro/categorias/novo" >
+                                <SpanText>Novo Grupo/Filtro Para Categorias</SpanText>
+                            </Link>
+                        </AddButton>
+                    </GridDate>
 
                     {search.length < 1 ? (
                         <>

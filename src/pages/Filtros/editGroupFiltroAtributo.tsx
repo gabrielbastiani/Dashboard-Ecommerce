@@ -32,16 +32,23 @@ const EditGroupFiltroAtributo: React.FC = () => {
     const [atributoName, setAtributoName] = useState("");
     const [status, setStatus] = useState("");
 
+    const [allAtributos, setAllatributos] = useState<any[]>([]);
+
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategory] = useState();
 
-    const [allAtributos, setAllatributos] = useState<any[]>([]);
+    const [type, setType] = useState<any[]>([]);
+    const [typeSelected, setTypeSelected] = useState();
 
     const [modalItem, setModalItem] = useState<DeleteFitrosGrupo>();
     const [modalVisible, setModalVisible] = useState(false);
 
     function handleChangeSlug(e: any) {
         setSlugCategory(e.target.value);
+    }
+
+    function handleChangeType(e: any) {
+        setTypeSelected(e.target.value);
     }
 
     useEffect(() => {
@@ -64,7 +71,7 @@ const EditGroupFiltroAtributo: React.FC = () => {
                 const response = await apiClient.get(`/findUniqueIDGroup?groupFilter_id=${groupFilter_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setAtributoName(response.data.atributoName || "");
+                setAtributoName(response.data.type || "");
                 setSlugCategory(response.data.slugCategory || "");
                 setStatus(response.data.status);
 
@@ -76,19 +83,17 @@ const EditGroupFiltroAtributo: React.FC = () => {
     }, [groupFilter_id]);
 
     useEffect(() => {
-        async function findAllFilterAtributos() {
+        async function loadTypeAttribute() {
+            const apiClient = setupAPIClient();
             try {
-                const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findManyNameFiltroAtributo?groupFilter_id=${groupFilter_id}`);
-
-                setAllatributos(response.data || []);
-
-            } catch (error) {/* @ts-ignore */
-                console.error(error.response.data);
+                const response = await apiClient.get('/allTypeAttributes');
+                setType(response.data || []);
+            } catch (error) {
+                console.log(error);
             }
         }
-        findAllFilterAtributos();
-    }, [groupFilter_id]);
+        loadTypeAttribute();
+    }, []);
 
     async function updateNameGroup() {
         try {
@@ -113,12 +118,12 @@ const EditGroupFiltroAtributo: React.FC = () => {
 
     async function updateAtributoName() {
         try {
-            if (atributoName === "") {
-                toast.error('Não deixe o nome do filtro em branco!!!');
+            if (typeSelected === "") {
+                toast.error('Não deixe o tipo de atributo do filtro em branco!!!');
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateAtributoName?groupFilter_id=${groupFilter_id}`, { atributoName: atributoName });
+            await apiClient.put(`/updateTypeAttributeGroup?groupFilter_id=${groupFilter_id}`, { type: typeSelected });
             toast.success('Tipo do atributo atualizado com sucesso.');
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -142,12 +147,12 @@ const EditGroupFiltroAtributo: React.FC = () => {
             toast.error('Ops erro ao atualizar a disponibilidade do grupo.');
         }
 
-        if (status === "Inativo") {
+        if (status === "Indisponivel") {
             toast.success(`O Grupo se encontra Disponivel.`);
             return;
         }
 
-        if (status === "Ativo") {
+        if (status === "Disponivel") {
             toast.error(`O Grupo se encontra Indisponivel.`);
             return;
         }
@@ -166,6 +171,21 @@ const EditGroupFiltroAtributo: React.FC = () => {
             navigate(0);
         }, 3000);
     }
+
+    useEffect(() => {
+        async function findAllFilterAtributos() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findManyNameFilterAttribute?groupFilter_id=${groupFilter_id}`);
+
+                setAllatributos(response.data || []);
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        findAllFilterAtributos();
+    }, [groupFilter_id]);
 
     function handleCloseModalDelete() {
         setModalVisible(false);
@@ -233,17 +253,19 @@ const EditGroupFiltroAtributo: React.FC = () => {
 
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Atualizar nome do tipo de atributo"}
+                                    chave={"Atualizar o tipo de atributo"}
                                     dados={
-                                        <InputUpdate
+                                        <SelectUpdate
                                             dado={atributoName}
-                                            type="text"
-                                            /* @ts-ignore */
-                                            placeholder={atributoName}
-                                            value={atributoName}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setAtributoName(e.target.value)}
                                             handleSubmit={updateAtributoName}
+                                            value={typeSelected}
+                                            opcoes={
+                                                [
+                                                    { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                                    ...(type || []).map((item) => ({ label: item.type, value: item.type }))
+                                                ]
+                                            }/* @ts-ignore */
+                                            onChange={handleChangeType}
                                         />
                                     }
                                 />

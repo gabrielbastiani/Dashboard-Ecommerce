@@ -22,10 +22,13 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
     const { admin } = useContext(AuthContext);
 
     const [nameGroup, setNameGroup] = useState('');
-    const [atributoName, setAtributoName] = useState('');
+
+    const [type, setType] = useState<any[]>([]);
+    const [typeSelected, setTypeSelected] = useState();
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategory] = useState();
+    const [order, setOrder] = useState(Number);
 
     const [storeID] = useState(admin.store_id);
 
@@ -41,6 +44,10 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
         setSlugCategory(e.target.value);
     }
 
+    function handleChangeType(e: any) {
+        setTypeSelected(e.target.value);
+    }
+
     useEffect(() => {
         async function loadCategorys() {
             const apiClient = setupAPIClient();
@@ -52,6 +59,19 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
             }
         }
         loadCategorys();
+    }, []);
+
+    useEffect(() => {
+        async function loadTypeAttribute() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/allTypeAttributes');
+                setType(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadTypeAttribute();
     }, []);
 
     async function loadGroup() {
@@ -75,7 +95,8 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
             await apiClient.post('/createGroupFilter', {
                 nameGroup: nameGroup,
                 slugCategory: slugCategory,
-                atributoName: atributoName,
+                type: typeSelected,
+                order: Number(order),
                 store_id: storeID
             });
 
@@ -144,12 +165,28 @@ const NovoGrupoFiltroAtributo: React.FC = () => {
 
                         <Block>
                             <Etiqueta>Tipo do atributo:</Etiqueta>
-                            <InputPost
-                                type="text"
-                                placeholder="Digite o tipo aqui..."
-                                value={atributoName}
-                                onChange={(e) => setAtributoName(e.target.value)}
+                            <Select
+                                value={typeSelected}
+                                /* @ts-ignore */
+                                onChange={handleChangeType}
+                                opcoes={
+                                    [
+                                        { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                        ...(type || []).map((item) => ({ label: item.type, value: item.type }))
+                                    ]
+                                }
                             />
+                        </Block>
+
+                        <Block>
+                            <Etiqueta>Ordem:</Etiqueta>
+                            <InputPost
+                                type="number"
+                                placeholder="0"
+                                value={order}/* @ts-ignore */
+                                onChange={(e) => setOrder(e.target.value)}
+                            />
+                            <br />
                         </Block>
 
                         <Block>

@@ -27,7 +27,7 @@ import { ModalDeleteImagemFiltro } from "../../../components/popups/ModalDeleteI
 
 
 export type DeleteFiltro = {
-    filterAtributo_id: string;
+    filterAttribute_id: string;
 }
 
 export type DeleteImagemAtributo = {
@@ -35,13 +35,13 @@ export type DeleteImagemAtributo = {
 }
 
 export type DeleteFiltroAndImage = {
-    filterAtributo_id: string;
+    filterAttribute_id: string;
     iDImage: string;
 }
 
 const EditAtributoFiltro: React.FC = () => {
 
-    let { filterAtributo_id } = useParams();
+    let { filterAttribute_id } = useParams();
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
@@ -69,6 +69,10 @@ const EditAtributoFiltro: React.FC = () => {
     const [modalItemImagem, setModalItemImagem] = useState("");
     const [modalVisibleImagem, setModalVisibleImagem] = useState(false);
 
+    const newArray = atributos.map((item) => {return(item.value)});
+
+    const attArray = newArray.filter((este, i) => newArray.indexOf(este) === i);
+
 
     function handleChangeValorAtributo(e: any) {
         setAtributosSelected(e.target.value);
@@ -78,28 +82,28 @@ const EditAtributoFiltro: React.FC = () => {
         async function loadItemDate() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/findUniqueFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
+                const response = await apiClient.get(`/findUniqueFilterAttribute?filterAttribute_id=${filterAttribute_id}`);
 
                 setNameGroup(response.data.groupFilter.nameGroup);
                 setOrder(response.data.order);
                 setStatus(response.data.status);
-                setImageAtributoLoad(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].imageAtributo : response.data.imagefilteratributos.imageAtributo);
-                setImageAtributoUpload(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].imageAtributo : response.data.imagefilteratributos.imageAtributo);
+                setImageAtributoLoad(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].imageAttribute : response.data.imagefilteratributos.imageAttribute);
+                setImageAtributoUpload(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].imageAttribute : response.data.imagefilteratributos.imageAttribute);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadItemDate();
-    }, [filterAtributo_id]);
+    }, [filterAttribute_id]);
 
     useEffect(() => {
         async function loadMoreDates() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/findUniqueFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
+                const response = await apiClient.get(`/findUniqueFilterAttribute?filterAttribute_id=${filterAttribute_id}`);
 
-                setValor(response.data.valor);
+                setValor(response.data.value);
                 setIDImage(response.data.imagefilteratributos ? response.data.imagefilteratributos[0].id : response.data.imagefilteratributos.id);
 
             } catch (error) {/* @ts-ignore */
@@ -107,19 +111,19 @@ const EditAtributoFiltro: React.FC = () => {
             }
         }
         loadMoreDates();
-    }, [filterAtributo_id]);
+    }, [filterAttribute_id]);
 
     useEffect(() => {
-        async function loadAtributos() {
+        async function loadAttributes() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/allAtributos');
+                const response = await apiClient.get('/allValueAttributesValue');
                 setAtributos(response.data || []);
             } catch (error) {
                 console.log(error);
             }
         }
-        loadAtributos();
+        loadAttributes();
     }, []);
 
     async function updateValorAtributo() {
@@ -129,7 +133,7 @@ const EditAtributoFiltro: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateFiltroValorAtributo?filterAtributo_id=${filterAtributo_id}`, { valor: atributosSelected });
+            await apiClient.put(`/updateValueFilterAttribute?filterAttribute_id=${filterAttribute_id}`, { value: atributosSelected });
 
             toast.success('O valor foi atualizado com sucesso.');
 
@@ -150,7 +154,7 @@ const EditAtributoFiltro: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateFiltroOrderAtributo?filterAtributo_id=${filterAtributo_id}`, { order: Number(order) });
+                await apiClient.put(`/updateOrderFilterAttribute?filterAttribute_id=${filterAttribute_id}`, { order: Number(order) });
                 toast.success('Ordem do valor no grupo/filtro atualizado com sucesso.');
                 setTimeout(() => {
                     navigate(0);
@@ -165,7 +169,7 @@ const EditAtributoFiltro: React.FC = () => {
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateFiltroStatusAtributo?filterAtributo_id=${filterAtributo_id}`);
+            await apiClient.put(`/updateStatusFilterAttribute?filterAttribute_id=${filterAttribute_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -175,12 +179,12 @@ const EditAtributoFiltro: React.FC = () => {
             toast.error('Ops erro ao atualizar a disponibilidade do valor/filtro nesse grupo.');
         }
 
-        if (status === "Inativo") {
+        if (status === "Indisponivel") {
             toast.success(`O item valor/filtro se encontra Disponivel no grupo.`);
             return;
         }
 
-        if (status === "Ativo") {
+        if (status === "Disponivel") {
             toast.error(`O valor/filtro se encontra Indisponivel no grupo.`);
             return;
         }
@@ -192,10 +196,10 @@ const EditAtributoFiltro: React.FC = () => {
             const data = new FormData();
             /* @ts-ignore */
             data.append('file', imageAtributo);/* @ts-ignore */
-            data.append('filterAtributo_id', filterAtributo_id);
+            data.append('filterAttribute_id', filterAttribute_id);
 
             const apiClient = setupAPIClient();
-            await apiClient.post(`/createImageFilterAtributo`, data);
+            await apiClient.post(`/createImageFilterAttribute`, data);
 
             toast.success('Imagem cadastrada com sucesso.');
 
@@ -235,7 +239,7 @@ const EditAtributoFiltro: React.FC = () => {
             data.append('file', imageAtributoUpload);
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateImageFilterAtributo?imageFilterAtributo_id=${iDImage}`, data);
+            await apiClient.put(`/updateImageFilterAttribute?imageFilterAttribute_id=${iDImage}`, data);
 
             toast.success('Imagem atualizada com sucesso.');
 
@@ -271,11 +275,11 @@ const EditAtributoFiltro: React.FC = () => {
         setModalVisibleItens(false);
     }
 
-    async function handleOpenModalDeleteFiltro(filterAtributo_id: string) {
+    async function handleOpenModalDeleteFiltro(filterAttribute_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueFiltroAtributo', {
+        const response = await apiClient.get('/findUniqueFilterAttribute', {
             params: {
-                filterAtributo_id: filterAtributo_id,
+                filterAttribute_id: filterAttribute_id,
             }
         });
         setModalItens(response.data || "");
@@ -286,11 +290,11 @@ const EditAtributoFiltro: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(filterAtributo_id: string) {
+    async function handleOpenModalDelete(filterAttribute_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueFiltroAtributo', {
+        const response = await apiClient.get('/findUniqueFilterAttribute', {
             params: {
-                filterAtributo_id: filterAtributo_id,
+                filterAttribute_id: filterAttribute_id,
             }
         });
         setModalItem(response.data || "");
@@ -302,11 +306,11 @@ const EditAtributoFiltro: React.FC = () => {
         setModalVisibleImagem(false);
     }
 
-    async function handleOpenModalDeleteImagem(filterAtributo_id: string) {
+    async function handleOpenModalDeleteImagem(filterAttribute_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueFiltroAtributo', {
+        const response = await apiClient.get('/findUniqueFilterAttribute', {
             params: {
-                filterAtributo_id: filterAtributo_id,
+                filterAttribute_id: filterAttribute_id,
             }
         });
         setModalItemImagem(response.data.imagefilteratributos[0].id || "");
@@ -340,14 +344,14 @@ const EditAtributoFiltro: React.FC = () => {
                             {imageAtributoLoad ? (
                                 <Button
                                     style={{ backgroundColor: 'red' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDelete(filterAtributo_id)}
+                                    onClick={() => handleOpenModalDelete(filterAttribute_id)}
                                 >
                                     Deletar filtro
                                 </Button>
                             ) :
                                 <Button
                                     style={{ backgroundColor: '#FB451E' }}/* @ts-ignore */
-                                    onClick={() => handleOpenModalDeleteFiltro(filterAtributo_id)}
+                                    onClick={() => handleOpenModalDeleteFiltro(filterAttribute_id)}
                                 >
                                     Deletar filtro
                                 </Button>
@@ -369,7 +373,7 @@ const EditAtributoFiltro: React.FC = () => {
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(atributos || []).map((item) => ({ label: item.valor, value: item.valor }))
+                                                        ...(attArray || []).map((item) => ({ label: item, value: item }))
                                                     ]
                                                 }/* @ts-ignore */
                                                 onChange={handleChangeValorAtributo}
@@ -413,7 +417,7 @@ const EditAtributoFiltro: React.FC = () => {
                                 {imageAtributoLoad ? (
                                     <Button
                                         /* @ts-ignore */
-                                        onClick={() => handleOpenModalDeleteImagem(filterAtributo_id)}
+                                        onClick={() => handleOpenModalDeleteImagem(filterAttribute_id)}
                                     >
                                         Deletar imagem
                                     </Button>

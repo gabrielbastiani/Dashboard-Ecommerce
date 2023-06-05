@@ -35,9 +35,9 @@ export function ModalDeleteFiltro({ isOpen, onRequestClose, relationIDS }: Modal
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const filterAtributo_id = relationIDS.id;
+            const filterAttribute_id = relationIDS.id;
 
-            await apiClient.delete(`/deleteFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
+            await apiClient.delete(`/deleteFilterAttribute?filterAttribute_id=${filterAttribute_id}`);
             toast.success(`Filtro/atributo deletado com sucesso.`);
 
             navigate('/filterGrupos');

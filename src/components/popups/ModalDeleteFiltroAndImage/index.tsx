@@ -36,7 +36,7 @@ export function ModalDeleteFiltroAndImage({ isOpen, onRequestClose, relationIDS,
         try {
             const apiClient = setupAPIClient();
 
-            await apiClient.delete(`/deleteImageFiltroAtributo?imageFilterAtributo_id=${idGroupImage}`);
+            await apiClient.delete(`/deleteImageFilterAttribute?imageFilterAttribute_id=${idGroupImage}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -52,9 +52,9 @@ export function ModalDeleteFiltroAndImage({ isOpen, onRequestClose, relationIDS,
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const filterAtributo_id = relationIDS.id;
+            const filterAttribute_id = relationIDS.id;
 
-            await apiClient.delete(`/deleteFiltroAtributo?filterAtributo_id=${filterAtributo_id}`);
+            await apiClient.delete(`/deleteFilterAttribute?filterAttribute_id=${filterAttribute_id}`);
             toast.success(`Filtro/atributo deletado com sucesso.`);
 
             navigate('/filterGrupos');

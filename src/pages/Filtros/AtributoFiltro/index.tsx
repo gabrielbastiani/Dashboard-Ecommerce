@@ -39,6 +39,10 @@ const AtributoFiltro: React.FC = () => {
 
     const [loadGruop, setLoadGruop] = useState<any[]>([]);
 
+    const newArray = atributos.map((item) => {return(item.value)});
+
+    const attArray = newArray.filter((este, i) => newArray.indexOf(este) === i);
+
     function handleChangeAtributos(e: any) {
         setAtributosSelected(e.target.value);
     }
@@ -65,7 +69,7 @@ const AtributoFiltro: React.FC = () => {
         async function findGroupDate() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findManyNameFiltroAtributo?groupFilter_id=${groupFilter_id}`);
+                const response = await apiClient.get(`/findManyNameFilterAttribute?groupFilter_id=${groupFilter_id}`);
 
                 setLoadGruop(response.data || []);
 
@@ -77,16 +81,16 @@ const AtributoFiltro: React.FC = () => {
     }, [groupFilter_id]);
 
     useEffect(() => {
-        async function loadAtributos() {
+        async function loadAttributes() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get('/listAtributosNotDistinct');
+                const response = await apiClient.get('/allValueAttributesValue');
                 setAtributos(response.data || []);
             } catch (error) {
                 console.log(error);
             }
         }
-        loadAtributos();
+        loadAttributes();
     }, []);
 
     async function handleFiltrosAtributos() {
@@ -96,9 +100,9 @@ const AtributoFiltro: React.FC = () => {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
-            await apiClient.post('/createFiltroAtributo', {
+            await apiClient.post('/createFilterAttribute', {
                 groupFilter_id: idGroupFilter,
-                valor: atributosSelected,
+                value: atributosSelected,
                 order: Number(order),
                 slugCategory: slugCategory,
                 store_id: store_id
@@ -159,7 +163,7 @@ const AtributoFiltro: React.FC = () => {
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(atributos || []).map((item) => ({ label: item.valor, value: item.valor }))
+                                    ...(attArray || []).map((item) => ({ label: item, value: item }))
                                 ]
                             }
                         />
@@ -192,19 +196,19 @@ const AtributoFiltro: React.FC = () => {
                                 {loadGruop.map((item) => {
                                     return (
                                         <>
-                                            <Card>
+                                            <Card key={item.id}>
                                                 <Titulos
                                                     tipo="h2"
-                                                    titulo={item.valor}
+                                                    titulo={item.value}
                                                 />
                                                 <br />
                                                 <br />
-                                                <GridDate key={item.id}>
+                                                <GridDate>
 
                                                     <SectionDate>
                                                         {item.imagefilteratributos[0] ? (
                                                             <ImagensCategorys
-                                                                src={"http://localhost:3333/files/" + item.imagefilteratributos[0].imageAtributo}
+                                                                src={"http://localhost:3333/files/" + item.imagefilteratributos[0].image}
                                                                 width={170}
                                                                 height={80}
                                                             />

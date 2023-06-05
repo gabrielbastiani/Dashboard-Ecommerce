@@ -35,9 +35,9 @@ export function ModalDeleteImagemFiltro({ isOpen, onRequestClose, idImage }: Mod
     async function handleDeleteImageFiltro() {
         try {
             const apiClient = setupAPIClient();
-            const imageFilterAtributo_id = idImage;
+            const imageFilterAttribute_id = idImage;
 
-            await apiClient.delete(`/deleteImageFiltroAtributo?imageFilterAtributo_id=${imageFilterAtributo_id}`);
+            await apiClient.delete(`/deleteImageFilterAttribute?imageFilterAttribute_id=${imageFilterAttribute_id}`);
 
             toast.success('Imagem do filtro deletada com sucesso');
 
