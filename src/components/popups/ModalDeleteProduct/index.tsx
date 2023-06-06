@@ -12,9 +12,10 @@ interface ModalDeleteProductRequest {
     isOpen: boolean;
     onRequestClose: () => void;
     product: DeleteProduct;
+    buy: DeleteProduct;
 }
 
-export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDeleteProductRequest) {
+export function ModalDeleteProduct({ isOpen, onRequestClose, product, buy }: ModalDeleteProductRequest) {
 
     const navigate = useNavigate();
 
@@ -36,10 +37,11 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
             const apiClient = setupAPIClient();
             /* @ts-ignore */
             const product_id = product.id;
-
+            
+            await apiClient.delete(`/deleteAllImageProductRelationAttribute?product_id=${product_id}`);
+            await apiClient.delete(`/deleteAllRelationProductAttributes?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllTagProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllDescriptionsProduct?product_id=${product_id}`);
-            await apiClient.delete(`/deleteAllRelationProductAttributes?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllPhotos?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllPhotosVariation?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllVariationProduct?product_id=${product_id}`);
@@ -56,13 +58,20 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
 
     }
 
+    
+
     async function handleDeleteProduct() {
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
             const product_id = product.id;
+            const buyTogether_id = buy;
+
+            await apiClient.delete(`/deleteParentIdBuyTogether?parentId=${buyTogether_id}`);
+           /*  await apiClient.delete(`/deleteGroupBuyTogether?buyTogether_id=${buyTogether_id}`); */
 
             await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
+
             toast.success(`Produto deletado com sucesso.`);
 
             navigate('/produtos');

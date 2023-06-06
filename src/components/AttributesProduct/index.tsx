@@ -272,6 +272,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
             /* @ts-ignore */
             data.append('file', imageAttr);
             data.append('relationAttributeProduct_id', id);
+            data.append('product_id', product_id);
 
             await apiClient.post(`/createImageAttributeProduct`, data);
 
