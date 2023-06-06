@@ -241,8 +241,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                             ]
                                         }}
                                         onEditorChange={(description, editor) => {
-                                            setDescription(description);/* @ts-ignore */
-                                            setText(editor.getContent({ format: 'text' }));
+                                            setDescription(description);
                                         }}
                                     />
                                     <br />
