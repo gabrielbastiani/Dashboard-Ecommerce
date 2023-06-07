@@ -23,6 +23,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
     const { admin } = useContext(AuthContext);
 
     const [nameGroup, setNameGroup] = useState('');
+    const [order, setOrder] = useState(Number);
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategory] = useState();
@@ -75,6 +76,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
             await apiClient.post('/createGroupFilter', {
                 nameGroup: nameGroup,
                 slugCategory: slugCategory,
+                order: Number(order),
                 store_id: storeID
             });
 
@@ -139,6 +141,17 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
                                 value={nameGroup}
                                 onChange={(e) => setNameGroup(e.target.value)}
                             />
+                        </Block>
+
+                        <Block>
+                            <Etiqueta>Ordem:</Etiqueta>
+                            <InputPost
+                                type="number"
+                                placeholder="0"
+                                value={order}/* @ts-ignore */
+                                onChange={(e) => setOrder(e.target.value)}
+                            />
+                            <br />
                         </Block>
 
                         <Block>

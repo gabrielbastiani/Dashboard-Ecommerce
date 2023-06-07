@@ -50,6 +50,7 @@ import CompreJunto from './pages/Produtos/CompreJunto';
 import NovoGrupoCompreJunto from './pages/Produtos/CompreJunto/novoGrupoCompreJunto';
 import ProdutosGrupo from './pages/Produtos/CompreJunto/produtosGrupo';
 import EditGrupoCompreJunto from './pages/Produtos/CompreJunto/editGrupoCompreJunto';
+import EditGroupFiltroCategory from './pages/Filtros/editGroupFiltroCategory';
 
 
 const RoutesAuth: React.FC = () => {
@@ -92,6 +93,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/grupoFiltro/categorias/:groupFilter_id' element={<CategoryFiltro />} />
             <Route path='/filtroCategory/edit/:filterCategory_id' element={<EditCategoryFiltro />} />
             <Route path='/grupoFiltroAtributo/edit/:groupFilter_id' element={<EditGroupFiltroAtributo />} />
+            <Route path='/grupoFiltroCategoria/edit/:groupFilter_id' element={<EditGroupFiltroCategory />} />
             <Route path='/grupoFiltro/atributos/:groupFilter_id' element={<AtributoFiltro />} />
             <Route path='/filtroAtributo/edit/:filterAttribute_id' element={<EditAtributoFiltro />} />
 

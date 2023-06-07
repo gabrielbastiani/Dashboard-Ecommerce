@@ -208,7 +208,7 @@ const AtributoFiltro: React.FC = () => {
                                                     <SectionDate>
                                                         {item.imagefilteratributos[0] ? (
                                                             <ImagensCategorys
-                                                                src={"http://localhost:3333/files/" + item.imagefilteratributos[0].image}
+                                                                src={"http://localhost:3333/files/" + item.imagefilteratributos[0].imageAttribute}
                                                                 width={170}
                                                                 height={80}
                                                             />

@@ -61,7 +61,7 @@ const CategoryFiltro: React.FC = () => {
         async function findGroupDate() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findManyNameFiltroCategory?groupFilter_id=${groupFilter_id}`);
+                const response = await apiClient.get(`/findManyFilterName?groupFilter_id=${groupFilter_id}`);
 
                 setLoadGruop(response.data || []);
 
@@ -92,9 +92,9 @@ const CategoryFiltro: React.FC = () => {
                 toast.error('Não deixe campos em branco.');
                 return;
             }
-            await apiClient.post('/createFiltroCategory', {
+            await apiClient.post('/createFilterCategory', {
                 groupFilter_id: idGroupFilter,
-                categoryName: categorySelected,
+                name: categorySelected,
                 order: Number(order),
                 store_id: store_id
             });
@@ -106,11 +106,14 @@ const CategoryFiltro: React.FC = () => {
             }, 3000);
 
         } catch (error) {
-            toast.error('Erro ao cadastrar o filtro atributo no grupo!!!');
+            toast.error('Erro ao cadastrar o filtro categoria no grupo!!!');
             /* @ts-ignore */
             console.log(error.response.data);
         }
     }
+
+
+    console.log(loadGruop)
 
 
     return (
@@ -139,7 +142,7 @@ const CategoryFiltro: React.FC = () => {
                             opcoes={
                                 [
                                     { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                    ...(categories || []).map((item) => ({ label: item.categoryName, value: item.categoryName }))
+                                    ...(categories || []).map((item) => ({ label: item.name, value: item.name }))
                                 ]
                             }
                         />
@@ -175,16 +178,16 @@ const CategoryFiltro: React.FC = () => {
                                             <Card>
                                                 <Titulos
                                                     tipo="h2"
-                                                    titulo={item.categoryName}
+                                                    titulo={item.name}
                                                 />
                                                 <br />
                                                 <br />
                                                 <GridDate key={item.id}>
 
                                                     <SectionDate>
-                                                        {item.imageFilterCategory[0] ? (
+                                                        {item.imageFilterCategories[0] ? (
                                                             <ImagensCategorys
-                                                                src={"http://localhost:3333/files/" + item.imageFilterCategory[0].imageCategory}
+                                                                src={"http://localhost:3333/files/" + item.imageFilterCategories[0].imageCategory}
                                                                 width={170}
                                                                 height={80}
                                                             />

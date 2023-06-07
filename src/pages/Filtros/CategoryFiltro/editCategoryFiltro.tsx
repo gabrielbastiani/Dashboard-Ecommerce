@@ -21,20 +21,20 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/ImagensInstitucionais/Imagem/styles";
 import { MdFileUpload } from "react-icons/md";
 import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
-import { ModalDeleteFiltro } from "../../../components/popups/ModalDeleteFiltro";
-import { ModalDeleteFiltroAndImage } from "../../../components/popups/ModalDeleteFiltroAndImage";
-import { ModalDeleteImagemFiltro } from "../../../components/popups/ModalDeleteImagemFiltro";
+import { ModalDeleteFiltroCategory } from "../../../components/popups/ModalDeleteFiltroCategory";
+import { ModalDeleteFiltroAndImageCategory } from "../../../components/popups/ModalDeleteFiltroAndImageCategory";
+import { ModalDeleteImagemFiltroCateg } from "../../../components/popups/ModalDeleteImagemFiltroCateg";
 
 
-export type DeleteFiltro = {
+export type DeleteFiltroCateg = {
     filterCategory_id: string;
 }
 
-export type DeleteImagemAtributo = {
+export type DeleteImagemAtributoCateg = {
     iDImage: string;
 }
 
-export type DeleteFiltroAndImage = {
+export type DeleteFiltroAndImageCateg = {
     filterCategory_id: string;
     iDImage: string;
 }
@@ -78,13 +78,13 @@ const EditCategoryFiltro: React.FC = () => {
         async function loadItemDate() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/findUniqueFiltroCategory?filterCategory_id=${filterCategory_id}`);
+                const response = await apiClient.get(`/findUniqueFilterCategory?filterCategory_id=${filterCategory_id}`);
 
                 setNameGroup(response.data.groupFilter.nameGroup);
                 setOrder(response.data.order);
                 setStatus(response.data.status);
-                setImageCategoryLoad(response.data.imageFilterCategory ? response.data.imageFilterCategory[0].imageCategory : response.data.imageFilterCategory.imageCategory);
-                setImageCategoryUpload(response.data.imageFilterCategory ? response.data.imageFilterCategory[0].imageCategory : response.data.imageFilterCategory.imageCategory);
+                setImageCategoryLoad(response.data.imageFilterCategories ? response.data.imageFilterCategories[0].imageCategory : response.data.imageFilterCategories.imageCategory);
+                setImageCategoryUpload(response.data.imageFilterCategories ? response.data.imageFilterCategories[0].imageCategory : response.data.imageFilterCategories.imageCategory);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -97,10 +97,10 @@ const EditCategoryFiltro: React.FC = () => {
         async function loadMoreDates() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/findUniqueFiltroCategory?filterCategory_id=${filterCategory_id}`);
+                const response = await apiClient.get(`/findUniqueFilterCategory?filterCategory_id=${filterCategory_id}`);
 
-                setCategory(response.data.categoryName);
-                setIDImage(response.data.imageFilterCategory ? response.data.imageFilterCategory[0].id : response.data.imageFilterCategory.id);
+                setCategory(response.data.name);
+                setIDImage(response.data.imageFilterCategories ? response.data.imageFilterCategories[0].id : response.data.imageFilterCategories.id);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -129,7 +129,7 @@ const EditCategoryFiltro: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateCategoryNameFiltro?filterCategory_id=${filterCategory_id}`, { categoryName: categorySelected });
+            await apiClient.put(`/updateCategoryNameFilter?filterCategory_id=${filterCategory_id}`, { name: categorySelected });
 
             toast.success('A categoria foi atualizado com sucesso.');
 
@@ -150,7 +150,7 @@ const EditCategoryFiltro: React.FC = () => {
                 toast.error('Não deixe a ordem em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateFiltroOrderCategory?filterCategory_id=${filterCategory_id}`, { order: Number(order) });
+                await apiClient.put(`/updateFilterOrderCategory?filterCategory_id=${filterCategory_id}`, { order: Number(order) });
                 toast.success('Ordem da categoria no grupo/filtro atualizado com sucesso.');
                 setTimeout(() => {
                     navigate(0);
@@ -165,7 +165,7 @@ const EditCategoryFiltro: React.FC = () => {
     async function updateStatus() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateFiltroStatusCategory?filterCategory_id=${filterCategory_id}`);
+            await apiClient.put(`/updateFilterStatusCategory?filterCategory_id=${filterCategory_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -175,12 +175,12 @@ const EditCategoryFiltro: React.FC = () => {
             toast.error('Ops erro ao atualizar a disponibilidade da categoria/filtro nesse grupo.');
         }
 
-        if (status === "Inativo") {
+        if (status === "Indisponivel") {
             toast.success(`A categoria/filtro se encontra Disponivel no grupo.`);
             return;
         }
 
-        if (status === "Ativo") {
+        if (status === "Disponivel") {
             toast.error(`A categoria/filtro se encontra Indisponivel no grupo.`);
             return;
         }
@@ -273,7 +273,7 @@ const EditCategoryFiltro: React.FC = () => {
 
     async function handleOpenModalDeleteFiltro(filterCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueFiltroCategory', {
+        const response = await apiClient.get('/findUniqueFilterCategory', {
             params: {
                 filterCategory_id: filterCategory_id,
             }
@@ -288,13 +288,13 @@ const EditCategoryFiltro: React.FC = () => {
 
     async function handleOpenModalDelete(filterCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueFiltroCategory', {
+        const response = await apiClient.get('/findUniqueFilterCategory', {
             params: {
                 filterCategory_id: filterCategory_id,
             }
         });
         setModalItem(response.data || "");
-        setIDImage(response.data.imageFilterCategory[0].id || "");
+        setIDImage(response.data.imageFilterCategories[0].id || "");
         setModalVisible(true);
     }
 
@@ -304,12 +304,12 @@ const EditCategoryFiltro: React.FC = () => {
 
     async function handleOpenModalDeleteImagem(filterCategory_id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueFiltroCategory', {
+        const response = await apiClient.get('/findUniqueFilterCategory', {
             params: {
                 filterCategory_id: filterCategory_id,
             }
         });
-        setModalItemImagem(response.data.imageFilterCategory[0].id || "");
+        setModalItemImagem(response.data.imageFilterCategories[0].id || "");
         setModalVisibleImagem(true);
     }
 
@@ -369,7 +369,7 @@ const EditCategoryFiltro: React.FC = () => {
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                        ...(categories || []).map((item) => ({ label: item.categoryName, value: item.categoryName }))
+                                                        ...(categories || []).map((item) => ({ label: item.name, value: item.name }))
                                                     ]
                                                 }/* @ts-ignore */
                                                 onChange={handleChangeCategory}
@@ -496,7 +496,7 @@ const EditCategoryFiltro: React.FC = () => {
             </Grid >
 
             {modalVisibleItens && (
-                <ModalDeleteFiltro
+                <ModalDeleteFiltroCategory
                     isOpen={modalVisibleItens}
                     onRequestClose={handleCloseModalDeleteFiltro}
                     /* @ts-ignore */
@@ -505,7 +505,7 @@ const EditCategoryFiltro: React.FC = () => {
             )}
 
             {modalVisible && (
-                <ModalDeleteFiltroAndImage
+                <ModalDeleteFiltroAndImageCategory
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
@@ -516,7 +516,7 @@ const EditCategoryFiltro: React.FC = () => {
             )}
 
             {modalVisibleImagem && (
-                <ModalDeleteImagemFiltro
+                <ModalDeleteImagemFiltroCateg
                     isOpen={modalVisibleImagem}
                     onRequestClose={handleCloseModalDeleteImagem}
                     /* @ts-ignore */
