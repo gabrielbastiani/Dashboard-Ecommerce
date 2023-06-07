@@ -37,6 +37,7 @@ export function ModalDeleteVariacao({ isOpen, onRequestClose, variacao }: ModalD
             /* @ts-ignore */
             const variation_id = variacao.id;
 
+            await apiClient.delete(`/deleteAllProductVariation?variation_id=${variation_id}`);
             await apiClient.delete(`/deleteAllPhotosVariation?variation_id=${variation_id}`);
 
         } catch (error) {/* @ts-ignore */

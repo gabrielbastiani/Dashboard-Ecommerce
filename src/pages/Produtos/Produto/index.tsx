@@ -339,6 +339,11 @@ const Produto: React.FC = () => {
     }
 
     async function handleOpenModalDelete(product_id: string) {
+        if (variation.length >= 1) {
+            toast.error("Delete todas as variações vinculadas a este produto antes, para poder delatar esse produto!!!");
+            return;
+        }
+
         const apiClient = setupAPIClient();
         const responseDelete = await apiClient.get('/findUniqueProduct', {
             params: {

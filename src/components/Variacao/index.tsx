@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Block, BlockTop, Etiqueta } from "../../pages/Categorias/styles";
 import { InputPost } from "../ui/InputPost";
 import { Button } from "../ui/Button";
@@ -7,7 +7,6 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import Select from "../ui/Select";
 
 
 interface VariacaoRequest {
@@ -19,42 +18,23 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
     const navigate = useNavigate();
     const { admin } = useContext(AuthContext);
 
-    const [products, setProducts] = useState<any[]>([]);
-    const [productsSelected, setProductsSelected] = useState("");
-
     const [store_id] = useState(admin.store_id);
     const [product_ids] = useState(product_id);
 
+    const [name, setName] = useState("");
     const [order, setOrder] = useState(Number);
 
 
-    function handleChangeProduct(e: any) {
-        setProductsSelected(e.target.value);
-    }
-
-    useEffect(() => {
-        async function loadVariations() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/allProductsStore`);
-                setProducts(response.data || []);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        loadVariations();
-    }, []);
-
     async function handleRegisterVariation() {
         try {
-            if (productsSelected === undefined || productsSelected === null || productsSelected === "") {
+            if (name === "") {
                 toast.error('Preencha todos os campos')
                 return
             }
 
             const apiClient = setupAPIClient();
             await apiClient.post('/createVariation', {
-                name: productsSelected,
+                name: name,
                 product_id: product_ids,
                 order: order,
                 store_id: store_id
@@ -90,17 +70,12 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
             </BlockTop>
 
             <Block>
-                <Etiqueta>Escolha um produto para variação:</Etiqueta>
-                <Select
-                    value={productsSelected}
-                    /* @ts-ignore */
-                    onChange={handleChangeProduct}
-                    opcoes={
-                        [
-                            { label: "Selecionar...", value: "" },/* @ts-ignore */
-                            ...(products || []).map((item) => ({ label: item.name, value: item.name }))
-                        ]
-                    }
+                <Etiqueta>Nome da variação:</Etiqueta>
+                <InputPost
+                    type="text"
+                    placeholder="Digite aqui..."
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
             </Block>
             <br />

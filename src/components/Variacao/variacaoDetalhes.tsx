@@ -18,6 +18,7 @@ import Select from "../ui/Select";
 import { InputPost } from "../ui/InputPost";
 import { AuthContext } from "../../contexts/AuthContext";
 import { DivisorHorizontal } from "../ui/DivisorHorizontal";
+import { InputUpdate } from "../ui/InputUpdate";
 
 
 export type DeleteVariacao = {
@@ -41,6 +42,7 @@ const VariacaoDetalhes = ({
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
+    const [updateName, setUpdateName] = useState("");
 
     const [products, seProducts] = useState<any[]>([]);
     const [productsSelected, setProductsSelected] = useState("");
@@ -48,11 +50,14 @@ const VariacaoDetalhes = ({
     const [status, setStatus] = useState('');
     const [statusVariation, setStatusVariation] = useState('');
 
+    const [nameProductVariation, setNameProductVariation] = useState("");
     const [order, setOrder] = useState(Number);
+    const [orderVariation, setOrderVariation] = useState(Number);
     const [updateOrder, setUpdateOrder] = useState();
-    const [updateVariationOrder, setUpdateVariationOrder] = useState();
+    const [updateVariationOrder, setUpdateVariationOrder] = useState(Number);
+    const [orderUpdateproductVariation, setOrderUpdateproductVariation] = useState();
 
-    const [variation, setVariation] = useState();
+    const [productVariationID, setProductVariationID] = useState("");
 
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -82,6 +87,7 @@ const VariacaoDetalhes = ({
                 const response = await apiClient.get(`/findUniqueVariation?variation_id=${variation_id}`);
 
                 setName(response.data.name || "");
+                setOrderVariation(response.data.order);
                 setStatus(response.data.status);
 
             } catch (error) {/* @ts-ignore */
@@ -97,7 +103,10 @@ const VariacaoDetalhes = ({
             try {
                 const response = await apiClient.get(`/findFirstProductVariation?variation_id=${variation_id}`);
 
-                setVariation(response.data);
+                setNameProductVariation(response.data.product.name || "");
+                setProductVariationID(response.data.id || "");
+                setUpdateVariationOrder(response.data.order);
+                setStatusVariation(response.data.status || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -105,6 +114,47 @@ const VariacaoDetalhes = ({
         }
         loadFirstVariation();
     }, [variation_id]);
+
+    async function updateNameVariation() {
+        try {
+            const apiClient = setupAPIClient();
+            if (updateName === '') {
+                toast.error('Não deixe o nome da variação em branco!!!');
+                return;
+            }
+
+            await apiClient.put(`/updateNameVariation?variation_id=${variation_id}`, { name: updateName });
+
+            toast.success('Nome da variação atualizada com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o nome do produto.');
+        }
+    }
+
+    async function updateOrderProductVariation() {
+        try {
+            const apiClient = setupAPIClient();
+            if (updateOrder === null) {
+                toast.error('Não deixe a ordem em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateOrderVariacao?variation_id=${variation_id}`, { order: Number(updateOrder) });
+                toast.success('Ordem da variação atualizada com sucesso.');
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a ordem.');
+        }
+    }
 
     async function updateStatus() {
         try {
@@ -128,28 +178,6 @@ const VariacaoDetalhes = ({
         if (status === "Disponivel") {
             toast.error(`A variação se encontra Indisponivel.`);
             return;
-        }
-    }
-
-    async function updateNameVariation() {
-        try {
-            const apiClient = setupAPIClient();
-            if (name === '') {
-                toast.error('Não deixe o nome da variação em branco!!!');
-                return;
-            }
-
-            await apiClient.put(`/updateNameVariation?variation_id=${variation_id}`, { name: productsSelected });
-
-            toast.success('Nome da variação atualizada com sucesso.');
-
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o nome do produto.');
         }
     }
 
@@ -183,12 +211,12 @@ const VariacaoDetalhes = ({
     async function updateNameProductVariation() {
         try {
             const apiClient = setupAPIClient();
-            if (name === '') {
-                toast.error('Não deixe o nome da variação em branco!!!');
-                return;
+            if (productsSelected === undefined || productsSelected === null || productsSelected === "") {
+                toast.error('Preencha todos os campos')
+                return
             }
 
-            await apiClient.put(`/updateProductVariationName?productVariation_id=${variation_id}`, { product_id: productsSelected });
+            await apiClient.put(`/updateProductVariationName?productVariation_id=${productVariationID}`, { product_id: productsSelected });
 
             toast.success('Produto variação atualizado com sucesso.');
 
@@ -202,10 +230,29 @@ const VariacaoDetalhes = ({
         }
     }
 
+    async function updateProductVariationOrder() {
+        try {
+            const apiClient = setupAPIClient();
+            if (updateOrder === null) {
+                toast.error('Não deixe a ordem em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateOrderProductVariationName?productVariation_id=${productVariationID}`, { order: Number(orderUpdateproductVariation) });
+                toast.success('Ordem do produto na variação atualizada com sucesso.');
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar a ordem.');
+        }
+    }
+
     async function updateStatusProductVariation() {
         try {
             const apiClient = setupAPIClient();/* @ts-ignore */
-            await apiClient.put(`/updateStatusProductVariation?productVariation_id=${variation.id}`);
+            await apiClient.put(`/updateStatusProductVariation?productVariation_id=${productVariationID}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -245,6 +292,7 @@ const VariacaoDetalhes = ({
     Modal.setAppElement('body');
 
 
+
     return (
         <>
             <BlockTop>
@@ -268,17 +316,31 @@ const VariacaoDetalhes = ({
                         <TextoDados
                             chave={"Atualizar nome da variação"}
                             dados={
-                                <SelectUpdate
+                                <InputUpdate
                                     dado={name}
+                                    type="text"
+                                    placeholder={name}
+                                    value={updateName}
+                                    onChange={(e) => setUpdateName(e.target.value)}
                                     handleSubmit={updateNameVariation}
-                                    value={productsSelected}
-                                    opcoes={
-                                        [
-                                            { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                            ...(products || []).map((item) => ({ label: item.name, value: item.name }))
-                                        ]
-                                    }/* @ts-ignore */
-                                    onChange={handleChangeProducts}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Ordem da variação"}
+                            dados={
+                                <InputUpdate
+                                    dado={orderVariation}
+                                    type="number"
+                                    /* @ts-ignore */
+                                    placeholder={order}
+                                    value={updateOrder}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setUpdateOrder(e.target.value)}
+                                    handleSubmit={updateOrderProductVariation}
                                 />
                             }
                         />
@@ -306,25 +368,43 @@ const VariacaoDetalhes = ({
                 </SectionDate>
             </GridDate>
 
-            {variation ? (
+            {productVariationID ? (
                 <>
                     <DivisorHorizontal />
-                    
+
                     <BlockDados>
                         <TextoDados
                             chave={"Atualizar produto variação"}
                             dados={
                                 <SelectUpdate
-                                    dado={name}
+                                    dado={nameProductVariation}
                                     handleSubmit={updateNameProductVariation}
                                     value={productsSelected}
                                     opcoes={
                                         [
                                             { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                            ...(products || []).map((item) => ({ label: item.name, value: item.name }))
+                                            ...(products || []).map((item) => ({ label: item.name, value: item.id }))
                                         ]
                                     }/* @ts-ignore */
                                     onChange={handleChangeProducts}
+                                />
+                            }
+                        />
+                    </BlockDados>
+
+                    <BlockDados>
+                        <TextoDados
+                            chave={"Ordem do produto variação"}
+                            dados={
+                                <InputUpdate
+                                    dado={updateVariationOrder}
+                                    type="number"
+                                    /* @ts-ignore */
+                                    placeholder={updateVariationOrder}
+                                    value={orderUpdateproductVariation}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setOrderUpdateproductVariation(e.target.value)}
+                                    handleSubmit={updateProductVariationOrder}
                                 />
                             }
                         />
