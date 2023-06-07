@@ -58,8 +58,6 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product, buy }: Mod
 
     }
 
-    
-
     async function handleDeleteProduct() {
         try {
             const apiClient = setupAPIClient();
@@ -67,8 +65,8 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product, buy }: Mod
             const product_id = product.id;
             const buyTogether_id = buy;
 
+            await apiClient.delete(`/deleteGroupBuyTogether?buyTogether_id=${buyTogether_id}`);
             await apiClient.delete(`/deleteParentIdBuyTogether?parentId=${buyTogether_id}`);
-           /*  await apiClient.delete(`/deleteGroupBuyTogether?buyTogether_id=${buyTogether_id}`); */
 
             await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
 
