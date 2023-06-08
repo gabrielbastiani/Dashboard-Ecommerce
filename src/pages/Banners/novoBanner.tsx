@@ -58,6 +58,7 @@ const NovoBanner: React.FC = () => {
     };
 
 
+
     async function handleRegisterBanner(event: FormEvent) {
         event.preventDefault();
         const apiClient = setupAPIClient();
