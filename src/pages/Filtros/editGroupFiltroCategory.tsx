@@ -29,26 +29,18 @@ const EditGroupFiltroCategory: React.FC = () => {
     const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
-    const [atributoName, setAtributoName] = useState("");
     const [status, setStatus] = useState("");
 
-    const [allAtributos, setAllatributos] = useState<any[]>([]);
+    const [allCategories, setAllCategories] = useState<any[]>([]);
 
     const [categories, setCategories] = useState<any[]>([]);
     const [slugCategory, setSlugCategory] = useState();
-
-    const [type, setType] = useState<any[]>([]);
-    const [typeSelected, setTypeSelected] = useState();
 
     const [modalItem, setModalItem] = useState<DeleteFitrosGrupo>();
     const [modalVisible, setModalVisible] = useState(false);
 
     function handleChangeSlug(e: any) {
         setSlugCategory(e.target.value);
-    }
-
-    function handleChangeType(e: any) {
-        setTypeSelected(e.target.value);
     }
 
     useEffect(() => {
@@ -71,7 +63,6 @@ const EditGroupFiltroCategory: React.FC = () => {
                 const response = await apiClient.get(`/findUniqueIDGroup?groupFilter_id=${groupFilter_id}`);
 
                 setNameGroup(response.data.nameGroup || "");
-                setAtributoName(response.data.type || "");
                 setSlugCategory(response.data.slugCategory || "");
                 setStatus(response.data.status);
 
@@ -81,19 +72,6 @@ const EditGroupFiltroCategory: React.FC = () => {
         }
         findDdatesGroups();
     }, [groupFilter_id]);
-
-    useEffect(() => {
-        async function loadTypeAttribute() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get('/allTypeAttributes');
-                setType(response.data || []);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        loadTypeAttribute();
-    }, []);
 
     async function updateNameGroup() {
         try {
@@ -114,24 +92,6 @@ const EditGroupFiltroCategory: React.FC = () => {
             console.log(error);
             toast.error('Ops erro ao atualizar o nome do grupo.');
         }
-    }
-
-    async function updateAtributoName() {
-        try {
-            if (typeSelected === "") {
-                toast.error('Não deixe o tipo de atributo do filtro em branco!!!');
-                return;
-            }
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updateTypeAttributeGroup?groupFilter_id=${groupFilter_id}`, { type: typeSelected });
-            toast.success('Tipo do atributo atualizado com sucesso.');
-        } catch (error) {/* @ts-ignore */
-            console.log(error.response.data);
-            toast.error("Erro ao atualizar o tipo do atributo.");
-        }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
     async function updateStatus() {
@@ -173,18 +133,18 @@ const EditGroupFiltroCategory: React.FC = () => {
     }
 
     useEffect(() => {
-        async function findAllFilterAtributos() {
+        async function findAllCategoriesFilter() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findManyNameFilterAttribute?groupFilter_id=${groupFilter_id}`);
+                const response = await apiClient.get(`/findManyFilterName?groupFilter_id=${groupFilter_id}`);
 
-                setAllatributos(response.data || []);
+                setAllCategories(response.data || []);
 
             } catch (error) {/* @ts-ignore */
                 console.error(error.response.data);
             }
         }
-        findAllFilterAtributos();
+        findAllCategoriesFilter();
     }, [groupFilter_id]);
 
     function handleCloseModalDelete() {
@@ -192,7 +152,7 @@ const EditGroupFiltroCategory: React.FC = () => {
     }
 
     async function handleOpenModalDelete(groupFilter_id: string) {
-        if (allAtributos.length >= 1) {
+        if (allCategories.length >= 1) {
             toast.error("Delete todos os filtros desse grupo antes de deletar esse grupo!!!");
             return;
         }
@@ -246,26 +206,6 @@ const EditGroupFiltroCategory: React.FC = () => {
                                             /* @ts-ignore */
                                             onChange={(e) => setNameGroup(e.target.value)}
                                             handleSubmit={updateNameGroup}
-                                        />
-                                    }
-                                />
-                            </BlockDados>
-
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Atualizar o tipo de atributo"}
-                                    dados={
-                                        <SelectUpdate
-                                            dado={atributoName}
-                                            handleSubmit={updateAtributoName}
-                                            value={typeSelected}
-                                            opcoes={
-                                                [
-                                                    { label: "Selecionar...", value: "" },/* @ts-ignore */
-                                                    ...(type || []).map((item) => ({ label: item.type, value: item.type }))
-                                                ]
-                                            }/* @ts-ignore */
-                                            onChange={handleChangeType}
                                         />
                                     }
                                 />

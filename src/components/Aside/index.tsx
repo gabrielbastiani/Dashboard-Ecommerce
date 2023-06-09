@@ -48,7 +48,6 @@ const Aside: React.FC = () => {
     const [submenu, setSubmenu] = useState(false);
     const [submenu1, setSubmenu1] = useState(false);
     const [submenu2, setSubmenu2] = useState(false);
-    const [submenu3, setSubmenu3] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -60,10 +59,6 @@ const Aside: React.FC = () => {
 
     const handleSubMenu2 = () => {
         setSubmenu2(!submenu2);
-    }
-
-    const handleSubMenu3 = () => {
-        setSubmenu3(!submenu3);
     }
 
     const handleToggleMenu = () => {
@@ -148,29 +143,10 @@ const Aside: React.FC = () => {
                     </>
                 ) : null}
 
-                <MenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
+                <MenuItemLink href='/filterGrupos' >
                     <FaFilter />
                     Filtros
                 </MenuItemLink>
-
-                {submenu3 ? (
-                    <>
-                        <SubMenuItemLink href='/filterGrupos' >
-                            <MdPlayArrow />
-                            Grupos de Filtros
-                        </SubMenuItemLink>
-
-                        <SubMenuItemLink href='/filterCategories' >
-                            <MdPlayArrow />
-                            Filtros de Categorias
-                        </SubMenuItemLink>
-
-                        <SubMenuItemLink href='/filterAtributos' >
-                            <MdPlayArrow />
-                            Filtros de Atributos
-                        </SubMenuItemLink>
-                    </>
-                ) : null}
 
                 <MenuItemLink href='/banners'>
                     <BsImages />
