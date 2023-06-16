@@ -135,6 +135,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
             await apiClient.post('/createRelationAttributeProduct', {
                 product_id: product_id,
                 type: typeSelected,
+                value: "",
                 nivel: 0,
                 order: Number(order),
                 store_id: store_id
