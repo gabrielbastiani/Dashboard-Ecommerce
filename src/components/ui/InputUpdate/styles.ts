@@ -67,7 +67,7 @@ export const EditBox = styled.div`
 
 export const ValueText = styled.span`
   position: relative;
-  width: 65%;
+  width: 45%;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
