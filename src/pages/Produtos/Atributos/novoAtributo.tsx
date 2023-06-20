@@ -14,7 +14,7 @@ import { Button } from "../../../components/ui/Button";
 import { InputPost } from "../../../components/ui/InputPost";
 
 
-const NovoTipoAtributo: React.FC = () => {
+const NovoAtributo: React.FC = () => {
 
     const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -41,12 +41,12 @@ const NovoTipoAtributo: React.FC = () => {
                 store_id: storeID
             });
 
-            toast.success('Atributo cadastrado com sucesso');
+            toast.success('Tipo de atributo cadastrado com sucesso');
 
             setType("");
 
             setTimeout(() => {
-                navigate(0);
+                navigate('/atributos');
             }, 3000);
 
         } catch (error) {/* @ts-ignore */
@@ -64,7 +64,7 @@ const NovoTipoAtributo: React.FC = () => {
             <Container>
                 <Card>
 
-                    <Voltar url='/tiposAtributos' />
+                    <Voltar url='/atributos' />
 
                     <BlockTop>
                         <Titulos
@@ -97,4 +97,4 @@ const NovoTipoAtributo: React.FC = () => {
 
 }
 
-export default NovoTipoAtributo;
+export default NovoAtributo;

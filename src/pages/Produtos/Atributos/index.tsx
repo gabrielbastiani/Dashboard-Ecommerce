@@ -12,7 +12,7 @@ import { Avisos } from "../../../components/Avisos";
 import TabelaSimples from "../../../components/Tabelas";
 
 
-const TiposAtributos: React.FC = () => {
+const Atributos: React.FC = () => {
 
     const [search, setSearch] = useState<any[]>([]);
 
@@ -48,13 +48,13 @@ const TiposAtributos: React.FC = () => {
                 <Card>
                     <Titulos
                         tipo="h1"
-                        titulo="Tipos de atributos"
+                        titulo="Atributos"
                     />
 
                     <AddButton>
                         <AiOutlinePlusCircle />
                         <Link to="/tipoAtributo/novo" >
-                            <SpanText>Novo tipo de atributo</SpanText>
+                            <SpanText>Novo atributo</SpanText>
                         </Link>
                     </AddButton>
 
@@ -69,7 +69,7 @@ const TiposAtributos: React.FC = () => {
                             <TabelaSimples
                                 cabecalho={["Tipo de atributo"]}
                                 dados={dados}
-                                textbutton={"Editar"}
+                                textbutton={"Editar ou inserir atributo"}
                             />
                         </>
                     }
@@ -79,4 +79,4 @@ const TiposAtributos: React.FC = () => {
     )
 }
 
-export default TiposAtributos;
+export default Atributos;

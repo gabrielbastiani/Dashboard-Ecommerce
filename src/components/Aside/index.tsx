@@ -125,9 +125,9 @@ const Aside: React.FC = () => {
                             Produtos
                         </SubMenuItemLink>
 
-                        <SubMenuItemLink href='/tiposAtributos' >
+                        <SubMenuItemLink href='/atributos' >
                             <MdPlayArrow />
-                            Tipo de Atributos
+                            Atributos
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href="/compreJunto" >

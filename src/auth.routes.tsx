@@ -42,9 +42,9 @@ import NovoGrupoFiltroCategoria from './pages/Filtros/novoGrupoFiltroCategoria';
 import CategoryFiltro from './pages/Filtros/CategoryFiltro';
 import EditCategoryFiltro from './pages/Filtros/CategoryFiltro/editCategoryFiltro';
 import EditItem from './pages/Categorias/MenusCategorias/editItem';
-import TiposAtributos from './pages/Produtos/TiposAtributos';
-import EditTipoAtributo from './pages/Produtos/TiposAtributos/editTipoAtributo';
-import NovoTipoAtributo from './pages/Produtos/TiposAtributos/novoTipoAtributo';
+import Atributos from './pages/Produtos/Atributos';
+import Atributo from './pages/Produtos/Atributos/atributo';
+import NovoAtributo from './pages/Produtos/Atributos/novoAtributo';
 import ProductDescription from './pages/Produtos/ProductDescription';
 import CompreJunto from './pages/Produtos/CompreJunto';
 import NovoGrupoCompreJunto from './pages/Produtos/CompreJunto/novoGrupoCompreJunto';
@@ -79,9 +79,10 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avalietion_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
-            <Route path='/tiposAtributos' element={<TiposAtributos />} />
-            <Route path='/tipoAtributo/novo' element={<NovoTipoAtributo />} />
-            <Route path='/tipoAtributo/edit/:typeAttribute_id' element={<EditTipoAtributo />} />
+            
+            <Route path='/atributos' element={<Atributos />} />
+            <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />
+            <Route path='/tipoAtributo/edit/:typeAttribute_id' element={<Atributo />} />
             <Route path='/compreJunto' element={<CompreJunto />} />
             <Route path='/compreJunto/grupo/novo' element={<NovoGrupoCompreJunto />} />
             <Route path='/compreJunto/grupo/edit/:buyTogether_id' element={<EditGrupoCompreJunto />} />
