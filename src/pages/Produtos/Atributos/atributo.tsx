@@ -283,9 +283,9 @@ const Atributo: React.FC = () => {
 
     async function handleOpenModalDelete(id: string) {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get('/findUniqueRelationAttributeProduct', {
+        const response = await apiClient.get('/findUniqueValueAttribute', {
             params: {
-                relationAttributeProduct_id: id,
+                valueAttribute_id: id,
             }
         });
         setModalItem(response.data || "");

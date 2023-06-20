@@ -35,10 +35,10 @@ export function ModalDeleteAttributeProduct({ isOpen, onRequestClose, relation }
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const relationAttributeProduct_id = relation.id;
+            const valueAttribute_id = relation.id;
 
-            await apiClient.delete(`/deleteAllImageRelationAttribute?relationAttributeProduct_id=${relationAttributeProduct_id}`);
-            await apiClient.delete(`/deleteAttributeProduct?relationAttributeProduct_id=${relationAttributeProduct_id}`);
+            await apiClient.delete(`/deleteImageAttributeProduct?valueAttribute_id=${valueAttribute_id}`);
+            await apiClient.delete(`/deleteValueAttribute?valueAttribute_id=${valueAttribute_id}`);
             
             toast.success(`Atributo deletado do produto com sucesso.`);
 
