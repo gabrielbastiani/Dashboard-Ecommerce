@@ -678,7 +678,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                         isOpen={modalVisibleImage}
                         onRequestClose={handleCloseModalDeleteImage}
                         /* @ts-ignore */
-                        relation={modalItemImage}
+                        relationImage={modalItemImage}
                     />
                 )}
             </GridContainer>

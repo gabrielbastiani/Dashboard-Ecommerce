@@ -19,8 +19,20 @@ import { InputPost } from "../../../components/ui/InputPost";
 import { Button } from "../../../components/ui/Button";
 import { Avisos } from "../../../components/Avisos";
 import { GridDate } from "../../Perfil/styles";
-import { InputLogo, SectionDate, TextLogo } from "../../Configuracoes/styles";
-import { AttributeImg, ButtonImg, EtiquetaImg, FormImage, IconSpanUpload, PreviewImageAttribute, TextUpdate } from "../../../components/AttributesProduct/styles";
+import {
+    InputLogo,
+    SectionDate,
+    TextLogo
+} from "../../Configuracoes/styles";
+import {
+    AttributeImg,
+    ButtonImg,
+    EtiquetaImg,
+    FormImage,
+    IconSpanUpload,
+    PreviewImageAttribute,
+    TextUpdate
+} from "../../../components/AttributesProduct/styles";
 import { MdFileUpload } from "react-icons/md";
 import { ModalDeleteImageAttributeProduct } from "../../../components/popups/ModalDeleteImageAttributeProduct";
 import { BsTrash } from "react-icons/bs";
@@ -511,7 +523,7 @@ const Atributo: React.FC = () => {
                                 isOpen={modalVisibleImage}
                                 onRequestClose={handleCloseModalDeleteImage}
                                 /* @ts-ignore */
-                                relation={modalItemImage}
+                                relationImage={modalItemImage}
                             />
                         )}
                     </Card>

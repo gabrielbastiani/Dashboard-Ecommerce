@@ -11,10 +11,10 @@ import { DeleteImageAttribute } from '../../../pages/Produtos/Atributos/atributo
 interface DeleteAttributeImageRequest {
     isOpen: boolean;
     onRequestClose: () => void;
-    relation: DeleteImageAttribute;
+    relationImage: DeleteImageAttribute;
 }
 
-export function ModalDeleteImageAttributeProduct({ isOpen, onRequestClose, relation }: DeleteAttributeImageRequest) {
+export function ModalDeleteImageAttributeProduct({ isOpen, onRequestClose, relationImage }: DeleteAttributeImageRequest) {
 
     const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ export function ModalDeleteImageAttributeProduct({ isOpen, onRequestClose, relat
         try {
             const apiClient = setupAPIClient();
             /* @ts-ignore */
-            const imageAttribute_id = relation.id;
+            const imageAttribute_id = relationImage.id;
 
             await apiClient.delete(`/deleteImageAttributeProduct?imageAttribute_id=${imageAttribute_id}`);
             
