@@ -4,7 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import Titulos from "../Titulos";
-import { Etiqueta } from "../../pages/Categorias/styles";
+import { Block, Etiqueta } from "../../pages/Categorias/styles";
 import Select from "../ui/Select";
 import { Button } from "../ui/Button";
 import { ContainerCategories, ContainerCategoriesBox, GridContainer, TextNotFound } from "../CategoriesProduct/styles";
@@ -12,6 +12,7 @@ import { BlockDados } from "../../pages/Categorias/Categoria/styles";
 import { TextoDados } from "../TextoDados";
 import SelectUpdate from "../ui/SelectUpdate";
 import { BsTrash } from "react-icons/bs";
+import { InputPost } from "../ui/InputPost";
 
 
 interface AtributeRequest {
@@ -27,6 +28,8 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
     const [atributes, setAtributes] = useState<any[]>([]);
     const [atributesSelected, setAtributesSelected] = useState();
+
+    const [order, setOrder] = useState(Number);
 
     const [attributesProducts, setAttributesProducts] = useState<any[]>([]);
 
@@ -51,7 +54,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         async function findAllRelation() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findAllRelationsProductAndCategory?product_id=${product_id}`);
+                const response = await apiClient.get(`/getAllAttributesProduct?product_id=${product_id}`);
 
                 setAttributesProducts(response.data || []);
 
@@ -61,6 +64,29 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         }
         findAllRelation();
     }, [product_id]);
+
+    async function handleRegisterAttribute() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post('/createRelationAttributeProduct', {
+                product_id: product_id,
+                type: atributesSelected,
+                order: Number(order),
+                store_id: store_id
+            });
+
+            toast.success('Atributo cadastrado com sucesso!');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
+            /* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
 
     return (
@@ -84,22 +110,32 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                 }
             />
 
+            <Block>
+                <Etiqueta>Ordem:</Etiqueta>
+                <InputPost
+                    type="number"
+                    placeholder="0"
+                    value={order}/* @ts-ignore */
+                    onChange={(e) => setOrder(e.target.value)}
+                />
+            </Block>
+
             <Button
                 style={{ backgroundColor: 'green' }}
-                onClick={alert}
+                onClick={handleRegisterAttribute}
             >
                 Salvar atributo
             </Button>
             <br />
             <br />
             <GridContainer>
-                {attributesLoad.length < 1 ? (
+                {attributesProducts.length < 1 ? (
                     <>
                         <TextNotFound>Não há atributos cadastrados no produto ainda...</TextNotFound>
                     </>
                 ) :
                     <>
-                        {attributesLoad.map((item) => {
+                        {attributesProducts.map((item) => {
                             return (
                                 <>
                                     <ContainerCategories key={item.id}>
