@@ -315,7 +315,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                             </BlockDados>
 
                                             <BlockDados>
-                                            <Button
+                                                <Button
                                                     style={{ backgroundColor: 'orange' }}
                                                     onClick={() => handleClick(item.category.id)}
                                                 >
@@ -355,12 +355,12 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                             </BlockDados>
 
                                             <BlockDados>
-                                            <BsTrash
-                                                onClick={() => handleOpenModalDelete(item.id)}
-                                                style={{ cursor: 'pointer', margin: '13px 0' }}
-                                                color="red"
-                                                size={35}
-                                            />
+                                                <BsTrash
+                                                    onClick={() => handleOpenModalDelete(item.id)}
+                                                    style={{ cursor: 'pointer', margin: '13px 0' }}
+                                                    color="red"
+                                                    size={35}
+                                                />
                                             </BlockDados>
 
                                             <BlockSub>
@@ -388,7 +388,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                                 :
                                                                 null
                                                             }
-                                                            
+
                                                             {activeTabSub === sub.id ?
                                                                 <BlockSub key={sub.id}>
                                                                     <TextSub>{sub.name}</TextSub>
