@@ -35,6 +35,7 @@ const Atributos: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Tipo de atributo": item.type,
+            "Valores de atributo": item.valueattribute ? item.valueattribute.length : "Sem valores ainda",
             "botaoDetalhes": `/tipoAtributo/edit/${item.id}`
         });
     });
@@ -67,7 +68,7 @@ const Atributos: React.FC = () => {
                     ) :
                         <>
                             <TabelaSimples
-                                cabecalho={["Tipo de atributo"]}
+                                cabecalho={["Tipo de atributo", "Valores de atributo"]}
                                 dados={dados}
                                 textbutton={"Editar ou inserir atributo"}
                             />
