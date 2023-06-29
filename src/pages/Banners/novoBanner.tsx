@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Aside from "../../components/Aside";
 import { Card } from "../../components/Content/styles";
 import MainHeader from "../../components/MainHeader";
@@ -47,6 +47,7 @@ const NovoBanner: React.FC = () => {
     const [order, setOrder] = useState(Number);
     const [url, setUrl] = useState("");
     const [positionSelected, setPositionSelected] = useState();
+    const [categories, setCategories] = useState<any[]>([]);
 
     const [loading, setLoading] = useState(false);
 
@@ -57,7 +58,18 @@ const NovoBanner: React.FC = () => {
         setCheck(e.target.checked);
     };
 
-
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCategorys();
+    }, []);
 
     async function handleRegisterBanner(event: FormEvent) {
         event.preventDefault();
@@ -182,7 +194,8 @@ const NovoBanner: React.FC = () => {
                                                 { label: "Página Sobre", value: "Página Sobre" },
                                                 { label: "Banner Topo", value: "Banner Topo" },
                                                 { label: "Banner Mosaico Página Principal", value: "Banner Mosaico Página Principal" },
-                                                { label: "Banner Páginas", value: "Banner Páginas" }
+                                                { label: "Banner Páginas Categorias", value: "Banner Páginas Categorias" },
+                                                ...(categories || []).map((item) => ({ label: item.name, value: item.slug }))
                                             ]
                                         }/* @ts-ignore */
                                         onChange={handleChangePosition}
