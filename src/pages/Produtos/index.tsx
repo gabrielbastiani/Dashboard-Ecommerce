@@ -91,11 +91,11 @@ const Produtos: React.FC = () => {
             localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "precoCrescente":
-            search.sort((n1, n9) => n9.preco - n1.preco);
+            search.sort((n1, n9) => n9.price - n1.price);
             localStorage.setItem('@storeorderproduct', String(order));
             break;/* @ts-ignore */
         case "precoDecrescente":
-            search.sort((n1, n9) => n1.preco - n9.preco);
+            search.sort((n1, n9) => n1.price - n9.price);
             localStorage.setItem('@storeorderproduct', String(order));
             break;
         default:
