@@ -192,8 +192,31 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
         }
     }
 
+    async function updateMainCategory(id: string, mainCategory: string) {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/mainCategoryProduct?productCategory_id=${id}`);
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {
+            toast.error('Ops erro ao atualizar a categoria principal.');
+        }
+
+        if (mainCategory === "Nao") {
+            toast.success(`Está será a categoria principal do produto.`);
+            return;
+        }
+
+        if (mainCategory === "Sim") {
+            toast.error(`Está categoria não será mais a principal do produto.`);
+            return;
+        }
+    }
+
     async function updateStatus(id: string, status: string) {
-        console.log(id)
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusCategoryProduct?productCategory_id=${id}`);
@@ -352,7 +375,20 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                         />
                                                     }
                                                 />
+
+                                                <TextoDados
+                                                    chave={"Principal?"}
+                                                    dados={
+                                                        <ButtonSelect
+                                                            /* @ts-ignore */
+                                                            dado={item.mainCategory}
+                                                            handleSubmit={() => updateMainCategory(item.id, item.mainCategory)}
+                                                        />
+                                                    }
+                                                />
                                             </BlockDados>
+
+                                            
 
                                             <BlockDados>
                                                 <BsTrash
