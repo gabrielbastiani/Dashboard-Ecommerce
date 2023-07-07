@@ -202,7 +202,9 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
             }, 3000);
 
         } catch (error) {
-            toast.error('Ops erro ao atualizar a categoria principal.');
+            /* @ts-ignore */
+            toast.error(`${error.response.data.error}`);
+            return;
         }
 
         if (mainCategory === "Nao") {
