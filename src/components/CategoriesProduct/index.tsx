@@ -192,10 +192,10 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
         }
     }
 
-    async function updateMainCategory(id: string, mainCategory: string) {
+    async function updateMainCategory(id: string, mainCategory: string, product_id: string) {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/mainCategoryProduct?productCategory_id=${id}`);
+            await apiClient.put(`/mainCategoryProduct?productCategory_id=${id}&product_id=${product_id}`);
 
             setTimeout(() => {
                 navigate(0);
@@ -384,7 +384,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                         <ButtonSelect
                                                             /* @ts-ignore */
                                                             dado={item.mainCategory}
-                                                            handleSubmit={() => updateMainCategory(item.id, item.mainCategory)}
+                                                            handleSubmit={() => updateMainCategory(item.id, item.mainCategory, item.product_id)}
                                                         />
                                                     }
                                                 />
