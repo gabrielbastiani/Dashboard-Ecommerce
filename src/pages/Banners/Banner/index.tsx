@@ -55,10 +55,24 @@ const Banner: React.FC = () => {
     const [position, setPosition] = useState("");
     const [positionSelected, setPositionSelected] = useState();
     const [active, setActive] = useState("");
-
+    const [categories, setCategories] = useState<any[]>([]);
+    
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
+
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get('/listCategorysDisponivel');
+                setCategories(response.data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCategorys();
+    }, []);
 
     useEffect(() => {
         async function loadBanner() {
@@ -317,7 +331,8 @@ const Banner: React.FC = () => {
                                                         { label: "Página Sobre", value: "Página Sobre" },
                                                         { label: "Banner Topo", value: "Banner Topo" },
                                                         { label: "Banner Mosaico Página Principal", value: "Banner Mosaico Página Principal" },
-                                                        { label: "Banner Páginas", value: "Banner Páginas" }
+                                                        { label: "Banner Páginas Categorias", value: "Banner Páginas Categorias" },
+                                                        ...(categories || []).map((item) => ({ label: item.name, value: item.slug }))
                                                     ]
                                                 }
                                                 handleSubmit={updatePosition}
