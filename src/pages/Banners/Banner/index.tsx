@@ -53,10 +53,10 @@ const Banner: React.FC = () => {
     const [order, setOrder] = useState(Number);
     const [url, setUrl] = useState("");
     const [position, setPosition] = useState("");
-    const [positionSelected, setPositionSelected] = useState();
+    const [positionSelected, setPositionSelected] = useState("");
     const [active, setActive] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
-    
+
     const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -149,15 +149,15 @@ const Banner: React.FC = () => {
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updatePositionBanner?banner_id=${banner_id}`, { position: positionSelected });
+            await apiClient.put(`/updatePosicaoBanner?banner_id=${banner_id}`, { position: positionSelected });
             toast.success('Posição atualizada com sucesso.');
-        } catch (error) {
-            console.log(error);
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
             toast.error('Ops erro ao atualizar a posição.');
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
     async function updateStatus() {
@@ -332,7 +332,7 @@ const Banner: React.FC = () => {
                                                         { label: "Banner Topo", value: "Banner Topo" },
                                                         { label: "Banner Mosaico Página Principal", value: "Banner Mosaico Página Principal" },
                                                         { label: "Banner Páginas Categorias", value: "Banner Páginas Categorias" },
-                                                        ...(categories || []).map((item) => ({ label: item.name, value: item.slug }))
+                                                        ...(categories || []).map((item) => ({ label: item.name, value: item.name }))
                                                     ]
                                                 }
                                                 handleSubmit={updatePosition}
