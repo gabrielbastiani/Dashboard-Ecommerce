@@ -36,7 +36,6 @@ const Avaliacoes: React.FC = () => {
 
     const [nameProduct, setNameProduct] = useState("");
 
-    console.log(nameProduct)
 
     useEffect(() => {
         async function allAvaliations() {
