@@ -102,11 +102,16 @@ const Aside: React.FC = () => {
 
                 <MenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
                     <IoIosPeople />
-                    Contrapropostas
+                    Clientes
                 </MenuItemLink>
 
                 {submenu3 ? (
                     <>
+                        <SubMenuItemLink href="/clientes" >
+                            <MdPlayArrow />
+                            Clientes
+                        </SubMenuItemLink>
+
                         <SubMenuItemLink href="/contrapropostas" >
                             <MdPlayArrow />
                             Contrapropostas
