@@ -33,6 +33,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
 import { FaFilter } from 'react-icons/fa';
+import { IoIosPeople } from 'react-icons/io';
 
 
 const Aside: React.FC = () => {
@@ -48,6 +49,7 @@ const Aside: React.FC = () => {
     const [submenu, setSubmenu] = useState(false);
     const [submenu1, setSubmenu1] = useState(false);
     const [submenu2, setSubmenu2] = useState(false);
+    const [submenu3, setSubmenu3] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -59,6 +61,10 @@ const Aside: React.FC = () => {
 
     const handleSubMenu2 = () => {
         setSubmenu2(!submenu2);
+    }
+
+    const handleSubMenu3 = () => {
+        setSubmenu3(!submenu3);
     }
 
     const handleToggleMenu = () => {
@@ -93,6 +99,20 @@ const Aside: React.FC = () => {
                     <MdDashboard />
                     Painel
                 </MenuItemLink>
+
+                <MenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
+                    <IoIosPeople />
+                    Contrapropostas
+                </MenuItemLink>
+
+                {submenu3 ? (
+                    <>
+                        <SubMenuItemLink href="/contrapropostas" >
+                            <MdPlayArrow />
+                            Contrapropostas
+                        </SubMenuItemLink>
+                    </>
+                ) : null}
 
                 <MenuItemLink onClick={handleSubMenu2} style={{ cursor: 'pointer' }} >
                     <MdOutlineCategory />
