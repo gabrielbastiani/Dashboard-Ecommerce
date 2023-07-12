@@ -51,6 +51,7 @@ import NovoGrupoCompreJunto from './pages/Produtos/CompreJunto/novoGrupoCompreJu
 import ProdutosGrupo from './pages/Produtos/CompreJunto/produtosGrupo';
 import EditGrupoCompreJunto from './pages/Produtos/CompreJunto/editGrupoCompreJunto';
 import EditGroupFiltroCategory from './pages/Filtros/editGroupFiltroCategory';
+import Contrapropostas from './pages/Clientes/Contrapropostas';
 
 
 const RoutesAuth: React.FC = () => {
@@ -65,6 +66,8 @@ const RoutesAuth: React.FC = () => {
             <Route path='/categoria/:category_id' element={<Categoria />} />
             <Route path='/categoria/subCategoria/:parentId' element={<SubCategoria />} />
             <Route path='/categoria/subCategoria/edit/:category_id' element={<Categoria />} />
+
+            <Route path='/contrapropostas' element={<Contrapropostas />} />
 
             <Route path='/menus' element={<MenusCategorias />} />
             <Route path='/menu/novo' element={<NovoMenu />} />
