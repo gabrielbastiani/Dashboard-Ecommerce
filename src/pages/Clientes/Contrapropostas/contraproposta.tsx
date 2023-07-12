@@ -9,15 +9,11 @@ import { toast } from "react-toastify";
 import Voltar from "../../../components/Voltar";
 import Titulos from "../../../components/Titulos";
 import moment from 'moment';
-import { BlockDados } from "../../Categorias/Categoria/styles";
-import { TextoDados } from "../../../components/TextoDados";
-import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { Block, Etiqueta } from "../../Categorias/styles";
 import { InputPost } from "../../../components/ui/InputPost";
 import { TextArea } from "../../../components/ui/Input";
 import { BlockData, TextData, TextStrong } from "./styles";
 import Select from "../../../components/ui/Select";
-import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { Button } from "../../../components/ui/Button";
 
 
@@ -38,7 +34,7 @@ const Contraproposta: React.FC = () => {
     const [status, setStatus] = useState("");
     const [statusSelected, setStatusSelected] = useState();
     const [dataProposta, setDataProposta] = useState("");
-    
+
     const [codeCoupon, setCodeCoupon] = useState("");
     const [information, setInformation] = useState("");
 
@@ -72,48 +68,6 @@ const Contraproposta: React.FC = () => {
         }
         loadCounterProposal();
     }, [counterproposal_id]);
-
-    async function updateStatus() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStatusCounterProposal?counterproposal_id=${counterproposal_id}`, { status: statusSelected });
-            toast.success('Status atualizado com sucesso.');
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o status.');
-        }
-    }
-
-    async function counterProposalCreate() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/createCounterProposal?counterproposal_id=${counterproposal_id}`, { codeCoupon: codeCoupon });
-            toast.success('Inserido cupom de desconto');
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao inserir o cupom de desconto');
-        }
-    }
-
-    async function informationProposalCreate() {
-        try {
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/informationCounterProposal?counterproposal_id=${counterproposal_id}`, { information: information });
-            toast.success('Inserido informações com sucesso');
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao inserir informações');
-        }
-    }
 
     async function handleCounterProposal() {
         try {
@@ -225,55 +179,25 @@ const Contraproposta: React.FC = () => {
                             />
                         </Block>
 
-                        {codeCoupon === null ? (
-                            <>
-                                <Block>
-                                    <Etiqueta>Cupom de Desconto para a Proposta:</Etiqueta>
-                                    <InputPost
-                                        type="text"
-                                        value={codeCoupon}
-                                        onChange={(e) => setCodeCoupon(e.target.value)}
-                                    />
-                                </Block>
-                            </>
-                        ) :
-                            <>
-                                <Block>
-                                    <Etiqueta>Cupom de Desconto para a Proposta:</Etiqueta>
-                                    <InputPost
-                                        type="text"
-                                        placeholder="Digite o código de cupom de desconto aqui..."
-                                        value={codeCoupon}
-                                        onChange={(e) => setCodeCoupon(e.target.value)}
-                                    />
-                                </Block>
-                            </>
-                        }
+                        <Block>
+                            <Etiqueta>Cupom de Desconto para a Proposta:</Etiqueta>
+                            <InputPost
+                                type="text"
+                                placeholder="Digite o código de cupom de desconto aqui..."
+                                value={codeCoupon}
+                                onChange={(e) => setCodeCoupon(e.target.value)}
+                            />
+                        </Block>
 
-                        {information === null ? (
-                            <>
-                                <Block>
-                                    <Etiqueta>Observações a serem enviadas ao Solicitante:</Etiqueta>
-                                    <TextArea
-                                        style={{ resize: 'none', height: '100px', borderRadius: '5px', padding: '10px', borderColor: 'orange' }}
-                                        value={information}
-                                        onChange={(e) => setInformation(e.target.value)}
-                                    />
-                                </Block>
-                            </>
-                        ) :
-                            <>
-                                <Block>
-                                    <Etiqueta>Observações a serem enviadas ao Solicitante:</Etiqueta>
-                                    <TextArea
-                                        style={{ resize: 'none', height: '100px', borderRadius: '5px', padding: '10px', borderColor: 'orange' }}
-                                        value={information}
-                                        placeholder="Digite aqui observações para o cliente..."
-                                        onChange={(e) => setInformation(e.target.value)}
-                                    />
-                                </Block>
-                            </>
-                        }
+                        <Block>
+                            <Etiqueta>Observações a serem enviadas ao Solicitante:</Etiqueta>
+                            <TextArea
+                                style={{ resize: 'none', height: '100px', borderRadius: '5px', padding: '10px', borderColor: 'orange' }}
+                                value={information}
+                                placeholder="Digite aqui observações para o cliente..."
+                                onChange={(e) => setInformation(e.target.value)}
+                            />
+                        </Block>
                         <br />
                         <Button
                             style={{ backgroundColor: 'green' }}
