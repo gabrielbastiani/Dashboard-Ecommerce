@@ -38,6 +38,8 @@ const Contraproposta: React.FC = () => {
     const [codeCoupon, setCodeCoupon] = useState("");
     const [information, setInformation] = useState("");
 
+    const existCodeCoupon = codeCoupon ? codeCoupon : "Sem código de cupom";
+
     function handleChangeStatus(e: any) {
         setStatusSelected(e.target.value);
     }
@@ -74,7 +76,7 @@ const Contraproposta: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateDataCounterProposal?counterproposal_id=${counterproposal_id}`, {
                 information: information,
-                codeCoupon: codeCoupon,
+                codeCoupon: existCodeCoupon,
                 status: statusSelected
             });
             toast.success('Proposta enviada com sucesso!!!');
