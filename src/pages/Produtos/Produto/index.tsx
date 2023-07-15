@@ -40,7 +40,6 @@ import { ButtonSubCat, TextNotFound } from "../../../components/CategoriesProduc
 
 export type DeleteProduct = {
     product_id: string;
-    idBuyTogether: string;
 }
 
 const Produto: React.FC = () => {
@@ -79,8 +78,6 @@ const Produto: React.FC = () => {
     const [buyTogether, setBuyTogether] = useState("");
     const [nameBuy, setNameBuy] = useState("");
     const [idBuy, setIdBuy] = useState("");
-
-    const [idBuyTogether, setIdBuyTogether] = useState("");
 
 
 
@@ -351,7 +348,6 @@ const Produto: React.FC = () => {
             }
         });
         setModalItem(responseDelete.data);
-        setIdBuyTogether(idBuy);
         setModalVisible(true);
     }
 
@@ -809,8 +805,6 @@ const Produto: React.FC = () => {
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
                     product={modalItem}
-                    /* @ts-ignore */
-                    buy={idBuyTogether}
                 />
             )}
         </>

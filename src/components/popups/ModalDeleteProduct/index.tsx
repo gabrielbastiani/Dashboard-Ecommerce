@@ -12,10 +12,9 @@ interface ModalDeleteProductRequest {
     isOpen: boolean;
     onRequestClose: () => void;
     product: DeleteProduct;
-    buy: DeleteProduct;
 }
 
-export function ModalDeleteProduct({ isOpen, onRequestClose, product, buy }: ModalDeleteProductRequest) {
+export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDeleteProductRequest) {
 
     const navigate = useNavigate();
 
@@ -38,13 +37,13 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product, buy }: Mod
             /* @ts-ignore */
             const product_id = product.id;
             
-            await apiClient.delete(`/deleteAllImageProductRelationAttribute?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllRelationProductAttributes?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllTagProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllDescriptionsProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllPhotos?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllCategoiesProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteAvalietionProductID?product_id=${product_id}`);
+            await apiClient.delete(`/deleteParentIdBuyTogether?product_id=${product_id}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -61,10 +60,6 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product, buy }: Mod
             const apiClient = setupAPIClient();
             /* @ts-ignore */
             const product_id = product.id;
-            const buyTogether_id = buy;
-
-            await apiClient.delete(`/deleteGroupBuyTogether?buyTogether_id=${buyTogether_id}`);
-            await apiClient.delete(`/deleteParentIdBuyTogether?parentId=${buyTogether_id}`);
 
             await apiClient.delete(`/deleteProduct?product_id=${product_id}`);
 
