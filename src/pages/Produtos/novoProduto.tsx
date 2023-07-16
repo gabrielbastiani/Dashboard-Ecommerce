@@ -14,6 +14,8 @@ import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { GridDate } from "../Perfil/styles";
 import { useNavigate } from "react-router-dom";
+import Modal from 'react-modal';
+import { ModalImageVideo } from "../../components/popups/ModalImageVideo";
 
 
 const NovoProduto: React.FC = () => {
@@ -32,6 +34,9 @@ const NovoProduto: React.FC = () => {
     const [height, setHeight] = useState('');
     const [depth, setDepth] = useState('');
     const [urlVideo, setUrlVideo] = useState('');
+
+    const [modalItem, setModalItem] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
 
     async function handleRegisterProduct() {
         try {
@@ -83,6 +88,17 @@ const NovoProduto: React.FC = () => {
         }
 
     }
+
+    function handleCloseModalImageVideo() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalImageVideo() {
+        setModalItem(urlVideo);
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('body');
 
 
     return (
@@ -186,9 +202,15 @@ const NovoProduto: React.FC = () => {
 
                                 <Block>
                                     <Etiqueta>Link video apresentação:</Etiqueta>
+                                    <Button
+                                        style={{ padding: '5px', fontSize: '10px', marginBottom: '10px' }}
+                                        onClick={handleOpenModalImageVideo}
+                                    >
+                                        ATENÇÃO CLIQUE AQUI ANTES DE INSERIR O LINK
+                                    </Button>
                                     <InputPost
                                         type="text"
-                                        placeholder="Ex: https://www.video.com.br"
+                                        placeholder="Ex: https://xxx.xxxxx.xxx/watch?v=mxFtJIFMhGE"
                                         value={urlVideo}
                                         onChange={(e) => setUrlVideo(e.target.value)}
                                     />
@@ -221,6 +243,13 @@ const NovoProduto: React.FC = () => {
                     </Card>
                 </>
             </Container>
+            {modalVisible && (
+                <ModalImageVideo
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalImageVideo}
+                    video={modalItem}
+                />
+            )}
         </Grid>
     )
 }

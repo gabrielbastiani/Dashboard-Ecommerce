@@ -798,7 +798,6 @@ const Produto: React.FC = () => {
                     </ContainerVariacao>
                 </Container>
             </Grid>
-
             {modalVisible && (
                 <ModalDeleteProduct
                     isOpen={modalVisible}
