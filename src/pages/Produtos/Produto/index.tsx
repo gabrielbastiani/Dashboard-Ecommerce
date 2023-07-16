@@ -341,6 +341,11 @@ const Produto: React.FC = () => {
             return;
         }
 
+        if (togetherBuy) {
+            toast.error("Delete todos grupos compre junto vinculados a esse produto antes, para poder deletar esse produto!!!");
+            return;
+        }
+
         const apiClient = setupAPIClient();
         const responseDelete = await apiClient.get('/findUniqueProduct', {
             params: {

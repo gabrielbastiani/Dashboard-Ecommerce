@@ -43,7 +43,6 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
             await apiClient.delete(`/deleteAllPhotos?product_id=${product_id}`);
             await apiClient.delete(`/deleteAllCategoiesProduct?product_id=${product_id}`);
             await apiClient.delete(`/deleteAvalietionProductID?product_id=${product_id}`);
-            await apiClient.delete(`/deleteParentIdBuyTogether?product_id=${product_id}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -100,7 +99,7 @@ export function ModalDeleteProduct({ isOpen, onRequestClose, product }: ModalDel
                 <TextModal
                     style={{ textAlign: 'center' }}
                 >
-                    Deseja mesmo deletar esse produto? Para isso, <br />será deletada todas as imagens e as variações desse produto também.
+                    Deseja mesmo deletar esse produto?
                 </TextModal>
 
                 <ContainerButton>
