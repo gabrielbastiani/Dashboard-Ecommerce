@@ -91,8 +91,8 @@ const Produto: React.FC = () => {
                 setNameBuy(response.data.nameGroup || "");
                 setIdBuy(response.data.id || "");
 
-            } catch (error) {/* @ts-ignore */
-                console.error(error.data.response);
+            } catch (error) {
+                console.error(error);
             }
         }
         findBuyTogether();
