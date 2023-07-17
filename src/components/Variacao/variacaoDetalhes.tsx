@@ -108,8 +108,8 @@ const VariacaoDetalhes = ({
                 setUpdateVariationOrder(response.data.order);
                 setStatusVariation(response.data.status || "");
 
-            } catch (error) {/* @ts-ignore */
-                console.log(error.response.data);
+            } catch (error) {
+                console.log(error);
             }
         }
         loadFirstVariation();
