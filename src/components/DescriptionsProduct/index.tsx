@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { ModalDeleteDescriptionProduct } from "../popups/ModalDeleteDescriptionProduct";
 import { Editor } from "@tinymce/tinymce-react";
 import { InputUpdate } from "../ui/InputUpdate";
+import { BlockDados } from "../../pages/Categorias/Categoria/styles";
+import { TextoDados } from "../TextoDados";
 
 
 export type DeleteDescriptions = {
@@ -36,6 +38,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [order, setOrder] = useState(Number);
 
     const [toogle, setToogle] = useState(!activeTab);
     const [cor, setCor] = useState('#999494');
@@ -135,6 +138,25 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         }
     }
 
+    async function updateOrderDescription(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateOrderDescription?descriptionProduct_id=${id}`,
+                { order: Number(order) }
+            );
+
+            toast.success('Ordem da descrição atualizada com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Ops erro ao atualizar a ordem dessa descrição.');
+        }
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
@@ -167,6 +189,20 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                     /* @ts-ignore */
                                     onChange={(e) => setTitle(e.target.value)}
                                     handleSubmit={() => updateTitleDescription(item.id)}
+                                />
+
+                                <TextoDados
+                                    chave={"Ordem"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={item.order}
+                                            type="number"
+                                            value={order}
+                                            /* @ts-ignore */
+                                            onChange={(e) => setOrder(e.target.value)}
+                                            handleSubmit={() => updateOrderDescription(item.id)}
+                                        />
+                                    }
                                 />
 
                                 <TituloTop
