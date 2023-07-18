@@ -20,6 +20,7 @@ import { ModalDeleteDescriptionProduct } from "../popups/ModalDeleteDescriptionP
 import { Editor } from "@tinymce/tinymce-react";
 import { InputUpdate } from "../ui/InputUpdate";
 import { TextoDados } from "../TextoDados";
+import { BlockDados } from "../../pages/Categorias/Categoria/styles";
 
 
 export type DeleteDescriptions = {
@@ -181,28 +182,36 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                     {descriptions.map((item) => {
                         return (
                             <>
-                                <InputUpdate
-                                    dado={item.title}
-                                    type="text"
-                                    value={title}
-                                    /* @ts-ignore */
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    handleSubmit={() => updateTitleDescription(item.id)}
-                                />
+                                <BlockDados
+                                    style={{ marginTop: '8px' }}
+                                >
+                                    <InputUpdate
+                                        dado={item.title}
+                                        type="text"
+                                        value={title}
+                                        /* @ts-ignore */
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        handleSubmit={() => updateTitleDescription(item.id)}
+                                    />
+                                </BlockDados>
 
-                                <TextoDados
-                                    chave={"Ordem"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={item.order}
-                                            type="number"
-                                            value={order}
-                                            /* @ts-ignore */
-                                            onChange={(e) => setOrder(e.target.value)}
-                                            handleSubmit={() => updateOrderDescription(item.id)}
-                                        />
-                                    }
-                                />
+                                <BlockDados
+                                    style={{ marginTop: '-5px' }}
+                                >
+                                    <TextoDados
+                                        chave={"Ordem"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={item.order}
+                                                type="number"
+                                                value={order}
+                                                /* @ts-ignore */
+                                                onChange={(e) => setOrder(e.target.value)}
+                                                handleSubmit={() => updateOrderDescription(item.id)}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
 
                                 <TituloTop
                                     key={item.id}
