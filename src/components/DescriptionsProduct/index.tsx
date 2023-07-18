@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ModalDeleteDescriptionProduct } from "../popups/ModalDeleteDescriptionProduct";
 import { Editor } from "@tinymce/tinymce-react";
+import { InputUpdate } from "../ui/InputUpdate";
 
 
 export type DeleteDescriptions = {
@@ -33,6 +34,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("");
 
+    const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
     const [toogle, setToogle] = useState(!activeTab);
@@ -109,6 +111,30 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         }
     }
 
+    async function updateTitleDescription(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            if (title === "") {
+                toast.error('Não deixe o titulo em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updateTitleDescription?descriptionProduct_id=${id}`,
+                    {
+                        title: title
+                    });
+
+                toast.success('Titulo da descrição atualizada com sucesso.');
+
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
+            }
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Ops erro ao atualizar o titulo dessa descrição.');
+        }
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
@@ -134,6 +160,15 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                     {descriptions.map((item) => {
                         return (
                             <>
+                                <InputUpdate
+                                    dado={item.title}
+                                    type="text"
+                                    value={title}
+                                    /* @ts-ignore */
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    handleSubmit={() => updateTitleDescription(item.id)}
+                                />
+
                                 <TituloTop
                                     key={item.id}
                                     style={{ backgroundColor: cor }}
