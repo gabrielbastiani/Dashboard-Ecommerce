@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { ModalDeleteDescriptionProduct } from "../popups/ModalDeleteDescriptionProduct";
 import { Editor } from "@tinymce/tinymce-react";
 import { InputUpdate } from "../ui/InputUpdate";
-import { BlockDados } from "../../pages/Categorias/Categoria/styles";
 import { TextoDados } from "../TextoDados";
 
 
