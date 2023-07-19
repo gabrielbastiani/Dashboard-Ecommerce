@@ -186,7 +186,7 @@ const Produto: React.FC = () => {
                         buyTogether_id: buyTogether.id
                     });
 
-                    stockproduct();
+                    setInterval(() => {stockproduct()}, 8000);
 
                 toast.success('Dado do produto atualizado com sucesso.');
 
