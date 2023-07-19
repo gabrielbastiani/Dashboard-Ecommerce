@@ -159,6 +159,11 @@ const Produto: React.FC = () => {
         }
     }
 
+    async function stockproduct() {
+        const apiClient = setupAPIClient();
+        await apiClient.put(`/getStockProduct`);
+    }
+
     async function updateProductData() {
         try {
             const apiClient = setupAPIClient();
@@ -180,6 +185,8 @@ const Produto: React.FC = () => {
                         urlVideo: urlVideo,/* @ts-ignore */
                         buyTogether_id: buyTogether.id
                     });
+
+                    stockproduct();
 
                 toast.success('Dado do produto atualizado com sucesso.');
 
