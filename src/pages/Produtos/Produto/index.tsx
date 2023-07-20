@@ -161,7 +161,7 @@ const Produto: React.FC = () => {
 
     async function stockproduct() {
         const apiClient = setupAPIClient();
-        await apiClient.put(`/getStockProduct`);
+        await apiClient.get(`/getStockProduct`);
     }
 
     async function updateProductData() {
@@ -186,7 +186,7 @@ const Produto: React.FC = () => {
                         buyTogether_id: buyTogether.id
                     });
 
-                    setInterval(() => {stockproduct()}, 8000);
+                    stockproduct()
 
                 toast.success('Dado do produto atualizado com sucesso.');
 
