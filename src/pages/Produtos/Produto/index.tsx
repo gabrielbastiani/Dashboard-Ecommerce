@@ -161,7 +161,7 @@ const Produto: React.FC = () => {
 
     async function stockproduct() {
         const apiClient = setupAPIClient();
-        await apiClient.get(`/getStockProduct`);
+        await apiClient.get(`/getStockProduct?product_id=${product_id}`);
     }
 
     async function updateProductData() {
