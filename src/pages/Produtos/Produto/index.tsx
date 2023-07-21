@@ -159,9 +159,26 @@ const Produto: React.FC = () => {
         }
     }
 
-    async function stockproduct() {
-        const apiClient = setupAPIClient();
-        await apiClient.get(`/getStockProduct?product_id=${product_id}`);
+    async function updateProductStock() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStockProduct?product_id=${product_id}`,
+                {
+                    stock: Number(stock)
+                });
+
+            await apiClient.get(`/getStockProduct?product_id=${product_id}`);
+
+            toast.success('Estoque do produto atualizado com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Ops erro ao atualizar o estoque do produto.');
+        }
     }
 
     async function updateProductData() {
@@ -177,7 +194,6 @@ const Produto: React.FC = () => {
                         price: Number(price),
                         promotion: Number(promotion),
                         sku: sku,
-                        stock: Number(stock),
                         weight: weight,
                         width: width,
                         height: height,
@@ -185,8 +201,6 @@ const Produto: React.FC = () => {
                         urlVideo: urlVideo,/* @ts-ignore */
                         buyTogether_id: buyTogether.id
                     });
-
-                    stockproduct()
 
                 toast.success('Dado do produto atualizado com sucesso.');
 
@@ -515,7 +529,7 @@ const Produto: React.FC = () => {
                                         }
                                     />
                                 </BlockDados>
-                                
+
                                 <BlockDados>
                                     <TextoDados
                                         chave={"Link vídeo do produto"}
@@ -621,7 +635,7 @@ const Produto: React.FC = () => {
                                                 value={stock}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setStock(e.target.value)}
-                                                handleSubmit={updateProductData}
+                                                handleSubmit={updateProductStock}
                                             />
                                         }
                                     />
