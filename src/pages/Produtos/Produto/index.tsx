@@ -162,16 +162,14 @@ const Produto: React.FC = () => {
     async function updateProductStock() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateStockProduct?product_id=${product_id}`,
-                {
-                    stock: Number(stock)
-                });
-
-            await apiClient.get(`/getStockProduct?product_id=${product_id}`);
+            await apiClient.put(`/updateStockProduct?product_id=${product_id}`, { stock: Number(stock) });
 
             toast.success('Estoque do produto atualizado com sucesso.');
 
-            setTimeout(() => {
+            setTimeout(async () => {
+                if (stock >= 1){
+                    await apiClient.get(`/getStockProduct?product_id=${product_id}`);
+                }
                 navigate(0);
             }, 3000);
 
