@@ -19,10 +19,6 @@ import { Mensagem, LabelMensagem, SendEmail } from './styles';
 import { RiMailSendLine } from 'react-icons/ri';
 
 
-export type DeleteContato = {
-    contact_id: string;
-}
-
 const Contato: React.FC = () => {
 
     let { contact_id } = useParams();
@@ -34,21 +30,20 @@ const Contato: React.FC = () => {
     const [sector, setSector] = useState('');
     const [message, setMessage] = useState('');
 
-    const [modalItem, setModalItem] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         async function loadContact() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findUniqueContact?contact_id=${contact_id}`);
+                const { data } = await apiClient.get(`/findUniqueContact?contact_id=${contact_id}`);
 
-                setName(response.data.name);
-                setEmail(response.data.email);
-                setPhone(response.data.phone);
-                setCompany(response.data.company);
-                setSector(response.data.sector);
-                setMessage(response.data.message);
+                setName(data.name || "");
+                setEmail(data.email || "");
+                setPhone(data.phone || "");
+                setCompany(data.company || "");
+                setSector(data.sector || "");
+                setMessage(data.message || "");
 
             } catch (error) {
                 console.log(error);
@@ -61,14 +56,7 @@ const Contato: React.FC = () => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete(contact_id: string) {
-        const apiClient = setupAPIClient();
-        const responseDelete = await apiClient.get('/findUniqueContact', {
-            params: {
-                contact_id: contact_id,
-            }
-        });
-        setModalItem(responseDelete.data || "");
+    async function handleOpenModalDelete() {
         setModalVisible(true);
     }
 
@@ -132,7 +120,7 @@ const Contato: React.FC = () => {
                                 <BlockDados>
                                     <TextoDados
                                         chave={'Empresa'}
-                                        dados={company}
+                                        dados={company || "Não é empresa"}
                                     />
                                 </BlockDados>
 
@@ -162,7 +150,7 @@ const Contato: React.FC = () => {
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
-                    contato={modalItem}
+                    contato={contact_id}
                 />
             )}
         </>

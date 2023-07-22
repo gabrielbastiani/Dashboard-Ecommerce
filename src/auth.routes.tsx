@@ -112,7 +112,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
 
             <Route path='/contatos' element={<Contatos />} />
-            <Route path='/contato/:contato_id' element={<Contato />} />
+            <Route path='/contato/:contact_id' element={<Contato />} />
 
             <Route path='/configuracoes' element={<Configuracoes />} />
             <Route path='/rede/:socialMedia_id' element={<Rede />} />

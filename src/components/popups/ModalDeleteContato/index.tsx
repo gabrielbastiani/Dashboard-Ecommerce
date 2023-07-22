@@ -5,13 +5,12 @@ import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
-import { DeleteContato } from '../../../pages/Contatos/Contato';
 
 
 interface DeleteContatos {
     isOpen: boolean;
     onRequestClose: () => void;
-    contato: DeleteContato;
+    contato: string;
 }
 
 export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteContatos) {
@@ -35,10 +34,8 @@ export function ModalDeleteContato({ isOpen, onRequestClose, contato }: DeleteCo
     async function handleDeleteContact() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const contact_id = contato.id;
 
-            await apiClient.delete(`/deleteContact?contact_id=${contact_id}`);
+            await apiClient.delete(`/deleteContact?contact_id=${contato}`);
             toast.success(`Contato deletada com sucesso.`);
 
             navigate('/contatos');

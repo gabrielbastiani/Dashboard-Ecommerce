@@ -11,7 +11,6 @@ import Select from "../../../components/ui/Select";
 import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Grid } from "../../Dashboard/styles";
 import { setupAPIClient } from "../../../services/api";
-import { TextArea } from "../../../components/ui/Input";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Editor } from "@tinymce/tinymce-react";
@@ -117,8 +116,15 @@ const NovoTexto: React.FC = () => {
                                     { label: "Rodapé Loja", value: "Rodapé Loja" },
                                     { label: "PopUp Menu Topo", value: "PopUp Menu Topo" },
                                     { label: "Header Topo", value: "Header Topo" },
+                                    { label: "Página Sobre", value: "Página Sobre" },
+                                    { label: "Politicas de Privacidade", value: "Politicas de Privacidade" },
                                     { label: "Página Contato", value: "Página Contato" },
-                                    { label: "Página Sobre", value: "Página Sobre" }
+                                    { label: "Trocas e Devoluções", value: "Trocas e Devoluções" },
+                                    { label: "Como Comprar", value: "Como Comprar" },
+                                    { label: "Segurança", value: "Segurança" },
+                                    { label: "Envios e Prazo de Entrega", value: "Envios e Prazo de Entrega" },
+                                    { label: "Perguntas Frequentes", value: "Perguntas Frequentes" },
+                                    { label: "Formas de Pagamento", value: "Formas de Pagamento" }
                                 ]
                             }/* @ts-ignore */
                             onChange={handleChangePosition}
