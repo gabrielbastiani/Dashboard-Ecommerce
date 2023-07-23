@@ -60,9 +60,7 @@ const SignupAdmin: React.FC = () => {
 
             await apiClient.post('/admin/createAdmin', { name: name, email: email, password: password });
 
-            toast.success('Cadastro de usuario ADMINISTRADOR feito com sucesso!')
-
-            console.log('Cadastro de usuario ADMINISTRADOR feito com sucesso!')
+            toast.success('Cadastro de usuario ADMINISTRADOR feito com sucesso!');
 
             setLoading(false);
 
