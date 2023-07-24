@@ -68,8 +68,7 @@ const SignupAdmin: React.FC = () => {
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            toast.error('Erro ao cadastrar!')
-            console.log("Ops erro ao cadastrar!")
+            toast.error('Erro ao cadastrar!');
         }
 
     }
