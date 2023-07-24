@@ -1,4 +1,4 @@
-import { useState, FormEvent, useRef } from 'react';
+import { useState, FormEvent, useRef, useEffect } from 'react';
 import logoLoginWhite from '../../assets/LogoBuilderWhite.png';
 import logoLoginBlack from '../../assets/LogoBuilderBlack.png';
 import { Input } from '../../components/ui/Input';
@@ -28,6 +28,36 @@ const SignupAdmin: React.FC = () => {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(email);
     }
 
+    const [superAdmin, setSuperAdmin] = useState("");
+
+    useEffect(() => {
+        async function loadSuperAdmin() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/admin/getSuperAdmin`);
+                setSuperAdmin(data || "");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadSuperAdmin();
+    }, []);
+
+    const [store, setStore] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function loadStore() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/store`);
+                setStore(data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadStore();
+    }, []);
+
     async function handleRegister(event: FormEvent) {
         event.preventDefault();
         try {/* @ts-ignore */
@@ -37,7 +67,6 @@ const SignupAdmin: React.FC = () => {
             } else {
                 console.log('Por favor, acerte o recaptcha!')
                 toast.error('Por favor, acerte o recaptcha!')
-
                 return;
             }
 
@@ -48,9 +77,7 @@ const SignupAdmin: React.FC = () => {
             }
 
             if (!isEmail(email)) {
-
                 toast.error('Por favor digite um email valido!');
-
                 return;
             }
 
@@ -58,8 +85,24 @@ const SignupAdmin: React.FC = () => {
 
             const apiClient = setupAPIClient();
 
-            await apiClient.post('/admin/createAdmin', { name: name, email: email, password: password });
+            /* @ts-ignore */
+            if (superAdmin.role === "ADMIN") {
+                try {
+                    if (store.length === 0) {
+                        toast.error('É preciso que seu super administrador cadastre os dados da loja/empresa antes de cadastrar novos usuarios empregados.');
+                        return;
+                    }
+                    await apiClient.post('/admin/createEmployee', { name: name, email: email, password: password });
+                    toast.success('Cadastro de usuario EMPREGADO feito com sucesso!');
+                    return;
+                } catch (error) {/* @ts-ignore */
+                    console.log(error.response.data);
+                    toast.error('Erro ao cadastrar empregado!');
+                }
+                return;
+            }
 
+            await apiClient.post('/admin/createAdmin', { name: name, email: email, password: password });
             toast.success('Cadastro de usuario ADMINISTRADOR feito com sucesso!');
 
             setLoading(false);
@@ -70,7 +113,6 @@ const SignupAdmin: React.FC = () => {
             console.log(error.response.data);
             toast.error('Erro ao cadastrar!');
         }
-
     }
 
     const onChange = () => {

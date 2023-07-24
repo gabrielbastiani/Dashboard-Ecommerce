@@ -14,6 +14,7 @@ type AdminProps = {
     id: string;
     name: string;
     email: string;
+    role: string;
     store_id: string;
 }
 
@@ -50,12 +51,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (token) {
             api.get('/admin/me').then(response => {
-                const { id, name, email, store_id } = response.data;
+                const { id, name, email, role, store_id } = response.data;
 
                 setAdmin({
                     id,
                     name,
                     email,
+                    role,
                     store_id
                 })
 
@@ -70,32 +72,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const response = await api.post('/admin/session', {
                 email,
                 password
-            })
+            });
 
-            const { id, name, store_id, token } = response.data;
+            const { id, name, store_id, role, token } = response.data;
 
             setCookie(undefined, '@storebuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
                 path: "/" // Quais caminhos terao acesso ao cookie
-            })
+            });
 
             setAdmin({
                 id,
                 name,
                 email,
+                role,
                 store_id
-            })
+            });
 
             //Passar para proximas requisiçoes o nosso token
             api.defaults.headers['Authorization'] = `Bearer ${token}`
 
-            toast.success('Logado com sucesso!')
+            toast.success('Logado com sucesso!');
 
         } catch (err) {
             toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
             /* @ts-ignore */
             toast.error(`${err.response.data.error}`);
-            console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err)
+            console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err);
         }
     }
 

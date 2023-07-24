@@ -43,6 +43,12 @@ const Perfil: React.FC = () => {
                 return;
             } else {
                 await apiClient.put(`/admin/updateNameAdminOrEmployee?admin_id=${admin.id}`, { name: userNames || dataName });
+                if (admin.role === "EMPLOYEE") {
+                    toast.success('Nome do empregado atualizado com sucesso.');
+                    refreshUserLoad();
+                    return;
+                }
+
                 toast.success('Nome do administrador atualizado com sucesso.');
                 refreshUserLoad();
             }
@@ -59,6 +65,11 @@ const Perfil: React.FC = () => {
                 return;
             } else {
                 await apiClient.put(`/admin/updateDateAdmin?admin_id=${admin.id}`, { email: emails || dataEmail });
+                if (admin.role === "EMPLOYEE") {
+                    toast.success('E-mail do empregado atualizado com sucesso.');
+                    refreshUserLoad();
+                    return;
+                }
                 toast.success('Email do administrador atualizado com sucesso.');
                 refreshUserLoad();
             }
