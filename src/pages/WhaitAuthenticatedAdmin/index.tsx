@@ -17,7 +17,7 @@ const WhaitAuthenticatedAdmin: React.FC = () => {
             {theme.title === 'light' && (
                 <LogImg src={logoLoginBlack} alt="Logo Builder Seu Negócio Online" />
             )}
-
+            
             <ContLogin>
                 <TextH1>AGUARDE POR FAVOR!</TextH1>
                 <TextLink>O super administrador vai analisar seu cadastro e assim autenticar sua conta.</TextLink>

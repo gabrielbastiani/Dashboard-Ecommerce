@@ -108,7 +108,7 @@ const SignupAdmin: React.FC = () => {
 
             setLoading(false);
 
-            navigate('/whaitAuthenticatedAdmin');
+            navigate('/loginAdmin');
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
