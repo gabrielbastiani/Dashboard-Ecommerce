@@ -18,7 +18,7 @@ const UserAuthenticatedAdmin: React.FC = () => {
 
             await apiClient.put(`/admin/authenticatedEmailAdmin?admin_id=${authenticated}`);
 
-            toast.success('Seu cadastro de administrador esta ativo para acessar o Dashboard.');
+            toast.success('Seu cadastro de empregado esta ativo para acessar o Dashboard.');
 
             navigate('/loginAdmin');
 
@@ -35,7 +35,7 @@ const UserAuthenticatedAdmin: React.FC = () => {
 
             <ContLogin>
 
-                <TextTitle>Confirme aqui, seu cadastro como administrador junto ao Loja Virtual para poder acessar!</TextTitle>
+                <TextTitle>Confirme aqui, seu cadastro como empregado junto ao Loja Virtual para poder acessar!</TextTitle>
 
                 <Button
                     onClick={() => handleAuthenticated()}

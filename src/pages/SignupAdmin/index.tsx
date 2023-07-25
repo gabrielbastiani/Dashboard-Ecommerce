@@ -94,7 +94,8 @@ const SignupAdmin: React.FC = () => {
                     }
                     await apiClient.post('/admin/createEmployee', { name: name, email: email, password: password });
                     toast.success('Cadastro de usuario EMPREGADO feito com sucesso!');
-                    return;
+                    setLoading(false);
+                    navigate('/whaitAuthenticatedAdmin');
                 } catch (error) {/* @ts-ignore */
                     console.log(error.response.data);
                     toast.error('Erro ao cadastrar empregado!');

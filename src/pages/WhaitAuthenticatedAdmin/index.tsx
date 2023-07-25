@@ -20,7 +20,7 @@ const WhaitAuthenticatedAdmin: React.FC = () => {
 
             <ContLogin>
                 <TextH1>AGUARDE POR FAVOR!</TextH1>
-                <TextLink>O Administrador Master analisar seu cadastro e assim autenticar sua conta.</TextLink>
+                <TextLink>O super administrador vai analisar seu cadastro e assim autenticar sua conta.</TextLink>
             </ContLogin>
         </ContainerCenter>
     )
