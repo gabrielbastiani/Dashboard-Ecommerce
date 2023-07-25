@@ -36,7 +36,7 @@ const LoginAdmin: React.FC = () => {
 		event.preventDefault();
 		try {
 			/* @ts-ignore */
-			/* if (captcha.current.getValue()) {
+			if (captcha.current.getValue()) {
 				console.log('Administrador válido!');
 				setUserValid(true);
 			} else {
@@ -44,7 +44,7 @@ const LoginAdmin: React.FC = () => {
 				toast.error('Por favor, acerte o recaptcha!');
 
 				return;
-			} */
+			}
 			/* @ts-ignore */
 			if (email === '' || password === '') {
 				toast.warning('Preencha os campos! (Email e Senha)')
@@ -107,14 +107,14 @@ const LoginAdmin: React.FC = () => {
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 
-					{/* <Recaptcha>
+					<Recaptcha>
 						<ReCAPTCHA
-							
+							/* @ts-ignore */
 							ref={captcha}
 							sitekey="6Lc8Hu8hAAAAAB4EHDuIsWxMk9Hfn5Wigm-RpdoB"
 							onChange={onChange}
 						/>
-					</Recaptcha> */}
+					</Recaptcha>
 
 					<Button
 						type="submit"
