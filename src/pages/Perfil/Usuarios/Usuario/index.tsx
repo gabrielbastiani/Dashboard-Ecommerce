@@ -16,6 +16,7 @@ import { InputUpdate } from "../../../../components/ui/InputUpdate";
 import { InputPost } from "../../../../components/ui/InputPost";
 import { useNavigate, useParams } from "react-router-dom";
 import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
+import Voltar from "../../../../components/Voltar";
 
 
 const Usuario: React.FC = () => {
@@ -235,6 +236,9 @@ const Usuario: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
+                    <Voltar
+                        url={'/usuarios'}
+                    />
                     <BlockTop>
                         <Titulos
                             tipo="h1"

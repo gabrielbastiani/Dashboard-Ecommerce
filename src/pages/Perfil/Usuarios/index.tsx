@@ -68,6 +68,8 @@ const Usuarios: React.FC = () => {
         dados.push({
             "Nome": item.name,
             "E-mail": item.email,
+            "Cargo": item.role === "EMPLOYEE" ? "Empregado" : item.role === "ADMIN" ? "Administrador" : null,
+            "Status": item.authenticated === false ? "Desativado" : item.authenticated === true ? "Ativado" : null,
             "Data de criação do usuario": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "botaoDetalhes": `/usuarios/usuario/${item.id}`
         });
@@ -107,7 +109,7 @@ const Usuarios: React.FC = () => {
                             />
 
                             <TabelaSimples
-                                cabecalho={["Nome", "E-mail", "Data de criação do usuario"]}
+                                cabecalho={["Nome", "E-mail", "Cargo", "Status", "Data de criação do usuario"]}
                                 dados={dados}
                                 textbutton={"Detalhes"}
                             />

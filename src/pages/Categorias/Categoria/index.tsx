@@ -39,7 +39,6 @@ import { SectionDate } from "../../Configuracoes/styles";
 import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } from "../../Configuracoes/ImagensInstitucionais/Imagem/styles";
 import { ModalDeleteImagemCategory } from "../../../components/popups/ModalDeleteImagemCategory";
 import VoltarNavagation from "../../../components/VoltarNavagation";
-import { AreaTexto } from "../../Configuracoes/TextosInstitucionais/Texto/styles";
 import { TextArea } from "../../../components/ui/Input";
 
 
