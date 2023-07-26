@@ -32,8 +32,8 @@ export const AuthContext = createContext({} as AuthContextData);
 export const signOut = () => {
     try {
         destroyCookie(undefined, '@storebuilder.token');
-        toast.success('Administrador deslogado com sucesso!');
-        console.log('Administrador deslogado com sucesso!');
+        toast.success('Usuario deslogado com sucesso!');
+        console.log('Usuario deslogado com sucesso!');
     } catch {
         toast.error('Erro ao deslogar!');
         console.log('erro ao deslogar');

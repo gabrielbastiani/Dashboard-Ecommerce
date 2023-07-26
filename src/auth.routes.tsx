@@ -53,6 +53,8 @@ import EditGrupoCompreJunto from './pages/Produtos/CompreJunto/editGrupoCompreJu
 import EditGroupFiltroCategory from './pages/Filtros/editGroupFiltroCategory';
 import Contrapropostas from './pages/Clientes/Contrapropostas';
 import Contraproposta from './pages/Clientes/Contrapropostas/contraproposta';
+import Usuarios from './pages/Perfil/Usuarios';
+import Usuario from './pages/Perfil/Usuarios/Usuario';
 
 
 const RoutesAuth: React.FC = () => {
@@ -125,6 +127,8 @@ const RoutesAuth: React.FC = () => {
             <Route path='/imagem/:imageStore_id' element={<Imagem />} />
 
             <Route path='/perfil' element={<Perfil />} />
+            <Route path='/usuarios' element={<Usuarios />} />
+            <Route path='/usuarios/usuario/:admin_id' element={<Usuario />} />
         </Routes>
     );
 }

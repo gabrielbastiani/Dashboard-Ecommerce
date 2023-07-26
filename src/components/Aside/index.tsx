@@ -40,7 +40,7 @@ const Aside: React.FC = () => {
 
     const navigate = useNavigate();
 
-    const { signOut } = useContext(AuthContext);
+    const { signOut, admin } = useContext(AuthContext);
     const { toggleTheme, theme } = useTheme();
 
     const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState(false);
@@ -50,6 +50,7 @@ const Aside: React.FC = () => {
     const [submenu1, setSubmenu1] = useState(false);
     const [submenu2, setSubmenu2] = useState(false);
     const [submenu3, setSubmenu3] = useState(false);
+    const [submenu4, setSubmenu4] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -65,6 +66,10 @@ const Aside: React.FC = () => {
 
     const handleSubMenu3 = () => {
         setSubmenu3(!submenu3);
+    }
+
+    const handleSubMenu4 = () => {
+        setSubmenu4(!submenu4);
     }
 
     const handleToggleMenu = () => {
@@ -212,10 +217,35 @@ const Aside: React.FC = () => {
                     </>
                     : null}
 
-                <MenuItemLink href="/perfil">
-                    <CgProfile />
-                    Perfil
-                </MenuItemLink>
+                {admin.role === "ADMIN" ? (
+                    <>
+                        <MenuItemLink onClick={handleSubMenu4} style={{ cursor: 'pointer' }} >
+                            <CgProfile />
+                            Perfil
+                        </MenuItemLink>
+
+                        {submenu4 ?
+                            <>
+                                <SubMenuItemLink href="/perfil" >
+                                    <MdPlayArrow />
+                                    Perfil
+                                </SubMenuItemLink>
+
+                                <SubMenuItemLink href='/usuarios' >
+                                    <MdPlayArrow />
+                                    Usuarios
+                                </SubMenuItemLink>
+                            </>
+                            : null}
+                    </>
+                ) :
+                    <>
+                        <MenuItemLink href="/perfil">
+                            <CgProfile />
+                            Perfil
+                        </MenuItemLink>
+                    </>
+                }
 
                 <MenuItemButton onClick={() => [signOut(), navigate("/loginAdmin"), navigate(0)]}>
                     <MdExitToApp />

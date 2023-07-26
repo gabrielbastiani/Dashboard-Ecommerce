@@ -35,7 +35,7 @@ const SignupAdmin: React.FC = () => {
             const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/admin/getSuperAdmin`);
-                setSuperAdmin(data || "");
+                setSuperAdmin(data.role || "");
             } catch (error) {
                 console.log(error);
             }
@@ -85,8 +85,7 @@ const SignupAdmin: React.FC = () => {
 
             const apiClient = setupAPIClient();
 
-            /* @ts-ignore */
-            if (superAdmin.role === "ADMIN") {
+            if (superAdmin === "ADMIN") {
                 try {
                     if (store.length === 0) {
                         toast.error('É preciso que seu super administrador cadastre os dados da loja/empresa antes de cadastrar novos usuarios empregados.');
@@ -137,8 +136,15 @@ const SignupAdmin: React.FC = () => {
             )}
 
             <ContLogin>
+                {superAdmin === "ADMIN" ? (
+                    <TextH1>Crie sua conta como EMPREGADO</TextH1>
+                ) :
+                    <>
+                        <TextH1>Crie sua conta de SUPER ADMINISTRADOR</TextH1>
+                        <TextLink>ATENÇÃO: Esse será o principal usuario do sistema/loja virtual.</TextLink>
+                    </>
+                }
 
-                <TextH1>Crie sua conta de ADMINISTRADOR</TextH1>
 
                 <Formulario onSubmit={handleRegister}>
 
