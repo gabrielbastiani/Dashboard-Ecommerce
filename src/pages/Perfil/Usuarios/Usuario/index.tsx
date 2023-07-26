@@ -238,7 +238,7 @@ const Usuario: React.FC = () => {
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo="Empregado"
+                            titulo="Usuario"
                         />
                         {showElement ?
                             <Button
