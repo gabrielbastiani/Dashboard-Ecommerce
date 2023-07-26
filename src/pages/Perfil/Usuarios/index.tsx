@@ -91,7 +91,7 @@ const Usuarios: React.FC = () => {
                     {dados.length < 1 ? (
                         <>
                             <Avisos
-                                texto="Não há empregados ainda..."
+                                texto="Não há usuarios ainda..."
                             />
                         </>
                     ) :
