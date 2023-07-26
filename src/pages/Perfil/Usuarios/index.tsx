@@ -102,7 +102,7 @@ const Usuarios: React.FC = () => {
                                 /* @ts-ignore */
                                 onChange={limits}
                                 opcoes={[
-                                    { label: "Todos empregados", value: "9999999" },
+                                    { label: "Todos usuarios", value: "9999999" },
                                     { label: "4", value: "4" },
                                     { label: "8", value: "8" }
                                 ]}
@@ -116,7 +116,7 @@ const Usuarios: React.FC = () => {
 
                             <ContainerPagination>
                                 <TotalBoxItems key={total}>
-                                    <TextTotal>Total de empregados: {total}</TextTotal>
+                                    <TextTotal>Total de usuarios: {total}</TextTotal>
                                 </TotalBoxItems>
                                 <ContainerCategoryPage>
                                     {currentPage > 1 && (
