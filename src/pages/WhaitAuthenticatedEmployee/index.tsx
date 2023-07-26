@@ -4,7 +4,7 @@ import { useTheme } from '../../contexts/theme';
 import { ContLogin, ContainerCenter, LogImg, TextH1, TextLink } from '../LoginAdmin/styles';
 
 
-const WhaitAuthenticatedAdmin: React.FC = () => {
+const WhaitAuthenticatedEmployee: React.FC = () => {
 
     const { theme } = useTheme();
 
@@ -27,4 +27,4 @@ const WhaitAuthenticatedAdmin: React.FC = () => {
 }
 
 
-export default WhaitAuthenticatedAdmin;
+export default WhaitAuthenticatedEmployee;

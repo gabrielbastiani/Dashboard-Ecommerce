@@ -6,7 +6,7 @@ import SignupAdmin from './pages/SignupAdmin';
 import RecoveryPasswordAdmin from './pages/RecoveryPasswordAdmin';
 import RecoverAdmin from './pages/RecoverAdmin';
 import UserAuthenticatedAdmin from './pages/UserAuthenticatedAdmin';
-import WhaitAuthenticatedAdmin from './pages/WhaitAuthenticatedAdmin';
+import WhaitAuthenticatedEmployee from './pages/WhaitAuthenticatedEmployee';
 
 
 const RaoutesApp: React.FC = () => {
@@ -18,7 +18,7 @@ const RaoutesApp: React.FC = () => {
             <Route path="/recoveryPasswordAdmin" element={<RecoveryPasswordAdmin />} />
             <Route path="/recoverAdmin/:passwordRecoveryAdmin_id" element={<RecoverAdmin />} />
             <Route path="/authenticated/:authenticated" element={<UserAuthenticatedAdmin />} />
-            <Route path="/whaitAuthenticatedAdmin" element={<WhaitAuthenticatedAdmin />} />
+            <Route path="/whaitAuthenticatedEmployee" element={<WhaitAuthenticatedEmployee />} />
         </Routes>
     );
 }
