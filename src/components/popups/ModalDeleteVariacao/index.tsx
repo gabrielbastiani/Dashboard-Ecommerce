@@ -1,6 +1,5 @@
 import Modal from 'react-modal';
-import { FiX } from 'react-icons/fi';
-import { DeleteVariacao } from '../../Variacao/variacaoDetalhes'; 
+import { FiX } from 'react-icons/fi'; 
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
@@ -11,7 +10,7 @@ import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './sty
 interface ModalDeleteVariacaoRequest {
     isOpen: boolean;
     onRequestClose: () => void;
-    variacao: DeleteVariacao;
+    variacao: string;
 }
 
 export function ModalDeleteVariacao({ isOpen, onRequestClose, variacao }: ModalDeleteVariacaoRequest) {
@@ -34,14 +33,11 @@ export function ModalDeleteVariacao({ isOpen, onRequestClose, variacao }: ModalD
     async function handleDeletePhotosVariacao() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const variation_id = variacao.id;
 
-            await apiClient.delete(`/deleteAllProductVariation?variation_id=${variation_id}`);
-            await apiClient.delete(`/deleteAllPhotosVariation?variation_id=${variation_id}`);
+            await apiClient.delete(`/deleteAllPhotosVariation?productVariation_id=${variacao}`);
 
         } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
+            console.log(error.response.data);
         }
 
         setTimeout(() => {
@@ -53,16 +49,14 @@ export function ModalDeleteVariacao({ isOpen, onRequestClose, variacao }: ModalD
     async function handleDeleteVariacao() {
         try {
             const apiClient = setupAPIClient();
-            /* @ts-ignore */
-            const variation_id = variacao.id;
 
-            await apiClient.delete(`/deleteVariation?variation_id=${variation_id}`);
+            await apiClient.delete(`/deleteVariation?productVariation_id=${variacao}`);
             toast.success(`Variação deletada com sucesso.`);
 
             onRequestClose();
 
         } catch (error) {/* @ts-ignore */
-            console.log(err.response.data);
+            console.log(error.response.data);
             toast.error('Ops erro ao deletar a variação!');
         }
         setTimeout(() => {

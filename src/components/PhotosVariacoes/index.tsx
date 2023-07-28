@@ -28,10 +28,9 @@ export type DeletePhotoVariacao = {
 
 interface PhotoVariacao {
     variation_id: string;
-    product_id: string;
 }
 
-const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
+const PhotosVariacoes = ({ variation_id }: PhotoVariacao) => {
 
     const navigate = useNavigate();
 
@@ -48,7 +47,7 @@ const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
         async function loadAllImagesVariation() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/allVariationImages?variation_id=${variation_id}`);
+                const response = await apiClient.get(`/allVariationImages?productVariation_id=${variation_id}`);
 
                 setAllPhotosVariantes(response.data);
 
@@ -89,7 +88,7 @@ const PhotosVariacoes = ({ variation_id, product_id }: PhotoVariacao) => {
 
             data.append('file', photoVariacao);
             /* @ts-ignore */
-            data.append('variation_id', variation_id);
+            data.append('productVariation_id', variation_id);
 
             const apiClient = setupAPIClient();
             await apiClient.post(`/createImageVariation`, data);

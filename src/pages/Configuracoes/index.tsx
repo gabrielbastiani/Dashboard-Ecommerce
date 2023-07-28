@@ -184,8 +184,8 @@ const Configuracoes: React.FC = () => {
 
             navigate(0);
 
-        } catch (error) {
-            console.error(error);
+        } catch (error) {/* @ts-ignore */
+            console.error(error.response.data);
         }
     }
 

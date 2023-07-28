@@ -329,7 +329,7 @@ const Produto: React.FC = () => {
         setIdVariation(id)
         const apiClient = setupAPIClient();
         try {
-            const responseVariation = await apiClient.get(`/findUniqueVariation?variation_id=${id}`);
+            const responseVariation = await apiClient.get(`/findUniqueVariation?productVariation_id=${id}`);
 
             setNameVariation(responseVariation.data.name || "");
 
@@ -781,7 +781,7 @@ const Produto: React.FC = () => {
                                     <ButtonVariacaoDetalhes key={names.id}
                                         onClick={() => loadVariationProduct(names.id)}
                                     >
-                                        {names.name}
+                                        {names.variationName}
                                     </ButtonVariacaoDetalhes>
                                 )
                             })}
