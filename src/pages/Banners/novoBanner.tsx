@@ -187,14 +187,10 @@ const NovoBanner: React.FC = () => {
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
-                                                { label: "Rodapé Loja", value: "Rodapé Loja" },
-                                                { label: "PopUp Menu Topo", value: "PopUp Menu Topo" },
-                                                { label: "Header Topo", value: "Header Topo" },
-                                                { label: "Página Contato", value: "Página Contato" },
-                                                { label: "Página Sobre", value: "Página Sobre" },
                                                 { label: "Banner Topo", value: "Banner Topo" },
                                                 { label: "Banner Mosaico Página Principal", value: "Banner Mosaico Página Principal" },
                                                 { label: "Banner Páginas Categorias", value: "Banner Páginas Categorias" },
+                                                { label: "Banner Páginas de Produto", value: "Banner Páginas de Produto" },
                                                 ...(categories || []).map((item) => ({ label: item.name, value: item.slug }))
                                             ]
                                         }/* @ts-ignore */
@@ -202,7 +198,7 @@ const NovoBanner: React.FC = () => {
                                     />
                                 </Block>
 
-                                {positionSelected === "Banner Topo" ? (
+                                {positionSelected === "Banner Topo" || positionSelected === "Banner Páginas Categorias" ? (
                                     null
                                 ) :
                                     <>

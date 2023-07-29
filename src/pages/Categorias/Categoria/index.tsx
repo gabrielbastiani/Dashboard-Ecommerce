@@ -73,6 +73,7 @@ const Categoria: React.FC = () => {
 
     const [modalItemImagem, setModalItemImagem] = useState("");
     const [modalVisibleImagem, setModalVisibleImagem] = useState(false);
+    
 
     useEffect(() => {
         async function refreshCategoryLoad() {

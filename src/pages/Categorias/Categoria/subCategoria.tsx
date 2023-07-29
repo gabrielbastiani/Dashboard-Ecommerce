@@ -32,6 +32,8 @@ const SubCategoria: React.FC = () => {
 
     const [storeID] = useState(admin.store_id);
 
+    const [nameCategory, setNameCategory] = useState("");
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [order, setOrder] = useState(Number);
@@ -74,6 +76,21 @@ const SubCategoria: React.FC = () => {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        async function loadDataCategory() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/finduniqueCategory?category_id=${parentId}`);
+
+                setNameCategory(data.name || "");
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        loadDataCategory();
+    }, [parentId]);
 
     useEffect(() => {
         async function findLoadRelation() {
@@ -149,7 +166,7 @@ const SubCategoria: React.FC = () => {
                     <BlockTop>
                         <Titulos
                             tipo="h1"
-                            titulo={`Cadastre uma subcategoria`}
+                            titulo={`Cadastre uma subcategoria para = ${nameCategory}`}
                         />
                         <Button
                             type="submit"
