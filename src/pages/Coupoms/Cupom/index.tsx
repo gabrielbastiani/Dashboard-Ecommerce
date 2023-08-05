@@ -23,7 +23,14 @@ import { ModalDeleteCupom } from "../../../components/popups/ModalDeleteCupom";
 import { Avisos } from "../../../components/Avisos";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { TextContent } from "../styles";
+import { BsTrash } from "react-icons/bs";
+import { ModalDeleteCupomProduct } from "../../../components/popups/ModalDeleteCupomProduct";
+import Select from "../../../components/ui/Select";
 
+
+export type DeleteProductCupon = {
+    id: string;
+}
 
 const Cupom: React.FC = () => {
 
@@ -39,11 +46,13 @@ const Cupom: React.FC = () => {
     const [productSelected, setProductSelected] = useState();
     const [product, setProduct] = useState<any[]>([]);
     const [active, setActive] = useState("");
-    const [productCupom, setProductCupom] = useState("");
 
     const [productInCupon, setProductInCupon] = useState<any[]>([]);
 
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [modalVisibleProduct, setModalVisibleProduct] = useState(false);
+    const [modalItem, setModalItem] = useState("");
 
 
     useEffect(() => {
@@ -89,7 +98,6 @@ const Cupom: React.FC = () => {
                 setStartDate(data.startDate || "");
                 setEndDate(data.endDate || "");
                 setActive(data.active || "");
-                setProductCupom(data.cupomsproducts || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -180,12 +188,52 @@ const Cupom: React.FC = () => {
         }
     }
 
+    async function handleRegisterProductInCupom() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post(`/createProductCoupon`, {
+                cupon_id: cupon_id,
+                product_id: productSelected
+            });
+
+            toast.success('Produto cadastrado no cupom com sucesso.');
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Erro ao cadastrar o produto no cupom.');
+        }
+
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
 
     async function handleOpenModalDelete() {
+        if (productInCupon.length >= 1) {
+            toast.error("Delete todos produtos vinculados a esse cupom antes, para poder deletar o cupom!!!");
+            return;
+        }
         setModalVisible(true);
+    }
+
+    function handleCloseModalDeleteProduct() {
+        setModalVisibleProduct(false);
+    }
+
+    async function handleOpenModalDeleteProductCupom(id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueProductCoupon', {
+            params: {
+                cuponProduct_id: id,
+            }
+        });
+        setModalItem(response.data || "");
+        setModalVisibleProduct(true);
     }
 
     Modal.setAppElement('body');
@@ -273,7 +321,7 @@ const Cupom: React.FC = () => {
 
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"Banner ativado?"}
+                                        chave={"Cupom ativado?"}
                                         dados={
                                             <ButtonSelect
                                                 /* @ts-ignore */
@@ -292,10 +340,35 @@ const Cupom: React.FC = () => {
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
                                     />
+                                    <br />
+                                    <Button
+                                        onClick={updateDatasCupon}
+                                    >
+                                        Atualizar Descrição
+                                    </Button>
                                 </Block>
                             </SectionDate>
 
                             <SectionDate>
+                                <Block>
+                                    <Etiqueta>Vincule esse cupom algun(s) produto(s) se desejar:</Etiqueta>
+                                    <Select
+                                        value={productSelected}
+                                        opcoes={
+                                            [
+                                                { label: "Selecionar...", value: "" },
+                                                ...(product || []).map((item) => ({ label: item.name, value: item.id }))
+                                            ]
+                                        }/* @ts-ignore */
+                                        onChange={handleChangeProduct}
+                                    />
+                                    <Button
+                                        onClick={handleRegisterProductInCupom}
+                                    >
+                                        Salvar Produto no Cupom
+                                    </Button>
+                                </Block>
+                                <br />
                                 <Etiqueta
                                     style={{ color: 'red', fontSize: '15px' }}
                                 >
@@ -363,7 +436,6 @@ const Cupom: React.FC = () => {
                                             key={item.id}
                                         >
                                             <Titulos tipo="h1" titulo={item.product.name} />
-
                                             <BlockDados>
                                                 <TextoDados
                                                     chave={"Atualizar produto"}
@@ -384,12 +456,22 @@ const Cupom: React.FC = () => {
                                                     }
                                                 />
                                             </BlockDados>
-
-                                            <GridDate>
+                                            <SectionDate>
                                                 <SectionDate>
-                                                    <TextContent>SKU: {item.product.sku}</TextContent>
+                                                    <BlockDados>
+                                                        <TextContent>SKU: {item.product.sku}</TextContent>
+                                                    </BlockDados>
                                                 </SectionDate>
-                                            </GridDate>
+                                                <BlockDados>
+                                                    <BsTrash
+                                                        onClick={() => handleOpenModalDeleteProductCupom(item.id)}
+                                                        style={{ cursor: 'pointer', margin: '13px 0' }}
+                                                        color="red"
+                                                        size={35}
+                                                    />
+                                                </BlockDados>
+
+                                            </SectionDate>
                                         </Card>
                                     </>
                                 )
@@ -405,6 +487,14 @@ const Cupom: React.FC = () => {
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
                     cuponId={cupon_id}
+                />
+            )}
+            {modalVisibleProduct && (
+                <ModalDeleteCupomProduct
+                    isOpen={modalVisibleProduct}
+                    onRequestClose={handleCloseModalDeleteProduct}
+                    /* @ts-ignore */
+                    cuponProductId={modalItem}
                 />
             )}
         </>
