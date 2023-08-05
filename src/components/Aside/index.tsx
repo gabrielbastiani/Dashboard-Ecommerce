@@ -34,6 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
 import { FaFilter } from 'react-icons/fa';
 import { IoIosPeople } from 'react-icons/io';
+import { RiCoupon2Fill } from 'react-icons/ri';
 
 
 const Aside: React.FC = () => {
@@ -172,6 +173,11 @@ const Aside: React.FC = () => {
 
                     </>
                 ) : null}
+
+                <MenuItemLink href='/coupoms' >
+                    <RiCoupon2Fill />
+                    Cupoms
+                </MenuItemLink>
 
                 <MenuItemLink href='/filterGrupos' >
                     <FaFilter />

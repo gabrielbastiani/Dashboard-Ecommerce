@@ -55,6 +55,9 @@ import Contrapropostas from './pages/Clientes/Contrapropostas';
 import Contraproposta from './pages/Clientes/Contrapropostas/contraproposta';
 import Usuarios from './pages/Perfil/Usuarios';
 import Usuario from './pages/Perfil/Usuarios/Usuario';
+import Coupoms from './pages/Coupoms';
+import NovoCupom from './pages/Coupoms/novoCupom';
+import Cupom from './pages/Coupoms/Cupom';
 
 
 const RoutesAuth: React.FC = () => {
@@ -86,6 +89,10 @@ const RoutesAuth: React.FC = () => {
             <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
             <Route path='/avaliacao/:slug/:avalietion_id' element={<Avaliacao />} />
             <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
+
+            <Route path='/coupoms' element={<Coupoms />} />
+            <Route path='/cupom/novo' element={<NovoCupom />} />
+            <Route path='/cupom/:cupon_id' element={<Cupom />} />
             
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />

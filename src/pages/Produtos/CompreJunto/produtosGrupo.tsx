@@ -311,8 +311,7 @@ const ProdutosGrupo: React.FC = () => {
                                                     />
                                                 </BlockDados>
 
-                                                <GridDate key={item.id}>
-
+                                                <GridDate>
                                                     <SectionDate>
                                                         {item.product.photoproducts.map((img: any) => {
                                                             return (

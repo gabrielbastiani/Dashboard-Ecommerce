@@ -171,7 +171,7 @@ const Banner: React.FC = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar a disponibilidade do produto.');
+            toast.error('Ops erro ao atualizar a disponibilidade do banner.');
         }
 
         if (active === "Nao") {
