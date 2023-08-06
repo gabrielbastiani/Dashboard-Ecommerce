@@ -26,6 +26,7 @@ import { TextContent } from "../styles";
 import { BsTrash } from "react-icons/bs";
 import { ModalDeleteCupomProduct } from "../../../components/popups/ModalDeleteCupomProduct";
 import Select from "../../../components/ui/Select";
+import { InputPost } from "../../../components/ui/InputPost";
 
 
 export type DeleteProductCupon = {
@@ -46,6 +47,16 @@ const Cupom: React.FC = () => {
     const [productSelected, setProductSelected] = useState();
     const [product, setProduct] = useState<any[]>([]);
     const [active, setActive] = useState("");
+
+    const [conditionalSelected, setConditionalSelected] = useState();
+    const [indexSelected, setIndexSelected] = useState();
+
+    function handleChangeConditional(e: any) {
+        setConditionalSelected(e.target.value);
+    }
+
+    const [action, setAction] = useState("");
+    const [value, setValue] = useState("");
 
     const [productInCupon, setProductInCupon] = useState<any[]>([]);
 
@@ -209,6 +220,25 @@ const Cupom: React.FC = () => {
 
     }
 
+    async function handleRegisterConditionalCoupon() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post(`/createConditionalCoupon`, {
+                cupon_id: cupon_id,
+                conditional: conditionalSelected,
+                value: value
+            });
+
+            setTimeout(() => {
+                navigate(0);
+            }, 3000);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+
+    }
+
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
@@ -237,6 +267,7 @@ const Cupom: React.FC = () => {
     }
 
     Modal.setAppElement('body');
+
 
 
     return (
@@ -419,6 +450,63 @@ const Cupom: React.FC = () => {
                                 >
                                     Ativar programação
                                 </Button>
+                                <br />
+                                <br />
+                                <Block>
+                                    <Etiqueta>Defina a condicional para esse cupom/promoção:</Etiqueta>
+                                    <Select
+                                        value={conditionalSelected}
+                                        opcoes={
+                                            [
+                                                { label: "Selecionar...", value: "" },
+                                                { label: "Valor de desconto no valor subtotal (soma dos produtos)", value: "valor" },
+                                                { label: "Valor de desconto no valor total (desconto é aplicado no pedido sem considerar o valor do frete)", value: "valor" },
+                                                { label: "Valor de desconto no valor do frete", value: "valor" },
+                                                { label: "Percentual de desconto no valor do frete", value: "porcento" },
+                                                { label: "Percentual de desconto no valor subtotal (soma dos produtos)", value: "porcento" }
+                                            ]
+                                        }/* @ts-ignore */
+                                        onChange={handleChangeConditional}
+                                    />
+                                </Block>
+
+                                {conditionalSelected === "valor" ? (
+                                    <Block>
+                                        <Etiqueta>Qual é o valor em preço(R$) para essa ação:</Etiqueta>
+                                        <InputPost
+                                            type="number"
+                                            placeholder="Digite aqui..."
+                                            onChange={(e) => setValue(e.target.value)}
+                                        />
+                                        <Button
+                                            onClick={handleRegisterConditionalCoupon}
+                                        >
+                                            Salvar
+                                        </Button>
+                                    </Block>
+                                ) :
+                                    null
+                                }
+
+                                {conditionalSelected === "porcento" ? (
+                                    <Block>
+                                        <Etiqueta>Porcentagem(%) para essa ação:</Etiqueta>
+                                        <InputPost
+                                            type="number"
+                                            placeholder="Digite aqui..."
+                                            onChange={(e) => setValue(e.target.value)}
+                                        />
+                                        <br />
+                                        <Button
+                                            onClick={handleRegisterConditionalCoupon}
+                                        >
+                                            Salvar
+                                        </Button>
+                                    </Block>
+                                ) :
+                                    null
+                                }
+
                             </SectionDate>
                         </GridDate>
                     </Card>

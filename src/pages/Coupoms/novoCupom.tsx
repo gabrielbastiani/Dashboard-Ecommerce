@@ -24,6 +24,7 @@ const NovoCupom: React.FC = () => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [code, setCode] = useState("");
+    
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [amountCoupon, setAmountCoupon] = useState(Number);
@@ -113,7 +114,7 @@ const NovoCupom: React.FC = () => {
                     ) :
                         <>
                             <Voltar url='/coupoms' />
-                            
+
                             <BlockTop>
                                 <Titulos
                                     tipo="h1"
