@@ -49,14 +49,12 @@ const Cupom: React.FC = () => {
     const [active, setActive] = useState("");
 
     const [conditionalSelected, setConditionalSelected] = useState();
-    const [indexSelected, setIndexSelected] = useState();
 
     function handleChangeConditional(e: any) {
         setConditionalSelected(e.target.value);
     }
 
-    const [action, setAction] = useState("");
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(Number);
 
     const [productInCupon, setProductInCupon] = useState<any[]>([]);
 
@@ -229,12 +227,15 @@ const Cupom: React.FC = () => {
                 value: value
             });
 
+            toast.success(`Valor salvo com sucesso.`);
+
             setTimeout(() => {
                 navigate(0);
             }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
+            toast.error('Erro ao cadastrar o valor no cupom.');
         }
 
     }
@@ -476,6 +477,7 @@ const Cupom: React.FC = () => {
                                         <InputPost
                                             type="number"
                                             placeholder="Digite aqui..."
+                                            /* @ts-ignore */
                                             onChange={(e) => setValue(e.target.value)}
                                         />
                                         <Button
@@ -494,6 +496,7 @@ const Cupom: React.FC = () => {
                                         <InputPost
                                             type="number"
                                             placeholder="Digite aqui..."
+                                            /* @ts-ignore */
                                             onChange={(e) => setValue(e.target.value)}
                                         />
                                         <br />
