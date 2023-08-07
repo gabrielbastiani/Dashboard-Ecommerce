@@ -460,11 +460,13 @@ const Cupom: React.FC = () => {
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
-                                                { label: "Valor de desconto no valor subtotal (soma dos produtos)", value: "valor" },
-                                                { label: "Valor de desconto no valor total (desconto é aplicado no pedido sem considerar o valor do frete)", value: "valor" },
+                                                { label: "Valor de desconto em todos os produtos da loja", value: "allProductsValue" },
+                                                { label: "Valor de desconto no valor total (soma dos produtos)", value: "valor" },
+                                                { label: "Frete grátis total", value: "freeShipping" },
                                                 { label: "Valor de desconto no valor do frete", value: "valor" },
                                                 { label: "Percentual de desconto no valor do frete", value: "porcento" },
-                                                { label: "Percentual de desconto no valor subtotal (soma dos produtos)", value: "porcento" }
+                                                { label: "Percentual de desconto no valor total (soma dos produtos)", value: "porcento" },
+                                                { label: "Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent" }
                                             ]
                                         }/* @ts-ignore */
                                         onChange={handleChangeConditional}
