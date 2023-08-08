@@ -276,6 +276,11 @@ const Cupom: React.FC = () => {
             toast.error("Delete todos produtos vinculados a esse cupom antes, para poder deletar o cupom!!!");
             return;
         }
+
+        if (conditionalCupom.length >= 1) {
+            toast.error("Delete a condição do cupom vinculada antes, para poder deletar o cupom!!!");
+            return;
+        }
         setModalVisible(true);
     }
 
