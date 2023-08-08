@@ -475,7 +475,7 @@ const Cupom: React.FC = () => {
                                     />
                                 </Block>
 
-                                {conditionalSelected === "valor" ? (
+                                {conditionalSelected === "productsValue" || conditionalSelected === "allProductsValue" || conditionalSelected === "valueProduct" || conditionalSelected === "valueShipping" ? (
                                     <Block>
                                         <Etiqueta>Qual é o valor em preço(R$) para essa ação:</Etiqueta>
                                         <InputPost
@@ -494,7 +494,7 @@ const Cupom: React.FC = () => {
                                     null
                                 }
 
-                                {conditionalSelected === "porcento" ? (
+                                {conditionalSelected === "shippingPercent" || conditionalSelected === "percent" || conditionalSelected === "percentAll" || conditionalSelected === "allProductsValuePercent" ? (
                                     <Block>
                                         <Etiqueta>Porcentagem(%) para essa ação:</Etiqueta>
                                         <InputPost
