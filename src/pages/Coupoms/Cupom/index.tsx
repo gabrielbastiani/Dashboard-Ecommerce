@@ -22,14 +22,19 @@ import { TextArea } from "../../../components/ui/Input";
 import { ModalDeleteCupom } from "../../../components/popups/ModalDeleteCupom";
 import { Avisos } from "../../../components/Avisos";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
-import { TextContent } from "../styles";
-import { BsTrash } from "react-icons/bs";
+import { BoxConditional, ConditionalText, ContainerConditional, TextContent } from "../styles";
+import { BsFillTrashFill, BsTrash } from "react-icons/bs";
 import { ModalDeleteCupomProduct } from "../../../components/popups/ModalDeleteCupomProduct";
 import Select from "../../../components/ui/Select";
 import { InputPost } from "../../../components/ui/InputPost";
+import { ModalDeleteCupomConditional } from "../../../components/popups/ModalDeleteCupomConditional";
 
 
 export type DeleteProductCupon = {
+    id: string;
+}
+
+export type DeleteConditional = {
     id: string;
 }
 
@@ -48,6 +53,8 @@ const Cupom: React.FC = () => {
     const [product, setProduct] = useState<any[]>([]);
     const [active, setActive] = useState("");
 
+    const [conditionalCupom, setConditionalCupom] = useState<any[]>([]);
+
     const [conditionalSelected, setConditionalSelected] = useState();
 
     function handleChangeConditional(e: any) {
@@ -63,6 +70,22 @@ const Cupom: React.FC = () => {
     const [modalVisibleProduct, setModalVisibleProduct] = useState(false);
     const [modalItem, setModalItem] = useState("");
 
+    const [modalVisibleConditional, setModalVisibleConditional] = useState(false);
+    const [modalItemConditional, setModalItemConditional] = useState("");
+
+
+    useEffect(() => {
+        async function loadConditional() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/allConditionalCoupon?cupon_id=${cupon_id}`);
+                setConditionalCupom(data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadConditional();
+    }, [cupon_id]);
 
     useEffect(() => {
         async function loadProductsInCupoms() {
@@ -221,6 +244,10 @@ const Cupom: React.FC = () => {
     async function handleRegisterConditionalCoupon() {
         const apiClient = setupAPIClient();
         try {
+            if (value === 0) {
+                toast.error('Não deixe o valor em branco!!!');
+                return;
+            }
             await apiClient.post(`/createConditionalCoupon`, {
                 cupon_id: cupon_id,
                 conditional: conditionalSelected,
@@ -265,6 +292,21 @@ const Cupom: React.FC = () => {
         });
         setModalItem(response.data || "");
         setModalVisibleProduct(true);
+    }
+
+    function handleCloseModalDeleteConditional() {
+        setModalVisibleConditional(false);
+    }
+
+    async function handleOpenModalDeleteConditional(id: string) {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/findUniqueConditionalCupon', {
+            params: {
+                couponConditional_id: id
+            }
+        });
+        setModalItemConditional(response.data || "");
+        setModalVisibleConditional(true);
     }
 
     Modal.setAppElement('body');
@@ -453,67 +495,172 @@ const Cupom: React.FC = () => {
                                 </Button>
                                 <br />
                                 <br />
-                                <Block>
-                                    <Etiqueta>Defina a condicional para esse cupom/promoção:</Etiqueta>
-                                    <Select
-                                        value={conditionalSelected}
-                                        opcoes={
-                                            [
-                                                { label: "Selecionar...", value: "" },
-                                                { label: "Valor de desconto", value: "productsValue" },
-                                                { label: "Valor de desconto em todos os produtos da loja", value: "allProductsValue" },
-                                                { label: "Valor de desconto no valor total", value: "valueProduct" },
-                                                { label: "Frete grátis total", value: "freeShipping" },
-                                                { label: "Valor de desconto no valor do frete", value: "valueShipping" },
-                                                { label: "Percentual de desconto no valor do frete", value: "shippingPercent" },
-                                                { label: "Percentual de desconto", value: "percent" },
-                                                { label: "Percentual de desconto no valor total", value: "percentAll" },
-                                                { label: "Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent" }
-                                            ]
-                                        }/* @ts-ignore */
-                                        onChange={handleChangeConditional}
-                                    />
-                                </Block>
-
-                                {conditionalSelected === "productsValue" || conditionalSelected === "allProductsValue" || conditionalSelected === "valueProduct" || conditionalSelected === "valueShipping" ? (
-                                    <Block>
-                                        <Etiqueta>Qual é o valor em preço(R$) para essa ação:</Etiqueta>
-                                        <InputPost
-                                            type="number"
-                                            placeholder="Digite aqui..."
-                                            /* @ts-ignore */
-                                            onChange={(e) => setValue(e.target.value)}
-                                        />
-                                        <Button
-                                            onClick={handleRegisterConditionalCoupon}
-                                        >
-                                            Salvar
-                                        </Button>
-                                    </Block>
-                                ) :
-                                    null
-                                }
-
-                                {conditionalSelected === "shippingPercent" || conditionalSelected === "percent" || conditionalSelected === "percentAll" || conditionalSelected === "allProductsValuePercent" ? (
-                                    <Block>
-                                        <Etiqueta>Porcentagem(%) para essa ação:</Etiqueta>
-                                        <InputPost
-                                            type="number"
-                                            placeholder="Digite aqui..."
-                                            /* @ts-ignore */
-                                            onChange={(e) => setValue(e.target.value)}
-                                        />
+                                {conditionalCupom?.length >= 1 ? (
+                                    <ContainerConditional>
                                         <br />
-                                        <Button
-                                            onClick={handleRegisterConditionalCoupon}
-                                        >
-                                            Salvar
-                                        </Button>
-                                    </Block>
-                                ) :
-                                    null
-                                }
+                                        <Titulos tipo="h4" titulo="Condição do cupom:" />
+                                        <br />
+                                        {conditionalCupom.map((con) => {
+                                            return (
+                                                <BoxConditional
+                                                    key={con?.id}
+                                                >
+                                                    {con?.conditional === "productsValue" ? (
+                                                        <>
+                                                            <ConditionalText>Valor de desconto</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
 
+                                                    {con?.conditional === "allProductsValue" ? (
+                                                        <>
+                                                            <ConditionalText>Valor de desconto em todos os produtos da loja</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "valueProduct" ? (
+                                                        <>
+                                                            <ConditionalText>Valor de desconto no valor total</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "freeShipping" ? (
+                                                        <>
+                                                            <ConditionalText>Frete grátis total</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "valueShipping" ? (
+                                                        <>
+                                                            <ConditionalText>Valor de desconto no valor do frete</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "shippingPercent" ? (
+                                                        <>
+                                                            <ConditionalText>Percentual de desconto no valor do frete</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "percent" ? (
+                                                        <>
+                                                            <ConditionalText>Percentual de desconto</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "percentAll" ? (
+                                                        <>
+                                                            <ConditionalText>Percentual de desconto no valor total</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+
+                                                    {con?.conditional === "allProductsValuePercent" ? (
+                                                        <>
+                                                            <ConditionalText>Percentual de desconto em todos os produtos da loja</ConditionalText>
+                                                            <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
+                                                        </>
+                                                    ) :
+                                                        null
+                                                    }
+                                                </BoxConditional>
+                                            )
+                                        })}
+                                    </ContainerConditional>
+                                ) :
+                                    <>
+                                        <Block>
+                                            <br />
+                                            <Etiqueta>Defina a condicional para esse cupom/promoção:</Etiqueta>
+                                            <Select
+                                                value={conditionalSelected}
+                                                opcoes={
+                                                    [
+                                                        { label: "Selecionar...", value: "" },
+                                                        { label: "Valor de desconto", value: "productsValue" },
+                                                        { label: "Valor de desconto em todos os produtos da loja", value: "allProductsValue" },
+                                                        { label: "Valor de desconto no valor total", value: "valueProduct" },
+                                                        { label: "Frete grátis total", value: "freeShipping" },
+                                                        { label: "Valor de desconto no valor do frete", value: "valueShipping" },
+                                                        { label: "Percentual de desconto no valor do frete", value: "shippingPercent" },
+                                                        { label: "Percentual de desconto", value: "percent" },
+                                                        { label: "Percentual de desconto no valor total", value: "percentAll" },
+                                                        { label: "Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent" }
+                                                    ]
+                                                }/* @ts-ignore */
+                                                onChange={handleChangeConditional}
+                                            />
+                                        </Block>
+
+                                        {conditionalSelected === "productsValue" || conditionalSelected === "allProductsValue" || conditionalSelected === "valueProduct" || conditionalSelected === "valueShipping" ? (
+                                            <Block>
+                                                <Etiqueta>Qual é o valor em preço(R$) para essa ação:</Etiqueta>
+                                                <InputPost
+                                                    type="number"
+                                                    placeholder="Digite aqui..."
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setValue(e.target.value)}
+                                                />
+                                                {conditionalCupom?.length >= 1 ? (
+                                                    <Avisos texto="Apague a condição existente para cadastrar outra..." />
+                                                ) :
+                                                    <Button
+                                                        onClick={handleRegisterConditionalCoupon}
+                                                    >
+                                                        Salvar
+                                                    </Button>
+                                                }
+                                            </Block>
+                                        ) :
+                                            null
+                                        }
+
+                                        {conditionalSelected === "shippingPercent" || conditionalSelected === "percent" || conditionalSelected === "percentAll" || conditionalSelected === "allProductsValuePercent" ? (
+                                            <Block>
+                                                <Etiqueta>Porcentagem(%) para essa ação:</Etiqueta>
+                                                <InputPost
+                                                    type="number"
+                                                    placeholder="Digite aqui..."
+                                                    /* @ts-ignore */
+                                                    onChange={(e) => setValue(e.target.value)}
+                                                />
+                                                <br />
+                                                <Button
+                                                    onClick={handleRegisterConditionalCoupon}
+                                                >
+                                                    Salvar
+                                                </Button>
+                                            </Block>
+                                        ) :
+                                            null
+                                        }
+
+                                        <Avisos texto="Não há condição aplicada a esse cupom ainda..." />
+
+                                    </>
+                                }
                             </SectionDate>
                         </GridDate>
                     </Card>
@@ -590,6 +737,14 @@ const Cupom: React.FC = () => {
                     onRequestClose={handleCloseModalDeleteProduct}
                     /* @ts-ignore */
                     cuponProductId={modalItem}
+                />
+            )}
+            {modalVisibleConditional && (
+                <ModalDeleteCupomConditional
+                    isOpen={modalVisibleConditional}
+                    onRequestClose={handleCloseModalDeleteConditional}
+                    /* @ts-ignore */
+                    cuponConditionalId={modalItemConditional}
                 />
             )}
         </>
