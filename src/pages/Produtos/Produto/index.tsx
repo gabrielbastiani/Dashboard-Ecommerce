@@ -79,6 +79,33 @@ const Produto: React.FC = () => {
     const [nameBuy, setNameBuy] = useState("");
     const [idBuy, setIdBuy] = useState("");
 
+    function removerAcentos(s: any) {
+        return s.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/ +/g, "")
+            .replace(/-{2,}/g, "")
+            .replace(/[/]/g, "");
+    }
+
+    var priceFormated = String(price);
+    priceFormated = priceFormated + '';
+    /* @ts-ignore */
+    priceFormated = parseInt(priceFormated.replace(/[\D]+/g, ''));
+    priceFormated = priceFormated + '';
+    priceFormated = priceFormated.replace(/([0-9]{2})$/g, ",$1");
+
+    if (priceFormated.length > 6) {
+        priceFormated = priceFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    /* @ts-ignore */
+    // eslint-disable-next-line eqeqeq
+    if (priceFormated == 'NaN') priceFormated = '';
+    const formatedPricePointer = priceFormated.replace(",", "");
+    const formatedPrice = formatedPricePointer.replace(".", "");
+    
+    console.log(formatedPrice)
+
 
     var peso = weight,
         integer = peso.split(',')[0];
@@ -202,7 +229,7 @@ const Produto: React.FC = () => {
                 await apiClient.put(`/updateAllDateProduct?product_id=${product_id}`,
                     {
                         name: name,
-                        price: Number(price),
+                        price: Number(formatedPrice),
                         promotion: Number(promotion),
                         sku: sku,
                         weight: peso,
@@ -481,12 +508,13 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
-                                                dado={price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                dado={price.toLocaleString('pt-BR')}
                                                 type="text"
+                                                maxLength={9}
                                                 /* @ts-ignore */
                                                 placeholder={price}
                                                 /* @ts-ignore */
-                                                value={price}
+                                                value={priceFormated}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPrice(e.target.value)}
                                                 handleSubmit={updateProductData}
@@ -677,7 +705,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 dado={width}
-                                                maxLength={2}                                                type="text"
+                                                maxLength={2} type="text"
                                                 /* @ts-ignore */
                                                 placeholder={width}
                                                 value={width}
