@@ -6,7 +6,9 @@ import {
     TituloTop,
     TabContents,
     EditBoxDesc,
-    TextButton
+    TextButton,
+    ContainerDescriptions,
+    SectionTitleDescriptions
 } from './styles';
 import { setupAPIClient } from "../../services/api";
 import { ButtonConfirm } from "../ui/SelectUpdate/styles";
@@ -179,9 +181,9 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         <>
             <TableSection>
                 <Cabecalho>
-                    {descriptions.map((item) => {
+                    {descriptions.map((item, index) => {
                         return (
-                            <>
+                            <SectionTitleDescriptions key={index}>
                                 <BlockDados
                                     style={{ marginTop: '8px' }}
                                 >
@@ -220,16 +222,16 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                 >
                                     {item.title}
                                 </TituloTop>
-                            </>
+                            </SectionTitleDescriptions>
                         )
                     })}
                 </Cabecalho>
 
-                {descriptions.map((item) => {
+                {descriptions.map((item, index) => {
                     return (
-                        <>
+                        <ContainerDescriptions key={index}>
                             {activeTab === item.id ?
-                                <TabContents key={item.id}>
+                                <TabContents>
                                     <Editor
                                         apiKey='3uadxc7du623dpn0gcvz8d1520ngvsigncyxnuj5f580qyz4'
                                         onInit={(editor) => {/* @ts-ignore */
@@ -337,7 +339,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                 :
                                 null
                             }
-                        </>
+                        </ContainerDescriptions>
                     )
                 })}
 

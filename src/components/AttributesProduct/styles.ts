@@ -142,3 +142,5 @@ export const TableAllDescription = styled.div``;
 export const TabContents = styled.div``;
 
 export const TableSection = styled.section``;
+
+export const ContainerAttributes = styled.div``;

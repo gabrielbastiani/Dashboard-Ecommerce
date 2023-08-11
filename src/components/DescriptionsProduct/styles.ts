@@ -57,3 +57,9 @@ export const TextButton = styled.span`
 export const TabContents = styled.div`
   width: 100%;
 `;
+
+export const SectionTitleDescriptions = styled.div``
+
+export const ContainerDescriptions = styled.div`
+
+`

@@ -93,11 +93,26 @@ const Produto: React.FC = () => {
     /* @ts-ignore */
     // eslint-disable-next-line eqeqeq
     if (priceFormated == 'NaN') priceFormated = '';
-    const formatedPrice = priceFormated.replace(",", ".");
-    const numberPrice = Number(formatedPrice);
+    const formatedPrice = priceFormated.replace(".", "");
+    const formatedPricePonto = formatedPrice.replace(",", ".");
+    const numberPrice = formatedPricePonto;
 
-    console.log(numberPrice)
+    var promotionFormated = String(promotion);
+    promotionFormated = promotionFormated + '';
+    /* @ts-ignore */
+    promotionFormated = parseInt(promotionFormated.replace(/[\D]+/g, ''));
+    promotionFormated = promotionFormated + '';
+    promotionFormated = promotionFormated.replace(/([0-9]{2})$/g, ",$1");
 
+    if (promotionFormated.length > 6) {
+        promotionFormated = promotionFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    /* @ts-ignore */
+    // eslint-disable-next-line eqeqeq
+    if (promotionFormated == 'NaN') promotionFormated = '';
+    const formatedPromotion = promotionFormated.replace(".", "");
+    const formatedPromotionPonto = formatedPromotion.replace(",", ".");
+    const numberPromotion = formatedPromotionPonto;
 
     var peso = weight,
         integer = peso.split(',')[0];
@@ -222,7 +237,7 @@ const Produto: React.FC = () => {
                     {
                         name: name,
                         price: Number(numberPrice),
-                        promotion: Number(promotion),
+                        promotion: Number(numberPromotion),
                         sku: sku,
                         weight: peso,
                         width: width,
@@ -500,7 +515,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
-                                                dado={price}
+                                                dado={new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}
                                                 type="text"
                                                 maxLength={9}
                                                 /* @ts-ignore */
@@ -521,12 +536,13 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
-                                                dado={promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                dado={new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}
+                                                maxLength={9}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                                placeholder={promotion}
                                                 /* @ts-ignore */
-                                                value={promotion}
+                                                value={promotionFormated}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setPromotion(e.target.value)}
                                                 handleSubmit={updateProductData}

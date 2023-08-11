@@ -12,6 +12,7 @@ import {
     ButtonSubCatSave,
     ContainerCategories,
     ContainerCategoriesBox,
+    ContainerCateroiesProducts,
     GridContainer,
     TextNotFound,
     TextSub
@@ -27,6 +28,7 @@ import { ButtonSelect } from "../ui/ButtonSelect";
 import { TextoDados } from "../TextoDados";
 import { InputUpdate } from "../ui/InputUpdate";
 import SelectUpdate from "../ui/SelectUpdate";
+
 
 export type DeleteRelations = {
     id: string;
@@ -314,9 +316,9 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                     </>
                 ) :
                     <>
-                        {allCategoriesProduct.map((item) => {
+                        {allCategoriesProduct.map((item, index) => {
                             return (
-                                <>
+                                <ContainerCateroiesProducts key={index}>
                                     <ContainerCategories>
                                         <ContainerCategoriesBox>
                                             <BlockDados style={{ marginLeft: "10px" }} >
@@ -390,7 +392,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                 />
                                             </BlockDados>
 
-                                            
+
 
                                             <BlockDados>
                                                 <BsTrash
@@ -453,7 +455,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                             </BlockSub>
                                         </ContainerCategoriesBox>
                                     </ContainerCategories>
-                                </>
+                                </ContainerCateroiesProducts>
                             )
                         })}
                     </>

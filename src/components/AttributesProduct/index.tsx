@@ -16,6 +16,7 @@ import { BsTrash } from "react-icons/bs";
 import { InputPost } from "../ui/InputPost";
 import { InputUpdate } from "../ui/InputUpdate";
 import { ModalDeleteRelationAttributeProduct } from "../popups/ModalDeleteRelationAttributeProduct";
+import { ContainerAttributes } from "./styles";
 
 
 export type DeleteAttribute = {
@@ -268,9 +269,9 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                     </>
                 ) :
                     <>
-                        {attributesProducts.map((item) => {
+                        {attributesProducts.map((item, index) => {
                             return (
-                                <>
+                                <ContainerAttributes key={index}>
                                     <ContainerCategories key={item.id}>
                                         <ContainerCategoriesBox>
                                             <BlockDados
@@ -345,7 +346,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                                             </BlockDados>
                                         </ContainerCategoriesBox>
                                     </ContainerCategories>
-                                </>
+                                </ContainerAttributes>
                             )
                         })}
                     </>

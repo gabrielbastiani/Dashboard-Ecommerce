@@ -39,6 +39,40 @@ const NovoProduto: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
 
+    var priceFormated = String(price);
+    priceFormated = priceFormated + '';
+    /* @ts-ignore */
+    priceFormated = parseInt(priceFormated.replace(/[\D]+/g, ''));
+    priceFormated = priceFormated + '';
+    priceFormated = priceFormated.replace(/([0-9]{2})$/g, ",$1");
+
+    if (priceFormated.length > 6) {
+        priceFormated = priceFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    /* @ts-ignore */
+    // eslint-disable-next-line eqeqeq
+    if (priceFormated == 'NaN') priceFormated = '';
+    const formatedPrice = priceFormated.replace(".", "");
+    const formatedPricePonto = formatedPrice.replace(",", ".");
+    const numberPrice = formatedPricePonto;
+
+    var promotionFormated = String(promotion);
+    promotionFormated = promotionFormated + '';
+    /* @ts-ignore */
+    promotionFormated = parseInt(promotionFormated.replace(/[\D]+/g, ''));
+    promotionFormated = promotionFormated + '';
+    promotionFormated = promotionFormated.replace(/([0-9]{2})$/g, ",$1");
+
+    if (promotionFormated.length > 6) {
+        promotionFormated = promotionFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    /* @ts-ignore */
+    // eslint-disable-next-line eqeqeq
+    if (promotionFormated == 'NaN') promotionFormated = '';
+    const formatedPromotion = promotionFormated.replace(".", "");
+    const formatedPromotionPonto = formatedPromotion.replace(",", ".");
+    const numberPromotion = formatedPromotionPonto;
+
     var peso = weight,
         integer = peso.split(',')[0];
 
@@ -78,8 +112,8 @@ const NovoProduto: React.FC = () => {
                 height: height,
                 depth: depth,
                 urlVideo: urlVideo,
-                price: Number(price.replace(/[^\d]+/g, '')),
-                promotion: Number(promotion.replace(/[^\d]+/g, '')),
+                price: Number(numberPrice),
+                promotion: Number(numberPromotion),
                 store_id: store_id
             });
 
@@ -239,9 +273,9 @@ const NovoProduto: React.FC = () => {
                                     <Etiqueta>Preço:</Etiqueta>
                                     <InputPost
                                         style={{ maxWidth: "310px" }}
-                                        maxLength={10}
-                                        placeholder="Digite aqui o valor sem pontos e sem virgulas"/* @ts-ignore */
-                                        value={price}/* @ts-ignore */
+                                        maxLength={9}
+                                        placeholder="Digite aqui..."
+                                        value={priceFormated}/* @ts-ignore */
                                         onChange={(e) => setPrice(e.target.value)}
                                     />
                                 </Block>
@@ -250,9 +284,9 @@ const NovoProduto: React.FC = () => {
                                     <Etiqueta>Valor em Promoção:</Etiqueta>
                                     <InputPost
                                         style={{ maxWidth: "310px" }}
-                                        maxLength={10}
-                                        placeholder="Digite aqui o valor sem pontos e sem virgulas"
-                                        value={promotion}/* @ts-ignore */
+                                        maxLength={9}
+                                        placeholder="Digite aqui..."
+                                        value={promotionFormated}/* @ts-ignore */
                                         onChange={(e) => setPromotion(e.target.value)}
                                     />
                                 </Block>

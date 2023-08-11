@@ -67,3 +67,5 @@ export const ButtonSubCatSave = styled.button`
   padding: 5px;
   border-radius: 5px;
 `;
+
+export const ContainerCateroiesProducts = styled.div``

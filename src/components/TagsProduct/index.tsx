@@ -151,36 +151,34 @@ const TagsProduct = ({ product_id }: TagRequest) => {
                     </>
                 ) :
                     <>
-                        {tagsProducts.map((item) => {
+                        {tagsProducts.map((item, index) => {
                             return (
-                                <>
-                                    <ContainerCategories>
-                                        <ContainerCategoriesBox>
-                                            <BlockDados style={{ marginLeft: "10px" }} >
-                                                <TextoDados
-                                                    chave={"Nome da TAG"}
-                                                    dados={
-                                                        <InputUpdate
-                                                            dado={item.tagName}
-                                                            type="text"
-                                                            placeholder={item.tagName}
-                                                            value={tagNameUpdate}
-                                                            onChange={(e) => setTagNameUpdate(e.target.value)}
-                                                            handleSubmit={() => updateNameTag(item.id)}
-                                                        />
-                                                    }
-                                                />
-                                            </BlockDados>
-
-                                            <BsTrash
-                                                onClick={() => handleOpenModalDelete(item.id)}
-                                                style={{ cursor: 'pointer', margin: '13px 0' }}
-                                                color="red"
-                                                size={35}
+                                <ContainerCategories key={index}>
+                                    <ContainerCategoriesBox>
+                                        <BlockDados style={{ marginLeft: "10px" }} >
+                                            <TextoDados
+                                                chave={"Nome da TAG"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={item.tagName}
+                                                        type="text"
+                                                        placeholder={item.tagName}
+                                                        value={tagNameUpdate}
+                                                        onChange={(e) => setTagNameUpdate(e.target.value)}
+                                                        handleSubmit={() => updateNameTag(item.id)}
+                                                    />
+                                                }
                                             />
-                                        </ContainerCategoriesBox>
-                                    </ContainerCategories>
-                                </>
+                                        </BlockDados>
+
+                                        <BsTrash
+                                            onClick={() => handleOpenModalDelete(item.id)}
+                                            style={{ cursor: 'pointer', margin: '13px 0' }}
+                                            color="red"
+                                            size={35}
+                                        />
+                                    </ContainerCategoriesBox>
+                                </ContainerCategories>
                             )
                         })}
                     </>
