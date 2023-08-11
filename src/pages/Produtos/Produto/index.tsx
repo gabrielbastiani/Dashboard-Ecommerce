@@ -79,14 +79,6 @@ const Produto: React.FC = () => {
     const [nameBuy, setNameBuy] = useState("");
     const [idBuy, setIdBuy] = useState("");
 
-    function removerAcentos(s: any) {
-        return s.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/ +/g, "")
-            .replace(/-{2,}/g, "")
-            .replace(/[/]/g, "");
-    }
 
     var priceFormated = String(price);
     priceFormated = priceFormated + '';
@@ -101,10 +93,10 @@ const Produto: React.FC = () => {
     /* @ts-ignore */
     // eslint-disable-next-line eqeqeq
     if (priceFormated == 'NaN') priceFormated = '';
-    const formatedPricePointer = priceFormated.replace(",", "");
-    const formatedPrice = formatedPricePointer.replace(".", "");
-    
-    console.log(formatedPrice)
+    const formatedPrice = priceFormated.replace(",", ".");
+    const numberPrice = Number(formatedPrice);
+
+    console.log(numberPrice)
 
 
     var peso = weight,
@@ -229,7 +221,7 @@ const Produto: React.FC = () => {
                 await apiClient.put(`/updateAllDateProduct?product_id=${product_id}`,
                     {
                         name: name,
-                        price: Number(formatedPrice),
+                        price: Number(numberPrice),
                         promotion: Number(promotion),
                         sku: sku,
                         weight: peso,
@@ -508,7 +500,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 /* @ts-ignore */
-                                                dado={price.toLocaleString('pt-BR')}
+                                                dado={price}
                                                 type="text"
                                                 maxLength={9}
                                                 /* @ts-ignore */
