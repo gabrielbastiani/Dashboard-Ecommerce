@@ -16,6 +16,7 @@ import { GridDate } from "../Perfil/styles";
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { ModalImageVideo } from "../../components/popups/ModalImageVideo";
+import { IMaskInput } from "react-imask";
 
 
 const NovoProduto: React.FC = () => {
@@ -37,6 +38,8 @@ const NovoProduto: React.FC = () => {
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+
+    
 
     async function handleRegisterProduct() {
         try {
@@ -159,6 +162,10 @@ const NovoProduto: React.FC = () => {
                                 <Block>
                                     <Etiqueta>Peso:</Etiqueta>
                                     <InputPost
+                                        /* @ts-ignore */
+                                        as={IMaskInput}
+                                        /* @ts-ignore */
+                                        mask="00.00"
                                         type="text"
                                         placeholder="Digite o peso do produto"
                                         value={weight}
