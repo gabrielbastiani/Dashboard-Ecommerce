@@ -16,7 +16,6 @@ import { GridDate } from "../Perfil/styles";
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { ModalImageVideo } from "../../components/popups/ModalImageVideo";
-import { IMaskInput } from "react-imask";
 
 
 const NovoProduto: React.FC = () => {
@@ -39,7 +38,20 @@ const NovoProduto: React.FC = () => {
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
 
-    
+
+    var peso = weight,
+        integer = peso.split(',')[0];
+
+    peso = peso.replace(/\D/, "");
+    peso = peso.replace(/^[0]+/, "");
+
+    if (peso.length <= 3 || !integer) {
+        if (peso.length === 1) peso = '0.00' + peso;
+        if (peso.length === 2) peso = '0.0' + peso;
+        if (peso.length === 3) peso = '0.' + peso;
+    } else {
+        peso = peso.replace(/^(\d{1,})(\d{3})$/, "$1.$2");
+    }
 
     async function handleRegisterProduct() {
         try {
@@ -61,7 +73,7 @@ const NovoProduto: React.FC = () => {
                 name: name,
                 sku: sku,
                 stock: Number(stock),
-                weight: weight,
+                weight: peso,
                 width: width,
                 height: height,
                 depth: depth,
@@ -160,15 +172,12 @@ const NovoProduto: React.FC = () => {
                                 </Block>
 
                                 <Block>
-                                    <Etiqueta>Peso:</Etiqueta>
+                                    <Etiqueta>Peso (Kg):</Etiqueta>
                                     <InputPost
-                                        /* @ts-ignore */
-                                        as={IMaskInput}
-                                        /* @ts-ignore */
-                                        mask="00.00"
+                                        maxLength={7}
                                         type="text"
                                         placeholder="Digite o peso do produto"
-                                        value={weight}
+                                        value={peso}
                                         onChange={(e) => setWeight(e.target.value)}
                                     />
                                 </Block>
@@ -177,6 +186,7 @@ const NovoProduto: React.FC = () => {
                                     <Etiqueta>Largura (Cm):</Etiqueta>
                                     <InputPost
                                         type="text"
+                                        maxLength={2}
                                         placeholder="Digite a largura do produto"
                                         value={width}
                                         onChange={(e) => setWidth(e.target.value)}
@@ -191,6 +201,7 @@ const NovoProduto: React.FC = () => {
                                     <Etiqueta>Altura (Cm):</Etiqueta>
                                     <InputPost
                                         type="text"
+                                        maxLength={2}
                                         placeholder="Digite a altura do produto"
                                         value={height}
                                         onChange={(e) => setHeight(e.target.value)}
@@ -201,6 +212,7 @@ const NovoProduto: React.FC = () => {
                                     <Etiqueta>Comprimento (Cm):</Etiqueta>
                                     <InputPost
                                         type="text"
+                                        maxLength={2}
                                         placeholder="Digite o comprimento do produto"
                                         value={depth}
                                         onChange={(e) => setDepth(e.target.value)}

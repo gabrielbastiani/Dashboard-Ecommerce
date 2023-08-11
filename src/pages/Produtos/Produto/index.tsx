@@ -80,6 +80,19 @@ const Produto: React.FC = () => {
     const [idBuy, setIdBuy] = useState("");
 
 
+    var peso = weight,
+        integer = peso.split(',')[0];
+
+    peso = peso.replace(/\D/, "");
+    peso = peso.replace(/^[0]+/, "");
+
+    if (peso.length <= 3 || !integer) {
+        if (peso.length === 1) peso = '0.00' + peso;
+        if (peso.length === 2) peso = '0.0' + peso;
+        if (peso.length === 3) peso = '0.' + peso;
+    } else {
+        peso = peso.replace(/^(\d{1,})(\d{3})$/, "$1.$2");
+    }
 
     useEffect(() => {
         async function findBuyTogether() {
@@ -167,7 +180,7 @@ const Produto: React.FC = () => {
             toast.success('Estoque do produto atualizado com sucesso.');
 
             setTimeout(async () => {
-                if (stock >= 1){
+                if (stock >= 1) {
                     await apiClient.get(`/getStockProduct?product_id=${product_id}`);
                 }
                 navigate(0);
@@ -192,7 +205,7 @@ const Produto: React.FC = () => {
                         price: Number(price),
                         promotion: Number(promotion),
                         sku: sku,
-                        weight: weight,
+                        weight: peso,
                         width: width,
                         height: height,
                         depth: depth,
@@ -644,11 +657,12 @@ const Produto: React.FC = () => {
                                         chave={"Peso (Kg)"}
                                         dados={
                                             <InputUpdate
-                                                dado={weight}
+                                                dado={peso}
+                                                maxLength={7}
                                                 type="text"
                                                 /* @ts-ignore */
-                                                placeholder={weight}
-                                                value={weight}
+                                                placeholder={peso}
+                                                value={peso}
                                                 /* @ts-ignore */
                                                 onChange={(e) => setWeight(e.target.value)}
                                                 handleSubmit={updateProductData}
@@ -663,7 +677,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 dado={width}
-                                                type="text"
+                                                maxLength={2}                                                type="text"
                                                 /* @ts-ignore */
                                                 placeholder={width}
                                                 value={width}
@@ -681,6 +695,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 dado={height}
+                                                maxLength={2}
                                                 type="text"
                                                 /* @ts-ignore */
                                                 placeholder={height}
@@ -699,6 +714,7 @@ const Produto: React.FC = () => {
                                         dados={
                                             <InputUpdate
                                                 dado={depth}
+                                                maxLength={2}
                                                 type="text"
                                                 /* @ts-ignore */
                                                 placeholder={depth}
