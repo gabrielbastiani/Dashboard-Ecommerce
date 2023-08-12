@@ -37,6 +37,7 @@ import { MdFileUpload } from "react-icons/md";
 import { ModalDeleteImageAttributeProduct } from "../../../components/popups/ModalDeleteImageAttributeProduct";
 import { BsTrash } from "react-icons/bs";
 import { ModalDeleteAttributeProduct } from "../../../components/popups/ModalDeleteAttributeProduct";
+import { ContainerCupon } from "./styles";
 
 
 export type DeleteRelationsAttribute = {
@@ -380,9 +381,9 @@ const Atributo: React.FC = () => {
                             </>
                         ) :
                             <>
-                                {loadValueType.map((item) => {
+                                {loadValueType.map((item, index) => {
                                     return (
-                                        <>
+                                        <ContainerCupon key={index}>
                                             <Card>
                                                 <Titulos
                                                     tipo="h3"
@@ -505,7 +506,7 @@ const Atributo: React.FC = () => {
                                                     </SectionDate>
                                                 </GridDate>
                                             </Card>
-                                        </>
+                                        </ContainerCupon>
                                     )
                                 })}
                             </>

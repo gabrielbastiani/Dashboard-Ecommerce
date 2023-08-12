@@ -24,6 +24,7 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { BsTrash } from "react-icons/bs";
 import { ModalDeleteBuyTogether } from "../../../components/popups/ModalDeleteBuyTogether";
+import { ContainerCompreJunto } from "./styles";
 
 
 export type DeleteBuy = {
@@ -282,10 +283,10 @@ const ProdutosGrupo: React.FC = () => {
                             </>
                         ) :
                             <>
-                                {loadIDMenu.map((item) => {
+                                {loadIDMenu.map((item, index) => {
                                     return (
-                                        <>
-                                            <Card key={item.id}>
+                                        <ContainerCompreJunto key={index}>
+                                            <Card>
                                                 <Titulos
                                                     tipo="h2"
                                                     titulo={item.product.name}
@@ -313,15 +314,14 @@ const ProdutosGrupo: React.FC = () => {
 
                                                 <GridDate>
                                                     <SectionDate>
-                                                        {item.product.photoproducts.map((img: any) => {
+                                                        {item.product.photoproducts.map((img: any, index: any) => {
                                                             return (
-                                                                <>
-                                                                    <ImagensCategorys
-                                                                        src={"http://localhost:3333/files/" + img.image}
-                                                                        width={170}
-                                                                        height={80}
-                                                                    />
-                                                                </>
+                                                                <ImagensCategorys
+                                                                    key={index}
+                                                                    src={"http://localhost:3333/files/" + img.image}
+                                                                    width={170}
+                                                                    height={80}
+                                                                />
                                                             )
                                                         })}
                                                     </SectionDate>
@@ -369,7 +369,7 @@ const ProdutosGrupo: React.FC = () => {
                                                     </SectionDate>
                                                 </GridDate>
                                             </Card>
-                                        </>
+                                        </ContainerCompreJunto>
                                     )
                                 })}
                             </>

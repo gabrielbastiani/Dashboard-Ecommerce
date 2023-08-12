@@ -505,10 +505,10 @@ const Cupom: React.FC = () => {
                                         <br />
                                         <Titulos tipo="h4" titulo="Condição do cupom:" />
                                         <br />
-                                        {conditionalCupom.map((con) => {
+                                        {conditionalCupom.map((con, index) => {
                                             return (
                                                 <BoxConditional
-                                                    key={con?.id}
+                                                    key={index}
                                                 >
                                                     {con?.conditional === "productsValue" ? (
                                                         <>
@@ -676,11 +676,11 @@ const Cupom: React.FC = () => {
                         </Card>
                     ) :
                         <Card>
-                            {productInCupon.map((item) => {
+                            {productInCupon.map((item, index) => {
                                 return (
                                     <>
                                         <Card
-                                            key={item.id}
+                                            key={index}
                                         >
                                             <Titulos tipo="h1" titulo={item.product.name} />
                                             <BlockDados>
@@ -725,7 +725,6 @@ const Cupom: React.FC = () => {
                             })}
                         </Card>
                     }
-
                 </Container>
             </Grid>
             {modalVisible && (

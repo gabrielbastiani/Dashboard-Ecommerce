@@ -216,99 +216,97 @@ const SubCategoria: React.FC = () => {
                         </>
                     ) :
                         <>
-                            {parentIdCategories.map((item) => {
+                            {parentIdCategories.map((item, index) => {
                                 return (
-                                    <>
-                                        <Card>
-                                            <Titulos
-                                                tipo="h3"
-                                                titulo={item.name}
-                                            />
-                                            <GridDate>
-                                                <SectionDate>
-                                                    {item.imagecategories[0] ? (
-                                                        <ImagensCategorys
-                                                            src={"http://localhost:3333/files/" + item.imagecategories[0].image}
-                                                            width={170}
-                                                            height={80}
-                                                        />
-                                                    ) :
-                                                        <ImagensCategorys
-                                                            src={noImage}
-                                                            width={170}
-                                                            height={80}
-                                                        />
-                                                    }
-                                                </SectionDate>
+                                    <Card key={index}>
+                                        <Titulos
+                                            tipo="h3"
+                                            titulo={item.name}
+                                        />
+                                        <GridDate>
+                                            <SectionDate>
+                                                {item.imagecategories[0] ? (
+                                                    <ImagensCategorys
+                                                        src={"http://localhost:3333/files/" + item.imagecategories[0].image}
+                                                        width={170}
+                                                        height={80}
+                                                    />
+                                                ) :
+                                                    <ImagensCategorys
+                                                        src={noImage}
+                                                        width={170}
+                                                        height={80}
+                                                    />
+                                                }
+                                            </SectionDate>
 
-                                                <SectionDate>
-                                                    <Button
-                                                        style={{ backgroundColor: 'green' }}
-                                                    >
-                                                        <AiOutlinePlusCircle />
-                                                        <Link to={`/categoria/subCategoria/${item.id}`} >
-                                                            <TextButton>Cadastre uma<br />nova subcategoria</TextButton>
-                                                        </Link>
-                                                    </Button>
-                                                </SectionDate>
-
-                                                <SectionDate>
-                                                    <BlockDados>
-                                                        <TextoDados
-                                                            chave={"Ordem"}
-                                                            dados={
-                                                                <InputUpdate
-                                                                    dado={String(item.order)}
-                                                                    type="number"
-                                                                    /* @ts-ignore */
-                                                                    placeholder={String(item.order)}
-                                                                    value={orderUpdate}
-                                                                    /* @ts-ignore */
-                                                                    onChange={(e) => setOrderUpdate(e.target.value)}
-                                                                    handleSubmit={() => updateOrder(item.id)}
-                                                                />
-                                                            }
-                                                        />
-                                                    </BlockDados>
-                                                </SectionDate>
-
-                                                <SectionDate>
-                                                    <BlockDados>
-                                                        <TextoDados
-                                                            chave={"Status"}
-                                                            dados={
-                                                                <ButtonSelect
-                                                                    /* @ts-ignore */
-                                                                    dado={item.status}/* @ts-ignore */
-                                                                    handleSubmit={() => updateStatus(item.id, item.status)}
-                                                                />
-                                                            }
-                                                        />
-                                                    </BlockDados>
-                                                </SectionDate>
-
-                                                <SectionDate
-                                                    style={{ textAlign: 'center' }}
+                                            <SectionDate>
+                                                <Button
+                                                    style={{ backgroundColor: 'green' }}
                                                 >
-                                                    <TextButton>Qtd. de Produtos</TextButton>
-                                                    <br />
-                                                    <br />
-                                                    <TextButton>{String(item.productcategories.length)}</TextButton>
-                                                </SectionDate>
+                                                    <AiOutlinePlusCircle />
+                                                    <Link to={`/categoria/subCategoria/${item.id}`} >
+                                                        <TextButton>Cadastre uma<br />nova subcategoria</TextButton>
+                                                    </Link>
+                                                </Button>
+                                            </SectionDate>
 
-                                                <SectionDate>
-                                                    <Button
-                                                        style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                            <SectionDate>
+                                                <BlockDados>
+                                                    <TextoDados
+                                                        chave={"Ordem"}
+                                                        dados={
+                                                            <InputUpdate
+                                                                dado={String(item.order)}
+                                                                type="number"
+                                                                /* @ts-ignore */
+                                                                placeholder={String(item.order)}
+                                                                value={orderUpdate}
+                                                                /* @ts-ignore */
+                                                                onChange={(e) => setOrderUpdate(e.target.value)}
+                                                                handleSubmit={() => updateOrder(item.id)}
+                                                            />
+                                                        }
+                                                    />
+                                                </BlockDados>
+                                            </SectionDate>
+
+                                            <SectionDate>
+                                                <BlockDados>
+                                                    <TextoDados
+                                                        chave={"Status"}
+                                                        dados={
+                                                            <ButtonSelect
+                                                                /* @ts-ignore */
+                                                                dado={item.status}/* @ts-ignore */
+                                                                handleSubmit={() => updateStatus(item.id, item.status)}
+                                                            />
+                                                        }
+                                                    />
+                                                </BlockDados>
+                                            </SectionDate>
+
+                                            <SectionDate
+                                                style={{ textAlign: 'center' }}
+                                            >
+                                                <TextButton>Qtd. de Produtos</TextButton>
+                                                <br />
+                                                <br />
+                                                <TextButton>{String(item.productcategories.length)}</TextButton>
+                                            </SectionDate>
+
+                                            <SectionDate>
+                                                <Button
+                                                    style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                                >
+                                                    <Link to={`/categoria/subCategoria/edit/${item.id}`}
                                                     >
-                                                        <Link to={`/categoria/subCategoria/edit/${item.id}`}
-                                                        >
-                                                            <TextButton>Editar subcategoria</TextButton>
-                                                        </Link>
-                                                    </Button>
-                                                </SectionDate>
-                                            </GridDate>
-                                        </Card>
-                                    </>
+                                                        <TextButton>Editar subcategoria</TextButton>
+                                                    </Link>
+                                                </Button>
+                                            </SectionDate>
+                                        </GridDate>
+                                    </Card>
                                 )
                             })}
                         </>

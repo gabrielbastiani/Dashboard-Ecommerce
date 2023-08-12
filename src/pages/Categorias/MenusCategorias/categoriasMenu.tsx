@@ -187,75 +187,73 @@ const CategoriasMenu: React.FC = () => {
                             </>
                         ) :
                             <>
-                                {loadIDMenu.map((item) => {
+                                {loadIDMenu.map((item, index) => {
                                     return (
-                                        <>
-                                            <Card>
-                                                <Titulos
-                                                    tipo="h3"
-                                                    titulo={item.categoryName}
-                                                />
+                                        <Card key={index}>
+                                            <Titulos
+                                                tipo="h3"
+                                                titulo={item.categoryName}
+                                            />
 
-                                                <GridDate key={item.id}>
+                                            <GridDate key={item.id}>
 
-                                                    <SectionDate>
-                                                        {item.imagemenucategories[0] ? (
-                                                            <ImagensCategorys
-                                                                src={"http://localhost:3333/files/" + item.imagemenucategories[0].image}
-                                                                width={170}
-                                                                height={80}
-                                                            />
-                                                        ) :
-                                                            <ImagensCategorys
-                                                                src={noImage}
-                                                                width={170}
-                                                                height={80}
-                                                            />
-                                                        }
-                                                    </SectionDate>
+                                                <SectionDate>
+                                                    {item.imagemenucategories[0] ? (
+                                                        <ImagensCategorys
+                                                            src={"http://localhost:3333/files/" + item.imagemenucategories[0].image}
+                                                            width={170}
+                                                            height={80}
+                                                        />
+                                                    ) :
+                                                        <ImagensCategorys
+                                                            src={noImage}
+                                                            width={170}
+                                                            height={80}
+                                                        />
+                                                    }
+                                                </SectionDate>
 
-                                                    <SectionDate>
-                                                        <Button
-                                                            style={{ backgroundColor: 'green' }}
+                                                <SectionDate>
+                                                    <Button
+                                                        style={{ backgroundColor: 'green' }}
+                                                    >
+                                                        <AiOutlinePlusCircle />
+                                                        <Link to={`/menu/${item.id}`} >
+                                                            <TextButton>Item</TextButton>
+                                                        </Link>
+                                                    </Button>
+                                                </SectionDate>
+
+                                                <SectionDate>
+                                                    <BlockDados>
+                                                        <TextoDados
+                                                            chave={"Ordem"}
+                                                            dados={item.order}
+                                                        />
+                                                    </BlockDados>
+                                                </SectionDate>
+
+                                                <SectionDate>
+                                                    <BlockDados>
+                                                        <TextoDados
+                                                            chave={"Ativo?"}
+                                                            dados={item.status}
+                                                        />
+                                                    </BlockDados>
+                                                </SectionDate>
+
+                                                <SectionDate>
+                                                    <Button
+                                                        style={{ backgroundColor: '#FB451E', padding: '5px' }}
+                                                    >
+                                                        <Link to={`/menu/categoriaMenu/edit/${item.id}`}
                                                         >
-                                                            <AiOutlinePlusCircle />
-                                                            <Link to={`/menu/${item.id}`} >
-                                                                <TextButton>Item</TextButton>
-                                                            </Link>
-                                                        </Button>
-                                                    </SectionDate>
-
-                                                    <SectionDate>
-                                                        <BlockDados>
-                                                            <TextoDados
-                                                                chave={"Ordem"}
-                                                                dados={item.order}
-                                                            />
-                                                        </BlockDados>
-                                                    </SectionDate>
-
-                                                    <SectionDate>
-                                                        <BlockDados>
-                                                            <TextoDados
-                                                                chave={"Ativo?"}
-                                                                dados={item.status}
-                                                            />
-                                                        </BlockDados>
-                                                    </SectionDate>
-
-                                                    <SectionDate>
-                                                        <Button
-                                                            style={{ backgroundColor: '#FB451E', padding: '5px' }}
-                                                        >
-                                                            <Link to={`/menu/categoriaMenu/edit/${item.id}`}
-                                                            >
-                                                                <TextButton>Editar item</TextButton>
-                                                            </Link>
-                                                        </Button>
-                                                    </SectionDate>
-                                                </GridDate>
-                                            </Card>
-                                        </>
+                                                            <TextButton>Editar item</TextButton>
+                                                        </Link>
+                                                    </Button>
+                                                </SectionDate>
+                                            </GridDate>
+                                        </Card>
                                     )
                                 })}
                             </>
