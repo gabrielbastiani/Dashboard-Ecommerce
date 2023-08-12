@@ -61,7 +61,7 @@ const Cupom: React.FC = () => {
         setConditionalSelected(e.target.value);
     }
 
-    const [value, setValue] = useState(Number);
+    const [value, setValue] = useState("");
 
     const [productInCupon, setProductInCupon] = useState<any[]>([]);
 
@@ -73,6 +73,22 @@ const Cupom: React.FC = () => {
     const [modalVisibleConditional, setModalVisibleConditional] = useState(false);
     const [modalItemConditional, setModalItemConditional] = useState("");
 
+    var valueFormated = String(value);
+    valueFormated = valueFormated + '';
+    /* @ts-ignore */
+    valueFormated = parseInt(valueFormated.replace(/[\D]+/g, ''));
+    valueFormated = valueFormated + '';
+    valueFormated = valueFormated.replace(/([0-9]{2})$/g, ",$1");
+
+    if (valueFormated.length > 6) {
+        valueFormated = valueFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    /* @ts-ignore */
+    // eslint-disable-next-line eqeqeq
+    if (valueFormated == 'NaN') valueFormated = '';
+    const formatedValue = valueFormated.replace(".", "");
+    const formatedValuePonto = formatedValue.replace(",", ".");
+    const numberValue = formatedValuePonto;
 
     useEffect(() => {
         async function loadConditional() {
@@ -244,14 +260,14 @@ const Cupom: React.FC = () => {
     async function handleRegisterConditionalCoupon() {
         const apiClient = setupAPIClient();
         try {
-            if (value === 0) {
+            if (Number(numberValue) === 0) {
                 toast.error('Não deixe o valor em branco!!!');
                 return;
             }
             await apiClient.post(`/createConditionalCoupon`, {
                 cupon_id: cupon_id,
                 conditional: conditionalSelected,
-                value: value
+                value: Number(numberValue)
             });
 
             toast.success(`Valor salvo com sucesso.`);
@@ -623,8 +639,10 @@ const Cupom: React.FC = () => {
                                             <Block>
                                                 <Etiqueta>Qual é o valor em preço(R$) para essa ação:</Etiqueta>
                                                 <InputPost
-                                                    type="number"
+                                                    maxLength={9}
+                                                    type="text"
                                                     placeholder="Digite aqui..."
+                                                    value={valueFormated}
                                                     /* @ts-ignore */
                                                     onChange={(e) => setValue(e.target.value)}
                                                 />
@@ -646,8 +664,10 @@ const Cupom: React.FC = () => {
                                             <Block>
                                                 <Etiqueta>Porcentagem(%) para essa ação:</Etiqueta>
                                                 <InputPost
-                                                    type="number"
+                                                    maxLength={9}
+                                                    type="text"
                                                     placeholder="Digite aqui..."
+                                                    value={valueFormated}
                                                     /* @ts-ignore */
                                                     onChange={(e) => setValue(e.target.value)}
                                                 />
