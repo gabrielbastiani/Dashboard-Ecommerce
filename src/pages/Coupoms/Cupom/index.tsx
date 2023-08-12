@@ -260,10 +260,6 @@ const Cupom: React.FC = () => {
     async function handleRegisterConditionalCoupon() {
         const apiClient = setupAPIClient();
         try {
-            if (Number(numberValue) === 0) {
-                toast.error('Não deixe o valor em branco!!!');
-                return;
-            }
             await apiClient.post(`/createConditionalCoupon`, {
                 cupon_id: cupon_id,
                 conditional: conditionalSelected,
@@ -544,7 +540,7 @@ const Cupom: React.FC = () => {
                                                         null
                                                     }
 
-                                                    {con?.conditional === "valueProduct" ? (
+                                                    {con?.conditional === "totalValue" ? (
                                                         <>
                                                             <ConditionalText>Valor de desconto no valor total</ConditionalText>
                                                             <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
@@ -580,7 +576,7 @@ const Cupom: React.FC = () => {
                                                         null
                                                     }
 
-                                                    {con?.conditional === "percent" ? (
+                                                    {con?.conditional === "percentProduct" ? (
                                                         <>
                                                             <ConditionalText>Percentual de desconto</ConditionalText>
                                                             <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
@@ -589,7 +585,7 @@ const Cupom: React.FC = () => {
                                                         null
                                                     }
 
-                                                    {con?.conditional === "percentAll" ? (
+                                                    {con?.conditional === "totalPercent" ? (
                                                         <>
                                                             <ConditionalText>Percentual de desconto no valor total</ConditionalText>
                                                             <BsFillTrashFill color="red" size={25} onClick={() => handleOpenModalDeleteConditional(con?.id)} />
@@ -622,12 +618,12 @@ const Cupom: React.FC = () => {
                                                         { label: "Selecionar...", value: "" },
                                                         { label: "Valor de desconto", value: "productsValue" },
                                                         { label: "Valor de desconto em todos os produtos da loja", value: "allProductsValue" },
-                                                        { label: "Valor de desconto no valor total", value: "valueProduct" },
+                                                        { label: "Valor de desconto no valor total", value: "totalValue" },
                                                         { label: "Frete grátis total", value: "freeShipping" },
                                                         { label: "Valor de desconto no valor do frete", value: "valueShipping" },
                                                         { label: "Percentual de desconto no valor do frete", value: "shippingPercent" },
-                                                        { label: "Percentual de desconto", value: "percent" },
-                                                        { label: "Percentual de desconto no valor total", value: "percentAll" },
+                                                        { label: "Percentual de desconto (Produto(s) selecionado(s) para essa promoção)", value: "percentProduct" },
+                                                        { label: "Percentual de desconto no valor total", value: "totalPercent" },
                                                         { label: "Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent" }
                                                     ]
                                                 }/* @ts-ignore */
@@ -635,7 +631,7 @@ const Cupom: React.FC = () => {
                                             />
                                         </Block>
 
-                                        {conditionalSelected === "productsValue" || conditionalSelected === "allProductsValue" || conditionalSelected === "valueProduct" || conditionalSelected === "valueShipping" ? (
+                                        {conditionalSelected === "productsValue" || conditionalSelected === "allProductsValue" || conditionalSelected === "totalValue" || conditionalSelected === "valueShipping" ? (
                                             <Block>
                                                 <Etiqueta>Qual é o valor em preço(R$) para essa ação:</Etiqueta>
                                                 <InputPost
@@ -660,7 +656,7 @@ const Cupom: React.FC = () => {
                                             null
                                         }
 
-                                        {conditionalSelected === "shippingPercent" || conditionalSelected === "percent" || conditionalSelected === "percentAll" || conditionalSelected === "allProductsValuePercent" ? (
+                                        {conditionalSelected === "shippingPercent" || conditionalSelected === "percentProduct" || conditionalSelected === "totalPercent" || conditionalSelected === "allProductsValuePercent" ? (
                                             <Block>
                                                 <Etiqueta>Porcentagem(%) para essa ação:</Etiqueta>
                                                 <InputPost
@@ -678,6 +674,16 @@ const Cupom: React.FC = () => {
                                                     Salvar
                                                 </Button>
                                             </Block>
+                                        ) :
+                                            null
+                                        }
+
+                                        {conditionalSelected === "freeShipping" ? (
+                                            <Button
+                                                onClick={handleRegisterConditionalCoupon}
+                                            >
+                                                Salvar
+                                            </Button>
                                         ) :
                                             null
                                         }
