@@ -22,7 +22,7 @@ const Filtros: React.FC = () => {
 
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(999999);
-    const [pages, setPages] = useState<any[]>([]);
+    const [pages, setPages] = useState<any[]>([])
     const [currentPage, setCurrentPage] = useState(1);
 
 
