@@ -616,7 +616,7 @@ const Cupom: React.FC = () => {
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },
-                                                        { label: "Valor de desconto", value: "productsValue" },
+                                                        { label: "Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue" },
                                                         { label: "Valor de desconto em todos os produtos da loja", value: "allProductsValue" },
                                                         { label: "Valor de desconto no valor total", value: "totalValue" },
                                                         { label: "Frete grátis total", value: "freeShipping" },
