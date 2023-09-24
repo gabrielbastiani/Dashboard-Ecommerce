@@ -9,7 +9,8 @@ import {
     MdOutlineProductionQuantityLimits,
     MdSettingsSuggest,
     MdPlayArrow,
-    MdContactMail
+    MdContactMail,
+    MdRemoveShoppingCart
 } from 'react-icons/md';
 import { BsNewspaper } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
@@ -52,6 +53,7 @@ const Aside: React.FC = () => {
     const [submenu2, setSubmenu2] = useState(false);
     const [submenu3, setSubmenu3] = useState(false);
     const [submenu4, setSubmenu4] = useState(false);
+    const [submenu5, setSubmenu5] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -71,6 +73,10 @@ const Aside: React.FC = () => {
 
     const handleSubMenu4 = () => {
         setSubmenu4(!submenu4);
+    }
+
+    const handleSubMenu5 = () => {
+        setSubmenu5(!submenu5);
     }
 
     const handleToggleMenu = () => {
@@ -178,6 +184,25 @@ const Aside: React.FC = () => {
                     <RiCoupon2Fill />
                     Cupoms
                 </MenuItemLink>
+
+                <MenuItemLink onClick={handleSubMenu5} style={{ cursor: 'pointer' }} >
+                    <MdRemoveShoppingCart />
+                    Carrinho abandonado
+                </MenuItemLink>
+
+                {submenu5 ? (
+                    <>
+                        <SubMenuItemLink href="/carrinho/configuracoes" >
+                            <MdPlayArrow />
+                            Configurações
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/carrinho/metricas' >
+                            <MdPlayArrow />
+                            Métricas
+                        </SubMenuItemLink>
+                    </>
+                ) : null}
 
                 <MenuItemLink href='/filterGrupos' >
                     <FaFilter />
