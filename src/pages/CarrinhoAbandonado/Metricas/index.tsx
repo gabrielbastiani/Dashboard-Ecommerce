@@ -73,15 +73,15 @@ const Metricas: React.FC = () => {
         setLimit(e.target.value);
         setCurrentPage(1);
     }, []);
-
-    let rec = search.map(item => item.cart_abandoned);
-
-    console.log(rec.map(item => item))
+    
+    var novoArray = search.reduce(function (a, b) {
+    return a.concat(b.cart_abandoned);
+    }, []);
 
     var totalValue = 0;
 
-    for (var i = 0; i < rec.length; i++) {
-        totalValue += rec[i].total;
+    for (var i = 0; i < novoArray.length; i++) {
+        totalValue += novoArray[i].total;
     }
 
     console.log(totalValue)
@@ -90,8 +90,8 @@ const Metricas: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Receita": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned[0].total),
-            "Valor médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned[0].total / 2),
+            "Receita": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalValue),
+            "Valor médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalValue / 2),
             "Transações": item.amount,
             "botaoDetalhes": `/carrinho/metricas/${item.created_at}`
         });
