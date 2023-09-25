@@ -58,6 +58,7 @@ import Usuario from './pages/Perfil/Usuarios/Usuario';
 import Coupoms from './pages/Coupoms';
 import NovoCupom from './pages/Coupoms/novoCupom';
 import Cupom from './pages/Coupoms/Cupom';
+import Metricas from './pages/CarrinhoAbandonado/Metricas';
 
 
 const RoutesAuth: React.FC = () => {
@@ -93,6 +94,8 @@ const RoutesAuth: React.FC = () => {
             <Route path='/coupoms' element={<Coupoms />} />
             <Route path='/cupom/novo' element={<NovoCupom />} />
             <Route path='/cupom/:cupon_id' element={<Cupom />} />
+
+            <Route path='/carrinho/metricas' element={<Metricas />} />
             
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />

@@ -1,66 +1,117 @@
-import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
-import { ModalDeleteContato } from "../../../components/popups/ModalDeleteContato";
-import { setupAPIClient } from '../../../services/api';
-import { useParams } from 'react-router-dom';
-import { Grid } from '../../Dashboard/styles';
-import MainHeader from '../../../components/MainHeader';
-import Aside from '../../../components/Aside';
-import { BlockTop, Container } from '../../Categorias/styles';
-import { Card } from '../../../components/Content/styles';
-import Voltar from '../../../components/Voltar';
-import Titulos from '../../../components/Titulos';
-import { Button } from '../../../components/ui/Button';
-import { BlockDados } from '../../Categorias/Categoria/styles';
-import { TextoDados } from '../../../components/TextoDados';
-import { GridDate } from '../../Perfil/styles';
-import { SectionDate } from '../../Configuracoes/styles';
-import { Mensagem, LabelMensagem, SendEmail } from './styles';
-import { RiMailSendLine } from 'react-icons/ri';
+import { useEffect, useState, useCallback } from "react";
+import { setupAPIClient } from "../../../services/api";
+import moment from "moment";
+import { toast } from "react-toastify";
+import { Grid } from "../../Dashboard/styles";
+import MainHeader from "../../../components/MainHeader";
+import Aside from "../../../components/Aside";
+import {
+    ButtonPage,
+    Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../../Categorias/styles";
+import { Card } from "../../../components/Content/styles";
+import Titulos from "../../../components/Titulos";
+import Pesquisa from "../../../components/Pesquisa";
+import { BlockExport, ButtonExit } from "../styles";
+import { Button } from "../../../components/ui/Button";
+import { FaTimesCircle } from "react-icons/fa";
+import { Avisos } from "../../../components/Avisos";
+import TabelaSimples from "../../../components/Tabelas";
+import Select from "../../../components/ui/Select";
 
 
-const Contato: React.FC = () => {
 
-    let { contact_id } = useParams();
+const Metricas: React.FC = () => {
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [company, setCompany] = useState('');
-    const [sector, setSector] = useState('');
-    const [message, setMessage] = useState('');
+    const [search, setSearch] = useState<any[]>([]);
 
-    const [modalVisible, setModalVisible] = useState(false);
+    const [total, setTotal] = useState(0);
+    const [limit, setLimit] = useState(15);
+    const [pages, setPages] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [loading, setLoading] = useState(false);
+    const [showElement, setShowElement] = useState(false);
+
+    const showOrHide = () => {
+        setShowElement(!showElement)
+    }
 
     useEffect(() => {
-        async function loadContact() {
+        async function allAbandoned() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findUniqueContact?contact_id=${contact_id}`);
+                const { data } = await apiClient.get(`/pageAbandonedCart?page=${currentPage}&limit=${limit}`);
 
-                setName(data.name || "");
-                setEmail(data.email || "");
-                setPhone(data.phone || "");
-                setCompany(data.company || "");
-                setSector(data.sector || "");
-                setMessage(data.message || "");
+                setTotal(data.total);
+                const totalPages = Math.ceil(total / limit);
+
+                const arrayPages = [];
+                for (let i = 1; i <= totalPages; i++) {
+                    arrayPages.push(i);
+                }
+
+                setPages(arrayPages || []);
+                setSearch(data.abandoned || []);
 
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         }
-        loadContact();
-    }, [contact_id]);
+        allAbandoned();
+    }, [currentPage, limit, total]);
 
-    function handleCloseModalDelete() {
-        setModalVisible(false);
+    /* @ts-ignore */
+    const limits = useCallback((e) => {
+        setLimit(e.target.value);
+        setCurrentPage(1);
+    }, []);
+
+    let rec = search.map(item => item.cart_abandoned);
+
+    console.log(rec.map(item => item))
+
+    var totalValue = 0;
+
+    for (var i = 0; i < rec.length; i++) {
+        totalValue += rec[i].total;
     }
 
-    async function handleOpenModalDelete() {
-        setModalVisible(true);
-    }
+    console.log(totalValue)
 
-    Modal.setAppElement('body');
+    const dados: any = [];
+    (search || []).forEach((item) => {
+        dados.push({
+            "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "Receita": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned[0].total),
+            "Valor médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned[0].total / 2),
+            "Transações": item.amount,
+            "botaoDetalhes": `/carrinho/metricas/${item.created_at}`
+        });
+    });
+
+    /* async function handleExportContacts() {
+        try {
+            setLoading(true);
+            const apiClient = setupAPIClient();
+            await apiClient.get('/exportContacts');
+            toast.success('Lista de contatos gerada com sucesso!');
+            setLoading(false);
+
+            showOrHide();
+
+        } catch (error) {
+            console.log(error);
+        }
+    } */
+
 
 
     return (
@@ -70,91 +121,110 @@ const Contato: React.FC = () => {
                 <Aside />
                 <Container>
                     <Card>
-                        <Voltar
-                            url={'/contatos'}
+                        <Titulos
+                            tipo="h1"
+                            titulo="Métricas"
                         />
-                        <BlockTop>
-                            <Titulos
-                                tipo="h1"
-                                titulo={"Contato - " + name}
-                            />
 
-                            <Button
-                                type="submit"
-                                style={{ backgroundColor: '#FB451E' }}
-                                /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(contact_id)}
-                            >
-                                Remover
-                            </Button>
-                        </BlockTop>
-                        <br />
-                        <br />
-                        <GridDate>
-                            <SectionDate>
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={'Nome'}
-                                        dados={name}
-                                    />
-                                </BlockDados>
+                        {/* {dados.length < 1 ? (
+                            null
+                        ) :
+                            <>
+                                {showElement ?
+                                    <BlockExport>
+                                        <Button
+                                            type="submit"
+                                            
+                                            loading={loading}
+                                            onClick={handleExportContactEmail}
+                                        >
+                                            Exportar arquivo para o seu email
+                                        </Button>
+                                        <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
+                                    </BlockExport>
+                                    :
+                                    <BlockExport>
+                                        <Button
+                                            style={{ backgroundColor: 'green' }}
+                                            type="submit"
+                                            
+                                            loading={loading}
+                                            onClick={handleExportContacts}
+                                        >
+                                            Gerar arquivo para exportar contatos
+                                        </Button>
+                                    </BlockExport>
+                                }
+                            </>
+                        } */}
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={'E-mail'}
-                                        dados={
-                                            <SendEmail href={`mailto:${email}?subject=${name} falo da loja virtual Builder Seu Negócio Online`}>
-                                                {email} <RiMailSendLine color='red' size={25} />
-                                            </SendEmail>
-                                        }
-                                    />
-                                </BlockDados>
+                        {dados.length < 1 ? (
+                            <>
+                                <Avisos
+                                    texto="Não há carrinhos abandonados por clientes ainda..."
+                                />
+                            </>
+                        ) :
+                            <>
+                                <TextTotal>Metricas por página: &nbsp;</TextTotal>
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={'Telefone'}
-                                        dados={phone}
-                                    />
-                                </BlockDados>
+                                <Select
+                                    /* @ts-ignore */
+                                    onChange={limits}
+                                    opcoes={[
+                                        { label: "Todas contatos", value: "99999" },
+                                        { label: "15", value: "15" },
+                                        { label: "30", value: "30" }
+                                    ]}
+                                    value={undefined}
+                                />
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={'Empresa'}
-                                        dados={company || "Não é empresa"}
-                                    />
-                                </BlockDados>
+                                <TabelaSimples
+                                    cabecalho={["Data", "Receita", "Valor médio", "Transações"]}
+                                    dados={dados}
+                                    textbutton={"Detalhes"}
+                                />
 
-                                <BlockDados>
-                                    <TextoDados
-                                        chave={'Setor'}
-                                        dados={sector}
-                                    />
-                                </BlockDados>
-                            </SectionDate>
+                                <ContainerPagination>
+                                    {currentPage > 1 && (
+                                        <Previus>
+                                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                                Voltar
+                                            </ButtonPage>
+                                        </Previus>
+                                    )}
 
-                            <SectionDate>
-                                <BlockDados style={{ flexDirection: 'column' }}>
-                                    <LabelMensagem>Mensagem:</LabelMensagem>
-                                    <br />
-                                    <Mensagem
-                                        value={message}
-                                    ></Mensagem>
-                                </BlockDados>
-                            </SectionDate>
-                        </GridDate>
+                                    <TotalBoxItems key={total}>
+                                        <TextTotal>Total de contatos: {total}</TextTotal>
+                                    </TotalBoxItems>
+                                    <ContainerCategoryPage>
+
+                                        {pages.map((page) => (
+                                            <TextPage
+                                                key={page}
+                                                onClick={() => setCurrentPage(page)}
+                                            >
+                                                {page}
+                                            </TextPage>
+                                        ))}
+
+                                        {currentPage < search.length && (
+                                            <Next>
+                                                <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                                    Avançar
+                                                </ButtonPage>
+                                            </Next>
+                                        )}
+
+                                    </ContainerCategoryPage>
+                                </ContainerPagination>
+                            </>
+                        }
                     </Card>
                 </Container>
-            </Grid>
-            {modalVisible && (
-                <ModalDeleteContato
-                    isOpen={modalVisible}
-                    onRequestClose={handleCloseModalDelete}
-                    /* @ts-ignore */
-                    contato={contact_id}
-                />
-            )}
+            </Grid >
         </>
     )
 }
 
-export default Contato;
+export default Metricas;
