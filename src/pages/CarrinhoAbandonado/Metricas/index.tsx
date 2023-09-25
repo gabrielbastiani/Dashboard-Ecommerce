@@ -73,26 +73,14 @@ const Metricas: React.FC = () => {
         setLimit(e.target.value);
         setCurrentPage(1);
     }, []);
-    
-    var novoArray = search.reduce(function (a, b) {
-    return a.concat(b.cart_abandoned);
-    }, []);
-
-    var totalValue = 0;
-
-    for (var i = 0; i < novoArray.length; i++) {
-        totalValue += novoArray[i].total;
-    }
-
-    console.log(totalValue)
 
     const dados: any = [];
-    (search || []).forEach((item) => {
-        dados.push({
-            "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Receita": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalValue),
-            "Valor médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalValue / 2),
-            "Transações": item.amount,
+    (search || []).forEach((item: any) => {
+        dados.push({/* @ts-ignore */
+            "Data": moment(item.created_at).format("DD/MM/YYYY"),
+            "Total Carrinho": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
+            "Valor médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total / 2) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
+            "Transações": item.cart_abandoned.map((val: any) => { return (val.amount) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0),
             "botaoDetalhes": `/carrinho/metricas/${item.created_at}`
         });
     });
@@ -180,7 +168,7 @@ const Metricas: React.FC = () => {
                                 />
 
                                 <TabelaSimples
-                                    cabecalho={["Data", "Receita", "Valor médio", "Transações"]}
+                                    cabecalho={["Data", "Total Carrinho", "Valor médio", "Transações"]}
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
