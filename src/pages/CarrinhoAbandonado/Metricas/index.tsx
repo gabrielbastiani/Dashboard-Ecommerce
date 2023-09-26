@@ -31,7 +31,7 @@ import Select from "../../../components/ui/Select";
 const Metricas: React.FC = () => {
 
     const [search, setSearch] = useState<any[]>([]);
-
+    const [metrics, setMetrics] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(15);
     const [pages, setPages] = useState<any[]>([]);
@@ -60,6 +60,7 @@ const Metricas: React.FC = () => {
 
                 setPages(arrayPages || []);
                 setSearch(data.abandoned || []);
+                setMetrics(data.abandonedFirst || []);
 
             } catch (error) {
                 console.error(error);
@@ -74,16 +75,30 @@ const Metricas: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
-    const dados: any = [];
+    console.log(search)
+
+    const filter: any = [];
     (search || []).forEach((item: any) => {
-        dados.push({/* @ts-ignore */
-            "Data": moment(item.created_at).format("DD/MM/YYYY"),
-            "Total Carrinho": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
-            "Valor médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total / 2) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
-            "Transações": item.cart_abandoned.map((val: any) => { return (val.amount) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0),
-            "botaoDetalhes": `/carrinho/metricas/${item.created_at}`
+        filter.push({/* @ts-ignore */
+            "data": item.nivel === "0" ? item.created_at : null,
+            "total_cart": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
+            "mediun_value": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total / 2) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
+            "trasactions_all": item.cart_abandoned.map((val: any) => { return (val.amount) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)
         });
     });
+
+    const dados: any = [];
+    (filter || []).forEach((item: any) => {
+        dados.push({/* @ts-ignore */
+            "Data": item.data,
+            "Total Carrinho": item.total_cart,
+            "Valor médio": item.mediun_value,
+            "Transações": item.trasactions_all,
+            "botaoDetalhes": `/carrinho/metricas/${item.data}`
+        });
+    });
+
+    console.log(dados)
 
     /* async function handleExportContacts() {
         try {
