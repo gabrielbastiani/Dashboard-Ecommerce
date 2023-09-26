@@ -77,28 +77,18 @@ const Metricas: React.FC = () => {
 
     console.log(search)
 
-    const filter: any = [];
-    (search || []).forEach((item: any) => {
-        filter.push({/* @ts-ignore */
-            "data": item.nivel === "0" ? item.created_at : null,
-            "total_cart": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
-            "mediun_value": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart_abandoned.map((val: any) => { return (val.total / 2) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)),
-            "trasactions_all": item.cart_abandoned.map((val: any) => { return (val.amount) }).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0)
-        });
-    });
-
     const dados: any = [];
-    (filter || []).forEach((item: any) => {
+    (search || []).forEach((item: any) => {
         dados.push({/* @ts-ignore */
-            "Data": item.data,
-            "Total Carrinho": item.total_cart,
-            "Valor médio": item.mediun_value,
-            "Transações": item.trasactions_all,
-            "botaoDetalhes": `/carrinho/metricas/${item.data}`
+            "Data": item.nivel === "0" ? item.created_at : null,/* @ts-ignore */
+            "Total Carrinho": item.total_cart * 8,
+            "Valor médio": "",
+            "Transações": "",
+            "botaoDetalhes": `/carrinho/metricas/${item.nivel === "0" ? item.created_at : null}`
         });
     });
 
-    console.log(dados)
+    console.log("Dados da tabela", dados)
 
     /* async function handleExportContacts() {
         try {
@@ -175,7 +165,7 @@ const Metricas: React.FC = () => {
                                     /* @ts-ignore */
                                     onChange={limits}
                                     opcoes={[
-                                        { label: "Todas contatos", value: "99999" },
+                                        { label: "Todas métricas", value: "15" },
                                         { label: "15", value: "15" },
                                         { label: "30", value: "30" }
                                     ]}
