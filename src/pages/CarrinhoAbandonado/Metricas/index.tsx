@@ -31,18 +31,10 @@ import Select from "../../../components/ui/Select";
 const Metricas: React.FC = () => {
 
     const [search, setSearch] = useState<any[]>([]);
-    const [metrics, setMetrics] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(15);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-
-    const [loading, setLoading] = useState(false);
-    const [showElement, setShowElement] = useState(false);
-
-    const showOrHide = () => {
-        setShowElement(!showElement)
-    }
 
     useEffect(() => {
         async function allAbandoned() {
@@ -60,7 +52,6 @@ const Metricas: React.FC = () => {
 
                 setPages(arrayPages || []);
                 setSearch(data.abandoned || []);
-                setMetrics(data.abandonedFirst || []);
 
             } catch (error) {
                 console.error(error);
@@ -75,34 +66,16 @@ const Metricas: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
-    console.log(search)
-
     const dados: any = [];
     (search || []).forEach((item: any) => {
         dados.push({
             "Data do Abandono": item.day_cart,
             "Total do Dia": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.total_day),
+            "Valor Médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.total_day / item.lost_orders),
             "Qtd. Pedidos do Dia": item.lost_orders,
-            "botaoDetalhes": `/carrinho/metricas/${item.nivel === "0" ? item.created_at : null}`
+            "botaoDetalhes": `/carrinho/metricas/${item.day_cart}`
         });
     });
-
-    console.log("Dados da tabela", dados)
-
-    /* async function handleExportContacts() {
-        try {
-            setLoading(true);
-            const apiClient = setupAPIClient();
-            await apiClient.get('/exportContacts');
-            toast.success('Lista de contatos gerada com sucesso!');
-            setLoading(false);
-
-            showOrHide();
-
-        } catch (error) {
-            console.log(error);
-        }
-    } */
 
 
 
@@ -117,38 +90,6 @@ const Metricas: React.FC = () => {
                             tipo="h1"
                             titulo="Métricas"
                         />
-
-                        {/* {dados.length < 1 ? (
-                            null
-                        ) :
-                            <>
-                                {showElement ?
-                                    <BlockExport>
-                                        <Button
-                                            type="submit"
-                                            
-                                            loading={loading}
-                                            onClick={handleExportContactEmail}
-                                        >
-                                            Exportar arquivo para o seu email
-                                        </Button>
-                                        <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
-                                    </BlockExport>
-                                    :
-                                    <BlockExport>
-                                        <Button
-                                            style={{ backgroundColor: 'green' }}
-                                            type="submit"
-                                            
-                                            loading={loading}
-                                            onClick={handleExportContacts}
-                                        >
-                                            Gerar arquivo para exportar contatos
-                                        </Button>
-                                    </BlockExport>
-                                }
-                            </>
-                        } */}
 
                         {dados.length < 1 ? (
                             <>
@@ -165,14 +106,13 @@ const Metricas: React.FC = () => {
                                     onChange={limits}
                                     opcoes={[
                                         { label: "Todas métricas", value: "15" },
-                                        { label: "15", value: "15" },
-                                        { label: "30", value: "30" }
+                                        { label: "25", value: "25" },
+                                        { label: "35", value: "35" }
                                     ]}
-                                    value={undefined}
                                 />
 
                                 <TabelaSimples
-                                    cabecalho={["Data do Abandono", "Total do Dia", "Qtd. Pedidos do Dia"]}
+                                    cabecalho={["Data do Abandono", "Total do Dia", "Valor Médio", "Qtd. Pedidos do Dia"]}
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
@@ -187,7 +127,7 @@ const Metricas: React.FC = () => {
                                     )}
 
                                     <TotalBoxItems key={total}>
-                                        <TextTotal>Total de contatos: {total}</TextTotal>
+                                        <TextTotal>Total de métricas: {total}</TextTotal>
                                     </TotalBoxItems>
                                     <ContainerCategoryPage>
 
