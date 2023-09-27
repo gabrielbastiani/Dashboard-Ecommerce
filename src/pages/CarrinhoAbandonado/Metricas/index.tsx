@@ -82,7 +82,7 @@ const Metricas: React.FC = () => {
         dados.push({
             "Data do Abandono": item.day_cart,
             "Total do Dia": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.total_day),
-            "Qtd. Pedidos do Dia": "",
+            "Qtd. Pedidos do Dia": item.lost_orders,
             "botaoDetalhes": `/carrinho/metricas/${item.nivel === "0" ? item.created_at : null}`
         });
     });
