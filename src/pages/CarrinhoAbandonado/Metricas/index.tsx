@@ -79,11 +79,10 @@ const Metricas: React.FC = () => {
 
     const dados: any = [];
     (search || []).forEach((item: any) => {
-        dados.push({/* @ts-ignore */
-            "Data": item.nivel === "0" ? item.created_at : null,/* @ts-ignore */
-            "Total Carrinho": item.total_cart * 8,
-            "Valor médio": "",
-            "Transações": "",
+        dados.push({
+            "Data do Abandono": item.day_cart,
+            "Total do Dia": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.total_day),
+            "Qtd. Pedidos do Dia": "",
             "botaoDetalhes": `/carrinho/metricas/${item.nivel === "0" ? item.created_at : null}`
         });
     });
@@ -173,7 +172,7 @@ const Metricas: React.FC = () => {
                                 />
 
                                 <TabelaSimples
-                                    cabecalho={["Data", "Total Carrinho", "Valor médio", "Transações"]}
+                                    cabecalho={["Data do Abandono", "Total do Dia", "Qtd. Pedidos do Dia"]}
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
