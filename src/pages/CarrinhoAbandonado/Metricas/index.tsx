@@ -67,7 +67,7 @@ const Metricas: React.FC = () => {
             "Total do Dia": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.total_day),
             "Valor Médio": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.total_day / item.lost_orders),
             "Qtd. Pedidos do Dia": item.lost_orders,
-            "botaoDetalhes": `/carrinho/metricas/${item.day_cart}`
+            "botaoDetalhes": `/carrinho/metricas/${item.slug_day}`
         });
     });
 
