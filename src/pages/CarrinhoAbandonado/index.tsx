@@ -5,11 +5,13 @@ import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
 import {
+    AddButton,
     ButtonPage,
     Container,
     ContainerCategoryPage,
     ContainerPagination,
     Next, Previus,
+    SpanText,
     TextPage,
     TextTotal,
     TotalBoxItems
@@ -24,30 +26,24 @@ import { Button } from "../../components/ui/Button";
 import { BlockExport, ButtonExit } from './styles';
 import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 
 const CarrinhoAbandonado: React.FC = () => {
 
-    const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
-
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(99999);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [loading, setLoading] = useState(false);
-    const [showElement, setShowElement] = useState(false);
-
-    const showOrHide = () => {
-        setShowElement(!showElement)
-    }
 
     useEffect(() => {
-        async function allContacts() {
+        async function allConfigs() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/pageContact?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/allConfigsAbandonedsCart?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -58,14 +54,13 @@ const CarrinhoAbandonado: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.contacts || []);
-                setInitialFilter(data.contacts);
+                setSearch(data.configs || []);
 
             } catch (error) {
                 console.error(error);
             }
         }
-        allContacts();
+        allConfigs();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -74,57 +69,15 @@ const CarrinhoAbandonado: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
-    /* @ts-ignore */
-    const handleChange = ({ target }) => {
-        if (!target.value) {/* @ts-ignore */
-            setSearch(initialFilter);
-
-            return;
-        }
-        /* @ts-ignore */
-        const filterContact = search.filter((filt) => filt.name.toLowerCase().includes(target.value));
-        setSearch(filterContact);
-    }
-
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Nome": item.name,
-            "E-mail": item.email,
-            "Data de Cadastro": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/contato/${item.id}`
+            "Assunto": item.subject,
+            "Tempo de disparo": item.time_send_email,
+            "Cupom no e-mail": item.code_cupom,
+            "botaoDetalhes": `/carrinho/configuracoes/${item.id}`
         });
     });
-
-    async function handleExportContacts() {
-        try {
-            setLoading(true);
-            const apiClient = setupAPIClient();
-            await apiClient.get('/exportContacts');
-            toast.success('Lista de contatos gerada com sucesso!');
-            setLoading(false);
-
-            showOrHide();
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function handleExportContactEmail() {
-        try {
-            setLoading(true);
-            const apiClient = setupAPIClient();
-            await apiClient.get('/sendEmailContact');
-            toast.success('Lista de contatos exportada para seu EMAIL com sucesso!');
-            setLoading(false);
-
-            showOrHide();
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 
     return (
@@ -134,75 +87,41 @@ const CarrinhoAbandonado: React.FC = () => {
                 <Aside />
                 <Container>
                     <Card>
-                        <Titulos
-                            tipo="h1"
-                            titulo="CarrinhoAbandonado"
-                        />
 
-                        {dados.length < 1 ? (
-                            null
-                        ) :
-                            <Pesquisa
-                                placeholder={"Pesquise aqui pelo nome da pessoa..."}
-                                /* @ts-ignore */
-                                onChange={handleChange}
-                            />
-                        }
-
-                        {dados.length < 1 ? (
-                            null
-                        ) :
-                            <>
-                                {showElement ?
-                                    <BlockExport>
-                                        <Button
-                                            type="submit"
-                                            /* @ts-ignore */
-                                            loading={loading}
-                                            onClick={handleExportContactEmail}
-                                        >
-                                            Exportar arquivo para o seu email
-                                        </Button>
-                                        <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
-                                    </BlockExport>
-                                    :
-                                    <BlockExport>
-                                        <Button
-                                            style={{ backgroundColor: 'green' }}
-                                            type="submit"
-                                            /* @ts-ignore */
-                                            loading={loading}
-                                            onClick={handleExportContacts}
-                                        >
-                                            Gerar arquivo para exportar contatos
-                                        </Button>
-                                    </BlockExport>
-                                }
-                            </>
-                        }
+                        <AddButton>
+                            <AiOutlinePlusCircle />
+                            <Link to="/carrinho/configuracoes/novo" >
+                                <SpanText>Criar Configuração</SpanText>
+                            </Link>
+                        </AddButton>
 
                         {dados.length < 1 ? (
                             <>
                                 <Avisos
-                                    texto="Não há contatos cadastradas aqui..."
+                                    texto="Não há configurações de carrinhos abandonados cadastradas aqui..."
                                 />
                             </>
                         ) :
                             <>
-                                <TextTotal>CarrinhoAbandonado por página: &nbsp;</TextTotal>
+                                <Titulos
+                                    tipo="h1"
+                                    titulo="Configurações de Carrinhos Abandonados"
+                                />
+
+                                <TextTotal>configurações por página: &nbsp;</TextTotal>
 
                                 <Select
                                     /* @ts-ignore */
                                     onChange={limits}
                                     opcoes={[
-                                        { label: "Todas contatos", value: "99999" },
+                                        { label: "Todas configurações", value: "99999" },
                                         { label: "15", value: "15" },
                                         { label: "30", value: "30" }
                                     ]}
                                 />
 
                                 <TabelaSimples
-                                    cabecalho={["Nome", "E-mail", "Data de Cadastro"]}
+                                    cabecalho={["Assunto", "Tempo de disparo", "Cupom no e-mail"]}
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
