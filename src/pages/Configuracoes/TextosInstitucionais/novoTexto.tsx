@@ -1,4 +1,8 @@
-import { ChangeEvent, HTMLAttributeAnchorTarget, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
+import ReactQuill, { Quill } from "react-quill";
+import 'react-quill/dist/quill.bubble.css'
+import 'react-quill/dist/quill.snow.css';
+import QuillImageResize from 'quill-image-resize';
 import { useNavigate } from "react-router-dom";
 import Aside from "../../../components/Aside";
 import { Card } from "../../../components/Content/styles";
@@ -13,12 +17,11 @@ import { Grid } from "../../Dashboard/styles";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../contexts/AuthContext";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { styled } from "styled-components";
 
 
 const NovoTexto: React.FC = () => {
+
+    Quill.register('modules/imageResize', QuillImageResize);
 
     const { admin } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -27,6 +30,10 @@ const NovoTexto: React.FC = () => {
     const [order, setOrder] = useState(Number);
     const [positionSelected, setPositionSelected] = useState();
     const [description, setDescription] = useState<any>('');
+
+    const handleChange = (html: string) => {
+        setDescription(html);
+    };
 
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -46,24 +53,15 @@ const NovoTexto: React.FC = () => {
     ];
 
     const module = {
-        toolbar: toolbarOptions
+        toolbar: toolbarOptions,
+        imageResize: {
+            handleStyles: {
+                backgroundColor: 'black',
+                border: 'none',
+                color: 'white',
+            },
+        },
     }
-
-    const CustomEditor = styled(ReactQuill)`
-        .ql-toolbar {
-            background-color: #ffffff;
-            color: #fff;
-        }
-
-        .ql-editor {
-            background-color: #ebebeb;
-            color: #000000;
-        }
-    `;
-
-    
-
-    console.log(description)
 
 
     async function handleTexto() {
@@ -107,7 +105,9 @@ const NovoTexto: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
-                <Card>
+                <Card
+                    style={{ height: '150%' }}
+                >
 
                     <Voltar url='/textosInstitucionais' />
 
@@ -174,10 +174,12 @@ const NovoTexto: React.FC = () => {
                         style={{ width: '100%' }}
                     >
                         <Etiqueta>Escreva o texto:</Etiqueta>
-                        <CustomEditor
+                        <ReactQuill
+                            style={{ backgroundColor: 'white', color: 'black', height: '500px' }}
+                            theme="snow"
+                            value={description}
+                            onChange={handleChange}
                             modules={module}
-                            value={description}/* @ts-ignore */
-                            onChange={''}
                         />
                     </Block>
                 </Card>
