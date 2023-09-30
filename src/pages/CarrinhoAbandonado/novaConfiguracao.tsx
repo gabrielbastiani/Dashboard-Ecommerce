@@ -27,8 +27,7 @@ const NovaConfiguracao: React.FC = () => {
     const [subject, setSubject] = useState('');
     const [code_cupom, setCode_cupom] = useState('');
     const [template, setTemplate] = useState<string>('');
-    const [emails, setEmails] = useState<any[]>([]);
-    const [startDate, setStartDate] = useState("");
+    const [startDate, setStartDate] = useState<number>();
 
     const [active, setActive] = useState('Nao');
     const [check, setCheck] = useState(false);
@@ -87,7 +86,6 @@ const NovaConfiguracao: React.FC = () => {
                 subject: subject,
                 template: template,
                 code_cupom: code_cupom,
-                emails: emails,
                 time_send_email: '',
                 active: ''
             }
@@ -116,7 +114,7 @@ const NovaConfiguracao: React.FC = () => {
             <Aside />
             <Container>
                 <Card
-                    style={{ height: '150%' }}
+                    style={{ height: '200%' }}
                 >
 
                     <Voltar url='/carrinho/configuracoes' />
@@ -149,17 +147,18 @@ const NovaConfiguracao: React.FC = () => {
                         <Etiqueta>Código do cupom:</Etiqueta>
                         <InputPost
                             type="text"
-                            placeholder="0"
+                            placeholder="Código do cupom..."
                             value={code_cupom}
                             onChange={(e) => setCode_cupom(e.target.value)}
                         />
                     </Block>
 
                     <Block>
-                        <Etiqueta>Data e tempo:</Etiqueta>
+                        <Etiqueta>Tempo do envio:</Etiqueta>
                         <InputPost
-                            type="datetime-local"
-                            placeholder={startDate}
+                            type="number"
+                            placeholder="0"
+                            value={startDate}/* @ts-ignore */
                             onChange={(e) => setStartDate(e.target.value)}
                         />
                     </Block>
@@ -185,7 +184,7 @@ const NovaConfiguracao: React.FC = () => {
                     >
                         <Etiqueta>Escreva o E-mail:</Etiqueta>
                         <ReactQuill
-                            style={{ backgroundColor: 'white', color: 'black', height: '500px' }}
+                            style={{ backgroundColor: 'white', color: 'black', height: '700px' }}
                             theme="snow"
                             value={template}
                             onChange={handleChange}
