@@ -27,7 +27,7 @@ const NovaConfiguracao: React.FC = () => {
     const [subject, setSubject] = useState('');
     const [code_cupom, setCode_cupom] = useState('');
     const [template, setTemplate] = useState<string>('');
-    const [startDate, setStartDate] = useState<number>();
+    const [startDate, setStartDate] = useState<number>(1);
 
     const [active, setActive] = useState('Nao');
     const [check, setCheck] = useState(false);
@@ -86,8 +86,8 @@ const NovaConfiguracao: React.FC = () => {
                 subject: subject,
                 template: template,
                 code_cupom: code_cupom,
-                time_send_email: '',
-                active: ''
+                time_send_email: startDate * 60,
+                active: active
             }
             );
 
@@ -100,8 +100,8 @@ const NovaConfiguracao: React.FC = () => {
                 navigate('/carrinho/configuracoes');
             }, 3000);
 
-        } catch (error) {
-            console.log(error);
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
             toast.error('Erro ao cadastrar a configuração.');
         }
     }
