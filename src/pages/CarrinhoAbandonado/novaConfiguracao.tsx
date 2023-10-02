@@ -1,8 +1,4 @@
 import { useState } from "react";
-import ReactQuill, { Quill } from "react-quill";
-import 'react-quill/dist/quill.bubble.css'
-import 'react-quill/dist/quill.snow.css';
-import QuillImageResize from 'quill-image-resize';
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { Grid } from "../Dashboard/styles";
@@ -20,13 +16,10 @@ import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../Banners/s
 
 const NovaConfiguracao: React.FC = () => {
 
-    Quill.register('modules/imageResize', QuillImageResize);
-
     const navigate = useNavigate();
 
     const [subject, setSubject] = useState('');
     const [code_cupom, setCode_cupom] = useState('');
-    const [template, setTemplate] = useState<string>('');
     const [startDate, setStartDate] = useState<number>(1);
 
     const [active, setActive] = useState('Nao');
@@ -35,38 +28,6 @@ const NovaConfiguracao: React.FC = () => {
     const handleChecked = (e: any) => {
         setCheck(e.target.checked);
     };
-
-    const handleChange = (html: string) => {
-        setTemplate(html);
-    };
-
-    var toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        ['clean'],
-        ['formula', 'link', 'image', 'video']
-    ];
-
-    const module = {
-        toolbar: toolbarOptions,
-        imageResize: {
-            handleStyles: {
-                backgroundColor: 'black',
-                border: 'none',
-                color: 'white',
-            },
-        },
-    }
 
 
     async function handleConfigAbandoned() {
@@ -77,14 +38,8 @@ const NovaConfiguracao: React.FC = () => {
                 return;
             }
 
-            if (template === "") {
-                toast.error('Não o email em branco!');
-                return;
-            }
-
             await apiClient.post(`/createConfigAbandonedCart`, {
                 subject: subject,
-                template: template,
                 code_cupom: code_cupom,
                 time_send_email: startDate * 60,
                 active: active
@@ -94,7 +49,6 @@ const NovaConfiguracao: React.FC = () => {
             toast.success('Configuração cadastrada com sucesso.');
 
             setSubject("");
-            setTemplate("");
 
             setTimeout(() => {
                 navigate('/carrinho/configuracoes');
@@ -113,9 +67,7 @@ const NovaConfiguracao: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
-                <Card
-                    style={{ height: '200%' }}
-                >
+                <Card>
 
                     <Voltar url='/carrinho/configuracoes' />
 
@@ -154,7 +106,7 @@ const NovaConfiguracao: React.FC = () => {
                     </Block>
 
                     <Block>
-                        <Etiqueta>Tempo do envio:</Etiqueta>
+                        <Etiqueta>Tempo do envio (OBS: Cada numero é o equivalente a quantidade de horas):</Etiqueta>
                         <InputPost
                             type="number"
                             placeholder="0"
@@ -176,20 +128,6 @@ const NovaConfiguracao: React.FC = () => {
                                 />
                             </BoxActive>
                         </BlockInputs>
-                    </Block>
-                    <br />
-                    <br />
-                    <Block
-                        style={{ width: '100%' }}
-                    >
-                        <Etiqueta>Escreva o E-mail:</Etiqueta>
-                        <ReactQuill
-                            style={{ backgroundColor: 'white', color: 'black', height: '700px' }}
-                            theme="snow"
-                            value={template}
-                            onChange={handleChange}
-                            modules={module}
-                        />
                     </Block>
                 </Card>
             </Container >

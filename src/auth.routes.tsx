@@ -63,6 +63,7 @@ import MetricaDetalhes from './pages/CarrinhoAbandonado/Metricas/metricaDetalhes
 import DetalheCarrinhoAbandonado from './pages/CarrinhoAbandonado/Metricas/detalheCarrinhoAbandonado';
 import CarrinhoAbandonado from './pages/CarrinhoAbandonado';
 import NovaConfiguracao from './pages/CarrinhoAbandonado/novaConfiguracao';
+import EditConfiguracao from './pages/CarrinhoAbandonado/editConfiguracao';
 
 
 const RoutesAuth: React.FC = () => {
@@ -104,6 +105,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/carrinho/metricas/detalhes/:abandonedCart_id' element={<DetalheCarrinhoAbandonado />} />
             <Route path='/carrinho/configuracoes' element={<CarrinhoAbandonado />} />
             <Route path='/carrinho/configuracoes/novo' element={<NovaConfiguracao />} />
+            <Route path='/carrinho/configuracoes/:configAbandonedCart_id' element={<EditConfiguracao />} />
 
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />

@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import { setupAPIClient } from "../../services/api";
-import moment from "moment";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
@@ -18,14 +17,9 @@ import {
 } from "../Categorias/styles";
 import { Card } from "../../components/Content/styles";
 import Titulos from "../../components/Titulos";
-import Pesquisa from "../../components/Pesquisa";
 import { Avisos } from "../../components/Avisos";
 import Select from "../../components/ui/Select";
 import TabelaSimples from "../../components/Tabelas";
-import { Button } from "../../components/ui/Button";
-import { BlockExport, ButtonExit } from './styles';
-import { toast } from "react-toastify";
-import { FaTimesCircle } from "react-icons/fa";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
