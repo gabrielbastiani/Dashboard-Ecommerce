@@ -192,14 +192,19 @@ const Aside: React.FC = () => {
 
                 {submenu5 ? (
                     <>
-                        <SubMenuItemLink href="/carrinho/configuracoes" >
-                            <MdPlayArrow />
-                            Configurações
-                        </SubMenuItemLink>
-
                         <SubMenuItemLink href='/carrinho/metricas' >
                             <MdPlayArrow />
                             Métricas
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href="/carrinho/emails" >
+                            <MdPlayArrow />
+                            Templates e-mails
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href="/carrinho/configuracoes" >
+                            <MdPlayArrow />
+                            Configurações
                         </SubMenuItemLink>
                     </>
                 ) : null}

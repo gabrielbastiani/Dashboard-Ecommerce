@@ -33,7 +33,7 @@ import MenusCategorias from './pages/Categorias/MenusCategorias';
 import NovoMenu from './pages/Categorias/MenusCategorias/novoMenu';
 import CategoriasMenu from './pages/Categorias/MenusCategorias/categoriasMenu';
 import EditMenu from './pages/Categorias/MenusCategorias/editMenu';
-import Filtros from './pages/Filtros'; 
+import Filtros from './pages/Filtros';
 import NovoGrupoFiltroAtributo from './pages/Filtros/novoGrupoFiltroAtributo';
 import AtributoFiltro from './pages/Filtros/AtributoFiltro';
 import EditAtributoFiltro from './pages/Filtros/AtributoFiltro/editAtributoFiltro';
@@ -62,8 +62,10 @@ import Metricas from './pages/CarrinhoAbandonado/Metricas';
 import MetricaDetalhes from './pages/CarrinhoAbandonado/Metricas/metricaDetalhes';
 import DetalheCarrinhoAbandonado from './pages/CarrinhoAbandonado/Metricas/detalheCarrinhoAbandonado';
 import CarrinhoAbandonado from './pages/CarrinhoAbandonado';
-import NovaConfiguracao from './pages/CarrinhoAbandonado/novaConfiguracao';
-import EditConfiguracao from './pages/CarrinhoAbandonado/editConfiguracao';
+import NovaConfiguracao from './pages/CarrinhoAbandonado/ConfiguracaoCarrinhoAbandonado';
+import EditConfiguracao from './pages/CarrinhoAbandonado/ConfiguracaoCarrinhoAbandonado/editConfiguracao';
+import TemplatesEmailAbandonedCart from './pages/CarrinhoAbandonado/TemplatesEmail';
+import NovoTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/novoTemplate';
 
 
 const RoutesAuth: React.FC = () => {
@@ -106,11 +108,13 @@ const RoutesAuth: React.FC = () => {
             <Route path='/carrinho/configuracoes' element={<CarrinhoAbandonado />} />
             <Route path='/carrinho/configuracoes/novo' element={<NovaConfiguracao />} />
             <Route path='/carrinho/configuracoes/:configAbandonedCart_id' element={<EditConfiguracao />} />
+            <Route path='/carrinho/emails' element={<TemplatesEmailAbandonedCart />} />
+            <Route path='/carrinho/templateEmail/novo' element={<NovoTemplate />} />
 
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />
             <Route path='/tipoAtributo/edit/:typeAttribute_id' element={<Atributo />} />
-            
+
             <Route path='/compreJunto' element={<CompreJunto />} />
             <Route path='/compreJunto/grupo/novo' element={<NovoGrupoCompreJunto />} />
             <Route path='/compreJunto/grupo/edit/:buyTogether_id' element={<EditGrupoCompreJunto />} />

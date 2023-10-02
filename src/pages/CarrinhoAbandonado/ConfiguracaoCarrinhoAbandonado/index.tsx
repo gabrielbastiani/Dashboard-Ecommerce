@@ -1,17 +1,18 @@
-import { useState } from "react";
-import { setupAPIClient } from "../../services/api";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Grid } from "../Dashboard/styles";
-import MainHeader from "../../components/MainHeader";
-import Aside from "../../components/Aside";
-import { Block, BlockTop, Container, Etiqueta } from "../Categorias/styles";
-import { Card } from "../../components/Content/styles";
-import Voltar from "../../components/Voltar";
-import Titulos from "../../components/Titulos";
-import { Button } from "../../components/ui/Button";
-import { InputPost } from "../../components/ui/InputPost";
 import { useNavigate } from "react-router-dom";
-import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../Banners/styles";
+import { Grid } from "../../Dashboard/styles";
+import MainHeader from "../../../components/MainHeader";
+import Aside from "../../../components/Aside";
+import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
+import { Card } from "../../../components/Content/styles";
+import Voltar from "../../../components/Voltar";
+import Titulos from "../../../components/Titulos";
+import { Button } from "../../../components/ui/Button";
+import { InputPost } from "../../../components/ui/InputPost";
+import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../../Banners/styles";
+import { setupAPIClient } from "../../../services/api";
+import Select from "../../../components/ui/Select";
 
 
 const NovaConfiguracao: React.FC = () => {
@@ -21,6 +22,9 @@ const NovaConfiguracao: React.FC = () => {
     const [subject, setSubject] = useState('');
     const [code_cupom, setCode_cupom] = useState('');
     const [startDate, setStartDate] = useState<number>(1);
+    const [templateSelected, setTemplateSelected] = useState("");
+
+    const [allTemplates, setAllTemplates] = useState<any[]>([]);
 
     const [active, setActive] = useState('Nao');
     const [check, setCheck] = useState(false);
@@ -29,6 +33,24 @@ const NovaConfiguracao: React.FC = () => {
         setCheck(e.target.checked);
     };
 
+    function handleChangeTemplate(e: any) {
+        setTemplateSelected(e.target.value)
+    }
+
+    useEffect(() => {
+        async function allTemplates() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/allTemplatesAbandonedCart`);
+
+                setAllTemplates(data || []);
+
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
+            }
+        }
+        allTemplates();
+    }, []);
 
     async function handleConfigAbandoned() {
         const apiClient = setupAPIClient();
@@ -42,7 +64,8 @@ const NovaConfiguracao: React.FC = () => {
                 subject: subject,
                 code_cupom: code_cupom,
                 time_send_email: startDate * 60,
-                active: active
+                active: active,
+                templateAbandonedCartEmail_id: templateSelected
             }
             );
 
@@ -129,6 +152,20 @@ const NovaConfiguracao: React.FC = () => {
                             </BoxActive>
                         </BlockInputs>
                     </Block>
+                    <br />
+                    <br />
+                    <Etiqueta>Escolha um template de e-mail:</Etiqueta>
+                    <Select
+                        value={templateSelected}
+                        /* @ts-ignore */
+                        onChange={handleChangeTemplate}
+                        opcoes={
+                            [
+                                { label: "Selecionar...", value: "" },/* @ts-ignore */
+                                ...(allTemplates || []).map((item) => ({ label: item.name_file_email, value: item.id }))
+                            ]
+                        }
+                    />
                 </Card>
             </Container >
         </Grid >

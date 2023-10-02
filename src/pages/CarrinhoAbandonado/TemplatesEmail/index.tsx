@@ -1,30 +1,20 @@
 import { useEffect, useState, useCallback } from "react";
-import { setupAPIClient } from "../../services/api";
-import { Grid } from "../Dashboard/styles";
-import MainHeader from "../../components/MainHeader";
-import Aside from "../../components/Aside";
-import {
-    AddButton,
-    ButtonPage,
-    Container,
-    ContainerCategoryPage,
-    ContainerPagination,
-    Next, Previus,
-    SpanText,
-    TextPage,
-    TextTotal,
-    TotalBoxItems
-} from "../Categorias/styles";
-import { Card } from "../../components/Content/styles";
-import Titulos from "../../components/Titulos";
-import { Avisos } from "../../components/Avisos";
-import Select from "../../components/ui/Select";
-import TabelaSimples from "../../components/Tabelas";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { setupAPIClient } from "../../../services/api";
+import moment from "moment";
+import { Grid } from "../../Dashboard/styles";
+import MainHeader from "../../../components/MainHeader";
+import Aside from "../../../components/Aside";
+import { AddButton, ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
+import { Card } from "../../../components/Content/styles";
+import { Avisos } from "../../../components/Avisos";
+import Titulos from "../../../components/Titulos";
+import Select from "../../../components/ui/Select";
+import TabelaSimples from "../../../components/Tabelas";
 
 
-const CarrinhoAbandonado: React.FC = () => {
+const TemplatesEmailAbandonedCart: React.FC = () => {
 
     const [search, setSearch] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
@@ -34,10 +24,10 @@ const CarrinhoAbandonado: React.FC = () => {
 
 
     useEffect(() => {
-        async function allConfigs() {
+        async function allTemplates() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/allConfigsAbandonedsCart?page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/pageTemplatesCartAbandoned?page=${currentPage}&limit=${limit}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -48,13 +38,13 @@ const CarrinhoAbandonado: React.FC = () => {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.configs || []);
+                setSearch(data.templates || []);
 
             } catch (error) {
                 console.error(error);
             }
         }
-        allConfigs();
+        allTemplates();
     }, [currentPage, limit, total]);
 
     /* @ts-ignore */
@@ -66,10 +56,9 @@ const CarrinhoAbandonado: React.FC = () => {
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
-            "Assunto": item.subject,
-            "Tempo de disparo": item.time_send_email,
-            "Cupom no e-mail": item.code_cupom,
-            "botaoDetalhes": `/carrinho/configuracoes/${item.id}`
+            "Nome do arquivo": item.name_file_email,
+            "Data de criação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "botaoDetalhes": `/carrinho/templateEmail/${item.id}`
         });
     });
 
@@ -84,38 +73,38 @@ const CarrinhoAbandonado: React.FC = () => {
 
                         <AddButton>
                             <AiOutlinePlusCircle />
-                            <Link to="/carrinho/configuracoes/novo" >
-                                <SpanText>Criar Configuração</SpanText>
+                            <Link to="/carrinho/templateEmail/novo" >
+                                <SpanText>Criar Template</SpanText>
                             </Link>
                         </AddButton>
 
                         {dados.length < 1 ? (
                             <>
                                 <Avisos
-                                    texto="Não há configurações de carrinhos abandonados cadastradas aqui..."
+                                    texto="Não há templates de emails para carrinhos abandonados cadastradas aqui..."
                                 />
                             </>
                         ) :
                             <>
                                 <Titulos
                                     tipo="h1"
-                                    titulo="Configurações de Carrinhos Abandonados"
+                                    titulo="Templates de e-mails para carrinhos abandonados"
                                 />
 
-                                <TextTotal>configurações por página: &nbsp;</TextTotal>
+                                <TextTotal>Templates por página: &nbsp;</TextTotal>
 
                                 <Select
                                     /* @ts-ignore */
                                     onChange={limits}
                                     opcoes={[
-                                        { label: "Todas configurações", value: "99999" },
+                                        { label: "Todos templates", value: "99999" },
                                         { label: "15", value: "15" },
                                         { label: "30", value: "30" }
                                     ]}
                                 />
 
                                 <TabelaSimples
-                                    cabecalho={["Assunto", "Tempo de disparo", "Cupom no e-mail"]}
+                                    cabecalho={["Nome do arquivo", "Data de criação"]}
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
@@ -130,7 +119,7 @@ const CarrinhoAbandonado: React.FC = () => {
                                     )}
 
                                     <TotalBoxItems key={total}>
-                                        <TextTotal>Total de configurações: {total}</TextTotal>
+                                        <TextTotal>Total de templates: {total}</TextTotal>
                                     </TotalBoxItems>
                                     <ContainerCategoryPage>
 
@@ -162,4 +151,4 @@ const CarrinhoAbandonado: React.FC = () => {
     )
 }
 
-export default CarrinhoAbandonado;
+export default TemplatesEmailAbandonedCart;
