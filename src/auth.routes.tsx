@@ -66,6 +66,7 @@ import NovaConfiguracao from './pages/CarrinhoAbandonado/ConfiguracaoCarrinhoAba
 import EditConfiguracao from './pages/CarrinhoAbandonado/ConfiguracaoCarrinhoAbandonado/editConfiguracao';
 import TemplatesEmailAbandonedCart from './pages/CarrinhoAbandonado/TemplatesEmail';
 import NovoTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/novoTemplate';
+import EditTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/editTemplate';
 
 
 const RoutesAuth: React.FC = () => {
@@ -110,6 +111,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/carrinho/configuracoes/:configAbandonedCart_id' element={<EditConfiguracao />} />
             <Route path='/carrinho/emails' element={<TemplatesEmailAbandonedCart />} />
             <Route path='/carrinho/templateEmail/novo' element={<NovoTemplate />} />
+            <Route path='/carrinho/templateEmail/:templateAbandonedCartEmail_id' element={<EditTemplate />} />
 
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />

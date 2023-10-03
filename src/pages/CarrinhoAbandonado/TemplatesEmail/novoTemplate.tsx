@@ -1,8 +1,5 @@
-import { useState } from "react";
-import ReactQuill, { Quill } from "react-quill";
-import 'react-quill/dist/quill.bubble.css'
-import 'react-quill/dist/quill.snow.css';
-import QuillImageResize from 'quill-image-resize';
+import { SetStateAction, useState } from "react";
+import Editor from '@monaco-editor/react';
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Grid } from "../../Dashboard/styles";
@@ -19,43 +16,13 @@ import { InputPost } from "../../../components/ui/InputPost";
 
 const NovoTemplate: React.FC = () => {
 
-    Quill.register('modules/imageResize', QuillImageResize);
-
     const navigate = useNavigate();
 
     const [name_file_email, setName_file_email] = useState('');
     const [template_cart_email, setTemplate_cart_email] = useState<string>('');
 
-    const handleChange = (html: string) => {
-        setTemplate_cart_email(html);
-    };
-
-    var toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        ['clean'],
-        ['formula', 'link', 'image', 'video']
-    ];
-
-    const module = {
-        toolbar: toolbarOptions,
-        imageResize: {
-            handleStyles: {
-                backgroundColor: 'black',
-                border: 'none',
-                color: 'white',
-            },
-        },
+    function handleValueEditor(value: SetStateAction<string>, event: any) {
+        setTemplate_cart_email(value)
     }
 
     async function handleRegisterTemplate() {
@@ -97,9 +64,7 @@ const NovoTemplate: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
-                    <Card
-                        style={{ height: '150%' }}
-                    >
+                    <Card>
 
                         <Voltar url='/carrinho/emails' />
 
@@ -130,12 +95,13 @@ const NovoTemplate: React.FC = () => {
                             style={{ width: '100%' }}
                         >
                             <Etiqueta>Escreva o E-mail:</Etiqueta>
-                            <ReactQuill
-                                style={{ backgroundColor: 'white', color: 'black', height: '700px' }}
-                                theme="snow"
-                                value={template_cart_email}
-                                onChange={handleChange}
-                                modules={module}
+                            <Editor
+                                height="80vh"
+                                width="100%"
+                                theme="vs-dark"
+                                defaultLanguage="html"
+                                value={template_cart_email}/* @ts-ignore */
+                                onChange={handleValueEditor}
                             />
                         </Block>
                     </Card>

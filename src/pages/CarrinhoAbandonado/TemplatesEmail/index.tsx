@@ -12,7 +12,6 @@ import { Avisos } from "../../../components/Avisos";
 import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
 import TabelaSimples from "../../../components/Tabelas";
-import {decode, decodeEntity, encode} from 'html-entities';
 
 
 const TemplatesEmailAbandonedCart: React.FC = () => {
@@ -62,18 +61,6 @@ const TemplatesEmailAbandonedCart: React.FC = () => {
             "botaoDetalhes": `/carrinho/templateEmail/${item.id}`
         });
     });
-
-    const template = search.map((item) => {
-        return(
-            item.template_cart_email
-        )
-    });
-
-    const tmp = template[0]; /* decodeEntity */
-
-    const dec = decode(tmp, {level: 'html5'});
-
-    console.log(dec)
 
 
     return (

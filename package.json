@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@monaco-editor/react": "^4.5.2",
     "axios": "^1.5.1",
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.50.0",
