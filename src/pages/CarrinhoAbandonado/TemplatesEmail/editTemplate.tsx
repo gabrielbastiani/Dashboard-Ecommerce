@@ -105,11 +105,6 @@ const EditTemplate: React.FC = () => {
                         name_file_email: name_file_email
                     });
 
-               /*  await apiClient.put(`/updateNameFiletemplateAbandonedCart?nameFile=${slugName}`,
-                    {
-                        name_file_email: name_file_email
-                    }); */
-
                 toast.success('Nome atualizado com sucesso.');
 
                 refreshConfig();
