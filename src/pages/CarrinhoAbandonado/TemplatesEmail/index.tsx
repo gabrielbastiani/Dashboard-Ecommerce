@@ -6,7 +6,19 @@ import moment from "moment";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
 import Aside from "../../../components/Aside";
-import { AddButton, ButtonPage, Container, ContainerCategoryPage, ContainerPagination, Next, Previus, SpanText, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
+import {
+    AddButton,
+    ButtonPage,
+    Container,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    SpanText,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../../Categorias/styles";
 import { Card } from "../../../components/Content/styles";
 import { Avisos } from "../../../components/Avisos";
 import Titulos from "../../../components/Titulos";
@@ -40,8 +52,8 @@ const TemplatesEmailAbandonedCart: React.FC = () => {
                 setPages(arrayPages || []);
                 setSearch(data.templates || []);
 
-            } catch (error) {
-                console.error(error);
+            } catch (error) {/* @ts-ignore */
+                console.error(error.response.data);
             }
         }
         allTemplates();

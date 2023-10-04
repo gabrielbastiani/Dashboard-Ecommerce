@@ -161,13 +161,12 @@ const EditTemplate: React.FC = () => {
                                 }
                             />
                         </BlockDados>
-
+                        <br />
+                        <br />
                         <Block
                             style={{ width: '100%' }}
                         >
                             <Etiqueta>Atualize abaixo o template do e-mail</Etiqueta>
-                            <br />
-                            <br />
                             <br />
                             <Button
                                 onClick={updateContentTemplate}
