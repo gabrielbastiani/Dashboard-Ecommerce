@@ -15,17 +15,14 @@ import { BlockDados } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
-import { decode } from "html-entities";
-import axios from "axios";
 import { ModalDeleteTemplateAbandonedCart } from "../../../components/popups/ModalDeleteTemplateAbandonedCart";
 
 
 const EditTemplate: React.FC = () => {
 
-    let { templateAbandonedCartEmail_id } = useParams();
+    let { slug_name_file_email } = useParams();
 
     const [name_file_email, setName_file_email] = useState<string>("");
-    const [slugName, setSlugName] = useState<string>("");
     const [template, setTemplate] = useState<string>("");
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -37,10 +34,9 @@ const EditTemplate: React.FC = () => {
     async function refreshConfig() {
         try {
             const apiClient = setupAPIClient();
-            const { data } = await apiClient.get(`/findUniqueTemplateEmailAbandonedCart?templateAbandonedCartEmail_id=${templateAbandonedCartEmail_id}`);
+            const { data } = await apiClient.get(`/findUniqueTemplateEmailAbandonedCart?slug_name_file_email=${slug_name_file_email}`);
 
             setName_file_email(data.name_file_email);
-            setSlugName(data.slug_name_file_email);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -51,23 +47,22 @@ const EditTemplate: React.FC = () => {
         async function loadNameTemplates() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/findUniqueTemplateEmailAbandonedCart?templateAbandonedCartEmail_id=${templateAbandonedCartEmail_id}`);
+                const { data } = await apiClient.get(`/findUniqueTemplateEmailAbandonedCart?slug_name_file_email=${slug_name_file_email}`);
 
                 setName_file_email(data.name_file_email || "");
-                setSlugName(data.slug_name_file_email || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadNameTemplates();
-    }, [templateAbandonedCartEmail_id]);
+    }, [slug_name_file_email]);
 
     useEffect(() => {
         const loadTemplate = async () => {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/getTemplateEmailAbandoned?slug_name=${slugName}`);
+                const { data } = await apiClient.get(`/getTemplateEmailAbandoned?slug_name_file_email=${slug_name_file_email}`);
 
                 setTemplate(data);
 
@@ -76,12 +71,12 @@ const EditTemplate: React.FC = () => {
             }
         };
         loadTemplate();
-    }, [slugName]);
+    }, [slug_name_file_email]);
 
     async function updateContentTemplate() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/updateFileTemplateAbandonedCart?slug_name=${slugName}`, {
+            await apiClient.put(`/updateFileTemplateAbandonedCart?slug_name_file_email=${slug_name_file_email}`, {
                 content: template
             });
 
@@ -100,7 +95,7 @@ const EditTemplate: React.FC = () => {
                 toast.error('Não deixe o nome em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateTemplateAbandonedCart?slug_name_file_email=${slugName}`,
+                await apiClient.put(`/updateTemplateAbandonedCart?slug_name_file_email=${slug_name_file_email}`,
                     {
                         name_file_email: name_file_email
                     });
@@ -197,7 +192,7 @@ const EditTemplate: React.FC = () => {
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
-                    template_data={slugName}
+                    template_data={slug_name_file_email}
                 />
             )}
         </>

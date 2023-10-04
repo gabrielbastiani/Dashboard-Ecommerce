@@ -58,7 +58,7 @@ const TemplatesEmailAbandonedCart: React.FC = () => {
         dados.push({
             "Nome do arquivo": item.name_file_email,
             "Data de criação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/carrinho/templateEmail/${item.id}`
+            "botaoDetalhes": `/carrinho/templateEmail/${item.slug_name_file_email}`
         });
     });
 

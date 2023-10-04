@@ -111,7 +111,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/carrinho/configuracoes/:configAbandonedCart_id' element={<EditConfiguracao />} />
             <Route path='/carrinho/emails' element={<TemplatesEmailAbandonedCart />} />
             <Route path='/carrinho/templateEmail/novo' element={<NovoTemplate />} />
-            <Route path='/carrinho/templateEmail/:templateAbandonedCartEmail_id' element={<EditTemplate />} />
+            <Route path='/carrinho/templateEmail/:slug_name_file_email' element={<EditTemplate />} />
 
             <Route path='/atributos' element={<Atributos />} />
             <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />
