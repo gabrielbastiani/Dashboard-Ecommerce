@@ -15,17 +15,18 @@ import { BlockDados } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
+import { decode } from "html-entities";
+import axios from "axios";
+import { ModalDeleteTemplateAbandonedCart } from "../../../components/popups/ModalDeleteTemplateAbandonedCart";
 
 
 const EditTemplate: React.FC = () => {
 
     let { templateAbandonedCartEmail_id } = useParams();
 
-    const [name_file_email, setName_file_email] = useState("");
-    const [slugName, setSlugName] = useState("");
+    const [name_file_email, setName_file_email] = useState<string>("");
+    const [slugName, setSlugName] = useState<string>("");
     const [template, setTemplate] = useState<string>("");
-
-    console.log(template)
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -39,6 +40,7 @@ const EditTemplate: React.FC = () => {
             const { data } = await apiClient.get(`/findUniqueTemplateEmailAbandonedCart?templateAbandonedCartEmail_id=${templateAbandonedCartEmail_id}`);
 
             setName_file_email(data.name_file_email);
+            setSlugName(data.slug_name_file_email);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -64,14 +66,13 @@ const EditTemplate: React.FC = () => {
     useEffect(() => {
         const loadTemplate = async () => {
             try {
-                const response = await fetch(`/getTemplateEmailAbandoned?slug_name=${slugName}`);
-                if (!response.ok) {
-                    throw new Error('Falha ao buscar os dados da API');
-                }
-                const content = await response.text();
-                setTemplate(content);
-            } catch (erro) {
-                console.error('Erro ao buscar dados da API:', erro);
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/getTemplateEmailAbandoned?slug_name=${slugName}`);
+
+                setTemplate(data);
+
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
             }
         };
         loadTemplate();
@@ -79,24 +80,16 @@ const EditTemplate: React.FC = () => {
 
     async function updateContentTemplate() {
         try {
-            const response = await fetch(`/updateFileTemplateAbandonedCart?slug_name=${slugName}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json', // Defina o tipo de conteúdo como JSON
-                },
-                body: JSON.stringify({
-                    content: template
-                }), // Converte os dados para JSON e envia no corpo
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateFileTemplateAbandonedCart?slug_name=${slugName}`, {
+                content: template
             });
 
-            if (response.ok) {
-                console.log('Dados atualizados com sucesso');
-                refreshConfig();
-            } else {
-                console.error('Falha ao atualizar dados');
-            }
+            toast.success("Arquivo do template atualizado com sucesso");
+
         } catch (error) {/* @ts-ignore */
-            console.error('Erro ao fazer a solicitação:', error.response.data);
+            console.error(error.response.data);
+            toast.error("Erro ao atualizar o arquivo do template");
         }
     }
 
@@ -107,10 +100,15 @@ const EditTemplate: React.FC = () => {
                 toast.error('Não deixe o nome em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/updateTemplateAbandonedCart?templateAbandonedCartEmail_id=${templateAbandonedCartEmail_id}`,
+                await apiClient.put(`/updateTemplateAbandonedCart?slug_name_file_email=${slugName}`,
                     {
                         name_file_email: name_file_email
                     });
+
+               /*  await apiClient.put(`/updateNameFiletemplateAbandonedCart?nameFile=${slugName}`,
+                    {
+                        name_file_email: name_file_email
+                    }); */
 
                 toast.success('Nome atualizado com sucesso.');
 
@@ -199,6 +197,14 @@ const EditTemplate: React.FC = () => {
                     </Card>
                 </Container >
             </Grid >
+            {modalVisible && (
+                <ModalDeleteTemplateAbandonedCart
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    template_data={slugName}
+                />
+            )}
         </>
     )
 }

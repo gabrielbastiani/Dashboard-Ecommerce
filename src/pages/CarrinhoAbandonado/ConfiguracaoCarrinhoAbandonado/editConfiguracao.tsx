@@ -18,6 +18,7 @@ import Modal from 'react-modal';
 import { ModalDeleteConfigAbandonedCart } from "../../../components/popups/ModalDeleteConfigAbandonedCart";
 
 
+
 const EditConfiguracao: React.FC = () => {
 
     let { configAbandonedCart_id } = useParams();
