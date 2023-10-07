@@ -19,7 +19,6 @@ import SelectUpdate from "../../../../components/ui/SelectUpdate";
 import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
 import { setupAPIClient } from "../../../../services/api";
 import { toast } from "react-toastify";
-import { AreaTexto } from "./styles";
 import Modal from 'react-modal';
 import { ModalDeleteTextoInstitucional } from "../../../../components/popups/ModalDeleteTextoInstitucional";
 

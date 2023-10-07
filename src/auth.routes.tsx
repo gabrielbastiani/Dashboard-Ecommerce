@@ -67,6 +67,7 @@ import EditConfiguracao from './pages/CarrinhoAbandonado/ConfiguracaoCarrinhoAba
 import TemplatesEmailAbandonedCart from './pages/CarrinhoAbandonado/TemplatesEmail';
 import NovoTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/novoTemplate';
 import EditTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/editTemplate';
+import Loja from './pages/Configuracoes/Loja';
 
 
 const RoutesAuth: React.FC = () => {
@@ -147,6 +148,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/textosInstitucionais' element={<TextosInstitucionais />} />
             <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
             <Route path='/texto/:institutionalText_id' element={<Texto />} />
+            <Route path='/configuracoes/loja' element={<Loja />} />
 
             <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
             <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />

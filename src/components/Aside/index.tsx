@@ -250,6 +250,11 @@ const Aside: React.FC = () => {
                             <MdPlayArrow />
                             Imagens Institucionais
                         </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/configuracoes/loja' >
+                            <MdPlayArrow />
+                            Configurações na loja
+                        </SubMenuItemLink>
                     </>
                     : null}
 
