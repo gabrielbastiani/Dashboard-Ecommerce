@@ -11,6 +11,7 @@ import { TextoDados } from "../../../components/TextoDados";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
 import { ContainerComponents } from "./styles";
+import { Button } from "../../../components/ui/Button";
 
 
 const Loja: React.FC = () => {
@@ -52,6 +53,17 @@ const Loja: React.FC = () => {
         }
     }
 
+    async function clearAllCart() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.delete(`/clearAllCacheCarts`);
+            toast.success("Limpeza realizada com sucesso!!!")
+        } catch (error) {
+            console.log(error);
+            toast.error("Erro ao limpar o cache dos carrinhos")
+        }
+    }
+
 
     return (
         <Grid>
@@ -63,6 +75,14 @@ const Loja: React.FC = () => {
                         tipo="h1"
                         titulo="Configurações na Loja"
                     />
+                    <br />
+                    <BlockDados>
+                        <Button
+                            onClick={clearAllCart}
+                        >
+                            Limpar cache carrinhos de compras parados
+                        </Button>
+                    </BlockDados>
                     <br />
                     {datasConfigs.map((item, index) => {
                         return (

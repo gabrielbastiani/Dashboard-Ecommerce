@@ -67,8 +67,8 @@ const CarrinhoAbandonado: React.FC = () => {
     (search || []).forEach((item) => {
         dados.push({
             "Assunto": item.subject,
-            "Tempo de disparo": item.time_send_email,
-            "Cupom no e-mail": item.code_cupom,
+            "Tempo de disparo": item.time_in_hours + " Hora(s)",
+            "Cupom no e-mail": item.code_cupom ? item.code_cupom : "Sem cupom",
             "botaoDetalhes": `/carrinho/configuracoes/${item.id}`
         });
     });

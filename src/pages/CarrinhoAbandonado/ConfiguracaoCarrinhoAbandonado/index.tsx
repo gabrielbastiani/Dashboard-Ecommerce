@@ -64,6 +64,7 @@ const NovaConfiguracao: React.FC = () => {
                 subject: subject,
                 code_cupom: code_cupom,
                 time_send_email: startDate * 60,
+                time_in_hours: startDate,
                 active: active,
                 templateAbandonedCartEmail_id: templateSelected
             }
