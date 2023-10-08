@@ -277,9 +277,9 @@ const SubCategoria: React.FC = () => {
                                                         chave={"Status"}
                                                         dados={
                                                             <ButtonSelect
-                                                                /* @ts-ignore */
-                                                                dado={item.status}/* @ts-ignore */
+                                                                dado={item.status} /* @ts-ignore */
                                                                 handleSubmit={() => updateStatus(item.id, item.status)}
+                                                                showElement={item.status}
                                                             />
                                                         }
                                                     />

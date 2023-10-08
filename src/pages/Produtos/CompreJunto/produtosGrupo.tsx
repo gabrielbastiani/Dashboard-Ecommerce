@@ -332,9 +332,9 @@ const ProdutosGrupo: React.FC = () => {
                                                                 chave={"Status"}
                                                                 dados={
                                                                     <ButtonSelect
-                                                                        /* @ts-ignore */
                                                                         dado={item.status}
                                                                         handleSubmit={() => updateStatus(item.id, item.status)}
+                                                                        showElement={item.status}
                                                                     />
                                                                 }
                                                             />

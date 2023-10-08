@@ -405,9 +405,9 @@ const EditItem: React.FC = () => {
                                         chave={"Ativo?"}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={status}
                                                 handleSubmit={updateStatus}
+                                                showElement={status}
                                             />
                                         }
                                     />

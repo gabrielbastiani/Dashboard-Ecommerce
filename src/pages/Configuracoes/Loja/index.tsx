@@ -94,6 +94,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.offer_products}
                                                 handleSubmit={() => handleUpdateStatusComponent("offer_products")}
+                                                showElement={item.offer_products}
                                             />
                                         }
                                     />
@@ -106,6 +107,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.emphasis_products}
                                                 handleSubmit={() => handleUpdateStatusComponent("emphasis_products")}
+                                                showElement={item.emphasis_products}
                                             />
                                         }
                                     />
@@ -118,6 +120,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.recent_products_views}
                                                 handleSubmit={() => handleUpdateStatusComponent("recent_products_views")}
+                                                showElement={item.recent_products_views}
                                             />
                                         }
                                     />
@@ -130,6 +133,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.chat_ia}
                                                 handleSubmit={() => handleUpdateStatusComponent("chat_ia")}
+                                                showElement={item.chat_ia}
                                             />
                                         }
                                     />
@@ -142,6 +146,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.credits_customer_in_menu}
                                                 handleSubmit={() => handleUpdateStatusComponent("credits_customer_in_menu")}
+                                                showElement={item.credits_customer_in_menu}
                                             />
                                         }
                                     />
@@ -154,6 +159,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.cupom_in_cart}
                                                 handleSubmit={() => handleUpdateStatusComponent("cupom_in_cart")}
+                                                showElement={item.cupom_in_cart}
                                             />
                                         }
                                     />
@@ -166,6 +172,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.cupom_in_payment}
                                                 handleSubmit={() => handleUpdateStatusComponent("cupom_in_payment")}
+                                                showElement={item.cupom_in_payment}
                                             />
                                         }
                                     />
@@ -178,6 +185,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.digital_products_customer_in_menu}
                                                 handleSubmit={() => handleUpdateStatusComponent("digital_products_customer_in_menu")}
+                                                showElement={item.digital_products_customer_in_menu}
                                             />
                                         }
                                     />
@@ -190,6 +198,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.newsllaters_section}
                                                 handleSubmit={() => handleUpdateStatusComponent("newsllaters_section")}
+                                                showElement={item.newsllaters_section}
                                             />
                                         }
                                     />
@@ -202,6 +211,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.search_bar}
                                                 handleSubmit={() => handleUpdateStatusComponent("search_bar")}
+                                                showElement={item.search_bar}
                                             />
                                         }
                                     />
@@ -214,6 +224,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.service_in_header}
                                                 handleSubmit={() => handleUpdateStatusComponent("service_in_header")}
+                                                showElement={item.service_in_header}
                                             />
                                         }
                                     />
@@ -226,6 +237,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.payment_boleto}
                                                 handleSubmit={() => handleUpdateStatusComponent("payment_boleto")}
+                                                showElement={item.payment_boleto}
                                             />
                                         }
                                     />
@@ -238,6 +250,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.payment_cartao}
                                                 handleSubmit={() => handleUpdateStatusComponent("payment_cartao")}
+                                                showElement={item.payment_cartao}
                                             />
                                         }
                                     />
@@ -250,6 +263,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.payment_pix}
                                                 handleSubmit={() => handleUpdateStatusComponent("payment_pix")}
+                                                showElement={item.payment_pix}
                                             />
                                         }
                                     />
@@ -262,6 +276,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.filter_categorys}
                                                 handleSubmit={() => handleUpdateStatusComponent("filter_categorys")}
+                                                showElement={item.filter_categorys}
                                             />
                                         }
                                     />
@@ -274,6 +289,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.filter_atributes}
                                                 handleSubmit={() => handleUpdateStatusComponent("filter_atributes")}
+                                                showElement={item.filter_atributes}
                                             />
                                         }
                                     />
@@ -286,6 +302,7 @@ const Loja: React.FC = () => {
                                             <ButtonSelect
                                                 dado={item.filter_price}
                                                 handleSubmit={() => handleUpdateStatusComponent("filter_price")}
+                                                showElement={item.filter_price}
                                             />
                                         }
                                     />

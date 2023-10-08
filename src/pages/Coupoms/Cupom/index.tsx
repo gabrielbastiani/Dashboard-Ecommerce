@@ -415,9 +415,9 @@ const Cupom: React.FC = () => {
                                         chave={"Cupom ativado?"}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={active}
                                                 handleSubmit={updateStatus}
+                                                showElement={active}
                                             />
                                         }
                                     />

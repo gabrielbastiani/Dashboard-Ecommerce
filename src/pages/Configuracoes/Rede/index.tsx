@@ -369,9 +369,9 @@ const Rede: React.FC = () => {
                                 chave={"Rede social esta ativada em sua posição? "}
                                 dados={
                                     <ButtonSelect
-                                        /* @ts-ignore */
                                         dado={status}
                                         handleSubmit={updateStatusSocialMedia}
+                                        showElement={status}
                                     />
                                 }
                             />

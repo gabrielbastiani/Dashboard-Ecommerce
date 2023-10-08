@@ -204,9 +204,9 @@ const EditConfiguracao: React.FC = () => {
                                 chave={"Ativado?"}
                                 dados={
                                     <ButtonSelect
-                                        /* @ts-ignore */
                                         dado={activeConfig}
                                         handleSubmit={updateStatus}
+                                        showElement={activeConfig}
                                     />
                                 }
                             />

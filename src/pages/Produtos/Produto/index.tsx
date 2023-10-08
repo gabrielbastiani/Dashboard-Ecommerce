@@ -483,9 +483,9 @@ const Produto: React.FC = () => {
                                         chave={"Disponibilidade"}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={status}
                                                 handleSubmit={updateStatus}
+                                                showElement={status}
                                             />
                                         }
                                     />
@@ -556,9 +556,9 @@ const Produto: React.FC = () => {
                                         chave={"Produto em destaque? "}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={emphasis}
                                                 handleSubmit={updateEmphasis}
+                                                showElement={emphasis}
                                             />
                                         }
                                     />
@@ -569,9 +569,9 @@ const Produto: React.FC = () => {
                                         chave={"Produto em oferta? "}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={offer}
                                                 handleSubmit={updateOffer}
+                                                showElement={offer}
                                             />
                                         }
                                     />
@@ -662,9 +662,9 @@ const Produto: React.FC = () => {
                                         chave={"Fréte Grátis "}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={freeShipping}
                                                 handleSubmit={updateFreeShipping}
+                                                showElement={freeShipping}
                                             />
                                         }
                                     />

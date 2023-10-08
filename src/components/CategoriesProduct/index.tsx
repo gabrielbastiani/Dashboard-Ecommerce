@@ -373,9 +373,9 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                     chave={"Status"}
                                                     dados={
                                                         <ButtonSelect
-                                                            /* @ts-ignore */
                                                             dado={item.status}
                                                             handleSubmit={() => updateStatus(item.id, item.status)}
+                                                            showElement={item.status}
                                                         />
                                                     }
                                                 />
@@ -384,9 +384,9 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                                                     chave={"Principal?"}
                                                     dados={
                                                         <ButtonSelect
-                                                            /* @ts-ignore */
                                                             dado={item.mainCategory}
                                                             handleSubmit={() => updateMainCategory(item.id, item.mainCategory, item.product_id)}
+                                                            showElement={item.mainCategory}
                                                         />
                                                     }
                                                 />

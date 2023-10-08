@@ -404,9 +404,9 @@ const Banner: React.FC = () => {
                                         chave={"Banner ativado?"}
                                         dados={
                                             <ButtonSelect
-                                                /* @ts-ignore */
                                                 dado={active}
                                                 handleSubmit={updateStatus}
+                                                showElement={active}
                                             />
                                         }
                                     />

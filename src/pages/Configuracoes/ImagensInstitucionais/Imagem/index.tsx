@@ -313,9 +313,9 @@ const Imagem: React.FC = () => {
                                 chave={"Disponibilidade"}
                                 dados={
                                     <ButtonSelect
-                                        /* @ts-ignore */
                                         dado={status}
                                         handleSubmit={updateStatus}
+                                        showElement={status}
                                     />
                                 }
                             />

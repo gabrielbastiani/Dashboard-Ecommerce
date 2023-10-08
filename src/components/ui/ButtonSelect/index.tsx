@@ -10,30 +10,27 @@ import { GiConfirmed } from 'react-icons/gi';
 
 interface SelectRequest {
     dado: string;
-    handleSubmit: (param?:any, param2?:any)=> void;
+    handleSubmit: (param?: any, param2?: any) => void;
+    showElement: string;
 }
 
-export function ButtonSelect({ dado, handleSubmit }: SelectRequest) {
-
-    const [showElement, setShowElement] = useState(false);
-
-    const showOrHide = () => {
-        setShowElement(!showElement)
-    }
+export function ButtonSelect({ showElement, dado, handleSubmit }: SelectRequest) {
 
     function handle() {
         handleSubmit();
-        showOrHide();
     }
+
+    const status1 = "Indisponivel";
+    const status2 = "Nao";
 
     return (
         <>
-            {showElement ? 
+            {showElement === status1 || showElement === status2 ?
                 <BoxSelect>
                     <ValueText>{dado}</ValueText>
                     <IndisponivelData type="submit" onClick={handle}><FaTimesCircle /></IndisponivelData>
                 </BoxSelect>
-             : 
+                :
                 <BoxSelect>
                     <ValueText>{dado}</ValueText>
                     <DisponivelData type="submit" onClick={handle}><GiConfirmed /></DisponivelData>

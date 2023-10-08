@@ -257,9 +257,9 @@ const VariacaoDetalhes = ({
                             chave={"Disponibilidade"}
                             dados={
                                 <ButtonSelect
-                                    /* @ts-ignore */
                                     dado={status}
                                     handleSubmit={updateStatus}
+                                    showElement={status}
                                 />
                             }
                         />
