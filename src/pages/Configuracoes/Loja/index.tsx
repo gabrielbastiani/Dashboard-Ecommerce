@@ -12,11 +12,68 @@ import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { toast } from "react-toastify";
 import { ContainerComponents } from "./styles";
 import { Button } from "../../../components/ui/Button";
+import { InputUpdate } from "../../../components/ui/InputUpdate";
+import CountdownTimer from "../../../components/CountdownTimer";
 
 
 const Loja: React.FC = () => {
 
     const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+    const [countDownShow, setCountDownShow] = useState(false);
+
+    const [text_promotion, setText_promotion] = useState("");
+    const [link_button, setLink_button] = useState("");
+    const [text_button, setText_button] = useState("");
+    const [day, setDay] = useState("");
+    const [month, setMonth] = useState("");
+    const [year, setYear] = useState("");
+    const [hour, setHour] = useState("");
+    const [minute, setMinute] = useState("");
+
+    const showCountDown = () => {
+        setCountDownShow(!countDownShow)
+    }
+
+    useEffect(() => {
+        async function loadCountDown() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get('/findCountDownTime');
+
+                setText_promotion(data.text_promotion || "");
+                setLink_button(data.link_button || "");
+                setText_button(data.text_button || "");
+                setDay(data.day || "");
+                setMonth(data.month || "");
+                setYear(data.year || "");
+                setHour(data.hour || "");
+                setMinute(data.minute || "");
+
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        loadCountDown();
+    }, []);
+
+    async function loadCountDown() {
+        try {
+            const apiClient = setupAPIClient();
+            const { data } = await apiClient.get('/findCountDownTime');
+
+            setText_promotion(data.text_promotion || "");
+            setLink_button(data.link_button || "");
+            setText_button(data.text_button || "");
+            setDay(data.day || "");
+            setMonth(data.month || "");
+            setYear(data.year || "");
+            setHour(data.hour || "");
+            setMinute(data.minute || "");
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
     useEffect(() => {
         async function reloadsConfigs() {
@@ -30,6 +87,30 @@ const Loja: React.FC = () => {
         }
         reloadsConfigs()
     }, []);
+
+    async function updatePromotionDates() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateCountDownTimer`, {
+                text_promotion: text_promotion,
+                text_button: text_button,
+                link_button: link_button,
+                day: day,
+                month: month,
+                year: year,
+                hour: hour,
+                minute: minute
+            });
+
+            toast.success('Dado do contador regressivo atualizado com sucesso');
+
+            loadCountDown();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o contador regressivo.');
+        }
+    }
 
     async function reloadsConfigs() {
         try {
@@ -83,6 +164,159 @@ const Loja: React.FC = () => {
                             Limpar cache carrinhos de compras parados
                         </Button>
                     </BlockDados>
+                    <br />
+                    <BlockDados>
+                        {countDownShow ?
+                            <Button
+                                onClick={showCountDown}
+                            >
+                                Fechar
+                            </Button>
+                            :
+                            <Button
+                                onClick={showCountDown}
+                            >
+                                Cronômetro regressivo
+                            </Button>
+                        }
+                    </BlockDados>
+                    {countDownShow ?
+                        <Card>
+
+                            <CountdownTimer />
+                            <br />
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Texto da promoção"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={text_promotion}
+                                            type="text"
+                                            placeholder={text_promotion}
+                                            value={text_promotion}
+                                            onChange={(e) => setText_promotion(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Link do botão"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={link_button}
+                                            type="text"
+                                            placeholder={link_button}
+                                            value={link_button}
+                                            onChange={(e) => setLink_button(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Texto do botão"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={text_button}
+                                            type="text"
+                                            placeholder={text_button}
+                                            value={text_button}
+                                            onChange={(e) => setText_button(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Dia"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={day}
+                                            type="text"
+                                            placeholder={day}
+                                            value={day}
+                                            onChange={(e) => setDay(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Mês"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={month}
+                                            type="text"
+                                            placeholder={month}
+                                            value={month}
+                                            onChange={(e) => setMonth(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Ano"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={year}
+                                            type="text"
+                                            placeholder={year}
+                                            value={year}
+                                            onChange={(e) => setYear(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Hora"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={hour}
+                                            type="text"
+                                            placeholder={hour}
+                                            value={hour}
+                                            onChange={(e) => setHour(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Minuto"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={minute}
+                                            type="text"
+                                            placeholder={minute}
+                                            value={minute}
+                                            onChange={(e) => setMinute(e.target.value)}
+                                            handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+                        </Card>
+                        :
+                        null
+                    }
                     <br />
                     {datasConfigs.map((item, index) => {
                         return (
@@ -303,6 +537,19 @@ const Loja: React.FC = () => {
                                                 dado={item.filter_price}
                                                 handleSubmit={() => handleUpdateStatusComponent("filter_price")}
                                                 showElement={item.filter_price}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Componente tempo regressivo"}
+                                        dados={
+                                            <ButtonSelect
+                                                dado={item.count_down_timer}
+                                                handleSubmit={() => handleUpdateStatusComponent("count_down_timer")}
+                                                showElement={item.count_down_timer}
                                             />
                                         }
                                     />
