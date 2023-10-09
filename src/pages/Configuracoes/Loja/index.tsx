@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Aside from "../../../components/Aside";
 import { Card } from "../../../components/Content/styles";
+import { IMaskInput } from "react-imask";
 import MainHeader from "../../../components/MainHeader";
 import Titulos from "../../../components/Titulos";
 import { setupAPIClient } from "../../../services/api";
@@ -240,6 +241,10 @@ const Loja: React.FC = () => {
                                     dados={
                                         <InputUpdate
                                             dado={day}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="00"
                                             type="text"
                                             placeholder={day}
                                             value={day}
@@ -256,6 +261,10 @@ const Loja: React.FC = () => {
                                     dados={
                                         <InputUpdate
                                             dado={month}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="00"
                                             type="text"
                                             placeholder={month}
                                             value={month}
@@ -272,6 +281,10 @@ const Loja: React.FC = () => {
                                     dados={
                                         <InputUpdate
                                             dado={year}
+                                            /* @ts-ignore */
+                                            as={IMaskInput}
+                                            /* @ts-ignore */
+                                            mask="0000"
                                             type="text"
                                             placeholder={year}
                                             value={year}
