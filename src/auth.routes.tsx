@@ -68,6 +68,10 @@ import TemplatesEmailAbandonedCart from './pages/CarrinhoAbandonado/TemplatesEma
 import NovoTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/novoTemplate';
 import EditTemplate from './pages/CarrinhoAbandonado/TemplatesEmail/editTemplate';
 import Loja from './pages/Configuracoes/Loja';
+import Clientes from './pages/Clientes';
+import Cliente from './pages/Clientes/Cliente';
+import Pedidos from './pages/Pedidos';
+import Pedido from './pages/Pedidos/Pedido';
 
 
 const RoutesAuth: React.FC = () => {
@@ -77,14 +81,19 @@ const RoutesAuth: React.FC = () => {
             <Route path='/' element={<Dashboard />} />
             <Route path='/painel' element={<Painel />} />
 
+            <Route path='/pedidos' element={<Pedidos />} />
+            <Route path='/pedido/:order_id' element={<Pedido />} />
+
+            <Route path='/clientes' element={<Clientes />} />
+            <Route path='/cliente/:customer_id' element={<Cliente />} />
+            <Route path='/contrapropostas' element={<Contrapropostas />} />
+            <Route path='/contraproposta/:counterproposal_id' element={<Contraproposta />} />
+
             <Route path='/categorias' element={<Categorias />} />
             <Route path='/categoria/nova' element={<NovaCategoria />} />
             <Route path='/categoria/:category_id' element={<Categoria />} />
             <Route path='/categoria/subCategoria/:parentId' element={<SubCategoria />} />
             <Route path='/categoria/subCategoria/edit/:category_id' element={<Categoria />} />
-
-            <Route path='/contrapropostas' element={<Contrapropostas />} />
-            <Route path='/contraproposta/:counterproposal_id' element={<Contraproposta />} />
 
             <Route path='/menus' element={<MenusCategorias />} />
             <Route path='/menu/novo' element={<NovoMenu />} />

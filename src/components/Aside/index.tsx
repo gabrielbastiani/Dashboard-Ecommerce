@@ -36,6 +36,7 @@ import { BsFillArrowLeftSquareFill, BsImages } from 'react-icons/bs';
 import { FaFilter } from 'react-icons/fa';
 import { IoIosPeople } from 'react-icons/io';
 import { RiCoupon2Fill } from 'react-icons/ri';
+import { AiFillWallet } from 'react-icons/ai';
 
 
 const Aside: React.FC = () => {
@@ -110,6 +111,11 @@ const Aside: React.FC = () => {
                 <MenuItemLink href="/painel">
                     <MdDashboard />
                     Painel
+                </MenuItemLink>
+
+                <MenuItemLink href="/pedidos">
+                    <AiFillWallet />
+                    Pedidos
                 </MenuItemLink>
 
                 <MenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
