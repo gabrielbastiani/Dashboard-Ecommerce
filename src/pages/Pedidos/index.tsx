@@ -91,7 +91,7 @@ const Pedidos: React.FC = () => {
         dados.push({
             "Pedido": item.id_order_store,
             "Cliente": item.customer.name,
-            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart.map((car: { total: any; }) => car.total).reduce((acumulador: any, valorAtual: any) => acumulador + valorAtual, 0)),
+            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "Situação": item.shipmentsTrackings[0].delivery_history,
             "botaoDetalhes": `/pedido/${item.id}`
