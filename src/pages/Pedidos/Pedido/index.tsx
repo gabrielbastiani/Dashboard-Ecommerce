@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { Grid } from "../../Dashboard/styles";
@@ -24,13 +24,29 @@ import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import moment from "moment";
-import { BoxTopStatusGeral, GridOrder, ImagePay, SectionOrder, StatusTop, TotalFrete, TotalTop } from "./styles";
+import { BoxTopStatusGeral, GridOrder, ImagePay, Linked, SectionOrder, StatusTop, TotalFrete, TotalTop, WhatsButton } from "./styles";
 import { FaTruckMoving } from "react-icons/fa";
 import boleto from '../../../assets/boleto.png';
 import master from '../../../assets/mastercard.png';
 import visa from '../../../assets/visa.png';
-import elo from '../../../assets/elo.png';
+import american from '../../../assets/american.png';
 import pix from '../../../assets/pix.png';
+import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/styles";
+import { BsWhatsapp } from "react-icons/bs";
+
+interface CustomerProps {
+    id: string;
+    name: string;
+    slug: string;
+    email: string;
+    cpf: string;
+    cnpj: string;
+    stateRegistration: string;
+    phone: string;
+    dateOfBirth: string;
+    gender: string;
+    created_at: string;
+}
 
 interface PaymentProps {
     customer_id: string;
@@ -67,6 +83,7 @@ interface OrderProps {
     data_delivery: string;
     frete: number;
     id_order_store: number;
+
 }
 
 const Pedido: React.FC = () => {
@@ -77,15 +94,26 @@ const Pedido: React.FC = () => {
     const [idOrder, setIdOrder] = useState(Number);
     const [dataOrder, setDataOrder] = useState();
     const [cupom, setCupom] = useState('');
-    const [cartItens, setCartItens] = useState<any[]>([]);
-    const [shipments, setShipments] = useState<any[]>([]);
-    const [orderComments, setOrderComments] = useState<any[]>([]);
+    const [customerDate, setCustomerDate] = useState<CustomerProps>();
+    const [cartItens, setCartItens] = useState<{}>();
+    const [shipments, setShipments] = useState<{}>();
+    const [orderComments, setOrderComments] = useState<{}>();
     const [orderPayment, setOrderPayment] = useState<PaymentProps>();
+
+    /* function removerAcentos(s: any) {
+        return s.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace('(', "")
+            .replace(')', "")
+            .replace(' ', "")
+            .replace('-', "")
+            .replace('.', "")
+            .replace(',', "")
+    } */
 
     const payFrete = Number(order?.frete);
     const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
-
-    console.log(orderPayment)
 
     useEffect(() => {
         async function loadorderdata() {
@@ -96,12 +124,13 @@ const Pedido: React.FC = () => {
                 setOrder(data || []);
 
                 setIdOrder(data.id_order_store);
+                setCustomerDate(data.customer || {});
                 setDataOrder(data.created_at);
                 setCupom(data.cupom);
-                setCartItens(data.cart || []);
-                setShipments(data.shipmentsTrackings || []);
-                setOrderComments(data.orderComments || []);
-                setOrderPayment(data.payment || []);
+                setCartItens(data.cart || {});
+                setShipments(data.shipmentsTrackings || {});
+                setOrderComments(data.orderComments || {});
+                setOrderPayment(data.payment || {});
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -250,7 +279,7 @@ const Pedido: React.FC = () => {
 
                     {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
                         <TotalTop>
-                            <ImagePay src={elo} alt="Logo Builder Seu Negócio Online" />
+                            <ImagePay src={american} alt="Logo Builder Seu Negócio Online" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
@@ -284,7 +313,56 @@ const Pedido: React.FC = () => {
                             titulo="Cliente"
                         />
 
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong>{customerDate?.cnpj ? "Empresa" : "Nome"}</TextStrong>
+                            <TextData>{customerDate?.name}</TextData>
+                        </BlockData>
 
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong>Cliente desde</TextStrong>
+                            <TextData>{moment(customerDate?.created_at).format('DD/MM/YYYY')}</TextData>
+                        </BlockData>
+
+                        {customerDate?.stateRegistration ?
+                            <BlockData
+                                style={{ display: 'flex', flexDirection: 'column' }}
+                            >
+                                <TextStrong>Inscrição Estadual</TextStrong>
+                                <TextData>{customerDate?.stateRegistration}</TextData>
+                            </BlockData>
+                            :
+                            null
+                        }
+
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong>{customerDate?.cnpj ? "CNPJ" : "CPF"}</TextStrong>
+                            <TextData>{customerDate?.cnpj ? customerDate?.cnpj : customerDate?.cpf}</TextData>
+                        </BlockData>
+
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong>E-mail</TextStrong>
+                            <TextData>{customerDate?.email}</TextData>
+                        </BlockData>
+
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong>Telefone</TextStrong>
+                            <TextData>{customerDate?.phone}</TextData>
+                            <Linked href={`https://api.whatsapp.com/send?phone=55${customerDate?.phone}`} target="_blank">
+                                <WhatsButton>
+                                    <BsWhatsapp /> WhatsApp
+                                </WhatsButton>
+                            </Linked>
+                        </BlockData>
 
                     </Card>
 

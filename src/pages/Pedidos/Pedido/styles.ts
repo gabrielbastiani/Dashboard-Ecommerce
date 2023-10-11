@@ -63,3 +63,16 @@ export const GridOrder = styled.div`
   grid-template-columns: 33% 33% 33%;
   grid-gap: 10px;
 `;
+
+export const Linked = styled.a`
+  
+`
+
+export const WhatsButton = styled.button`
+  background-color: green;
+  border: none;
+  color: white;
+  padding: 8px;
+  width: 100px;
+  margin-top: 15px;
+`
