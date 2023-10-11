@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const SectionOrder = styled.section`
   background-color: ${(props) => props?.theme?.colors?.secondary};
-  height: 100%;
+  height: 200vh;
 `;
 
 export const StatusTop = styled.button`

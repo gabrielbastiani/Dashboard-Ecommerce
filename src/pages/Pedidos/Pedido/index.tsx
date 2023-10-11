@@ -1,30 +1,31 @@
-import { useEffect, useState, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
-import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
-import Aside from "../../../components/Aside";
-import { Card, Container } from "../../../components/Content/styles";
+import { Card } from "../../../components/Content/styles";
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import Titulos from "../../../components/Titulos";
-import { Button } from "../../../components/ui/Button";
 import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
-import { IMaskInput } from "react-imask";
-import { BlockTop, ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../../Categorias/styles";
-import { BlockDados } from "../../Categorias/Categoria/styles";
-import { InuptCheck } from "../../../components/ui/InuptCheck";
-import { GridDate } from "../../Perfil/styles";
-import { SectionDate } from "../../Configuracoes/styles";
-import { ModalDeleteCustomer } from "../../../components/popups/ModalDeleteCustomer";
-import SelectUpdate from "../../../components/ui/SelectUpdate";
-import TabelaSimples from "../../../components/Tabelas";
-import { Avisos } from "../../../components/Avisos";
-import Select from "../../../components/ui/Select";
 import moment from "moment";
-import { BoxPix, BoxTopStatusGeral, ButtoQRCode, ButtonPix, GridOrder, ImagePay, ImagePay1, InputPix, Linked, SectionOrder, StatusTop, TotalFrete, TotalTop, WhatsButton } from "./styles";
+import {
+    BoxPix,
+    BoxTopStatusGeral,
+    ButtoQRCode,
+    ButtonPix,
+    GridOrder,
+    ImagePay,
+    ImagePay1,
+    InputPix,
+    Linked,
+    SectionOrder,
+    StatusTop,
+    TotalFrete,
+    TotalTop,
+    WhatsButton
+} from "./styles";
 import { FaRegCopy, FaTruckMoving } from "react-icons/fa";
 import boleto from '../../../assets/boleto.png';
 import master from '../../../assets/mastercard.png';
@@ -82,6 +83,7 @@ interface PaymentProps {
 interface OrderProps {
     cart: any;
     created_at: string;
+    name_cupom: string;
     cupom: string;
     data_delivery: string;
     frete: number;
@@ -656,11 +658,27 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Boleto" ?
-                                <TextData
-                                    style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                >
-                                    Boleto <ImagePay1 src={boleto} alt="pagamento" />
-                                </TextData>
+                                <>
+                                    <TextData
+                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                    >
+                                        Boleto <ImagePay1 src={boleto} alt="pagamento" />
+                                    </TextData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>ID Transação</TextStrong>
+                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor Total</TextStrong>
+                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                    </BlockData>
+                                </>
                                 :
                                 null
                             }
@@ -720,7 +738,30 @@ const Pedido: React.FC = () => {
                     </Card>
                 </GridOrder>
 
+                {order?.cupom ? (
+                    <Card>
+                        <Titulos
+                            tipo="h2"
+                            titulo="Detalhes Adicionais"
+                        />
+
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong style={{ fontSize: '20px', marginBottom: '5px' }}>Promoções</TextStrong>
+                            <TextData style={{ fontWeight: '00' }}>Nome do cupom: {order?.name_cupom}</TextData>
+                            <br />
+                            <TextData style={{ fontWeight: '00' }}>Código de cupom: {order?.cupom}</TextData>
+                        </BlockData>
+
+                    </Card>
+                ) :
+                    null
+                }
+
+
             </Card>
+
             {modalVisibleQRCode && (
                 <ModalQRCodePayment
                     isOpen={modalVisibleQRCode}
