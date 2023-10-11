@@ -749,6 +749,7 @@ const Pedido: React.FC = () => {
                             style={{ display: 'flex', flexDirection: 'column' }}
                         >
                             <TextStrong style={{ fontSize: '20px', marginBottom: '5px' }}>Promoções</TextStrong>
+                            <br />
                             <TextData style={{ fontWeight: '00' }}>Nome do cupom: {order?.name_cupom}</TextData>
                             <br />
                             <TextData style={{ fontWeight: '00' }}>Código de cupom: {order?.cupom}</TextData>
