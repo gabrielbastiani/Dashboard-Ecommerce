@@ -24,8 +24,8 @@ import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import moment from "moment";
-import { BoxTopStatusGeral, GridOrder, ImagePay, Linked, SectionOrder, StatusTop, TotalFrete, TotalTop, WhatsButton } from "./styles";
-import { FaTruckMoving } from "react-icons/fa";
+import { BoxPix, BoxTopStatusGeral, ButtoQRCode, ButtonPix, GridOrder, ImagePay, ImagePay1, InputPix, Linked, SectionOrder, StatusTop, TotalFrete, TotalTop, WhatsButton } from "./styles";
+import { FaRegCopy, FaTruckMoving } from "react-icons/fa";
 import boleto from '../../../assets/boleto.png';
 import master from '../../../assets/mastercard.png';
 import visa from '../../../assets/visa.png';
@@ -33,6 +33,9 @@ import american from '../../../assets/american.png';
 import pix from '../../../assets/pix.png';
 import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/styles";
 import { BsWhatsapp } from "react-icons/bs";
+import copy from "copy-to-clipboard";
+import { ModalQRCodePayment } from "../../../components/popups/ModalQRCodePayment";
+
 
 interface CustomerProps {
     id: string;
@@ -83,7 +86,32 @@ interface OrderProps {
     data_delivery: string;
     frete: number;
     id_order_store: number;
+    weight: number;
+}
 
+interface DeliveryPropos {
+    id: string;
+    customer_id: string;
+    addressee: string;
+    address: string;
+    number: string;
+    complement: string;
+    reference: string;
+    neighborhood: string;
+    cep: string;
+    city: string;
+    state: string;
+    phone: string;
+    deliverySelected: string;
+    created_at: string;
+}
+
+interface FreteProps {
+    id: string;
+    order_id: string;
+    code_tracking: string;
+    delivery_history: string;
+    created_at: string;
 }
 
 const Pedido: React.FC = () => {
@@ -96,11 +124,26 @@ const Pedido: React.FC = () => {
     const [cupom, setCupom] = useState('');
     const [customerDate, setCustomerDate] = useState<CustomerProps>();
     const [cartItens, setCartItens] = useState<{}>();
-    const [shipments, setShipments] = useState<{}>();
+    const [shipments, setShipments] = useState<FreteProps>();
     const [orderComments, setOrderComments] = useState<{}>();
     const [orderPayment, setOrderPayment] = useState<PaymentProps>();
+    const [deliveryOrder, setDeliveryOrder] = useState<DeliveryPropos>();
 
-    /* function removerAcentos(s: any) {
+    const [codeRastreio, setCodeRastreio] = useState("");
+    const [keyPix, setKeyPix] = useState("");
+    const [keyPixQRCode, setKeyPixQRCode] = useState("");
+
+    const [modalVisibleQRCode, setModalVisibleQRCode] = useState(false);
+
+    const payFrete = Number(order?.frete);
+    const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
+    const payInstallment = Number(orderPayment?.installment_amount);
+
+
+
+    const telefone = String(customerDate?.phone);
+
+    function removerAcentos(s: any) {
         return s.normalize('NFD')
             .replace(/[\u0300-\u036f]/g, "")
             .toLowerCase()
@@ -110,10 +153,14 @@ const Pedido: React.FC = () => {
             .replace('-', "")
             .replace('.', "")
             .replace(',', "")
-    } */
+    }
 
-    const payFrete = Number(order?.frete);
-    const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
+    const tel = removerAcentos(telefone);
+
+    const copyToClipboard = () => {
+        copy(keyPix);
+        toast.success(`Você copiou o código com sucesso!!!`);
+    }
 
     useEffect(() => {
         async function loadorderdata() {
@@ -131,13 +178,37 @@ const Pedido: React.FC = () => {
                 setShipments(data.shipmentsTrackings || {});
                 setOrderComments(data.orderComments || {});
                 setOrderPayment(data.payment || {});
+                setDeliveryOrder(data.deliveryAddressCustomer || {});/* @ts-ignore */
+                setCodeRastreio(order?.shipmentsTrackings[0]?.code_tracking || "");
+                setKeyPix(data?.payment?.key_payment_pix || "");
+                setKeyPixQRCode(data?.payment?.qr_code_pix || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
-        loadorderdata();
-    }, [order_id]);
+        loadorderdata();/* @ts-ignore */
+    }, [order?.shipmentsTrackings, order_id]);
+
+    /* @ts-ignore */
+    const idShips = String(order?.shipmentsTrackings[0]?.id);
+
+    async function handleCodeRastreio() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/codeTrackingShipping?shippingTracking_id=${idShips}`, {
+                code_tracking: codeRastreio
+            });
+
+            toast.success("Código aplicado com sucesso...");
+
+            await apiClient.get(`/findAllDateTracking?shippingTracking_id=${idShips}`);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error("Erro ao aplicar o código");
+        }
+    }
 
 
 
@@ -154,6 +225,16 @@ const Pedido: React.FC = () => {
     }); */
 
 
+    function handleCloseModalQRCode() {
+        setModalVisibleQRCode(false);
+    }
+
+    async function handleOpenModalQRCode() {
+        setModalVisibleQRCode(true);
+    }
+
+    Modal.setAppElement('body');
+
 
     return (
         <SectionOrder>
@@ -165,7 +246,7 @@ const Pedido: React.FC = () => {
                 <VoltarNavagation />
 
                 <Titulos
-                    tipo="h1"
+                    tipo="h2"
                     titulo={`Pedido -  #${idOrder} | Data: ${moment(dataOrder).format('DD/MM/YYYY - HH:mm')}`}
                 />
 
@@ -261,7 +342,7 @@ const Pedido: React.FC = () => {
 
                     {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
                         <TotalTop>
-                            <ImagePay src={master} alt="Logo Builder Seu Negócio Online" />
+                            <ImagePay src={master} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
@@ -270,7 +351,7 @@ const Pedido: React.FC = () => {
 
                     {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
                         <TotalTop>
-                            <ImagePay src={visa} alt="Logo Builder Seu Negócio Online" />
+                            <ImagePay src={visa} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
@@ -279,7 +360,7 @@ const Pedido: React.FC = () => {
 
                     {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
                         <TotalTop>
-                            <ImagePay src={american} alt="Logo Builder Seu Negócio Online" />
+                            <ImagePay src={american} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
@@ -288,7 +369,7 @@ const Pedido: React.FC = () => {
 
                     {orderPayment?.type_payment === "Boleto" ?
                         <TotalTop>
-                            <ImagePay src={boleto} alt="Logo Builder Seu Negócio Online" />
+                            <ImagePay src={boleto} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
@@ -297,7 +378,7 @@ const Pedido: React.FC = () => {
 
                     {orderPayment?.type_payment === "PIX" ?
                         <TotalTop>
-                            <ImagePay src={pix} alt="Logo Builder Seu Negócio Online" />
+                            <ImagePay src={pix} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
@@ -357,7 +438,7 @@ const Pedido: React.FC = () => {
                         >
                             <TextStrong>Telefone</TextStrong>
                             <TextData>{customerDate?.phone}</TextData>
-                            <Linked href={`https://api.whatsapp.com/send?phone=55${customerDate?.phone}`} target="_blank">
+                            <Linked href={`https://api.whatsapp.com/send?phone=55${tel}`} target="_blank">
                                 <WhatsButton>
                                     <BsWhatsapp /> WhatsApp
                                 </WhatsButton>
@@ -372,7 +453,41 @@ const Pedido: React.FC = () => {
                             titulo="Envio"
                         />
 
+                        <BlockData>
+                            <TextData style={{ display: 'flex', fontWeight: '800' }}>{deliveryOrder?.addressee}</TextData>
+                            <TextData>{deliveryOrder?.address} - {deliveryOrder?.number} - {deliveryOrder?.complement} - {deliveryOrder?.reference}</TextData>
+                            <br />
+                            <br />
+                            <TextStrong style={{ fontWeight: '800' }}>Frete</TextStrong>
+                            <br />
+                            <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payFrete)}</TextData>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <TextData>{order?.data_delivery}</TextData>
+                            <br />
+                            <br />
+                            <TextData>Peso Total: {order?.weight}Kg</TextData>
+                        </BlockData>
 
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <br />
+                            <TextData>CÓDIGO: {codeRastreio}</TextData>
+                            <br />
+                            <TextoDados
+                                chave={"Código de rastreio"}
+                                dados={
+                                    <InputUpdate
+                                        dado={codeRastreio}
+                                        type="text"
+                                        placeholder={codeRastreio}
+                                        value={codeRastreio}
+                                        onChange={(e) => setCodeRastreio(e.target.value)}
+                                        handleSubmit={handleCodeRastreio}
+                                    />
+                                }
+                            />
+                        </BlockData>
 
                     </Card>
 
@@ -382,12 +497,237 @@ const Pedido: React.FC = () => {
                             titulo="Pagamento"
                         />
 
+                        <BlockData
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            <TextStrong>Forma de Pagamento</TextStrong>
 
+                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
+                                <>
+                                    <TextData
+                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                    >
+                                        Cartão de Crédito = Master <ImagePay1 src={master} alt="pagamento" />
+                                    </TextData>
+
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        {orderPayment?.cardholder_name}
+                                    </TextData>
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
+                                    </TextData>
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
+                                    </TextData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor parcelado</TextStrong>
+                                        <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>ID Transação</TextStrong>
+                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor Total</TextStrong>
+                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                    </BlockData>
+                                </>
+                                :
+                                null
+                            }
+
+                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
+                                <>
+                                    <TextData
+                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                    >
+                                        Cartão de Crédito = Visa <ImagePay1 src={visa} alt="pagamento" />
+                                    </TextData>
+
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        {orderPayment?.cardholder_name}
+                                    </TextData>
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
+                                    </TextData>
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
+                                    </TextData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor parcelado</TextStrong>
+                                        <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>ID Transação</TextStrong>
+                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor Total</TextStrong>
+                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                    </BlockData>
+                                </>
+                                :
+                                null
+                            }
+
+                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
+                                <>
+                                    <TextData
+                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                    >
+                                        Cartão de Crédito = American Express <ImagePay1 src={american} alt="pagamento" />
+                                    </TextData>
+
+                                    <TextData
+                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                    >
+                                        Cartão de Crédito = Visa <ImagePay1 src={visa} alt="pagamento" />
+                                    </TextData>
+
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        {orderPayment?.cardholder_name}
+                                    </TextData>
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
+                                    </TextData>
+                                    <TextData
+                                        style={{ marginBottom: '8px' }}
+                                    >
+                                        Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
+                                    </TextData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor parcelado</TextStrong>
+                                        <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>ID Transação</TextStrong>
+                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor Total</TextStrong>
+                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                    </BlockData>
+                                </>
+                                :
+                                null
+                            }
+
+                            {orderPayment?.type_payment === "Boleto" ?
+                                <TextData
+                                    style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                >
+                                    Boleto <ImagePay1 src={boleto} alt="pagamento" />
+                                </TextData>
+                                :
+                                null
+                            }
+
+                            {orderPayment?.type_payment === "PIX" ?
+                                <>
+                                    <BoxPix>
+                                        <TextData
+                                            style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
+                                        >
+                                            PIX <ImagePay1 src={pix} alt="pagamento" />
+                                        </TextData>
+                                        <TextData>Chave Pix</TextData>
+                                        <InputPix
+                                            type="text"
+                                            value={keyPix}
+                                        />
+                                        <ButtonPix
+                                            onClick={copyToClipboard}
+                                        >
+                                            <FaRegCopy size={25} />
+                                        </ButtonPix>
+                                    </BoxPix>
+
+                                    <ButtoQRCode
+                                        onClick={handleOpenModalQRCode}
+                                    >
+                                        Abrir QR Code
+                                    </ButtoQRCode>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Chave Válida até</TextStrong>
+                                        <TextData>{moment(orderPayment?.key_valid_pix).format('DD/MM/YYYY - HH:mm')}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>Valor Total</TextStrong>
+                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                    </BlockData>
+
+                                    <BlockData
+                                        style={{ display: 'flex', flexDirection: 'column' }}
+                                    >
+                                        <TextStrong>ID Transação</TextStrong>
+                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                    </BlockData>
+                                </>
+                                :
+                                null
+                            }
+                        </BlockData>
 
                     </Card>
                 </GridOrder>
 
             </Card>
+            {modalVisibleQRCode && (
+                <ModalQRCodePayment
+                    isOpen={modalVisibleQRCode}
+                    onRequestClose={handleCloseModalQRCode}
+                    qrCode={keyPixQRCode}
+                />
+            )}
         </SectionOrder>
     )
 }

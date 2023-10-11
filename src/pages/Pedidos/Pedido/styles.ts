@@ -17,6 +17,7 @@ export const StatusTop = styled.button`
 
 export const BoxTopStatusGeral = styled.div`
   display: inline-flex;
+  margin-top: 15px;
 `;
 
 export const TotalFrete = styled.button`
@@ -58,15 +59,18 @@ export const ImagePay = styled.img`
   height: 80%;
 `;
 
+export const ImagePay1 = styled.img`
+  width: 80px;
+  height: 100%;
+`;
+
 export const GridOrder = styled.div`
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-gap: 10px;
 `;
 
-export const Linked = styled.a`
-  
-`
+export const Linked = styled.a``;
 
 export const WhatsButton = styled.button`
   background-color: green;
@@ -75,4 +79,34 @@ export const WhatsButton = styled.button`
   padding: 8px;
   width: 100px;
   margin-top: 15px;
+`;
+
+export const BoxPix = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+  align-items: center;
+`;
+
+export const InputPix = styled.input`
+  padding: 8px;
+  margin-right: 5px;
+  width: 60%;
+  height: 40px;
+`;
+
+export const ButtonPix = styled.button`
+  background: none;
+  border: none;
+
+  svg {
+    color: ${(props) => props?.theme?.colors?.white};
+  }
+`;
+
+export const ButtoQRCode = styled.button`
+  background: transparent;
+  color: ${(props) => props?.theme?.colors?.white};
+
 `

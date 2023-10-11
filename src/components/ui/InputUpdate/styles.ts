@@ -72,6 +72,7 @@ export const ValueText = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: ${(props) => props.theme.colors.white};
 
   @media (max-width: 430px) {
     width: 25%;
