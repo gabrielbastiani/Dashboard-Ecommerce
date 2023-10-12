@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Key, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
@@ -11,22 +11,48 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
 import moment from "moment";
 import {
+    AtributeProduct,
+    BoxComment,
+    BoxData,
+    BoxDataProduct,
     BoxPix,
+    BoxPriceProductCart,
+    BoxPrices,
+    BoxPricesTotalProduct,
+    BoxProductCart,
     BoxTopStatusGeral,
+    BoxTotal,
     ButtoQRCode,
     ButtonPix,
+    ButtonSendComment,
+    Comments,
+    ContainerComments,
+    ContainerCommets,
+    DataComment,
+    EtiquetaComment,
     GridOrder,
+    ImageComment,
     ImagePay,
     ImagePay1,
+    ImageProduct,
+    ImageProductCart,
     InputPix,
     Linked,
+    NameProduct,
+    PriceProduct,
+    PriceProductData,
     SectionOrder,
+    Sku,
     StatusTop,
+    TextComment,
+    TextTotal,
+    TextUser,
     TotalFrete,
+    TotalOrder,
     TotalTop,
     WhatsButton
 } from "./styles";
-import { FaRegCopy, FaTruckMoving } from "react-icons/fa";
+import { FaCommentDots, FaRegCopy, FaTruckMoving } from "react-icons/fa";
 import boleto from '../../../assets/boleto.png';
 import master from '../../../assets/mastercard.png';
 import visa from '../../../assets/visa.png';
@@ -36,7 +62,11 @@ import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/
 import { BsWhatsapp } from "react-icons/bs";
 import copy from "copy-to-clipboard";
 import { ModalQRCodePayment } from "../../../components/popups/ModalQRCodePayment";
-
+import { Block } from "../../Categorias/styles";
+import { BlockInputs, BoxActive, RadioBotton } from "../../Banners/styles";
+import privateComment from "../../../assets/user-comment-private.png";
+import commentss from "../../../assets/Logo-Builder-Favicon.jpg";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 interface CustomerProps {
     id: string;
@@ -118,6 +148,7 @@ interface FreteProps {
 
 const Pedido: React.FC = () => {
 
+    const { admin } = useContext(AuthContext);
     let { order_id } = useParams();
 
     const [order, setOrder] = useState<OrderProps>();
@@ -125,7 +156,7 @@ const Pedido: React.FC = () => {
     const [dataOrder, setDataOrder] = useState();
     const [cupom, setCupom] = useState('');
     const [customerDate, setCustomerDate] = useState<CustomerProps>();
-    const [cartItens, setCartItens] = useState<{}>();
+    const [cartItens, setCartItens] = useState<any[]>([]);
     const [shipments, setShipments] = useState<FreteProps>();
     const [orderComments, setOrderComments] = useState<{}>();
     const [orderPayment, setOrderPayment] = useState<PaymentProps>();
@@ -135,13 +166,23 @@ const Pedido: React.FC = () => {
     const [keyPix, setKeyPix] = useState("");
     const [keyPixQRCode, setKeyPixQRCode] = useState("");
 
+    const [store, setStore] = useState("");
+    const [logoStore, setLogoStore] = useState("");
+    const [commentOrder, setCommentOrder] = useState("");
+    const [comments, setComments] = useState<any[]>([]);
+
+    const [active, setActive] = useState('Nao');
+    const [check, setCheck] = useState(false);
+
+    const handleChecked = (e: any) => {
+        setCheck(e.target.checked);
+    };
+
     const [modalVisibleQRCode, setModalVisibleQRCode] = useState(false);
 
     const payFrete = Number(order?.frete);
     const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
     const payInstallment = Number(orderPayment?.installment_amount);
-
-
 
     const telefone = String(customerDate?.phone);
 
@@ -165,6 +206,20 @@ const Pedido: React.FC = () => {
     }
 
     useEffect(() => {
+        async function loadStore() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/store`);
+                setStore(data.name || "");
+                setLogoStore(data.logo || "");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadStore();
+    }, []);
+
+    useEffect(() => {
         async function loadorderdata() {
             const apiClient = setupAPIClient();
             try {
@@ -176,7 +231,7 @@ const Pedido: React.FC = () => {
                 setCustomerDate(data.customer || {});
                 setDataOrder(data.created_at);
                 setCupom(data.cupom);
-                setCartItens(data.cart || {});
+                setCartItens(data.cart || []);
                 setShipments(data.shipmentsTrackings || {});
                 setOrderComments(data.orderComments || {});
                 setOrderPayment(data.payment || {});
@@ -212,19 +267,52 @@ const Pedido: React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        async function loadCommentsOrder() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/orderComments?order_id=${order_id}`);
+                setComments(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        loadCommentsOrder();
+    }, [order_id]);
 
+    async function loadCommentsOrder() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/orderComments?order_id=${order_id}`);
+            setComments(data || []);
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
+    const storeCommentUser = `${store} / ${admin.name}`
 
-    /* const dados: any = [];
-    (order || []).forEach((item) => {
-        dados.push({
-            "Pedido": item.id_order_store,
-            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart.map((car: { total: any; }) => car.total).reduce((acumulador: any, valorAtual: any) => acumulador + valorAtual, 0)),
-            "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Situação": item.shipmentsTrackings[0].delivery_history,
-            "botaoDetalhes": `/cliente/pedido/${item.id}`
-        });
-    }); */
+    async function handleCommentsOrder() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post(`/createOrderComments`, {
+                comment: commentOrder,
+                order_id: order_id,
+                admin_or_employee: storeCommentUser,
+                active: active
+            });
+
+            toast.success("Comentários adicionado com sucesso");
+
+            setCommentOrder("");
+
+            loadCommentsOrder();
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error("Ops... erro ao adicionar esse comentario");
+        }
+    }
 
 
     function handleCloseModalQRCode() {
@@ -238,6 +326,9 @@ const Pedido: React.FC = () => {
     Modal.setAppElement('body');
 
 
+    console.log(comments)
+
+
     return (
         <SectionOrder>
 
@@ -247,18 +338,14 @@ const Pedido: React.FC = () => {
 
                 <VoltarNavagation />
 
-                <Titulos
-                    tipo="h2"
-                    titulo={`Pedido -  #${idOrder} | Data: ${moment(dataOrder).format('DD/MM/YYYY - HH:mm')}`}
-                />
+                <Titulos tipo="h2" titulo={`Pedido - #${idOrder} | Data: ${moment(dataOrder).format('DD/MM/YYYY - HH:mm')}`} />
 
                 <BoxTopStatusGeral>
                     {orderPayment?.status === "pending" ?
                         <StatusTop style={{
                             backgroundColor: 'yellow',
                             color: 'black'
-                        }}
-                        >
+                        }}>
                             Pendente de Pagamento
                         </StatusTop>
                         :
@@ -269,8 +356,7 @@ const Pedido: React.FC = () => {
                         <StatusTop style={{
                             backgroundColor: 'green',
                             color: 'white'
-                        }}
-                        >
+                        }}>
                             Pago
                         </StatusTop>
                         :
@@ -281,8 +367,7 @@ const Pedido: React.FC = () => {
                         <StatusTop style={{
                             backgroundColor: 'orange',
                             color: 'white'
-                        }}
-                        >
+                        }}>
                             Procesando
                         </StatusTop>
                         :
@@ -293,8 +378,7 @@ const Pedido: React.FC = () => {
                         <StatusTop style={{
                             backgroundColor: 'red',
                             color: 'white'
-                        }}
-                        >
+                        }}>
                             Rejeitado
                         </StatusTop>
                         :
@@ -305,8 +389,7 @@ const Pedido: React.FC = () => {
                         <StatusTop style={{
                             backgroundColor: 'red',
                             color: 'white'
-                        }}
-                        >
+                        }}>
                             Cancelado
                         </StatusTop>
                         :
@@ -317,8 +400,7 @@ const Pedido: React.FC = () => {
                         <StatusTop style={{
                             backgroundColor: 'brown',
                             color: 'white'
-                        }}
-                        >
+                        }}>
                             Devolvido
                         </StatusTop>
                         :
@@ -329,8 +411,7 @@ const Pedido: React.FC = () => {
                         <StatusTop style={{
                             backgroundColor: 'white',
                             color: 'black'
-                        }}
-                        >
+                        }}>
                             Estornado
                         </StatusTop>
                         :
@@ -391,29 +472,20 @@ const Pedido: React.FC = () => {
 
                 <GridOrder>
                     <Card>
-                        <Titulos
-                            tipo="h2"
-                            titulo="Cliente"
-                        />
+                        <Titulos tipo="h2" titulo="Cliente" />
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>{customerDate?.cnpj ? "Empresa" : "Nome"}</TextStrong>
                             <TextData>{customerDate?.name}</TextData>
                         </BlockData>
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>Cliente desde</TextStrong>
                             <TextData>{moment(customerDate?.created_at).format('DD/MM/YYYY')}</TextData>
                         </BlockData>
 
                         {customerDate?.stateRegistration ?
-                            <BlockData
-                                style={{ display: 'flex', flexDirection: 'column' }}
-                            >
+                            <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                 <TextStrong>Inscrição Estadual</TextStrong>
                                 <TextData>{customerDate?.stateRegistration}</TextData>
                             </BlockData>
@@ -421,23 +493,17 @@ const Pedido: React.FC = () => {
                             null
                         }
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>{customerDate?.cnpj ? "CNPJ" : "CPF"}</TextStrong>
                             <TextData>{customerDate?.cnpj ? customerDate?.cnpj : customerDate?.cpf}</TextData>
                         </BlockData>
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>E-mail</TextStrong>
                             <TextData>{customerDate?.email}</TextData>
                         </BlockData>
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>Telefone</TextStrong>
                             <TextData>{customerDate?.phone}</TextData>
                             <Linked href={`https://api.whatsapp.com/send?phone=55${tel}`} target="_blank">
@@ -450,10 +516,7 @@ const Pedido: React.FC = () => {
                     </Card>
 
                     <Card>
-                        <Titulos
-                            tipo="h2"
-                            titulo="Envio"
-                        />
+                        <Titulos tipo="h2" titulo="Envio" />
 
                         <BlockData>
                             <TextData style={{ display: 'flex', fontWeight: '800' }}>{deliveryOrder?.addressee}</TextData>
@@ -470,81 +533,54 @@ const Pedido: React.FC = () => {
                             <TextData>Peso Total: {order?.weight}Kg</TextData>
                         </BlockData>
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <br />
                             <TextData>CÓDIGO: {codeRastreio}</TextData>
                             <br />
-                            <TextoDados
-                                chave={"Código de rastreio"}
-                                dados={
-                                    <InputUpdate
-                                        dado={codeRastreio}
-                                        type="text"
-                                        placeholder={codeRastreio}
-                                        value={codeRastreio}
-                                        onChange={(e) => setCodeRastreio(e.target.value)}
-                                        handleSubmit={handleCodeRastreio}
-                                    />
-                                }
+                            <TextoDados chave={"Código de rastreio"} dados={<InputUpdate dado={codeRastreio} type="text" placeholder={codeRastreio} value={codeRastreio} onChange={(e) => setCodeRastreio(e.target.value)}
+                                handleSubmit={handleCodeRastreio}
+                            />
+                            }
                             />
                         </BlockData>
 
                     </Card>
 
                     <Card>
-                        <Titulos
-                            tipo="h2"
-                            titulo="Pagamento"
-                        />
+                        <Titulos tipo="h2" titulo="Pagamento" />
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>Forma de Pagamento</TextStrong>
 
                             {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
+
                                 <>
-                                    <TextData
-                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                    >
-                                        Cartão de Crédito = Master <ImagePay1 src={master} alt="pagamento" />
+                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        Cartão de Crédito = Master
+                                        <ImagePay1 src={master} alt="pagamento" />
                                     </TextData>
 
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         {orderPayment?.cardholder_name}
                                     </TextData>
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
                                     </TextData>
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
                                     </TextData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor parcelado</TextStrong>
                                         <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
                                         <TextData>{orderPayment?.transaction_id}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
                                         <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
                                     </BlockData>
@@ -554,46 +590,34 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
+
                                 <>
-                                    <TextData
-                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                    >
-                                        Cartão de Crédito = Visa <ImagePay1 src={visa} alt="pagamento" />
+                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        Cartão de Crédito = Visa
+                                        <ImagePay1 src={visa} alt="pagamento" />
                                     </TextData>
 
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         {orderPayment?.cardholder_name}
                                     </TextData>
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
                                     </TextData>
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
                                     </TextData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor parcelado</TextStrong>
                                         <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
                                         <TextData>{orderPayment?.transaction_id}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
                                         <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
                                     </BlockData>
@@ -603,52 +627,39 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
+
                                 <>
-                                    <TextData
-                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                    >
-                                        Cartão de Crédito = American Express <ImagePay1 src={american} alt="pagamento" />
+                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        Cartão de Crédito = American Express
+                                        <ImagePay1 src={american} alt="pagamento" />
                                     </TextData>
 
-                                    <TextData
-                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                    >
-                                        Cartão de Crédito = Visa <ImagePay1 src={visa} alt="pagamento" />
+                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        Cartão de Crédito = Visa
+                                        <ImagePay1 src={visa} alt="pagamento" />
                                     </TextData>
 
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         {orderPayment?.cardholder_name}
                                     </TextData>
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
                                     </TextData>
-                                    <TextData
-                                        style={{ marginBottom: '8px' }}
-                                    >
+                                    <TextData style={{ marginBottom: '8px' }}>
                                         Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
                                     </TextData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor parcelado</TextStrong>
                                         <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
                                         <TextData>{orderPayment?.transaction_id}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
                                         <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
                                     </BlockData>
@@ -658,23 +669,19 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Boleto" ?
+
                                 <>
-                                    <TextData
-                                        style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                    >
-                                        Boleto <ImagePay1 src={boleto} alt="pagamento" />
+                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        Boleto
+                                        <ImagePay1 src={boleto} alt="pagamento" />
                                     </TextData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
                                         <TextData>{orderPayment?.transaction_id}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
                                         <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
                                     </BlockData>
@@ -684,48 +691,35 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "PIX" ?
+
                                 <>
                                     <BoxPix>
-                                        <TextData
-                                            style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}
-                                        >
-                                            PIX <ImagePay1 src={pix} alt="pagamento" />
+                                        <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                            PIX
+                                            <ImagePay1 src={pix} alt="pagamento" />
                                         </TextData>
                                         <TextData>Chave Pix</TextData>
-                                        <InputPix
-                                            type="text"
-                                            value={keyPix}
-                                        />
-                                        <ButtonPix
-                                            onClick={copyToClipboard}
-                                        >
+                                        <InputPix type="text" value={keyPix} />
+                                        <ButtonPix onClick={copyToClipboard}>
                                             <FaRegCopy size={25} />
                                         </ButtonPix>
                                     </BoxPix>
 
-                                    <ButtoQRCode
-                                        onClick={handleOpenModalQRCode}
-                                    >
+                                    <ButtoQRCode onClick={handleOpenModalQRCode}>
                                         Abrir QR Code
                                     </ButtoQRCode>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Chave Válida até</TextStrong>
                                         <TextData>{moment(orderPayment?.key_valid_pix).format('DD/MM/YYYY - HH:mm')}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
                                         <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
                                     </BlockData>
 
-                                    <BlockData
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                    >
+                                    <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
                                         <TextData>{orderPayment?.transaction_id}</TextData>
                                     </BlockData>
@@ -740,14 +734,9 @@ const Pedido: React.FC = () => {
 
                 {order?.cupom ? (
                     <Card>
-                        <Titulos
-                            tipo="h2"
-                            titulo="Detalhes Adicionais"
-                        />
+                        <Titulos tipo="h2" titulo="Detalhes Adicionais" />
 
-                        <BlockData
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong style={{ fontSize: '20px', marginBottom: '5px' }}>Promoções</TextStrong>
                             <br />
                             <TextData style={{ fontWeight: '00' }}>Nome do cupom: {order?.name_cupom}</TextData>
@@ -760,9 +749,94 @@ const Pedido: React.FC = () => {
                     null
                 }
 
+                <Card>
+                    {cartItens.map((prod, index: Key) => {
+                        return (
+                            <BoxProductCart key={index}>
+                                <ImageProductCart>
+                                    <ImageProduct src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
+                                </ImageProductCart>
+
+                                <BoxDataProduct>
+                                    <BoxData>
+                                        <Sku>SKU: {prod?.product?.sku}</Sku>
+                                        <NameProduct>{prod?.product?.name}</NameProduct>
+                                        {prod?.product?.relationattributeproducts.map((atr: any, index: Key) => {
+                                            return (
+                                                <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                            )
+                                        })}
+                                    </BoxData>
+                                </BoxDataProduct>
+
+                                <BoxPriceProductCart>
+                                    <PriceProduct>Qtd: {prod?.amount}</PriceProduct>
+                                </BoxPriceProductCart>
+
+                                <BoxPricesTotalProduct>
+                                    <BoxPrices>
+                                        <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion ? prod?.product?.promotion * prod?.amount : prod?.product?.price * prod?.amount)}</PriceProductData>
+                                    </BoxPrices>
+                                </BoxPricesTotalProduct>
+                            </BoxProductCart>
+                        )
+                    })}
+                </Card>
+
+                <Card>
+                    <BoxTotal>
+                        <TextTotal>TOTAL:</TextTotal>
+                        <TotalOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TotalOrder>
+                    </BoxTotal>
+                </Card>
+
+                <Card>
+                    <Titulos tipo="h3" titulo="Comentários" />
+
+                    <ContainerCommets>
+                        <TextComment
+                            value={commentOrder}
+                            onChange={(e) => setCommentOrder(e.target.value)}
+                        />
+
+                        <ButtonSendComment
+                            onClick={handleCommentsOrder}
+                        >
+                            <FaCommentDots size={25} />
+                            POSTAR
+                        </ButtonSendComment>
+                    </ContainerCommets>
+
+                    <Block>
+                        <BlockInputs>
+                            <BoxActive>
+                                <EtiquetaComment>Deixar comentário público para o cliente</EtiquetaComment>
+                                <RadioBotton
+                                    type="checkbox"
+                                    value={active}
+                                    onClick={handleChecked}
+                                    onChange={() => setActive(check ? "Nao" : "Sim")}
+                                    checked={check}
+                                />
+                            </BoxActive>
+                        </BlockInputs>
+                    </Block>
+
+                    {comments.map((item, index: Key) => {
+                        return (
+                            <ContainerComments key={index}>
+                                <DataComment>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataComment>
+                                <BoxComment>
+                                    <ImageComment src={item.active === "Sim" ? 'http://localhost:3333/files/' + logoStore : privateComment} alt="foto-comentario" />
+                                    <Comments><TextUser>{item.admin_or_employee} = </TextUser>{item.comment}</Comments>
+                                </BoxComment>
+                            </ContainerComments>
+                        )
+                    })}
+
+                </Card>
 
             </Card>
-
             {modalVisibleQRCode && (
                 <ModalQRCodePayment
                     isOpen={modalVisibleQRCode}
@@ -773,5 +847,6 @@ const Pedido: React.FC = () => {
         </SectionOrder>
     )
 }
+
 
 export default Pedido;
