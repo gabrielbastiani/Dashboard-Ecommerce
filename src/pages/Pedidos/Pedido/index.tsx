@@ -65,8 +65,8 @@ import { ModalQRCodePayment } from "../../../components/popups/ModalQRCodePaymen
 import { Block } from "../../Categorias/styles";
 import { BlockInputs, BoxActive, RadioBotton } from "../../Banners/styles";
 import privateComment from "../../../assets/user-comment-private.png";
-import commentss from "../../../assets/Logo-Builder-Favicon.jpg";
 import { AuthContext } from "../../../contexts/AuthContext";
+
 
 interface CustomerProps {
     id: string;
@@ -298,7 +298,7 @@ const Pedido: React.FC = () => {
             await apiClient.post(`/createOrderComments`, {
                 comment: commentOrder,
                 order_id: order_id,
-                admin_or_employee: storeCommentUser,
+                user_comment: storeCommentUser,
                 active: active
             });
 
@@ -325,8 +325,6 @@ const Pedido: React.FC = () => {
 
     Modal.setAppElement('body');
 
-
-    console.log(comments)
 
 
     return (
@@ -828,7 +826,7 @@ const Pedido: React.FC = () => {
                                 <DataComment>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataComment>
                                 <BoxComment>
                                     <ImageComment src={item.active === "Sim" ? 'http://localhost:3333/files/' + logoStore : privateComment} alt="foto-comentario" />
-                                    <Comments><TextUser>{item.admin_or_employee} = </TextUser>{item.comment}</Comments>
+                                    <Comments><TextUser>{item.user_comment} = </TextUser>{item.comment}</Comments>
                                 </BoxComment>
                             </ContainerComments>
                         )
