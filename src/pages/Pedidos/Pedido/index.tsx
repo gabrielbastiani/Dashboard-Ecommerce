@@ -59,7 +59,7 @@ import master from '../../../assets/mastercard.png';
 import visa from '../../../assets/visa.png';
 import american from '../../../assets/american.png';
 import pix from '../../../assets/pix.png';
-import { BlockData, TextStrong } from "../../Clientes/Contrapropostas/styles";
+import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/styles";
 import { BsWhatsapp } from "react-icons/bs";
 import copy from "copy-to-clipboard";
 import { ModalQRCodePayment } from "../../../components/popups/ModalQRCodePayment";
@@ -676,11 +676,11 @@ const Pedido: React.FC = () => {
                             {orderPayment?.type_payment === "PIX" ?
                                 <>
                                     <BoxPix>
-                                        <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             PIX
                                             <ImagePay1 src={pix} alt="pagamento" />
-                                        </TextDataOrder>
-                                        <TextDataOrder>Chave Pix</TextDataOrder>
+                                        </TextData>
+                                        <TextData>Chave Pix</TextData>
                                         <InputPix type="text" value={keyPix} />
                                         <ButtonPix onClick={copyToClipboard}>
                                             <FaRegCopy size={25} />
@@ -731,37 +731,37 @@ const Pedido: React.FC = () => {
                     null
                 }
 
-                    {cartItens.map((prod, index: Key) => {
-                        return (
-                            <BoxProductCart key={index}>
-                                <ImageProductCart>
-                                    <ImageProduct src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
-                                </ImageProductCart>
+                {cartItens.map((prod, index: Key) => {
+                    return (
+                        <BoxProductCart key={index}>
+                            <ImageProductCart>
+                                <ImageProduct src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
+                            </ImageProductCart>
 
-                                <BoxDataProduct>
-                                    <BoxData>
-                                        <Sku>SKU: {prod?.product?.sku}</Sku>
-                                        <NameProduct>{prod?.product?.name}</NameProduct>
-                                        {prod?.product?.relationattributeproducts.map((atr: any, index: Key) => {
-                                            return (
-                                                <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
-                                            )
-                                        })}
-                                    </BoxData>
-                                </BoxDataProduct>
+                            <BoxDataProduct>
+                                <BoxData>
+                                    <Sku>SKU: {prod?.product?.sku}</Sku>
+                                    <NameProduct>{prod?.product?.name}</NameProduct>
+                                    {prod?.product?.relationattributeproducts.map((atr: any, index: Key) => {
+                                        return (
+                                            <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                        )
+                                    })}
+                                </BoxData>
+                            </BoxDataProduct>
 
-                                <BoxPriceProductCart>
-                                    <PriceProduct>Qtd: {prod?.amount}</PriceProduct>
-                                </BoxPriceProductCart>
+                            <BoxPriceProductCart>
+                                <PriceProduct>Qtd: {prod?.amount}</PriceProduct>
+                            </BoxPriceProductCart>
 
-                                <BoxPricesTotalProduct>
-                                    <BoxPrices>
-                                        <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion ? prod?.product?.promotion * prod?.amount : prod?.product?.price * prod?.amount)}</PriceProductData>
-                                    </BoxPrices>
-                                </BoxPricesTotalProduct>
-                            </BoxProductCart>
-                        )
-                    })}
+                            <BoxPricesTotalProduct>
+                                <BoxPrices>
+                                    <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion ? prod?.product?.promotion * prod?.amount : prod?.product?.price * prod?.amount)}</PriceProductData>
+                                </BoxPrices>
+                            </BoxPricesTotalProduct>
+                        </BoxProductCart>
+                    )
+                })}
 
                 <Card>
                     <BoxTotal>
