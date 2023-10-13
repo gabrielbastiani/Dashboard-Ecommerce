@@ -18,6 +18,24 @@ export const StatusTop = styled.button`
 export const BoxTopStatusGeral = styled.div`
   display: inline-flex;
   margin-top: 15px;
+
+  @media (max-width: 620px) {
+    display: flex;
+  }
+
+  @media (max-width: 420px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+export const TextDataOrder = styled.span`
+  color: ${(props) => props?.theme?.colors?.white};
+  width: 95%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const TotalFrete = styled.button`
@@ -68,6 +86,15 @@ export const GridOrder = styled.div`
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-gap: 10px;
+
+  @media (max-width: 950px) {
+    justify-content: center;
+    grid-template-columns: 70%;
+  }
+
+  @media (max-width: 510px) {
+    grid-template-columns: 90%;
+  }
 `;
 
 export const Linked = styled.a``;
@@ -87,6 +114,11 @@ export const BoxPix = styled.div`
   justify-content: center;
   margin-top: 10px;
   align-items: center;
+
+  @media (max-width: 950px) {
+    justify-content: center;
+    flex-direction: column;
+  }
 `;
 
 export const InputPix = styled.input`
@@ -99,6 +131,10 @@ export const InputPix = styled.input`
 export const ButtonPix = styled.button`
   background: none;
   border: none;
+
+  @media (max-width: 950px) {
+    margin: 20px;
+  }
 
   svg {
     color: ${(props) => props?.theme?.colors?.white};
@@ -125,8 +161,16 @@ export const BoxProductCart = styled.div`
     flex-direction: column;
   }
 
+  @media (max-width: 730px) {
+    width: 400px;
+  }
+
   @media (max-width: 545px) {
     width: 300px;
+  }
+
+  @media (max-width: 450px) {
+    width: 250px;
   }
 `;
 
@@ -161,6 +205,11 @@ export const BoxData = styled.div`
   @media (max-width: 816px) {
     align-items: center;
   }
+
+  @media (max-width: 535px) {
+    align-items: unset;
+    width: 300px;
+  }
 `;
 
 export const BoxPriceProductCart = styled.div``;
@@ -190,6 +239,15 @@ export const PriceProductData = styled.strong`
 
 export const NameProduct = styled.strong`
   margin-bottom: 8px;
+  width: 95%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: 720px) {
+    width: 55%;
+  }
 `;
 
 export const AtributeProduct = styled.span`
@@ -201,6 +259,10 @@ export const BoxTotal = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0 50px;
+
+  @media (max-width: 535px) {
+    flex-direction: column;
+  }
 `;
 
 export const TextTotal = styled.span`
@@ -256,6 +318,10 @@ export const BoxComment = styled.div`
   background-color: ${(props) => props?.theme?.colors?.white};
   padding: 13px;
   margin-top: 15px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 
 export const ImageComment = styled.img`

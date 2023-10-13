@@ -45,6 +45,7 @@ import {
     Sku,
     StatusTop,
     TextComment,
+    TextDataOrder,
     TextTotal,
     TextUser,
     TotalFrete,
@@ -58,7 +59,7 @@ import master from '../../../assets/mastercard.png';
 import visa from '../../../assets/visa.png';
 import american from '../../../assets/american.png';
 import pix from '../../../assets/pix.png';
-import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/styles";
+import { BlockData, TextStrong } from "../../Clientes/Contrapropostas/styles";
 import { BsWhatsapp } from "react-icons/bs";
 import copy from "copy-to-clipboard";
 import { ModalQRCodePayment } from "../../../components/popups/ModalQRCodePayment";
@@ -138,13 +139,7 @@ interface DeliveryPropos {
     created_at: string;
 }
 
-interface FreteProps {
-    id: string;
-    order_id: string;
-    code_tracking: string;
-    delivery_history: string;
-    created_at: string;
-}
+
 
 const Pedido: React.FC = () => {
 
@@ -154,11 +149,8 @@ const Pedido: React.FC = () => {
     const [order, setOrder] = useState<OrderProps>();
     const [idOrder, setIdOrder] = useState(Number);
     const [dataOrder, setDataOrder] = useState();
-    const [cupom, setCupom] = useState('');
     const [customerDate, setCustomerDate] = useState<CustomerProps>();
     const [cartItens, setCartItens] = useState<any[]>([]);
-    const [shipments, setShipments] = useState<FreteProps>();
-    const [orderComments, setOrderComments] = useState<{}>();
     const [orderPayment, setOrderPayment] = useState<PaymentProps>();
     const [deliveryOrder, setDeliveryOrder] = useState<DeliveryPropos>();
 
@@ -230,10 +222,7 @@ const Pedido: React.FC = () => {
                 setIdOrder(data.id_order_store);
                 setCustomerDate(data.customer || {});
                 setDataOrder(data.created_at);
-                setCupom(data.cupom);
                 setCartItens(data.cart || []);
-                setShipments(data.shipmentsTrackings || {});
-                setOrderComments(data.orderComments || {});
                 setOrderPayment(data.payment || {});
                 setDeliveryOrder(data.deliveryAddressCustomer || {});/* @ts-ignore */
                 setCodeRastreio(order?.shipmentsTrackings[0]?.code_tracking || "");
@@ -474,18 +463,18 @@ const Pedido: React.FC = () => {
 
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>{customerDate?.cnpj ? "Empresa" : "Nome"}</TextStrong>
-                            <TextData>{customerDate?.name}</TextData>
+                            <TextDataOrder>{customerDate?.name}</TextDataOrder>
                         </BlockData>
 
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>Cliente desde</TextStrong>
-                            <TextData>{moment(customerDate?.created_at).format('DD/MM/YYYY')}</TextData>
+                            <TextDataOrder>{moment(customerDate?.created_at).format('DD/MM/YYYY')}</TextDataOrder>
                         </BlockData>
 
                         {customerDate?.stateRegistration ?
                             <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                 <TextStrong>Inscrição Estadual</TextStrong>
-                                <TextData>{customerDate?.stateRegistration}</TextData>
+                                <TextDataOrder>{customerDate?.stateRegistration}</TextDataOrder>
                             </BlockData>
                             :
                             null
@@ -493,17 +482,17 @@ const Pedido: React.FC = () => {
 
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>{customerDate?.cnpj ? "CNPJ" : "CPF"}</TextStrong>
-                            <TextData>{customerDate?.cnpj ? customerDate?.cnpj : customerDate?.cpf}</TextData>
+                            <TextDataOrder>{customerDate?.cnpj ? customerDate?.cnpj : customerDate?.cpf}</TextDataOrder>
                         </BlockData>
 
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>E-mail</TextStrong>
-                            <TextData>{customerDate?.email}</TextData>
+                            <TextDataOrder>{customerDate?.email}</TextDataOrder>
                         </BlockData>
 
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>Telefone</TextStrong>
-                            <TextData>{customerDate?.phone}</TextData>
+                            <TextDataOrder>{customerDate?.phone}</TextDataOrder>
                             <Linked href={`https://api.whatsapp.com/send?phone=55${tel}`} target="_blank">
                                 <WhatsButton>
                                     <BsWhatsapp /> WhatsApp
@@ -517,23 +506,23 @@ const Pedido: React.FC = () => {
                         <Titulos tipo="h2" titulo="Envio" />
 
                         <BlockData>
-                            <TextData style={{ display: 'flex', fontWeight: '800' }}>{deliveryOrder?.addressee}</TextData>
-                            <TextData>{deliveryOrder?.address} - {deliveryOrder?.number} - {deliveryOrder?.complement} - {deliveryOrder?.reference}</TextData>
+                            <TextDataOrder style={{ display: 'flex', fontWeight: '800' }}>{deliveryOrder?.addressee}</TextDataOrder>
+                            <TextDataOrder>{deliveryOrder?.address} - {deliveryOrder?.number} - {deliveryOrder?.complement} - {deliveryOrder?.reference}</TextDataOrder>
                             <br />
                             <br />
                             <TextStrong style={{ fontWeight: '800' }}>Frete</TextStrong>
                             <br />
-                            <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payFrete)}</TextData>
+                            <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payFrete)}</TextDataOrder>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <TextData>{order?.data_delivery}</TextData>
+                            <TextDataOrder>{order?.data_delivery}</TextDataOrder>
                             <br />
                             <br />
-                            <TextData>Peso Total: {order?.weight}Kg</TextData>
+                            <TextDataOrder>Peso Total: {order?.weight}Kg</TextDataOrder>
                         </BlockData>
 
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <br />
-                            <TextData>CÓDIGO: {codeRastreio}</TextData>
+                            <TextDataOrder>CÓDIGO: {codeRastreio}</TextDataOrder>
                             <br />
                             <TextoDados chave={"Código de rastreio"} dados={<InputUpdate dado={codeRastreio} type="text" placeholder={codeRastreio} value={codeRastreio} onChange={(e) => setCodeRastreio(e.target.value)}
                                 handleSubmit={handleCodeRastreio}
@@ -551,36 +540,35 @@ const Pedido: React.FC = () => {
                             <TextStrong>Forma de Pagamento</TextStrong>
 
                             {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
-
                                 <>
-                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                    <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = Master
                                         <ImagePay1 src={master} alt="pagamento" />
-                                    </TextData>
+                                    </TextDataOrder>
 
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         {orderPayment?.cardholder_name}
-                                    </TextData>
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    </TextDataOrder>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
-                                    </TextData>
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    </TextDataOrder>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
-                                    </TextData>
+                                    </TextDataOrder>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor parcelado</TextStrong>
-                                        <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
+                                        <TextDataOrder>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
-                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                        <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
-                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                        <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
                                     </BlockData>
                                 </>
                                 :
@@ -588,36 +576,35 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
-
                                 <>
-                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                    <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = Visa
                                         <ImagePay1 src={visa} alt="pagamento" />
-                                    </TextData>
+                                    </TextDataOrder>
 
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         {orderPayment?.cardholder_name}
-                                    </TextData>
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    </TextDataOrder>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
-                                    </TextData>
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    </TextDataOrder>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
-                                    </TextData>
+                                    </TextDataOrder>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor parcelado</TextStrong>
-                                        <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
+                                        <TextDataOrder>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
-                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                        <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
-                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                        <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
                                     </BlockData>
                                 </>
                                 :
@@ -625,41 +612,40 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
-
                                 <>
-                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                    <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = American Express
                                         <ImagePay1 src={american} alt="pagamento" />
-                                    </TextData>
+                                    </TextDataOrder>
 
-                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                    <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = Visa
                                         <ImagePay1 src={visa} alt="pagamento" />
-                                    </TextData>
+                                    </TextDataOrder>
 
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         {orderPayment?.cardholder_name}
-                                    </TextData>
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    </TextDataOrder>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         {orderPayment?.first_number_credit_card}******{orderPayment?.last_number_credit_card}
-                                    </TextData>
-                                    <TextData style={{ marginBottom: '8px' }}>
+                                    </TextDataOrder>
+                                    <TextDataOrder style={{ marginBottom: '8px' }}>
                                         Expira em {orderPayment?.expiration_month}/{orderPayment?.expiration_year}
-                                    </TextData>
+                                    </TextDataOrder>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor parcelado</TextStrong>
-                                        <TextData>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextData>
+                                        <TextDataOrder>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
-                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                        <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
-                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                        <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
                                     </BlockData>
                                 </>
                                 :
@@ -667,21 +653,20 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "Boleto" ?
-
                                 <>
-                                    <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                    <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Boleto
                                         <ImagePay1 src={boleto} alt="pagamento" />
-                                    </TextData>
+                                    </TextDataOrder>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
-                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                        <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
-                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                        <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
                                     </BlockData>
                                 </>
                                 :
@@ -689,14 +674,13 @@ const Pedido: React.FC = () => {
                             }
 
                             {orderPayment?.type_payment === "PIX" ?
-
                                 <>
                                     <BoxPix>
-                                        <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                        <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             PIX
                                             <ImagePay1 src={pix} alt="pagamento" />
-                                        </TextData>
-                                        <TextData>Chave Pix</TextData>
+                                        </TextDataOrder>
+                                        <TextDataOrder>Chave Pix</TextDataOrder>
                                         <InputPix type="text" value={keyPix} />
                                         <ButtonPix onClick={copyToClipboard}>
                                             <FaRegCopy size={25} />
@@ -709,17 +693,17 @@ const Pedido: React.FC = () => {
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Chave Válida até</TextStrong>
-                                        <TextData>{moment(orderPayment?.key_valid_pix).format('DD/MM/YYYY - HH:mm')}</TextData>
+                                        <TextDataOrder>{moment(orderPayment?.key_valid_pix).format('DD/MM/YYYY - HH:mm')}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>Valor Total</TextStrong>
-                                        <TextData>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextData>
+                                        <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
                                     </BlockData>
 
                                     <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                         <TextStrong>ID Transação</TextStrong>
-                                        <TextData>{orderPayment?.transaction_id}</TextData>
+                                        <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                     </BlockData>
                                 </>
                                 :
@@ -737,9 +721,9 @@ const Pedido: React.FC = () => {
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong style={{ fontSize: '20px', marginBottom: '5px' }}>Promoções</TextStrong>
                             <br />
-                            <TextData style={{ fontWeight: '00' }}>Nome do cupom: {order?.name_cupom}</TextData>
+                            <TextDataOrder style={{ fontWeight: '00' }}>Nome do cupom: {order?.name_cupom}</TextDataOrder>
                             <br />
-                            <TextData style={{ fontWeight: '00' }}>Código de cupom: {order?.cupom}</TextData>
+                            <TextDataOrder style={{ fontWeight: '00' }}>Código de cupom: {order?.cupom}</TextDataOrder>
                         </BlockData>
 
                     </Card>
@@ -747,7 +731,6 @@ const Pedido: React.FC = () => {
                     null
                 }
 
-                <Card>
                     {cartItens.map((prod, index: Key) => {
                         return (
                             <BoxProductCart key={index}>
@@ -779,7 +762,6 @@ const Pedido: React.FC = () => {
                             </BoxProductCart>
                         )
                     })}
-                </Card>
 
                 <Card>
                     <BoxTotal>
