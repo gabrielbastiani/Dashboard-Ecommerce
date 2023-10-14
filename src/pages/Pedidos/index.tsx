@@ -86,6 +86,8 @@ const Pedidos: React.FC = () => {
         setSearch(filterContact);
     }
 
+    console.log(search)
+
     const dados: any = [];
     (search || []).forEach((item) => {
         dados.push({
@@ -93,7 +95,7 @@ const Pedidos: React.FC = () => {
             "Cliente": item.customer.name,
             "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Situação": item.shipmentsTrackings[0].delivery_history,
+            "Situação": item.statusOrder[0].status_order === "pending" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "approved" ? "Aprovado" : "Reprovado ou Cancelado",
             "botaoDetalhes": `/pedido/${item.id}`
         });
     });

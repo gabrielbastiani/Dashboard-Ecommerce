@@ -139,8 +139,6 @@ interface DeliveryPropos {
     created_at: string;
 }
 
-
-
 const Pedido: React.FC = () => {
 
     const { admin } = useContext(AuthContext);
@@ -148,6 +146,7 @@ const Pedido: React.FC = () => {
 
     const [order, setOrder] = useState<OrderProps>();
     const [idOrder, setIdOrder] = useState(Number);
+    const [orderStatus, setOrderStatus] = useState("");
     const [dataOrder, setDataOrder] = useState();
     const [customerDate, setCustomerDate] = useState<CustomerProps>();
     const [cartItens, setCartItens] = useState<any[]>([]);
@@ -224,17 +223,18 @@ const Pedido: React.FC = () => {
                 setDataOrder(data.created_at);
                 setCartItens(data.cart || []);
                 setOrderPayment(data.payment || {});
-                setDeliveryOrder(data.deliveryAddressCustomer || {});/* @ts-ignore */
-                setCodeRastreio(order?.shipmentsTrackings[0]?.code_tracking || "");
+                setDeliveryOrder(data.deliveryAddressCustomer || {});
+                setCodeRastreio(data?.shipmentsTrackings[0]?.code_tracking || "");
                 setKeyPix(data?.payment?.key_payment_pix || "");
                 setKeyPixQRCode(data?.payment?.qr_code_pix || "");
+                setOrderStatus(data?.statusOrder[0]?.status_order || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
-        loadorderdata();/* @ts-ignore */
-    }, [order?.shipmentsTrackings, order_id]);
+        loadorderdata();
+    }, [order_id]);
 
     /* @ts-ignore */
     const idShips = String(order?.shipmentsTrackings[0]?.id);
@@ -315,6 +315,9 @@ const Pedido: React.FC = () => {
     Modal.setAppElement('body');
 
 
+    console.log(codeRastreio)
+
+
 
     return (
         <SectionOrder>
@@ -328,7 +331,7 @@ const Pedido: React.FC = () => {
                 <Titulos tipo="h2" titulo={`Pedido - #${idOrder} | Data: ${moment(dataOrder).format('DD/MM/YYYY - HH:mm')}`} />
 
                 <BoxTopStatusGeral>
-                    {orderPayment?.status === "pending" ?
+                    {orderStatus === "pending" ?
                         <StatusTop style={{
                             backgroundColor: 'yellow',
                             color: 'black'
@@ -339,7 +342,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.status === "approved" ?
+                    {orderStatus === "approved" ?
                         <StatusTop style={{
                             backgroundColor: 'green',
                             color: 'white'
@@ -350,7 +353,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.status === "inprocess" || orderPayment?.status === "inmediation" ?
+                    {orderStatus === "inprocess" || orderStatus === "inmediation" ?
                         <StatusTop style={{
                             backgroundColor: 'orange',
                             color: 'white'
@@ -361,7 +364,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.status === "rejected" ?
+                    {orderStatus === "rejected" ?
                         <StatusTop style={{
                             backgroundColor: 'red',
                             color: 'white'
@@ -372,7 +375,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.status === "cancelled" ?
+                    {orderStatus === "cancelled" ?
                         <StatusTop style={{
                             backgroundColor: 'red',
                             color: 'white'
@@ -383,7 +386,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.status === "refunded" || orderPayment?.status === "chargedback" ?
+                    {orderStatus === "refunded" || orderStatus === "chargedback" ?
                         <StatusTop style={{
                             backgroundColor: 'brown',
                             color: 'white'
@@ -394,7 +397,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.status === "chargedback" ?
+                    {orderStatus === "chargedback" ?
                         <StatusTop style={{
                             backgroundColor: 'white',
                             color: 'black'
@@ -524,10 +527,18 @@ const Pedido: React.FC = () => {
                             <br />
                             <TextDataOrder>CÓDIGO: {codeRastreio}</TextDataOrder>
                             <br />
-                            <TextoDados chave={"Código de rastreio"} dados={<InputUpdate dado={codeRastreio} type="text" placeholder={codeRastreio} value={codeRastreio} onChange={(e) => setCodeRastreio(e.target.value)}
-                                handleSubmit={handleCodeRastreio}
-                            />
-                            }
+                            <TextoDados
+                                chave={"Código de rastreio"}
+                                dados={
+                                    <InputUpdate
+                                        dado={codeRastreio}
+                                        type="text"
+                                        placeholder={codeRastreio}
+                                        value={codeRastreio}
+                                        onChange={(e) => setCodeRastreio(e.target.value)}
+                                        handleSubmit={handleCodeRastreio}
+                                    />
+                                }
                             />
                         </BlockData>
 
