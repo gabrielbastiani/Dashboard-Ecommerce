@@ -42,7 +42,7 @@ const TemplateEmailOrderStatus: React.FC = () => {
             "Nome do arquivo": item.name_file_email,
             "Status do pedido": item.status_order,
             "Data de criação": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "botaoDetalhes": `/carrinho/templateEmail/${item.slug_name_file_email}`
+            "botaoDetalhes": `/pedidos/templateEmailOrderStatus/${item.slug_name_file_email}`
         });
     });
 

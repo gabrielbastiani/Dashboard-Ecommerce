@@ -74,6 +74,7 @@ const EditConfiguracao: React.FC = () => {
                 await apiClient.put(`/updateDatasAllConfigAbandonedCart?configAbandonedCart_id=${configAbandonedCart_id}`,
                     {
                         time_send_email: time_send_email * 60,
+                        time_in_hours: time_send_email,
                         subject: subject,
                         code_cupom: code_cupom
                     });
