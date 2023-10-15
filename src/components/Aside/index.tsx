@@ -55,6 +55,7 @@ const Aside: React.FC = () => {
     const [submenu3, setSubmenu3] = useState(false);
     const [submenu4, setSubmenu4] = useState(false);
     const [submenu5, setSubmenu5] = useState(false);
+    const [submenu6, setSubmenu6] = useState(false);
 
     const handleSubMenu = () => {
         setSubmenu(!submenu);
@@ -78,6 +79,10 @@ const Aside: React.FC = () => {
 
     const handleSubMenu5 = () => {
         setSubmenu5(!submenu5);
+    }
+
+    const handleSubMenu6 = () => {
+        setSubmenu6(!submenu6);
     }
 
     const handleToggleMenu = () => {
@@ -113,10 +118,24 @@ const Aside: React.FC = () => {
                     Painel
                 </MenuItemLink>
 
-                <MenuItemLink href="/pedidos">
+                <MenuItemLink onClick={handleSubMenu6} style={{ cursor: 'pointer' }} >
                     <AiFillWallet />
                     Pedidos
                 </MenuItemLink>
+
+                {submenu6 ? (
+                    <>
+                        <SubMenuItemLink href="/pedidos">
+                            <MdPlayArrow />
+                            Pedidos
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href="/pedidos/emailStausOrder" >
+                            <MdPlayArrow />
+                            Templates E-mail
+                        </SubMenuItemLink>
+                    </>
+                ) : null}
 
                 <MenuItemLink onClick={handleSubMenu3} style={{ cursor: 'pointer' }} >
                     <IoIosPeople />

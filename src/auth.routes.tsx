@@ -72,6 +72,8 @@ import Clientes from './pages/Clientes';
 import Cliente from './pages/Clientes/Cliente';
 import Pedidos from './pages/Pedidos';
 import Pedido from './pages/Pedidos/Pedido';
+import TemplateEmailOrderStatus from './pages/Pedidos/TemplateEmailOrderStatus';
+import NovoTemplateStatusOrder from './pages/Pedidos/TemplateEmailOrderStatus/novoTemplateStatusOrder';
 
 
 const RoutesAuth: React.FC = () => {
@@ -83,6 +85,8 @@ const RoutesAuth: React.FC = () => {
 
             <Route path='/pedidos' element={<Pedidos />} />
             <Route path='/pedido/:order_id' element={<Pedido />} />
+            <Route path='/pedidos/emailStausOrder' element={<TemplateEmailOrderStatus />} />
+            <Route path='/pedidos/TemplateEmailOrderStatus/novo' element={<NovoTemplateStatusOrder />} />
 
             <Route path='/clientes' element={<Clientes />} />
             <Route path='/cliente/:customer_id' element={<Cliente />} />
