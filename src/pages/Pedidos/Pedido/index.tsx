@@ -331,7 +331,7 @@ const Pedido: React.FC = () => {
                 <Titulos tipo="h2" titulo={`Pedido - #${idOrder} | Data: ${moment(dataOrder).format('DD/MM/YYYY - HH:mm')}`} />
 
                 <BoxTopStatusGeral>
-                    {orderStatus === "pending" ?
+                    {orderStatus === "PENDING" ?
                         <StatusTop style={{
                             backgroundColor: 'yellow',
                             color: 'black'

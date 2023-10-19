@@ -256,7 +256,7 @@ const EditTemplateOrderStatus: React.FC = () => {
                                         opcoes={
                                             [
                                                 { label: "Selecionar...", value: "" },
-                                                { label: "Pendente", value: "pending" },
+                                                { label: "Pendente", value: "PENDING" },
                                                 { label: "Aprovado", value: "CONFIRMED" },
                                                 { label: "Processando", value: "inprocess" || "inmediation" },
                                                 { label: "Rejeitado", value: "rejected" },
