@@ -95,7 +95,7 @@ const Pedidos: React.FC = () => {
             "Cliente": item.customer.name,
             "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Situação": item.statusOrder[0].status_order === "pending" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "approved" ? "Aprovado" : "Reprovado ou Cancelado",
+            "Situação": item.statusOrder[0].status_order === "pending" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Reprovado ou Cancelado",
             "botaoDetalhes": `/pedido/${item.id}`
         });
     });

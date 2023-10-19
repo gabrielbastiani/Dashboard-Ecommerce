@@ -127,7 +127,7 @@ const NovoTemplateStatusOrder: React.FC = () => {
                                     [
                                         { label: "Selecionar...", value: "" },
                                         { label: "Pendente", value: "pending" },
-                                        { label: "Aprovado", value: "approved" },
+                                        { label: "Aprovado", value: "CONFIRMED" },
                                         { label: "Processando", value: "inprocess" || "inmediation" },
                                         { label: "Rejeitado", value: "rejected" },
                                         { label: "Cancelado", value: "cancelled" },

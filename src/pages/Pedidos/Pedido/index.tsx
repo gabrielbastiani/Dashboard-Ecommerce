@@ -342,7 +342,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderStatus === "approved" ?
+                    {orderStatus === "CONFIRMED" ?
                         <StatusTop style={{
                             backgroundColor: 'green',
                             color: 'white'
