@@ -128,11 +128,14 @@ const NovoTemplateStatusOrder: React.FC = () => {
                                         { label: "Selecionar...", value: "" },
                                         { label: "Pendente", value: "PENDING" },
                                         { label: "Aprovado", value: "CONFIRMED" },
-                                        { label: "Processando", value: "inprocess" || "inmediation" },
-                                        { label: "Rejeitado", value: "rejected" },
-                                        { label: "Cancelado", value: "cancelled" },
-                                        { label: "Devolvido", value: "refunded" },
-                                        { label: "Estornado", value: "chargedback" }
+                                        { label: "Recebida (saldo já creditado na conta)", value: "RECEIVED" },
+                                        { label: "Cobrança Vencida", value: "OVERDUE" },
+                                        { label: "Cobrança Estornada", value: "REFUNDED" },
+                                        { label: "Estorno Solicitado", value: "REFUND_REQUESTED" },
+                                        { label: "Estorno em processamento (liquidação já está agendada, cobrança será estornada após executar a liquidação)", value: "REFUND_IN_PROGRESS" },
+                                        { label: "Recebido chargeback", value: "CHARGEBACK_REQUESTED" },
+                                        { label: "Pagamento em análise", value: "AWAITING_RISK_ANALYSIS" },
+                                        { label: "Pedido Cancelado", value: "CANCELLED" }
                                     ]
                                 }/* @ts-ignore */
                                 onChange={handleChangeStatus}
