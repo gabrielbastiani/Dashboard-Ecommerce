@@ -55,8 +55,8 @@ import {
 } from "./styles";
 import { FaCommentDots, FaRegCopy, FaTruckMoving } from "react-icons/fa";
 import boleto from '../../../assets/boleto.png';
-import master from '../../../assets/mastercard.png';
-import visa from '../../../assets/visa.png';
+import MASTERCARD from '../../../assets/mastercard.png';
+import VISA from '../../../assets/visa.png';
 import american from '../../../assets/american.png';
 import pix from '../../../assets/pix.png';
 import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/styles";
@@ -98,11 +98,10 @@ interface PaymentProps {
     expiration_month: number;
     expiration_year: number;
     date_created: string;
+    created_at: string;
     cardholder_name: string;
-    cardholder_identification: {
-        name: string;
-        identification: any;
-    }
+    cardholder_identification_cpfCnpj: string;
+    cardholder_cpfCnpj: string;
     flag_credit_card: string;
     installment: number;
     installment_amount: number;
@@ -315,8 +314,6 @@ const Pedido: React.FC = () => {
     Modal.setAppElement('body');
 
 
-    console.log(codeRastreio)
-
 
 
     return (
@@ -353,7 +350,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderStatus === "inprocess" || orderStatus === "inmediation" ?
+                    {orderStatus === "AWAITING_RISK_ANALYSIS" ?
                         <StatusTop style={{
                             backgroundColor: 'orange',
                             color: 'white'
@@ -364,7 +361,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderStatus === "rejected" ?
+                    {orderStatus === "REFUNDED" ?
                         <StatusTop style={{
                             backgroundColor: 'red',
                             color: 'white'
@@ -375,7 +372,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderStatus === "cancelled" ?
+                    {orderStatus === "CANCELLED" ?
                         <StatusTop style={{
                             backgroundColor: 'red',
                             color: 'white'
@@ -386,7 +383,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderStatus === "refunded" || orderStatus === "chargedback" ?
+                    {orderStatus === "CANCELLED" ?
                         <StatusTop style={{
                             backgroundColor: 'brown',
                             color: 'white'
@@ -397,7 +394,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderStatus === "chargedback" ?
+                    {orderStatus === "CHARGEBACK_REQUESTED" ?
                         <StatusTop style={{
                             backgroundColor: 'white',
                             color: 'black'
@@ -413,25 +410,25 @@ const Pedido: React.FC = () => {
                         Frete: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payFrete)}
                     </TotalFrete>
 
-                    {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
+                    {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "MASTERCARD" ?
                         <TotalTop>
-                            <ImagePay src={master} alt="pagamento" />
+                            <ImagePay src={MASTERCARD} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
                         null
                     }
 
-                    {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
+                    {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "VISA" ?
                         <TotalTop>
-                            <ImagePay src={visa} alt="pagamento" />
+                            <ImagePay src={VISA} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                         </TotalTop>
                         :
                         null
                     }
 
-                    {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
+                    {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "AMEX" ?
                         <TotalTop>
                             <ImagePay src={american} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
@@ -440,7 +437,7 @@ const Pedido: React.FC = () => {
                         null
                     }
 
-                    {orderPayment?.type_payment === "Boleto" ?
+                    {orderPayment?.type_payment === "Boleto bancário" ?
                         <TotalTop>
                             <ImagePay src={boleto} alt="pagamento" />
                             Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
@@ -550,11 +547,11 @@ const Pedido: React.FC = () => {
                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                             <TextStrong>Forma de Pagamento</TextStrong>
 
-                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
+                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "MASTERCARD" ?
                                 <>
                                     <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = Master
-                                        <ImagePay1 src={master} alt="pagamento" />
+                                        <ImagePay1 src={MASTERCARD} alt="pagamento" />
                                     </TextDataOrder>
 
                                     <TextDataOrder style={{ marginBottom: '8px' }}>
@@ -586,11 +583,11 @@ const Pedido: React.FC = () => {
                                 null
                             }
 
-                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
+                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "VISA" ?
                                 <>
                                     <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = Visa
-                                        <ImagePay1 src={visa} alt="pagamento" />
+                                        <ImagePay1 src={VISA} alt="pagamento" />
                                     </TextDataOrder>
 
                                     <TextDataOrder style={{ marginBottom: '8px' }}>
@@ -622,7 +619,7 @@ const Pedido: React.FC = () => {
                                 null
                             }
 
-                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
+                            {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "AMEX" ?
                                 <>
                                     <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Cartão de Crédito = American Express
@@ -658,7 +655,7 @@ const Pedido: React.FC = () => {
                                 null
                             }
 
-                            {orderPayment?.type_payment === "Boleto" ?
+                            {orderPayment?.type_payment === "Boleto bancário" ?
                                 <>
                                     <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                         Boleto
