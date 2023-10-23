@@ -302,7 +302,6 @@ const Pedido: React.FC = () => {
         }
     }
 
-
     function handleCloseModalQRCode() {
         setModalVisibleQRCode(false);
     }
