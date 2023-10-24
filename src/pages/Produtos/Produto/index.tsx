@@ -187,6 +187,32 @@ const Produto: React.FC = () => {
         loadProduct();
     }, [product_id]);
 
+    async function refreshProduct() {
+        const apiClient = setupAPIClient();
+        try {
+            const responseProduct = await apiClient.get(`/findUniqueProduct?product_id=${product_id}`)
+
+            setName(responseProduct.data.name || "");
+            setPrice(responseProduct.data.price);
+            setSku(responseProduct.data.sku || "");
+            setPromotion(responseProduct.data.promotion);
+            setStock(responseProduct.data.stock);
+            setWeight(responseProduct.data.weight || "");
+            setWidth(responseProduct.data.width || "");
+            setHeight(responseProduct.data.height || "");
+            setDepth(responseProduct.data.depth || "");
+            setUrlVideo(responseProduct.data.urlVideo || "");
+            setFreeShipping(responseProduct.data.freeShipping);
+            setStatus(responseProduct.data.status || "");
+            setEmphasis(responseProduct.data.emphasis);
+            setOffer(responseProduct.data.offer);
+            setTogetherBuy(responseProduct.data.buyTogether_id || null);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
     async function updateNameProduct() {
         try {
             const apiClient = setupAPIClient();
@@ -196,9 +222,7 @@ const Produto: React.FC = () => {
             } else {
                 await apiClient.put(`/updateNameProduct?product_id=${product_id}`, { name: name });
                 toast.success('Nome do produto atualizado com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+                refreshProduct();
             }
         } catch (error) {
             console.log(error);
@@ -249,9 +273,7 @@ const Produto: React.FC = () => {
 
                 toast.success('Dado do produto atualizado com sucesso.');
 
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+                refreshProduct();
             }
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -264,9 +286,7 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusProduct?product_id=${product_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            refreshProduct();
 
         } catch (error) {
             console.log(error);
@@ -289,9 +309,7 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/emphasis?product_id=${product_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            refreshProduct();
 
         } catch (error) {
             console.log(error);
@@ -314,9 +332,7 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/offer?product_id=${product_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            refreshProduct();
 
         } catch (error) {
             console.log(error);
@@ -339,9 +355,7 @@ const Produto: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateFreeShipping?product_id=${product_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            refreshProduct();
 
         } catch (error) {
             console.log(error);
