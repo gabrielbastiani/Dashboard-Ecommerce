@@ -9,10 +9,6 @@ function signOut() {
     let remove_cookie_user = new Cookies();
     remove_cookie_user.remove('@storebuilder.token', { path: '/' });
     toast.success('Usuario deslogado com sucesso!');
-    setTimeout(() => {
-      return redirect('/loginAdmin')
-    }, 2500);
-
   } catch (error) {
     toast.error("OPS... Erro ao deslogar");
   }
@@ -30,23 +26,18 @@ export function setupAPIClient() {
     }
   })
 
-  api.interceptors.response.use(response => {
-    return response;
-  }, (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      // qualquer erro 401 (nao autorizado) devemos deslogar o usuario
-      // eslint-disable-next-line valid-typeof
-      if (typeof window !== undefined) {
-        // Chamar a funçao para deslogar o usuario
-        signOut();
-      } else {
-        return Promise.reject(new AuthTokenError())
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response.status === 401) {
+        // Realize a ação apropriada, como redirecionar para a página de login
+        signOut(); // Realize o logout
+        // Redirecione para a página de login
+        window.location.href = '/loginAdmin';
       }
+      return Promise.reject(error);
     }
-
-    return Promise.reject(error);
-
-  })
+  );
 
   return api;
 
