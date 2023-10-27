@@ -16,13 +16,9 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
             <GlobalStyles />
             { isAuthenticated ? 
-
                 <RoutesAuth /> 
-
             : 
-            
                 <RaoutesApp />
-                
             }
         </ThemeProvider>
     );

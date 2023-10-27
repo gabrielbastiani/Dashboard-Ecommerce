@@ -28,7 +28,6 @@ const LoginAdmin: React.FC = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [userValid, setUserValid] = useState<boolean>(false);
 	const captcha = useRef();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const navigate = useNavigate();
 
 
@@ -64,7 +63,7 @@ const LoginAdmin: React.FC = () => {
 			setLoading(false);
 
 			navigate('/');
-			navigate(0);
+			/* navigate(0); */
 
 		} catch (error) {
 			console.log("Erro ao logar");

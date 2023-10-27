@@ -16,8 +16,6 @@ const DetalheCarrinhoAbandonado: React.FC = () => {
 
     let { abandonedCart_id } = useParams();
 
-    const [search, setSearch] = useState<any[]>([]);
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -28,8 +26,6 @@ const DetalheCarrinhoAbandonado: React.FC = () => {
             try {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/findUniqueAbandonedCart?abandonedCart_id=${abandonedCart_id}`);
-
-                setSearch(data || []);
 
                 setName(data.customer.name || "");
                 setEmail(data.customer.email || "");

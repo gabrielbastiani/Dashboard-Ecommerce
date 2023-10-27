@@ -1,13 +1,14 @@
 import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/apiClient';
 import { toast } from 'react-toastify';
-import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { redirect } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 type AuthContextData = {
     admin: AdminProps;
     isAuthenticated: boolean;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
-    signOut(): void;
+    signOut: () => void;
 }
 
 type AdminProps = {
@@ -29,25 +30,16 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export const signOut = () => {
-    try {
-        destroyCookie(undefined, '@storebuilder.token');
-        toast.success('Usuario deslogado com sucesso!');
-        console.log('Usuario deslogado com sucesso!');
-    } catch {
-        toast.error('Erro ao deslogar!');
-        console.log('erro ao deslogar');
-    }
-}
-
 export function AuthProvider({ children }: AuthProviderProps) {
+
+    const [cookies, setCookie, removeCookie] = useCookies(['@storebuilder.token']);
 
     const [admin, setAdmin] = useState<AdminProps>()
     const isAuthenticated = !!admin;
 
     useEffect(() => {
 
-        const { '@storebuilder.token': token } = parseCookies();
+        let token = cookies['@storebuilder.token'];
 
         if (token) {
             api.get('/admin/me').then(response => {
@@ -65,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         }
 
-    }, [])
+    }, [cookies])
 
     async function signInAdmin({ email, password }: SignInProps) {
         try {
@@ -76,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             const { id, name, store_id, role, token } = response.data;
 
-            setCookie(undefined, '@storebuilder.token', token, {
+            setCookie('@storebuilder.token', token, {
                 maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
                 path: "/" // Quais caminhos terao acesso ao cookie
             });
@@ -94,6 +86,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             toast.success('Logado com sucesso!');
 
+            return redirect('/');
+
         } catch (err) {
             toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
             /* @ts-ignore */
@@ -101,6 +95,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
             console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err);
         }
     }
+
+    function signOut() {
+        try {
+            removeCookie('@storebuilder.token', { path: '/' });
+            toast.success('Usuario deslogado com sucesso!');
+            return redirect('/loginAdmin');
+        } catch (error) {
+            toast.error("OPS... Erro ao deslogar");
+        }
+    };
 
     return (/* @ts-ignore */
         <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut }}>

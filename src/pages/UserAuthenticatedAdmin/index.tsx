@@ -10,8 +10,6 @@ const UserAuthenticatedAdmin: React.FC = () => {
     const navigate = useNavigate();
     let { authenticated } = useParams();
 
-    console.log(authenticated)
-
     async function handleAuthenticated() {
         try {
             const apiClient = setupAPIClient();

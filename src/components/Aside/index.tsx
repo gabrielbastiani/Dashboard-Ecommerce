@@ -94,6 +94,15 @@ const Aside: React.FC = () => {
         toggleTheme();
     }
 
+    function signOutSystem() {
+        signOut();
+        navigate("/loginAdmin");
+
+        setTimeout(() => {
+            navigate(0)
+        }, 2500);
+    }
+
     return (
         <Container menuIsOpen={toggleMenuIsOpened}>
             <Header>
@@ -313,7 +322,7 @@ const Aside: React.FC = () => {
                     </>
                 }
 
-                <MenuItemButton onClick={() => [signOut(), navigate("/loginAdmin"), navigate(0)]}>
+                <MenuItemButton onClick={() => signOutSystem()}>
                     <MdExitToApp />
                     Sair
                 </MenuItemButton>

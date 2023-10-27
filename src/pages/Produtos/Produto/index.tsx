@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 import React, { useEffect, useState } from "react";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
