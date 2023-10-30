@@ -22,15 +22,13 @@ export function setupAPIClient() {
     headers: {
       Authorization: `Bearer ${cookies}`
     }
-  })
+  });
 
   api.interceptors.response.use(
     (response) => response,
     (error) => {
       if (error.response.status === 401) {
-        // Realize a ação apropriada, como redirecionar para a página de login
-        signOut(); // Realize o logout
-        // Redirecione para a página de login
+        signOut();
         window.location.href = '/loginAdmin';
       }
       return Promise.reject(error);

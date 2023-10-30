@@ -82,7 +82,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             });
 
             //Passar para proximas requisiçoes o nosso token
-            api.defaults.headers['Authorization'] = `Bearer ${token}`
+            api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
             toast.success('Logado com sucesso!');
 
