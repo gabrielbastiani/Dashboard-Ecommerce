@@ -54,9 +54,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 })
 
             })
+                .catch(() => {
+                    signOut();
+                })
 
         }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookies]);
 
     async function signInAdmin({ email, password }: SignInProps) {
