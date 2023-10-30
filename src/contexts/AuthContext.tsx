@@ -57,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         }
 
-    }, [cookies])
+    }, [cookies]);
 
     async function signInAdmin({ email, password }: SignInProps) {
         try {

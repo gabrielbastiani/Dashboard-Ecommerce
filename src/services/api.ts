@@ -1,8 +1,6 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import Cookies from 'universal-cookie';
-import { AuthTokenError } from './errors/AuthTokenError';
 import { toast } from 'react-toastify';
-import { redirect } from 'react-router-dom';
 
 function signOut() {
   try {
