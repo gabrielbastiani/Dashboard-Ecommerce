@@ -105,9 +105,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
 
             toast.success('Categoria cadastrada com sucesso!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {/* @ts-ignore */
             toast.error(`${error.response.data.error}`);
@@ -128,9 +126,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
 
             toast.success('Subcategoria cadastrada com sucesso!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {/* @ts-ignore */
             toast.error(`${error.response.data.error}`);
@@ -154,6 +150,18 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
         findAllRelation();
     }, [product_id]);
 
+    async function findAllRelation() {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/findAllRelationsProductAndCategory?product_id=${product_id}`);
+
+            setAllCategoriesProduct(response.data || []);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function updateCategory(id: string) {
         try {
             if (categorySelected === "" || categorySelected === null || categorySelected === undefined) {
@@ -165,9 +173,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
 
             toast.success('Categoria atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {
             console.log(error);
@@ -184,9 +190,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
             } else {
                 await apiClient.put(`/updateOrderRelation?productCategory_id=${id}`, { order: Number(orderUpdate) });
                 toast.success('Ordem da categoria atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 2800);
+                findAllRelation();
             }
         } catch (error) {
             console.log(error);
@@ -199,9 +203,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/mainCategoryProduct?productCategory_id=${id}&product_id=${product_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {
             /* @ts-ignore */
@@ -225,9 +227,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusCategoryProduct?productCategory_id=${id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {
             toast.error('Ops erro ao atualizar o status da relação de categorias.');
@@ -465,6 +465,7 @@ const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
                 <ModalDeleteRelationsCategorys
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
+                    reloadCategorys={findAllRelation}
                     /* @ts-ignore */
                     relation={modalItem}
                 />

@@ -31,8 +31,6 @@ interface PhotoProduct {
 
 const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
-    const navigate = useNavigate();
-
     const [productPhoto, setProductPhoto] = useState(null);
     const [photoInsertUrl, setPhotoInsertUrl] = useState('');
 
@@ -56,6 +54,18 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
         }
         loadAllPhotosProduct();
     }, [product_id]);
+
+    async function loadAllPhotosProduct() {
+        const apiClient = setupAPIClient();
+        try {
+            const responseProduct = await apiClient.get(`/allPhotosProducts?product_id=${product_id}`)
+
+            setAllPhotos(responseProduct.data || []);
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
     function handleFileInput(e: ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) {
@@ -94,9 +104,10 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
 
             toast.success('Imagem cadastrada no produto com sucesso!!!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadAllPhotosProduct();
+
+            setProductPhoto(null);
+            setPhotoInsertUrl("");
 
         } catch (err) {/* @ts-ignore */
             console.log(err.response.data);
@@ -165,6 +176,7 @@ const PhotosProduct = ({ product_id }: PhotoProduct) => {
                 <ModalDeletePhotoProduct
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
+                    reloadPhotos={loadAllPhotosProduct}
                     /* @ts-ignore */
                     photos={modalItem}
                 />

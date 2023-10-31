@@ -12,9 +12,10 @@ interface DeleteRelationsCategorys {
     isOpen: boolean;
     onRequestClose: () => void;
     relation: DeleteRelations;
+    reloadCategorys: () => void;
 }
 
-export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation }: DeleteRelationsCategorys) {
+export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, reloadCategorys, relation }: DeleteRelationsCategorys) {
 
     const navigate = useNavigate();
 
@@ -42,14 +43,13 @@ export function ModalDeleteRelationsCategorys({ isOpen, onRequestClose, relation
 
             onRequestClose();
 
+            reloadCategorys();
+
         } catch (error) {
             toast.error('Erro ao deletar a categoria desse produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
 

@@ -3,7 +3,6 @@ import { FiX } from 'react-icons/fi';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 import { DeleteDescriptions } from '../../DescriptionsProduct';
 
@@ -12,11 +11,10 @@ interface DeleteDescriptionRequest {
     isOpen: boolean;
     onRequestClose: () => void;
     relation: DeleteDescriptions;
+    reloadDescriptions: () => void;
 }
 
-export function ModalDeleteDescriptionProduct({ isOpen, onRequestClose, relation }: DeleteDescriptionRequest) {
-
-    const navigate = useNavigate();
+export function ModalDeleteDescriptionProduct({ isOpen, onRequestClose, reloadDescriptions, relation }: DeleteDescriptionRequest) {
 
     const customStyles = {
         content: {
@@ -42,15 +40,13 @@ export function ModalDeleteDescriptionProduct({ isOpen, onRequestClose, relation
             toast.success(`Descrição deletada do produto com sucesso.`);
 
             onRequestClose();
+            reloadDescriptions();
 
         } catch (error) {
             toast.error('Erro ao deletar a descrição desse produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
 

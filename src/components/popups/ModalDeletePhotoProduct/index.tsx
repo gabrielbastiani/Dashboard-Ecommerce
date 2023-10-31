@@ -12,9 +12,10 @@ interface ModalPhotoDelete {
     isOpen: boolean;
     onRequestClose: () => void;
     photos: DeletePhotoProduct[];
+    reloadPhotos: () => void;
 }
 
-export function ModalDeletePhotoProduct({ isOpen, onRequestClose, photos }: ModalPhotoDelete) {
+export function ModalDeletePhotoProduct({ isOpen, onRequestClose, reloadPhotos, photos }: ModalPhotoDelete) {
 
     const navigate = useNavigate();
 
@@ -43,13 +44,12 @@ export function ModalDeletePhotoProduct({ isOpen, onRequestClose, photos }: Moda
 
             onRequestClose();
 
+            reloadPhotos();
+
         } catch (error) {/* @ts-ignore */
             console.log(err.response.data);
             toast.error('Ops erro ao deletar a foto!');
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
 

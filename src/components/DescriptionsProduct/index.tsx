@@ -40,7 +40,6 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
     Quill.register('modules/imageResize', QuillImageResize);
 
-    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("");
 
     const [title, setTitle] = useState("");
@@ -64,8 +63,8 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
     const [descriptions, setDescriptions] = useState<any[]>([]);
 
-    const handleChange = (html: string) => {
-        setDescription(html);
+    const handleChange = (description: string) => {
+        setDescription(description);
     };
 
     var toolbarOptions = [
@@ -109,6 +108,16 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         loadDescriptions();
     }, [product_id]);
 
+    async function loadDescriptions() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/allProductsDescriptionsStore?product_id=${product_id}`);
+            setDescriptions(response.data || []);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function handleUpdateDescription(id: string) {
         try {
             const apiClient = setupAPIClient();
@@ -118,9 +127,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
             toast.success('Descrição do produto atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadDescriptions();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -133,9 +140,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusDescriptionProduct?descriptionProduct_id=${id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadDescriptions();
 
         } catch (error) {
             console.log(error);
@@ -167,9 +172,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
                 toast.success('Titulo da descrição atualizada com sucesso.');
 
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+                loadDescriptions();
             }
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -186,9 +189,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
 
             toast.success('Ordem da descrição atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadDescriptions();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -272,8 +273,8 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                     <ReactQuill
                                         style={{ backgroundColor: 'white', color: 'black', height: '500px' }}
                                         theme="snow"
-                                        value={description}
-                                        onChange={handleChange}
+                                        value={item.description}
+                                        onChange={() => handleChange(item.description)}
                                         modules={module}
                                     />
                                     <br />
@@ -301,6 +302,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
             {modalVisible && (
                 <ModalDeleteDescriptionProduct
                     isOpen={modalVisible}
+                    reloadDescriptions={loadDescriptions}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
                     relation={modalItem}
