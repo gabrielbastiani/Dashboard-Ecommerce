@@ -34,7 +34,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const [cookies, setCookie, removeCookie] = useCookies(['@storebuilder.token']);
 
-    const [admin, setAdmin] = useState<AdminProps>()
+    const [admin, setAdmin] = useState<AdminProps>();
     const isAuthenticated = !!admin;
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cookies]);
 
     async function signInAdmin({ email, password }: SignInProps) {

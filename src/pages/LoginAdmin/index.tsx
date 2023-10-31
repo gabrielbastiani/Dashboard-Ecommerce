@@ -63,7 +63,6 @@ const LoginAdmin: React.FC = () => {
 			setLoading(false);
 
 			navigate('/');
-			/* navigate(0); */
 
 		} catch (error) {
 			console.log("Erro ao logar");

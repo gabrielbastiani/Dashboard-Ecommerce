@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 
@@ -15,7 +15,7 @@ function signOut() {
 export function setupAPIClient() {
 
   let cookie_user = new Cookies();
-  let cookies = cookie_user.get('@storebuilder.token', undefined);
+  let cookies = cookie_user.get('@storebuilder.token');
 
   const api = axios.create({
     baseURL: 'http://localhost:3333',
@@ -26,8 +26,8 @@ export function setupAPIClient() {
 
   api.interceptors.response.use(
     (response) => response,
-    (error) => {
-      if (error.response.status === 401) {
+    (error: AxiosError) => {
+      if (error.response?.status === 401) {
         signOut();
         window.location.href = '/loginAdmin';
       }
