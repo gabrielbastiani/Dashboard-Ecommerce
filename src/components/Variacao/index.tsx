@@ -6,18 +6,18 @@ import Titulos from "../Titulos";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
-import { useNavigate } from "react-router-dom";
 import { BlockDados } from "../../pages/Categorias/Categoria/styles";
 import Select from "../ui/Select";
 
 
 interface VariacaoRequest {
     product_id: any;
+    reloadVariation: () => void;
+    close: () => void;
 }
 
-const NovaVariacao = ({ product_id }: VariacaoRequest) => {
+const NovaVariacao = ({ product_id, reloadVariation, close }: VariacaoRequest) => {
 
-    const navigate = useNavigate();
     const { admin } = useContext(AuthContext);
 
     const [store_id] = useState(admin.store_id);
@@ -63,9 +63,8 @@ const NovaVariacao = ({ product_id }: VariacaoRequest) => {
 
             toast.success('Variação cadastrada com sucesso');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            close();
+            reloadVariation();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

@@ -11,9 +11,10 @@ interface DeleteAttributeProduct {
     isOpen: boolean;
     onRequestClose: () => void;
     relation: DeleteAttribute;
+    reloadAtributes: () => void;
 }
 
-export function ModalDeleteRelationAttributeProduct({ isOpen, onRequestClose, relation }: DeleteAttributeProduct) {
+export function ModalDeleteRelationAttributeProduct({ isOpen, onRequestClose, reloadAtributes, relation }: DeleteAttributeProduct) {
 
     const navigate = useNavigate();
 
@@ -42,9 +43,7 @@ export function ModalDeleteRelationAttributeProduct({ isOpen, onRequestClose, re
 
             onRequestClose();
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            reloadAtributes();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

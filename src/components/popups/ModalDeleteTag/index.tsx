@@ -12,9 +12,10 @@ interface TagDelete {
     isOpen: boolean;
     onRequestClose: () => void;
     relation: DeleteTags;
+    reloadTags: () => void;
 }
 
-export function ModalDeleteTag({ isOpen, onRequestClose, relation }: TagDelete) {
+export function ModalDeleteTag({ isOpen, onRequestClose, reloadTags, relation }: TagDelete) {
 
     const navigate = useNavigate();
 
@@ -41,15 +42,13 @@ export function ModalDeleteTag({ isOpen, onRequestClose, relation }: TagDelete) 
             toast.success(`Tag deletada do produto com sucesso.`);
 
             onRequestClose();
+            reloadTags();
 
         } catch (error) {
             toast.error('Erro ao deletar a tag desse produto');
             /* @ts-ignore */
             console.log(error.response.data);
         }
-        setTimeout(() => {
-            navigate(0);
-        }, 3000);
     }
 
 

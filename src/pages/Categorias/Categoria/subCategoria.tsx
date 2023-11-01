@@ -41,6 +41,33 @@ const SubCategoria: React.FC = () => {
 
     const [parentIdCategories, setParentIdCategories] = useState<any[]>([]);
 
+    useEffect(() => {
+        async function findLoadRelation() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/parentIDCategoryAll?parentId=${parentId}`);
+
+                setParentIdCategories(response.data || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        findLoadRelation();
+    }, [parentId]);
+
+    async function loadCategorys() {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/parentIDCategoryAll?parentId=${parentId}`);
+
+            setParentIdCategories(response.data || []);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function handleRegisterCategory() {
         try {
             if (name === '') {
@@ -68,9 +95,7 @@ const SubCategoria: React.FC = () => {
             setName('');
             setDescription('');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadCategorys();
 
         } catch (error) {
             console.log(error)
@@ -90,21 +115,6 @@ const SubCategoria: React.FC = () => {
             }
         }
         loadDataCategory();
-    }, [parentId]);
-
-    useEffect(() => {
-        async function findLoadRelation() {
-            try {
-                const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/parentIDCategoryAll?parentId=${parentId}`);
-
-                setParentIdCategories(response.data || []);
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        findLoadRelation();
     }, [parentId]);
 
     async function updateOrder(id: string) {

@@ -12,25 +12,22 @@ import { GridDate } from "../../pages/Perfil/styles";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import { ModalDeleteVariacao } from '../popups/ModalDeleteVariacao';
-import { useNavigate } from "react-router-dom";
 import SelectUpdate from "../ui/SelectUpdate";
 import { InputUpdate } from "../ui/InputUpdate";
+import { useNavigate } from "react-router-dom";
 
 
 interface ItemsVariacao {
-    productId: any;
     variation_id: string;
     photoVariacaoID: string;
-    nameVariacao: string;
+    reloadVariation: () => void;
+    close: () => void;
 }
 
-const VariacaoDetalhes = ({
-    variation_id,
-    photoVariacaoID,
-}: ItemsVariacao) => {
+const VariacaoDetalhes = ({ variation_id, photoVariacaoID, reloadVariation, close }: ItemsVariacao) => {
 
     const navigate = useNavigate();
-
+    
     const [name, setName] = useState('');
     const [updateName, setUpdateName] = useState("");
     const [productVariation, setProductVariation] = useState("");
@@ -67,17 +64,37 @@ const VariacaoDetalhes = ({
             try {
                 const { data } = await apiClient.get(`/findUniqueVariation?productVariation_id=${variation_id}`);
 
+                if (data === null) {
+                    navigate(0);
+                    return;
+                }
+
                 setName(data.variationName || "");
                 setProductVariation(data.variationProduct || "");
                 setOrderVariation(data.order);
-                setStatus(data.status);
+                setStatus(data.status || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
         }
         loadVariation();
-    }, [variation_id]);
+    }, [navigate, variation_id]);
+
+    async function loadDataVariation() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/findUniqueVariation?productVariation_id=${variation_id}`);
+
+            setName(data.variationName || "");
+            setProductVariation(data.variationProduct || "");
+            setOrderVariation(data.order);
+            setStatus(data.status || "");
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
     async function updateNameVariation() {
         try {
@@ -91,9 +108,7 @@ const VariacaoDetalhes = ({
 
             toast.success('Nome da variação atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadDataVariation();
 
         } catch (error) {
             console.log(error);
@@ -110,9 +125,7 @@ const VariacaoDetalhes = ({
             } else {
                 await apiClient.put(`/updateOrderVariacao?productVariation_id=${variation_id}`, { order: Number(updateOrder) });
                 toast.success('Ordem da variação atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+                loadDataVariation();
             }
         } catch (error) {
             console.log(error);
@@ -125,9 +138,7 @@ const VariacaoDetalhes = ({
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusVariation?productVariation_id=${variation_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadDataVariation();
 
         } catch (error) {
             console.log(error);
@@ -157,9 +168,7 @@ const VariacaoDetalhes = ({
 
             toast.success('Produto variação atualizado com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadDataVariation();
 
         } catch (error) {
             console.log(error);
@@ -278,6 +287,8 @@ const VariacaoDetalhes = ({
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
                     variacao={variation_id}
+                    variationReload={reloadVariation}
+                    deleteClose={close}
                 />
             )}
         </>

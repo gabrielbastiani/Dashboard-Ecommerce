@@ -315,6 +315,18 @@ const Configuracoes: React.FC = () => {
         loadSocialMedia();
     }, []);
 
+    async function loadSocialMedia() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/listAllSocialMedia`);
+
+            setSocialMedia(response.data || []);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function handleChangePosition(e: any) {
         setPositionSelected(e.target.value);
     }
@@ -346,9 +358,7 @@ const Configuracoes: React.FC = () => {
             setNameRede("");
             setLink("");
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadSocialMedia();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

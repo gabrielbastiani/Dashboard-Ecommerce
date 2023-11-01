@@ -21,7 +21,6 @@ import { GiConfirmed } from "react-icons/gi";
 import { GrStatusUnknown } from "react-icons/gr";
 import { Button } from "../ui/Button";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { ModalDeleteDescriptionProduct } from "../popups/ModalDeleteDescriptionProduct";
 import { InputUpdate } from "../ui/InputUpdate";
 import { TextoDados } from "../TextoDados";
@@ -56,15 +55,16 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
         setCor(toogle ? '#c3c3c3' : '');
     }, [toogle]);
 
-    const handleClick = (id: string) => {
+    const handleClick = (id: string, description: string) => {
         setActiveTab(id);
-        setToogle(state => !state)
+        setToogle(state => !state);
+        setDescription(description);
     };
 
     const [descriptions, setDescriptions] = useState<any[]>([]);
 
-    const handleChange = (description: string) => {
-        setDescription(description);
+    const handleChange = (html: string) => {
+        setDescription(html);
     };
 
     var toolbarOptions = [
@@ -256,7 +256,7 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                 <TituloTop
                                     key={item.id}
                                     style={{ backgroundColor: cor }}
-                                    onClick={() => handleClick(item.id)}
+                                    onClick={() => handleClick(item.id, item.description)}
                                 >
                                     {item.title}
                                 </TituloTop>
@@ -273,8 +273,8 @@ const DescriptionsProduct = ({ product_id }: DescriptionRequest) => {
                                     <ReactQuill
                                         style={{ backgroundColor: 'white', color: 'black', height: '500px' }}
                                         theme="snow"
-                                        value={item.description}
-                                        onChange={() => handleChange(item.description)}
+                                        value={description}
+                                        onChange={handleChange}
                                         modules={module}
                                     />
                                     <br />

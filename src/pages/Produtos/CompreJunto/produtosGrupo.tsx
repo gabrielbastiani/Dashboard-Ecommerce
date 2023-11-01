@@ -94,6 +94,18 @@ const ProdutosGrupo: React.FC = () => {
         loadProducts();
     }, []);
 
+    async function loadProductsBuyToghether() {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/findItensGroupBuyTogether?parentId=${buyTogether_id}`);
+
+            setloadIDMenu(response.data || []);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function handleRegisterProductsGruop() {
         const apiClient = setupAPIClient();
         try {
@@ -111,9 +123,7 @@ const ProdutosGrupo: React.FC = () => {
 
             toast.success('Produto cadastrado com sucesso no grupo compre junto!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadProductsBuyToghether();
 
         } catch (error) {
             toast.error('Erro ao cadastrar o produto no grupo!!!');
@@ -148,9 +158,7 @@ const ProdutosGrupo: React.FC = () => {
 
             toast.success('Produto atualizado com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadProductsBuyToghether();
 
         } catch (error) {
             console.log(error);
@@ -167,9 +175,7 @@ const ProdutosGrupo: React.FC = () => {
             } else {
                 await apiClient.put(`/updateOrderBuyTogether?buyTogether_id=${id}`, { order: Number(orderUpdate) });
                 toast.success('Ordem do produto no grupo atualizado com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 2800);
+                loadProductsBuyToghether();
             }
         } catch (error) {
             console.log(error);
@@ -178,14 +184,11 @@ const ProdutosGrupo: React.FC = () => {
     }
 
     async function updateStatus(id: string, status: string) {
-        console.log(id)
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusBuyTogether?buyTogether_id=${id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadProductsBuyToghether();
 
         } catch (error) {
             toast.error('Ops erro ao atualizar o status do produto no grupo.');
@@ -378,6 +381,7 @@ const ProdutosGrupo: React.FC = () => {
                             <ModalDeleteBuyTogether
                                 isOpen={modalVisible}
                                 onRequestClose={handleCloseModalDelete}
+                                reloadBuyTogheter={loadProductsBuyToghether}
                                 /* @ts-ignore */
                                 relation={modalItem}
                             />

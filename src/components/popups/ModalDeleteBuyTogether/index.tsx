@@ -12,9 +12,10 @@ interface DeleteRequest {
     isOpen: boolean;
     onRequestClose: () => void;
     relation: DeleteBuy;
+    reloadBuyTogheter: () => void;
 }
 
-export function ModalDeleteBuyTogether({ isOpen, onRequestClose, relation }: DeleteRequest) {
+export function ModalDeleteBuyTogether({ isOpen, onRequestClose, relation, reloadBuyTogheter }: DeleteRequest) {
 
     const navigate = useNavigate();
 
@@ -43,9 +44,7 @@ export function ModalDeleteBuyTogether({ isOpen, onRequestClose, relation }: Del
 
             onRequestClose();
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            reloadBuyTogheter();
 
         } catch (error) {
             /* @ts-ignore */

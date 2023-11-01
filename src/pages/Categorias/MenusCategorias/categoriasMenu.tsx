@@ -76,6 +76,33 @@ const CategoriasMenu: React.FC = () => {
         loadCategorys();
     }, []);
 
+    useEffect(() => {
+        async function findLoadIDMenu() {
+            try {
+                const apiClient = setupAPIClient();
+                const response = await apiClient.get(`/findMenuID?parentId=${menuCategory_id}`);
+
+                setloadIDMenu(response.data || []);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        findLoadIDMenu();
+    }, [menuCategory_id]);
+
+    async function loadCategoriesMenu() {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/findMenuID?parentId=${menuCategory_id}`);
+
+            setloadIDMenu(response.data || []);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     async function handleGroupCategories() {
         const apiClient = setupAPIClient();
         try {
@@ -96,9 +123,7 @@ const CategoriasMenu: React.FC = () => {
 
             toast.success('Item de categoria cadastrada com sucesso no menu!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadCategoriesMenu();
 
         } catch (error) {
             toast.error('Erro ao cadastrar o item categoria no menu!!!');
@@ -106,21 +131,6 @@ const CategoriasMenu: React.FC = () => {
             console.log(error.response.data);
         }
     }
-
-    useEffect(() => {
-        async function findLoadIDMenu() {
-            try {
-                const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findMenuID?parentId=${menuCategory_id}`);
-
-                setloadIDMenu(response.data || []);
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        findLoadIDMenu();
-    }, [menuCategory_id]);
 
 
 

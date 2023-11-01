@@ -387,6 +387,18 @@ const Produto: React.FC = () => {
         loadVariations();
     }, [product_id]);
 
+    async function loadVariations() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/allVariationProduct?product_id=${product_id}`);
+
+            setVariation(response.data || []);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function loadVariationProduct(id: string) {
         setIdVariation(id)
         const apiClient = setupAPIClient();
@@ -401,7 +413,7 @@ const Produto: React.FC = () => {
     }
 
     const showOrHide = () => {
-        setShowElement(!showElement)
+        setShowElement(!showElement);
     }
 
     const renderOk = () => {
@@ -859,6 +871,8 @@ const Produto: React.FC = () => {
                             {showElement ? (
                                 <NovaVariacao
                                     product_id={product_id}
+                                    reloadVariation={loadVariations}
+                                    close={showOrHide}
                                 />
                             ) :
                                 <>
@@ -877,10 +891,10 @@ const Produto: React.FC = () => {
 
                                     {!!idVariation && (
                                         <VariacaoDetalhes
-                                            productId={product_id}
                                             variation_id={idVariation}
                                             photoVariacaoID={idVariation}
-                                            nameVariacao={nameVariation}
+                                            reloadVariation={loadVariations}
+                                            close={showOrHide}
                                         />
                                     )}
                                 </>

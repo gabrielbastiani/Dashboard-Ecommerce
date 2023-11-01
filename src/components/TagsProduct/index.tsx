@@ -52,6 +52,16 @@ const TagsProduct = ({ product_id }: TagRequest) => {
         loadTags();
     }, [product_id]);
 
+    async function loadTags() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/allTagProducts?product_id=${product_id}`);
+            setTagsProducts(response.data || []);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function handleRegisterTag() {
         const apiClient = setupAPIClient();
         try {
@@ -68,9 +78,8 @@ const TagsProduct = ({ product_id }: TagRequest) => {
 
             toast.success('TAG cadastrada com sucesso no produto!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            setTagName("");
+            loadTags();
 
         } catch (error) {
             toast.error("Ops! erro ao cadastrar a TAG no produto.");
@@ -90,9 +99,7 @@ const TagsProduct = ({ product_id }: TagRequest) => {
 
             toast.success('TAG atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadTags();
 
         } catch (error) {
             console.log(error);
@@ -188,6 +195,7 @@ const TagsProduct = ({ product_id }: TagRequest) => {
             {modalVisible && (
                 <ModalDeleteTag
                     isOpen={modalVisible}
+                    reloadTags={loadTags}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */
                     relation={modalItem}

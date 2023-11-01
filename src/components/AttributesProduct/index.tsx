@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
@@ -28,8 +27,6 @@ interface AtributeRequest {
 }
 
 const AttributesProduct = ({ product_id }: AtributeRequest) => {
-
-    const navigate = useNavigate();
 
     const { admin } = useContext(AuthContext);
     const [store_id] = useState(admin.store_id);
@@ -100,6 +97,19 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
         findAllRelation();
     }, [product_id]);
 
+    async function findAllRelation() {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get(`/getAllAttributesProduct?product_id=${product_id}`);
+
+            setAttributesProducts(response.data || []);
+
+        } catch (error) {
+            /* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
     async function handleRegisterAttribute() {
         const apiClient = setupAPIClient();
         try {
@@ -113,9 +123,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
             toast.success('Atributo cadastrado com sucesso!');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {/* @ts-ignore */
             toast.error('Ops, erro ao cadastrar o atributo no produto');
@@ -135,9 +143,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
             toast.success('Tipo de atributo atualizado com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {
             /* @ts-ignore */
@@ -157,9 +163,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
 
             toast.success('Valor de atributo atualizado com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            findAllRelation();
 
         } catch (error) {
             /* @ts-ignore */
@@ -177,9 +181,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
             } else {
                 await apiClient.put(`/updateOrderRelationAttributeProduct?relationAttributeProduct_id=${id}`, { order: Number(orderUpdate) });
                 toast.success('Ordem do atributo atualizado com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 2800);
+                findAllRelation();
             }
         } catch (error) {
             /* @ts-ignore */
@@ -354,6 +356,7 @@ const AttributesProduct = ({ product_id }: AtributeRequest) => {
                 {modalVisible && (
                     <ModalDeleteRelationAttributeProduct
                         isOpen={modalVisible}
+                        reloadAtributes={findAllRelation}
                         onRequestClose={handleCloseModalDelete}
                         /* @ts-ignore */
                         relation={modalItem}
