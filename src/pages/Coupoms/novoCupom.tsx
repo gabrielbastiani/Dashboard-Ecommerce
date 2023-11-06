@@ -95,7 +95,6 @@ const NovoCupom: React.FC = () => {
             <Aside />
             <Container>
                 <Card>
-
                     {showFirstCoupom ? (
                         <>
                             <Card>

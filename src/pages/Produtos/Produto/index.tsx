@@ -68,9 +68,6 @@ const Produto: React.FC = () => {
 
     const [variation, setVariation] = useState<any[]>([]);
     const [idVariation, setIdVariation] = useState("");
-
-    const [nameVariation, setNameVariation] = useState("");
-
     const [showElement, setShowElement] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
@@ -400,16 +397,7 @@ const Produto: React.FC = () => {
     }
 
     async function loadVariationProduct(id: string) {
-        setIdVariation(id)
-        const apiClient = setupAPIClient();
-        try {
-            const responseVariation = await apiClient.get(`/findUniqueVariation?productVariation_id=${id}`);
-
-            setNameVariation(responseVariation.data.name || "");
-
-        } catch (error) {
-            console.log(error);
-        }
+        setIdVariation(id);
     }
 
     const showOrHide = () => {

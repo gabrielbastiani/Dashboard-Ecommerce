@@ -90,9 +90,10 @@ const Cupom: React.FC = () => {
     const formatedValuePonto = formatedValue.replace(",", ".");
     const numberValue = formatedValuePonto;
 
+    const apiClient = setupAPIClient();
+
     useEffect(() => {
         async function loadConditional() {
-            const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/allConditionalCoupon?cupon_id=${cupon_id}`);
                 setConditionalCupom(data || []);
@@ -105,7 +106,6 @@ const Cupom: React.FC = () => {
 
     useEffect(() => {
         async function loadProductsInCupoms() {
-            const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/allProductsInCoupom?cupon_id=${cupon_id}`);
                 setProductInCupon(data || []);
@@ -118,7 +118,6 @@ const Cupom: React.FC = () => {
 
     useEffect(() => {
         async function loadProducts() {
-            const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get('/allProductsStore');
                 setProduct(response.data || []);
@@ -135,7 +134,6 @@ const Cupom: React.FC = () => {
 
     useEffect(() => {
         async function loadCupom() {
-            const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/findUniqueCoupom?cupon_id=${cupon_id}`);
 
@@ -154,9 +152,25 @@ const Cupom: React.FC = () => {
         loadCupom();
     }, [cupon_id]);
 
+    async function loadCupom() {
+        try {
+            const { data } = await apiClient.get(`/findUniqueCoupom?cupon_id=${cupon_id}`);
+
+            setName(data.name || "");
+            setDescription(data.description || "");
+            setCode(data.code || "");
+            setAmountCoupon(data.amountCoupon);
+            setStartDate(data.startDate || "");
+            setEndDate(data.endDate || "");
+            setActive(data.active || "");
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
     async function cuponProgramedActiveAndDesactive() {
         try {
-            const apiClient = setupAPIClient();
             await apiClient.get(`/activeDesactiveCuponProgramed?cupon_id=${cupon_id}`);
             toast.success('Datas atualizadas com sucesso.');
         } catch (error) {/* @ts-ignore */
@@ -167,7 +181,6 @@ const Cupom: React.FC = () => {
 
     async function updateDatasCupon() {
         try {
-            const apiClient = setupAPIClient();
             if (name === "") {
                 toast.error('Não deixe o nome do cupom em branco!!!');
                 return;
@@ -182,10 +195,11 @@ const Cupom: React.FC = () => {
                         amountCoupon: Number(amountCoupon),
                         active: active
                     });
+
                 toast.success('Dado do cupom atualizado com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+
+                loadCupom();
+
             }
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -199,12 +213,12 @@ const Cupom: React.FC = () => {
                 toast.error(`Selecione um produto, ou cancele a atualização apertando no botão vermelho!`);
                 return;
             }
-            const apiClient = setupAPIClient();
             await apiClient.put(`/updateProductCoupom?cuponProduct_id=${id}`, { product_id: productSelected });
+
             toast.success('Produto atualizado com sucesso.');
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+
+            loadCupom();
+
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
             toast.error('Ops erro ao atualizar o produto.');
@@ -213,12 +227,9 @@ const Cupom: React.FC = () => {
 
     async function updateStatus() {
         try {
-            const apiClient = setupAPIClient();
             await apiClient.put(`/statusCoupom?cupon_id=${cupon_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadCupom();
 
         } catch (error) {
             console.log(error);
@@ -237,7 +248,6 @@ const Cupom: React.FC = () => {
     }
 
     async function handleRegisterProductInCupom() {
-        const apiClient = setupAPIClient();
         try {
             await apiClient.post(`/createProductCoupon`, {
                 cupon_id: cupon_id,
@@ -258,7 +268,6 @@ const Cupom: React.FC = () => {
     }
 
     async function handleRegisterConditionalCoupon() {
-        const apiClient = setupAPIClient();
         try {
             await apiClient.post(`/createConditionalCoupon`, {
                 cupon_id: cupon_id,
@@ -301,7 +310,6 @@ const Cupom: React.FC = () => {
     }
 
     async function handleOpenModalDeleteProductCupom(id: string) {
-        const apiClient = setupAPIClient();
         const response = await apiClient.get('/findUniqueProductCoupon', {
             params: {
                 cuponProduct_id: id,
@@ -316,7 +324,6 @@ const Cupom: React.FC = () => {
     }
 
     async function handleOpenModalDeleteConditional(id: string) {
-        const apiClient = setupAPIClient();
         const response = await apiClient.get('/findUniqueConditionalCupon', {
             params: {
                 couponConditional_id: id
