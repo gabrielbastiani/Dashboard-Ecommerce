@@ -356,10 +356,10 @@ const Configuracoes: React.FC = () => {
 
             toast.success('Rede Social cadastrada com sucesso.');
 
+            loadSocialMedia();
+
             setNameRede("");
             setLink("");
-
-            loadSocialMedia();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
