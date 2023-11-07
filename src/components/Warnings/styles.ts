@@ -8,6 +8,10 @@ export const Container = styled.div`
   margin-bottom: 10px;
 `;
 
+export const Warn = styled.strong`
+  color: red;
+`;
+
 export const TextWarning = styled.h4`
   color: ${(props) => props.theme.colors.black};
 `
