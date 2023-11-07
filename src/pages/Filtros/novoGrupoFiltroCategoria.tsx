@@ -15,6 +15,7 @@ import { Block, BlockTop, Etiqueta } from "../Categorias/styles";
 import Titulos from "../../components/Titulos";
 import { InputPost } from "../../components/ui/InputPost";
 import Select from "../../components/ui/Select";
+import Warnings from "../../components/Warnings";
 
 
 
@@ -100,7 +101,7 @@ const NovoGrupoFiltroCategoria: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
-
+                <Warnings />
                 {showCategories ? (
                     <Card>
                         <BlockCategory>

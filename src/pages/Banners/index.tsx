@@ -25,6 +25,7 @@ import TabelaSimples from "../../components/Tabelas";
 import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
 import moment from "moment";
+import Warnings from "../../components/Warnings";
 
 
 const Banners: React.FC = () => {
@@ -101,6 +102,7 @@ const Banners: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

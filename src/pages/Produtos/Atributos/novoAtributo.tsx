@@ -12,6 +12,7 @@ import { Block, BlockTop, Etiqueta } from "../../Categorias/styles";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { InputPost } from "../../../components/ui/InputPost";
+import Warnings from "../../../components/Warnings";
 
 
 const NovoAtributo: React.FC = () => {
@@ -62,6 +63,7 @@ const NovoAtributo: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
 
                     <Voltar url='/atributos' />

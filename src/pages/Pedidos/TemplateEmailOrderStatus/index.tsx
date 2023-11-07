@@ -15,6 +15,7 @@ import { Card } from "../../../components/Content/styles";
 import { Avisos } from "../../../components/Avisos";
 import Titulos from "../../../components/Titulos";
 import TabelaSimples from "../../../components/Tabelas";
+import Warnings from "../../../components/Warnings";
 
 
 const TemplateEmailOrderStatus: React.FC = () => {
@@ -53,6 +54,7 @@ const TemplateEmailOrderStatus: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <AddButton>

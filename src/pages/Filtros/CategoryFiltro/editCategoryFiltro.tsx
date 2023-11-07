@@ -24,6 +24,7 @@ import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } 
 import { ModalDeleteFiltroCategory } from "../../../components/popups/ModalDeleteFiltroCategory";
 import { ModalDeleteFiltroAndImageCategory } from "../../../components/popups/ModalDeleteFiltroAndImageCategory";
 import { ModalDeleteImagemFiltroCateg } from "../../../components/popups/ModalDeleteImagemFiltroCateg";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteFiltroCateg = {
@@ -322,6 +323,7 @@ const EditCategoryFiltro: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>

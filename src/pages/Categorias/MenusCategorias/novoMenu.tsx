@@ -15,6 +15,7 @@ import { BlockCategory, TextButton } from "../Categoria/styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { InputPost } from "../../../components/ui/InputPost";
 import Select from "../../../components/ui/Select";
+import Warnings from "../../../components/Warnings";
 
 
 const NovoMenu: React.FC = () => {
@@ -106,7 +107,7 @@ const NovoMenu: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
-
+                <Warnings />
                 {showCategory ? (
                     <Card>
                         <BlockCategory>

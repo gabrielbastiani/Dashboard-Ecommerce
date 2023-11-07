@@ -13,6 +13,7 @@ import { InputPost } from "../../../components/ui/InputPost";
 import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../../Banners/styles";
 import { setupAPIClient } from "../../../services/api";
 import Select from "../../../components/ui/Select";
+import Warnings from "../../../components/Warnings";
 
 
 const NovaConfiguracao: React.FC = () => {
@@ -91,6 +92,7 @@ const NovaConfiguracao: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
 
                     <Voltar url='/carrinho/configuracoes' />

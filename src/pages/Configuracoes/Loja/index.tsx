@@ -15,6 +15,7 @@ import { ContainerComponents } from "./styles";
 import { Button } from "../../../components/ui/Button";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import CountdownTimer from "../../../components/CountdownTimer";
+import Warnings from "../../../components/Warnings";
 
 
 const Loja: React.FC = () => {
@@ -152,6 +153,7 @@ const Loja: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

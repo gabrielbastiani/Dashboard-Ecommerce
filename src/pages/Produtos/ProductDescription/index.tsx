@@ -15,6 +15,7 @@ import { Block, BlockTop, Container, Etiqueta } from "../../Categorias/styles";
 import { Grid } from "../../Dashboard/styles";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
+import Warnings from "../../../components/Warnings";
 
 
 const ProductDescription: React.FC = () => {
@@ -113,6 +114,7 @@ const ProductDescription: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
 
                     <Voltar url={`/produto/${slug}/${product_id}`} />

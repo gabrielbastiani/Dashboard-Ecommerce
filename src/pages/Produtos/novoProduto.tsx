@@ -16,6 +16,7 @@ import { GridDate } from "../Perfil/styles";
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 import { ModalImageVideo } from "../../components/popups/ModalImageVideo";
+import Warnings from "../../components/Warnings";
 
 
 const NovoProduto: React.FC = () => {
@@ -155,6 +156,7 @@ const NovoProduto: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <>
                     <Card>
                         

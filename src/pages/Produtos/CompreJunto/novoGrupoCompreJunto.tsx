@@ -15,6 +15,7 @@ import { InputPost } from "../../../components/ui/InputPost";
 import Select from "../../../components/ui/Select";
 import { Block, BlockTop, Etiqueta } from "../../Categorias/styles";
 import { BlockCategory, TextButton } from "../styles";
+import Warnings from "../../../components/Warnings";
 
 
 const NovoGrupoCompreJunto: React.FC = () => {
@@ -111,7 +112,7 @@ const NovoGrupoCompreJunto: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
-
+                <Warnings />
                 {showProducts ? (
                     <Card>
                         <BlockCategory>

@@ -19,6 +19,7 @@ import Titulos from "../../../components/Titulos";
 import { Avisos } from "../../../components/Avisos";
 import TabelaSimples from "../../../components/Tabelas";
 import Select from "../../../components/ui/Select";
+import Warnings from "../../../components/Warnings";
 
 
 
@@ -79,6 +80,7 @@ const Metricas: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Titulos
                             tipo="h1"

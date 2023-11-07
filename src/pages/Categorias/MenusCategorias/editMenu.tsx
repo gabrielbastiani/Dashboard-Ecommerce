@@ -16,6 +16,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { ModalDeleteMenu } from "../../../components/popups/ModalDeleteMenu";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteGroups = {
@@ -156,6 +157,7 @@ const EditMenu: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <>
                             <VoltarNavagation />

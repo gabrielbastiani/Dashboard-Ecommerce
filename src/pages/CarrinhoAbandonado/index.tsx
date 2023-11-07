@@ -22,6 +22,7 @@ import Select from "../../components/ui/Select";
 import TabelaSimples from "../../components/Tabelas";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import Warnings from "../../components/Warnings";
 
 
 const CarrinhoAbandonado: React.FC = () => {
@@ -80,6 +81,7 @@ const CarrinhoAbandonado: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <AddButton>

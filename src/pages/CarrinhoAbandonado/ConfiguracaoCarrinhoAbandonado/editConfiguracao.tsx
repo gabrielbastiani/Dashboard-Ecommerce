@@ -16,6 +16,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import Modal from 'react-modal';
 import { ModalDeleteConfigAbandonedCart } from "../../../components/popups/ModalDeleteConfigAbandonedCart";
+import Warnings from "../../../components/Warnings";
 
 
 
@@ -130,6 +131,7 @@ const EditConfiguracao: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/carrinho/configuracoes' />

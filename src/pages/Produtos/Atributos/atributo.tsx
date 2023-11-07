@@ -38,6 +38,7 @@ import { ModalDeleteImageAttributeProduct } from "../../../components/popups/Mod
 import { BsTrash } from "react-icons/bs";
 import { ModalDeleteAttributeProduct } from "../../../components/popups/ModalDeleteAttributeProduct";
 import { ContainerCupon } from "./styles";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteRelationsAttribute = {
@@ -314,6 +315,7 @@ const Atributo: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Voltar
                             url="/atributos"

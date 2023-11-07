@@ -24,6 +24,7 @@ import { Avisos } from "../../../components/Avisos";
 import Titulos from "../../../components/Titulos";
 import Select from "../../../components/ui/Select";
 import TabelaSimples from "../../../components/Tabelas";
+import Warnings from "../../../components/Warnings";
 
 
 const TemplatesEmailAbandonedCart: React.FC = () => {
@@ -81,6 +82,7 @@ const TemplatesEmailAbandonedCart: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <AddButton>

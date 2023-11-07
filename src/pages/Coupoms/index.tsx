@@ -23,6 +23,7 @@ import TabelaSimples from "../../components/Tabelas";
 import moment from 'moment';
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import Warnings from "../../components/Warnings";
 
 
 const Coupoms: React.FC = () => {
@@ -83,6 +84,7 @@ const Coupoms: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <BlockTop>
                         <Titulos

@@ -21,6 +21,7 @@ import Titulos from "../../../components/Titulos";
 import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import TabelaSimples from "../../../components/Tabelas";
+import Warnings from "../../../components/Warnings";
 
 
 const Contrapropostas: React.FC = () => {
@@ -82,6 +83,7 @@ const Contrapropostas: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <BlockTop>
                         <Titulos

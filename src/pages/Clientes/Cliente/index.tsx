@@ -25,6 +25,7 @@ import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import moment from "moment";
+import Warnings from "../../../components/Warnings";
 
 
 
@@ -284,6 +285,7 @@ const Cliente: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <>
                             <VoltarNavagation />

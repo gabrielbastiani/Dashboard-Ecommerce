@@ -16,6 +16,7 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
 import { ModalDeleteTemplateAbandonedCart } from "../../../components/popups/ModalDeleteTemplateAbandonedCart";
+import Warnings from "../../../components/Warnings";
 
 
 const EditTemplate: React.FC = () => {
@@ -128,6 +129,7 @@ const EditTemplate: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/carrinho/emails' />

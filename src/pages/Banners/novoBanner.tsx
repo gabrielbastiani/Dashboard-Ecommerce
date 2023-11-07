@@ -31,6 +31,7 @@ import {
 } from "../Configuracoes/ImagensInstitucionais/styles";
 import { MdFileUpload } from "react-icons/md";
 import { GridDate } from "../Perfil/styles";
+import Warnings from "../../components/Warnings";
 
 
 const NovoBanner: React.FC = () => {
@@ -140,6 +141,7 @@ const NovoBanner: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
 
                     <Voltar url={'/banners'} />

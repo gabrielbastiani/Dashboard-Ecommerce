@@ -24,6 +24,7 @@ import { Button } from "../../components/ui/Button";
 import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
 import { BlockExport, ButtonExit } from "../Newsletters/styles";
+import Warnings from "../../components/Warnings";
 
 
 const Pedidos: React.FC = () => {
@@ -137,6 +138,7 @@ const Pedidos: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Titulos
                             tipo="h1"

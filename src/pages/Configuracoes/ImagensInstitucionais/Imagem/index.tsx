@@ -27,6 +27,7 @@ import {
     PreviewTextImagem,
     TextPhoto
 } from "./styles";
+import Warnings from "../../../../components/Warnings";
 
 
 export type ImagemDelete = {
@@ -228,6 +229,7 @@ const Imagem: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Voltar
                             url='/ImagensInstitucionais'

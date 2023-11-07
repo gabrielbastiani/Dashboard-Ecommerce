@@ -12,6 +12,7 @@ import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { InputPost } from "../../../components/ui/InputPost";
+import Warnings from "../../../components/Warnings";
 
 
 const NovoTemplate: React.FC = () => {
@@ -64,6 +65,7 @@ const NovoTemplate: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/carrinho/emails' />

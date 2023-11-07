@@ -18,6 +18,7 @@ import { InputPost } from '../../components/ui/InputPost';
 import { Card } from '../../components/Content/styles';
 import { useNavigate } from 'react-router-dom';
 import { TextArea } from '../../components/ui/Input';
+import Warnings from '../../components/Warnings';
 
 
 const NovaCategoria: React.FC = () => {
@@ -70,6 +71,7 @@ const NovaCategoria: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
 
                     <Voltar url={'/categorias'} />

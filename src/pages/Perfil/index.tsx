@@ -15,6 +15,7 @@ import { GridDate } from "./styles";
 import { AuthContext } from '../../contexts/AuthContext';
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
+import Warnings from "../../components/Warnings";
 
 
 const Perfil: React.FC = () => {
@@ -171,6 +172,7 @@ const Perfil: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <BlockTop>
                         <Titulos

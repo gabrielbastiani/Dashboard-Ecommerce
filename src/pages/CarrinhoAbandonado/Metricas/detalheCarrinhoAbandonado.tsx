@@ -10,6 +10,7 @@ import Titulos from '../../../components/Titulos';
 import { BlockData, TextData, TextStrong } from '../../Clientes/Contrapropostas/styles';
 import TabelaSimples from '../../../components/Tabelas';
 import VoltarNavagation from '../../../components/VoltarNavagation';
+import Warnings from '../../../components/Warnings';
 
 
 const DetalheCarrinhoAbandonado: React.FC = () => {
@@ -56,6 +57,7 @@ const DetalheCarrinhoAbandonado: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <VoltarNavagation />

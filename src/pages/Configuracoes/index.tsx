@@ -36,6 +36,7 @@ import SelectUpdate from "../../components/ui/SelectUpdate";
 import Select from "../../components/ui/Select";
 import { GridDate } from "../Perfil/styles";
 import TabelaSimples from "../../components/Tabelas";
+import Warnings from "../../components/Warnings";
 
 
 const Configuracoes: React.FC = () => {
@@ -405,6 +406,7 @@ const Configuracoes: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     {admin.store_id ? (
                         <>

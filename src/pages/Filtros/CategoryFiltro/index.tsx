@@ -19,6 +19,7 @@ import { SectionDate } from "../../Configuracoes/styles";
 import { BlockDados, TextButton } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { Avisos } from "../../../components/Avisos";
+import Warnings from "../../../components/Warnings";
 
 
 const CategoryFiltro: React.FC = () => {
@@ -122,6 +123,7 @@ const CategoryFiltro: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>

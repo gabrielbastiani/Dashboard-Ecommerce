@@ -17,6 +17,7 @@ import { Grid } from "../../Dashboard/styles";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../contexts/AuthContext";
+import Warnings from "../../../components/Warnings";
 
 
 const NovoTexto: React.FC = () => {
@@ -105,6 +106,7 @@ const NovoTexto: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card
                     style={{ height: '150%' }}
                 >

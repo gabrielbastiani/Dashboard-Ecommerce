@@ -11,6 +11,7 @@ import TabelaSimples from "../../../components/Tabelas";
 import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../../services/api";
 import { ImgInstitucional } from "./styles";
+import Warnings from "../../../components/Warnings";
 
 
 
@@ -51,6 +52,7 @@ const ImagensInstitucionais: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

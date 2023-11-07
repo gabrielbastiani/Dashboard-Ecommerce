@@ -11,6 +11,7 @@ import Select from '../../../components/ui/Select';
 import TabelaSimples from '../../../components/Tabelas';
 import moment from 'moment';
 import VoltarNavagation from '../../../components/VoltarNavagation';
+import Warnings from '../../../components/Warnings';
 
 
 const MetricaDetalhes: React.FC = () => {
@@ -72,6 +73,7 @@ const MetricaDetalhes: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <VoltarNavagation />

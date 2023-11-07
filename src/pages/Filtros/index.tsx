@@ -13,6 +13,7 @@ import { Avisos } from "../../components/Avisos";
 import Select from "../../components/ui/Select";
 import TabelaSimples from "../../components/Tabelas";
 import { GridDate } from "../Perfil/styles";
+import Warnings from "../../components/Warnings";
 
 
 
@@ -75,6 +76,7 @@ const Filtros: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import Pesquisa from "../../../components/Pesquisa";
 import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
+import Warnings from "../../../components/Warnings";
 
 
 const TextosInstitucionais: React.FC = () => {
@@ -63,6 +64,7 @@ const TextosInstitucionais: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

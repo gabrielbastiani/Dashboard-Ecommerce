@@ -17,6 +17,7 @@ import { GridDate } from '../../Perfil/styles';
 import { SectionDate } from '../../Configuracoes/styles';
 import { Mensagem, LabelMensagem, SendEmail } from './styles';
 import { RiMailSendLine } from 'react-icons/ri';
+import Warnings from '../../../components/Warnings';
 
 
 const Contato: React.FC = () => {
@@ -69,6 +70,7 @@ const Contato: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Voltar
                             url={'/contatos'}

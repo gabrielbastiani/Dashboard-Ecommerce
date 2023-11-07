@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { InputPost } from "../../../components/ui/InputPost";
 import Select from "../../../components/ui/Select";
 import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../../Banners/styles";
+import Warnings from "../../../components/Warnings";
 
 
 const NovoTemplateStatusOrder: React.FC = () => {
@@ -82,6 +83,7 @@ const NovoTemplateStatusOrder: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/carrinho/emails' />

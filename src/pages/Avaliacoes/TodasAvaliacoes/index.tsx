@@ -21,6 +21,7 @@ import {
 import { Grid } from "../../Dashboard/styles";
 import { setupAPIClient } from "../../../services/api";
 import moment from 'moment';
+import Warnings from "../../../components/Warnings";
 
 
 const TodasAvaliacoes: React.FC = () => {
@@ -94,6 +95,7 @@ const TodasAvaliacoes: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

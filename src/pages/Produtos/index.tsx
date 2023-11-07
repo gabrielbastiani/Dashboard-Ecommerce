@@ -27,6 +27,7 @@ import { setupAPIClient } from "../../services/api";
 import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
 import { ImgRedes } from "../Configuracoes/styles";
+import Warnings from "../../components/Warnings";
 
 
 const Produtos: React.FC = () => {
@@ -131,6 +132,7 @@ const Produtos: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

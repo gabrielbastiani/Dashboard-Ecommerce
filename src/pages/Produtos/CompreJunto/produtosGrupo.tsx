@@ -25,6 +25,7 @@ import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { BsTrash } from "react-icons/bs";
 import { ModalDeleteBuyTogether } from "../../../components/popups/ModalDeleteBuyTogether";
 import { ContainerCompreJunto } from "./styles";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteBuy = {
@@ -230,6 +231,7 @@ const ProdutosGrupo: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>

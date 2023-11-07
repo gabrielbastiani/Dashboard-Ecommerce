@@ -26,6 +26,7 @@ import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
 import { ImgInstitucional } from "../Configuracoes/ImagensInstitucionais/styles";
 import { Button } from "../../components/ui/Button";
+import Warnings from "../../components/Warnings";
 
 
 const Categorias: React.FC = () => {
@@ -101,6 +102,7 @@ const Categorias: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

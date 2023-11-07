@@ -21,6 +21,7 @@ import { setupAPIClient } from "../../../../services/api";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import { ModalDeleteTextoInstitucional } from "../../../../components/popups/ModalDeleteTextoInstitucional";
+import Warnings from "../../../../components/Warnings";
 
 
 export type DeleteTexto = {
@@ -215,6 +216,7 @@ const Texto: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Voltar
                             url="/textosInstitucionais"

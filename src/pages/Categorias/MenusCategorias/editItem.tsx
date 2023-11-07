@@ -24,6 +24,7 @@ import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } f
 import { MdFileUpload } from "react-icons/md";
 import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } from "../../Configuracoes/ImagensInstitucionais/styles";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteImagemItem = {
@@ -327,6 +328,7 @@ const EditItem: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>

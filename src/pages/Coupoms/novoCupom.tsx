@@ -17,6 +17,7 @@ import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../Banners/s
 import { TextArea } from "../../components/ui/Input";
 import { BlockCategory, TextButton } from "../Produtos/styles";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import Warnings from "../../components/Warnings";
 
 
 const NovoCupom: React.FC = () => {
@@ -94,6 +95,7 @@ const NovoCupom: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     {showFirstCoupom ? (
                         <>

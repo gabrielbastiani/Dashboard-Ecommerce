@@ -20,6 +20,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { BlockDados, TextButton } from "../Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
 import { Avisos } from "../../../components/Avisos";
+import Warnings from "../../../components/Warnings";
 
 
 const CategoriasMenu: React.FC = () => {
@@ -133,14 +134,13 @@ const CategoriasMenu: React.FC = () => {
     }
 
 
-
-
     return (
         <>
             <Grid>
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>

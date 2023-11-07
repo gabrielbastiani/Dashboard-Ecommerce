@@ -22,6 +22,7 @@ import { TextArea } from "../../../components/ui/Input";
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import noImage from '../../../assets/semfoto.png';
 import { Avisos } from "../../../components/Avisos";
+import Warnings from "../../../components/Warnings";
 
 
 const SubCategoria: React.FC = () => {
@@ -169,6 +170,7 @@ const SubCategoria: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
 
                     <VoltarNavagation />

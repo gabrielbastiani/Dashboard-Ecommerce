@@ -18,6 +18,7 @@ import Modal from 'react-modal';
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import { ModalDeleteTemplateEmailOrderStatus } from "../../../components/popups/ModalDeleteTemplateEmailOrderStatus";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
+import Warnings from "../../../components/Warnings";
 
 
 const EditTemplateOrderStatus: React.FC = () => {
@@ -192,6 +193,7 @@ const EditTemplateOrderStatus: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/pedidos/emailStausOrder' />

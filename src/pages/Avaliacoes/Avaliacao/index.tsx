@@ -17,6 +17,7 @@ import { TextoDados } from "../../../components/TextoDados";
 import { SendEmail } from "../../Contatos/Contato/styles";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { toast } from "react-toastify";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteAvaliacao = {
@@ -111,6 +112,7 @@ const Avaliacao: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>

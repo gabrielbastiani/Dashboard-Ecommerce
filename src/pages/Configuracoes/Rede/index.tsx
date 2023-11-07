@@ -19,6 +19,7 @@ import { MdFileUpload } from "react-icons/md";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import Modal from 'react-modal';
 import { ModalDeleteRedeSocial } from '../../../components/popups/ModalDeleteRedeSocial';
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteRede = {
@@ -239,6 +240,7 @@ const Rede: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Voltar
                             url="/configuracoes"

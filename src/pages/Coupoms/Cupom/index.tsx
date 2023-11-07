@@ -28,6 +28,7 @@ import { ModalDeleteCupomProduct } from "../../../components/popups/ModalDeleteC
 import Select from "../../../components/ui/Select";
 import { InputPost } from "../../../components/ui/InputPost";
 import { ModalDeleteCupomConditional } from "../../../components/popups/ModalDeleteCupomConditional";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteProductCupon = {
@@ -343,6 +344,7 @@ const Cupom: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/coupoms' />

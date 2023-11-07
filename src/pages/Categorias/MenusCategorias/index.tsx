@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import { Avisos } from "../../../components/Avisos";
 import TabelaSimples from "../../../components/Tabelas";
 import { Button } from "../../../components/ui/Button";
+import Warnings from "../../../components/Warnings";
 
 
 
@@ -100,6 +101,7 @@ const MenusCategorias: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Titulos
                         tipo="h1"

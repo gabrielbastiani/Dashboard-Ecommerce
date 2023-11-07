@@ -40,6 +40,7 @@ import { EtiquetaTextImagem, FormUpdateImage, InputLogoTextImagem, TextPhoto } f
 import { ModalDeleteImagemCategory } from "../../../components/popups/ModalDeleteImagemCategory";
 import VoltarNavagation from "../../../components/VoltarNavagation";
 import { TextArea } from "../../../components/ui/Input";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteCategoryImage = {
@@ -284,6 +285,7 @@ const Categoria: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <VoltarNavagation />

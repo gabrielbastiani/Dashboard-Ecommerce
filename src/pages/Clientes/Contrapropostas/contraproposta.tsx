@@ -15,6 +15,7 @@ import { TextArea } from "../../../components/ui/Input";
 import { BlockData, TextData, TextStrong } from "./styles";
 import Select from "../../../components/ui/Select";
 import { Button } from "../../../components/ui/Button";
+import Warnings from "../../../components/Warnings";
 
 
 const Contraproposta: React.FC = () => {
@@ -95,6 +96,7 @@ const Contraproposta: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <Voltar url='/contrapropostas' />

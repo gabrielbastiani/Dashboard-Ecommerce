@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom"
 import Select from "../../../components/ui/Select"
 import { BlockImagem, EtiquetaImagens, FormImagens, IconSpanImagens, ImagensPreviewUrl, ImagensUpload, InputImagens, TextImagens } from "./styles"
 import { MdFileUpload } from "react-icons/md"
+import Warnings from "../../../components/Warnings"
 
 
 
@@ -92,6 +93,7 @@ const NovaImagem: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <BlockTop>
                             <Titulos

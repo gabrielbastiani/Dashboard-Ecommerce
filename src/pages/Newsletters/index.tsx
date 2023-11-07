@@ -25,6 +25,7 @@ import { Button } from "../../components/ui/Button";
 import { BlockExport, ButtonExit } from './styles';
 import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
+import Warnings from "../../components/Warnings";
 
 
 const Newsletters: React.FC = () => {
@@ -132,6 +133,7 @@ const Newsletters: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Titulos
                             tipo="h1"

@@ -17,6 +17,7 @@ import { InputPost } from "../../../../components/ui/InputPost";
 import { useNavigate, useParams } from "react-router-dom";
 import { ButtonSelect } from "../../../../components/ui/ButtonSelect";
 import Voltar from "../../../../components/Voltar";
+import Warnings from "../../../../components/Warnings";
 
 
 const Usuario: React.FC = () => {
@@ -235,6 +236,7 @@ const Usuario: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Voltar
                         url={'/usuarios'}

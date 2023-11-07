@@ -16,6 +16,7 @@ import { InputUpdate } from "../../../components/ui/InputUpdate";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { Button } from "../../../components/ui/Button";
 import { ModalDeleteGroupBuyTogether } from "../../../components/popups/ModalDeleteGroupBuyTogether";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteBuyGroup = {
@@ -134,6 +135,7 @@ const EditGrupoCompreJunto: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <Voltar
                             url="/compreJunto"

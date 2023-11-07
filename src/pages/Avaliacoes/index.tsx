@@ -21,6 +21,7 @@ import { Avisos } from "../../components/Avisos";
 import Select from "../../components/ui/Select";
 import TabelaSimples from "../../components/Tabelas";
 import moment from 'moment';
+import Warnings from "../../components/Warnings";
 
 
 const Avaliacoes: React.FC = () => {
@@ -96,6 +97,7 @@ const Avaliacoes: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <Voltar
                         url={`/produto/${slug}/${product_id}`}

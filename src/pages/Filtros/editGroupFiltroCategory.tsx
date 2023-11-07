@@ -17,6 +17,7 @@ import { InputUpdate } from "../../components/ui/InputUpdate";
 import SelectUpdate from "../../components/ui/SelectUpdate";
 import { ModalDeleteGroupFiltro } from "../../components/popups/ModalDeleteGroupFiltro";
 import { ButtonSelect } from "../../components/ui/ButtonSelect";
+import Warnings from "../../components/Warnings";
 
 
 export type DeleteFitrosGrupo = {
@@ -176,6 +177,7 @@ const EditGroupFiltroCategory: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <>
                             <VoltarNavagation />

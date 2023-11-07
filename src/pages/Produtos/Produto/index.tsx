@@ -37,6 +37,7 @@ import CategoriesProduct from "../../../components/CategoriesProduct";
 import TagsProduct from "../../../components/TagsProduct";
 import AttributesProduct from "../../../components/AttributesProduct";
 import { ButtonSubCat, TextNotFound } from "../../../components/CategoriesProduct/styles";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteProduct = {
@@ -446,6 +447,7 @@ const Produto: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
 
                         <VoltarNavagation />

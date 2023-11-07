@@ -21,6 +21,7 @@ import Titulos from "../../../components/Titulos";
 import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import TabelaSimples from "../../../components/Tabelas";
+import Warnings from "../../../components/Warnings";
 
 
 const Usuarios: React.FC = () => {
@@ -80,6 +81,7 @@ const Usuarios: React.FC = () => {
             <MainHeader />
             <Aside />
             <Container>
+                <Warnings />
                 <Card>
                     <BlockTop>
                         <Titulos

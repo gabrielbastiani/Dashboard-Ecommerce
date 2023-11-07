@@ -24,6 +24,7 @@ import { BlockImagem, EtiquetaImagens, FormImagens, InputImagens, TextImagens } 
 import { ModalDeleteFiltro } from "../../../components/popups/ModalDeleteFiltro";
 import { ModalDeleteFiltroAndImage } from "../../../components/popups/ModalDeleteFiltroAndImage";
 import { ModalDeleteImagemFiltro } from "../../../components/popups/ModalDeleteImagemFiltro";
+import Warnings from "../../../components/Warnings";
 
 
 export type DeleteFiltro = {
@@ -326,6 +327,7 @@ const EditAtributoFiltro: React.FC = () => {
                 <MainHeader />
                 <Aside />
                 <Container>
+                    <Warnings />
                     <Card>
                         <VoltarNavagation />
                         <BlockTop>
