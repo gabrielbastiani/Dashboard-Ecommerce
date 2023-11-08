@@ -16,7 +16,6 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import Modal from 'react-modal';
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
-import { ModalDeleteTemplateEmailOrderStatus } from "../../../components/popups/ModalDeleteTemplateEmailOrderStatus";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import Warnings from "../../../components/Warnings";
 import { ModalDeleteTemplateEmailFrete } from "../../../components/popups/ModalDeleteTemplateEmailFrete";
