@@ -10,9 +10,9 @@ const Painel: React.FC = () => {
     return (
         <Grid>
             <MainHeader />
+            <Warnings />
             <Aside />
             <Content />
-            <Warnings />
         </Grid>
     )
 }
