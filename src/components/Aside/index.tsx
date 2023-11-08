@@ -141,7 +141,12 @@ const Aside: React.FC = () => {
 
                         <SubMenuItemLink href="/pedidos/emailStausOrder" >
                             <MdPlayArrow />
-                            Templates E-mail
+                            E-mail status pedidos
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href="/pedidos/emailFretes" >
+                            <MdPlayArrow />
+                            E-mail fretes pedidos
                         </SubMenuItemLink>
                     </>
                 ) : null}

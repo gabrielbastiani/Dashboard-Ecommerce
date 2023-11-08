@@ -63,10 +63,11 @@ import { BlockData, TextData, TextStrong } from "../../Clientes/Contrapropostas/
 import { BsWhatsapp } from "react-icons/bs";
 import copy from "copy-to-clipboard";
 import { ModalQRCodePayment } from "../../../components/popups/ModalQRCodePayment";
-import { Block } from "../../Categorias/styles";
+import { Block, Etiqueta } from "../../Categorias/styles";
 import { BlockInputs, BoxActive, RadioBotton } from "../../Banners/styles";
 import privateComment from "../../../assets/user-comment-private.png";
 import { AuthContext } from "../../../contexts/AuthContext";
+import Select from "../../../components/ui/Select";
 
 
 interface CustomerProps {
@@ -161,6 +162,12 @@ const Pedido: React.FC = () => {
     const [commentOrder, setCommentOrder] = useState("");
     const [comments, setComments] = useState<any[]>([]);
 
+    const [statusSelected, setStatusSelected] = useState();
+
+    function handleChangeStatus(e: any) {
+        setStatusSelected(e.target.value);
+    }
+
     const [active, setActive] = useState('Nao');
     const [check, setCheck] = useState(false);
 
@@ -242,12 +249,14 @@ const Pedido: React.FC = () => {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/codeTrackingShipping?shippingTracking_id=${idShips}`, {
-                code_tracking: codeRastreio
+                code_tracking: codeRastreio,
+                status_frete: statusSelected
             });
 
             toast.success("Código aplicado com sucesso...");
 
             await apiClient.get(`/findAllDateTracking?shippingTracking_id=${idShips}`);
+            await apiClient.get(`/sendEmailOrderFreteStatus?order_id=${order_id}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -311,7 +320,6 @@ const Pedido: React.FC = () => {
     }
 
     Modal.setAppElement('body');
-
 
 
 
@@ -519,24 +527,44 @@ const Pedido: React.FC = () => {
                             <TextDataOrder>Peso Total: {order?.weight}Kg</TextDataOrder>
                         </BlockData>
 
-                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                            <br />
-                            <TextDataOrder>CÓDIGO: {codeRastreio}</TextDataOrder>
-                            <br />
-                            <TextoDados
-                                chave={"Código de rastreio"}
-                                dados={
-                                    <InputUpdate
-                                        dado={codeRastreio}
-                                        type="text"
-                                        placeholder={codeRastreio}
-                                        value={codeRastreio}
-                                        onChange={(e) => setCodeRastreio(e.target.value)}
-                                        handleSubmit={handleCodeRastreio}
-                                    />
-                                }
+                        <Block>
+                            <Etiqueta>Status do frete:</Etiqueta>
+                            <Select
+                                value={statusSelected}
+                                opcoes={
+                                    [
+                                        { label: "Selecionar...", value: "" },
+                                        { label: "Pedido postado", value: "postado" },
+                                        { label: "Em transito", value: "transito" },
+                                        { label: "Aguardando retirada", value: "aguardando" }
+                                    ]
+                                }/* @ts-ignore */
+                                onChange={handleChangeStatus}
                             />
-                        </BlockData>
+                        </Block>
+
+                        {statusSelected === "postado" ?
+                            <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
+                                <br />
+                                <TextDataOrder>CÓDIGO: {codeRastreio}</TextDataOrder>
+                                <br />
+                                <TextoDados
+                                    chave={"Código de rastreio"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={codeRastreio}
+                                            type="text"
+                                            placeholder={codeRastreio}
+                                            value={codeRastreio}
+                                            onChange={(e) => setCodeRastreio(e.target.value)}
+                                            handleSubmit={handleCodeRastreio}
+                                        />
+                                    }
+                                />
+                            </BlockData>
+                            :
+                            null
+                        }
 
                     </Card>
 

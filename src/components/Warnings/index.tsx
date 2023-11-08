@@ -16,6 +16,7 @@ const Warnings: React.FC = () => {
     const [store, setStore] = useState<any[]>([]);
     const [templateAbandonedCartEmail, setTemplateAbandonedCartEmail] = useState<any[]>([]);
     const [templateOrderEmail, setTemplateOrderEmail] = useState<any[]>([]);
+    const [templateFreteEmail, setTemplateFreteEmail] = useState<any[]>([]);
 
     useEffect(() => {
         const apiClient = setupAPIClient();
@@ -32,6 +33,7 @@ const Warnings: React.FC = () => {
                 setStore(data.store);
                 setTemplateAbandonedCartEmail(data.templateAbandonedCartEmail);
                 setTemplateOrderEmail(data.templateOrderEmail);
+                setTemplateFreteEmail(data.templateFreteEmail);
 
             } catch (error) {
                 console.log(error);
@@ -76,6 +78,13 @@ const Warnings: React.FC = () => {
                 <TextWarning>
                     <Warn>ATENÇÃO!!!</Warn> Não deixe de cadastrar templates de e-mails para os carrinhos abandonados&nbsp;
                     <LinkPage href='/carrinho/templateEmail/novo'>CLIQUE AQUI</LinkPage>
+                </TextWarning>
+            </Container>
+
+            <Container style={{ display: templateFreteEmail.length === 0 ? 'block' : 'none' }}>
+                <TextWarning>
+                    <Warn>ATENÇÃO!!!</Warn> Não deixe de cadastrar templates de e-mails para os rastreio de pedidos&nbsp;
+                    <LinkPage href='/pedidos/TemplateEmailFretes/novo'>CLIQUE AQUI</LinkPage>
                 </TextWarning>
             </Container>
 

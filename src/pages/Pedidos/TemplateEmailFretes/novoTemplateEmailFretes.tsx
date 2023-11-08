@@ -17,12 +17,12 @@ import { BlockInputs, BoxActive, EtiquetaInput, RadioBotton } from "../../Banner
 import Warnings from "../../../components/Warnings";
 
 
-const NovoTemplateStatusOrder: React.FC = () => {
+const NovoTemplateEmailFretes: React.FC = () => {
 
     const navigate = useNavigate();
 
     const [name_file_email, setName_file_email] = useState('');
-    const [template_cart_email, setTemplate_cart_email] = useState<string>('');
+    const [template_frete_email, setTemplate_frete_email] = useState<string>('');
     const [subject, setSubject] = useState<string>('');
     const [statusSelected, setStatusSelected] = useState();
 
@@ -34,7 +34,7 @@ const NovoTemplateStatusOrder: React.FC = () => {
     };
 
     function handleValueEditor(value: SetStateAction<string>, event: any) {
-        setTemplate_cart_email(value)
+        setTemplate_frete_email(value)
     }
 
     function handleChangeStatus(e: any) {
@@ -49,16 +49,16 @@ const NovoTemplateStatusOrder: React.FC = () => {
                 return;
             }
 
-            if (template_cart_email === "") {
+            if (template_frete_email === "") {
                 toast.error('Não deixe o template em branco!');
                 return;
             }
 
-            await apiClient.post(`/createTemplateEmailOrderStatus`, {
-                status_order: statusSelected,
+            await apiClient.post(`/createTemplateEmailFreteOrderStatus`, {
+                status_frete: statusSelected,
                 subject: subject,
                 name_file_email: name_file_email,
-                template_cart_email: template_cart_email,
+                template_frete_email: template_frete_email,
                 active: active,
             }
             );
@@ -66,7 +66,7 @@ const NovoTemplateStatusOrder: React.FC = () => {
             toast.success('Template de e-mail cadastrado com sucesso.');
 
             setTimeout(() => {
-                navigate('/pedidos/emailStausOrder');
+                navigate('/pedidos/emailFretes');
             }, 3000);
 
         } catch (error) {/* @ts-ignore */
@@ -86,7 +86,7 @@ const NovoTemplateStatusOrder: React.FC = () => {
                     <Warnings />
                     <Card>
 
-                        <Voltar url='/pedidos/emailStausOrder' />
+                        <Voltar url='/pedidos/emailFretes' />
 
                         <BlockTop>
                             <Titulos
@@ -122,22 +122,15 @@ const NovoTemplateStatusOrder: React.FC = () => {
                         </Block>
 
                         <Block>
-                            <Etiqueta>Status do pedido:</Etiqueta>
+                            <Etiqueta>Status do frete:</Etiqueta>
                             <Select
                                 value={statusSelected}
                                 opcoes={
                                     [
                                         { label: "Selecionar...", value: "" },
-                                        { label: "Pendente", value: "PENDING" },
-                                        { label: "Aprovado", value: "CONFIRMED" },
-                                        { label: "Recebida (saldo já creditado na conta)", value: "RECEIVED" },
-                                        { label: "Cobrança Vencida", value: "OVERDUE" },
-                                        { label: "Cobrança Estornada", value: "REFUNDED" },
-                                        { label: "Estorno Solicitado", value: "REFUND_REQUESTED" },
-                                        { label: "Estorno em processamento (liquidação já está agendada, cobrança será estornada após executar a liquidação)", value: "REFUND_IN_PROGRESS" },
-                                        { label: "Recebido chargeback", value: "CHARGEBACK_REQUESTED" },
-                                        { label: "Pagamento em análise", value: "AWAITING_RISK_ANALYSIS" },
-                                        { label: "Pedido Cancelado", value: "CANCELLED" }
+                                        { label: "Pedido postado", value: "postado" },
+                                        { label: "Em transito", value: "transito" },
+                                        { label: "Aguardando retirada", value: "aguardando" }
                                     ]
                                 }/* @ts-ignore */
                                 onChange={handleChangeStatus}
@@ -170,7 +163,7 @@ const NovoTemplateStatusOrder: React.FC = () => {
                                 width="100%"
                                 theme="vs-dark"
                                 defaultLanguage="html"
-                                value={template_cart_email}/* @ts-ignore */
+                                value={template_frete_email}/* @ts-ignore */
                                 onChange={handleValueEditor}
                             />
                         </Block>
@@ -181,4 +174,4 @@ const NovoTemplateStatusOrder: React.FC = () => {
     )
 }
 
-export default NovoTemplateStatusOrder;
+export default NovoTemplateEmailFretes;

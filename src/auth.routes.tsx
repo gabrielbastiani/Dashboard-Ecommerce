@@ -75,6 +75,9 @@ import Pedido from './pages/Pedidos/Pedido';
 import TemplateEmailOrderStatus from './pages/Pedidos/TemplateEmailOrderStatus';
 import NovoTemplateStatusOrder from './pages/Pedidos/TemplateEmailOrderStatus/novoTemplateStatusOrder';
 import EditTemplateOrderStatus from './pages/Pedidos/TemplateEmailOrderStatus/editTemplateOrderStatus';
+import TemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes';
+import NovoTemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes/novoTemplateEmailFretes';
+import EditTemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes/editTemplateEmailFretes';
 
 
 const RoutesAuth: React.FC = () => {
@@ -89,6 +92,9 @@ const RoutesAuth: React.FC = () => {
             <Route path='/pedidos/emailStausOrder' element={<TemplateEmailOrderStatus />} />
             <Route path='/pedidos/TemplateEmailOrderStatus/novo' element={<NovoTemplateStatusOrder />} />
             <Route path='/pedidos/templateEmailOrderStatus/:slug_name_file_email' element={<EditTemplateOrderStatus />} />
+            <Route path='/pedidos/emailFretes' element={<TemplateEmailFretes />} />
+            <Route path='/pedidos/TemplateEmailFretes/novo' element={<NovoTemplateEmailFretes />} />
+            <Route path='/pedidos/templateEmailFreteStatus/:slug_name_file_email' element={<EditTemplateEmailFretes />} />
 
             <Route path='/clientes' element={<Clientes />} />
             <Route path='/cliente/:customer_id' element={<Cliente />} />
