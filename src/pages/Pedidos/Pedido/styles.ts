@@ -335,3 +335,11 @@ export const TextUser = styled.strong``;
 export const Comments = styled.span`
   color: ${(props) => props?.theme?.colors?.black};
 `;
+
+export const BoxTracking = styled.div`
+
+`
+
+export const DateTracking = styled.span`
+  color: ${(props) => props?.theme?.colors?.white};
+`
