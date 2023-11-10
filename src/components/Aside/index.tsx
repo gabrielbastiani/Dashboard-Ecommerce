@@ -184,7 +184,7 @@ const Aside: React.FC = () => {
 
                         <SubMenuItemLink href='/menus' >
                             <MdPlayArrow />
-                            Menus de Categorias
+                            Menus de categorias
                         </SubMenuItemLink>
                     </>
                 ) : null}
@@ -208,12 +208,12 @@ const Aside: React.FC = () => {
 
                         <SubMenuItemLink href="/compreJunto" >
                             <MdPlayArrow />
-                            Compre Junto
+                            Compre junto
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href='/avaliacoes' >
                             <MdPlayArrow />
-                            Todas Avaliações
+                            Todas avaliações
                         </SubMenuItemLink>
 
                     </>
@@ -277,17 +277,22 @@ const Aside: React.FC = () => {
                     <>
                         <SubMenuItemLink href='/configuracoes' >
                             <MdPlayArrow />
-                            Dados da Loja
+                            Dados da loja
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href='/textosInstitucionais' >
                             <MdPlayArrow />
-                            Textos Institucionais
+                            Textos institucionais
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href='/imagensInstitucionais' >
                             <MdPlayArrow />
-                            Imagens Institucionais
+                            Imagens institucionais
+                        </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/configuracoes/emailstransacionais' >
+                            <MdPlayArrow />
+                            E-mails transacionais
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href='/configuracoes/loja' >
