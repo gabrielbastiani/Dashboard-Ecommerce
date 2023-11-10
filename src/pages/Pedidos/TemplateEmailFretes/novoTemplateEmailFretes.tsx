@@ -130,7 +130,8 @@ const NovoTemplateEmailFretes: React.FC = () => {
                                         { label: "Selecionar...", value: "" },
                                         { label: "Pedido postado", value: "postado" },
                                         { label: "Em transito", value: "transito" },
-                                        { label: "Aguardando retirada", value: "aguardando" }
+                                        { label: "Aguardando retirada", value: "aguardando" },
+                                        { label: "Entregue", value: "entregue" }
                                     ]
                                 }/* @ts-ignore */
                                 onChange={handleChangeStatus}

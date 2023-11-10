@@ -167,8 +167,6 @@ const Pedido: React.FC = () => {
     const [comments, setComments] = useState<any[]>([]);
 
     const [trackingHistory, setTrackingHistory] = useState<any[]>([]);
-    const [nameTransport, setNameTransport] = useState("");
-    const [statusFrete, setStatusFrete] = useState("");
     const [codeTracking, setCodeTracking] = useState("");
 
     const [statusSelected, setStatusSelected] = useState();
@@ -266,9 +264,6 @@ const Pedido: React.FC = () => {
                 const { data } = await apiClient.get(`/findAllDateTracking?shippingTracking_id=${idShips}`);
 
                 setTrackingHistory(data || []);
-
-                setNameTransport(data.name_transport);
-                setStatusFrete(data.status_frete);
                 setCodeTracking(data.code_tracking);
 
             } catch (error) {
@@ -284,10 +279,6 @@ const Pedido: React.FC = () => {
             const { data } = await apiClient.get(`/findAllDateTracking?shippingTracking_id=${idShips}`);
 
             setTrackingHistory(data || []);
-
-            /* setNameTransport(data.name_transport);
-            setStatusFrete(data.status_frete);
-            setCodeTracking(data.code_tracking); */
 
         } catch (error) {
             console.log(error);
@@ -314,7 +305,7 @@ const Pedido: React.FC = () => {
 
             loadRastreio();
 
-            await apiClient.get(`/sendEmailOrderFreteStatus?order_id=${order_id}`);
+            await apiClient.get(`/sendEmailOrderFreteStatus?order_id=${order_id}&status_frete=postado`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -333,6 +324,8 @@ const Pedido: React.FC = () => {
             toast.success("Rastreio atualizado com sucesso...");
 
             loadRastreio();
+
+            await apiClient.get(`/sendEmailOrderFreteStatus?order_id=${order_id}&status_frete=${statusSelected}`);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -623,28 +616,58 @@ const Pedido: React.FC = () => {
                         </BlockData>
 
                         {trackingHistory.length >= 1 ?
-                            <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                                <br />
-                                <TextDataOrder>STATUS: {""}</TextDataOrder>
-                                <br />
-                                <TextDataOrder>CÓDIGO: {""}</TextDataOrder>
-                                <br />
-                                <DateTracking>DATA DA POSTAGEM: {moment("").format('DD/MM/YYYY - HH:mm')}</DateTracking>
-                                <br />
-                                <TextoDados
-                                    chave={"Código de rastreio"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={codeTracking}
-                                            type="text"
-                                            placeholder={codeTracking}
-                                            value={codeTracking}
-                                            onChange={(e) => setCodeTracking(e.target.value)}
-                                            handleSubmit={updateCodeTracking}
-                                        />
-                                    }
-                                />
-                            </BlockData>
+                            <>
+                                <Block>
+                                    <Etiqueta>Status da entrega:</Etiqueta>
+                                    <Select
+                                        value={statusSelected}
+                                        opcoes={
+                                            [
+                                                { label: "Selecionar...", value: "" },
+                                                { label: "Pedido postado", value: "postado" },
+                                                { label: "Em transito", value: "transito" },
+                                                { label: "Aguardando retirada", value: "aguardando" },
+                                                { label: "Entregue", value: "entregue" }
+                                            ]
+                                        }/* @ts-ignore */
+                                        onChange={handleChangeStatus}
+                                    />
+
+                                    <Button
+                                        onClick={handleTrackingNext}
+                                    >
+                                        Cadastrar
+                                    </Button>
+
+                                </Block>
+
+                                <DivisorHorizontal />
+
+                                <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <br />
+                                    <TextDataOrder>STATUS: {trackingHistory[0].status_frete}</TextDataOrder>
+                                    <br />
+                                    <TextDataOrder>CÓDIGO: {trackingHistory[0].code_tracking}</TextDataOrder>
+                                    <br />
+                                    <DateTracking>DATA DA POSTAGEM: {moment(trackingHistory[0].created_at).format('DD/MM/YYYY - HH:mm')}</DateTracking>
+                                    <br />
+                                    <TextoDados
+                                        chave={"Código de rastreio"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={trackingHistory[0].code_tracking}
+                                                type="text"
+                                                placeholder={codeTracking}
+                                                value={codeTracking}
+                                                onChange={(e) => setCodeTracking(e.target.value)}
+                                                handleSubmit={updateCodeTracking}
+                                            />
+                                        }
+                                    />
+                                </BlockData>
+
+                                <DivisorHorizontal />
+                            </>
                             :
                             <>
                                 <Block>
@@ -675,9 +698,7 @@ const Pedido: React.FC = () => {
                                     </BoxTracking>
                                 </>
                             )
-
                         })}
-
 
                     </Card>
 
