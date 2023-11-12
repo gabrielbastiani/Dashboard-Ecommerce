@@ -84,11 +84,11 @@ const EditItem: React.FC = () => {
             try {
                 const { data } = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
 
-                setCategoryName(data.categoryName || "");
-                setOrder(data.order);
-                setStatus(data.status);
-                setImageCategories(data.imagemenucategories ? data.imagemenucategories[0].image : data.imagemenucategories.image);
-                setCategoryImageUpload(data.imagemenucategories ? data.imagemenucategories[0].image : data.imagemenucategories.image);
+                setCategoryName(data?.categoryName || "");
+                setOrder(data?.order);
+                setStatus(data?.status);
+                setImageCategories(data?.imagemenucategories ? data?.imagemenucategories[0]?.image : data?.imagemenucategories?.image);
+                setCategoryImageUpload(data?.imagemenucategories ? data?.imagemenucategories[0]?.image : data?.imagemenucategories?.image);
                 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -97,15 +97,31 @@ const EditItem: React.FC = () => {
         loadItemDate();
     }, [menuCategory_id]);
 
+    async function loadItemDate() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
+
+            setCategoryName(data?.categoryName || "");
+            setOrder(data?.order);
+            setStatus(data?.status);
+            setImageCategories(data?.imagemenucategories ? data?.imagemenucategories[0]?.image : data?.imagemenucategories?.image);
+            setCategoryImageUpload(data?.imagemenucategories ? data?.imagemenucategories[0]?.image : data?.imagemenucategories?.image);
+            
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
     useEffect(() => {
         async function loadCategory() {
             const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/findUniqueMenu?menuCategory_id=${menuCategory_id}`);
 
-                setName(data.category.name);
-                setNameGroup(data.nameGroup || "");
-                setIDImage(data.imagemenucategories ? data.imagemenucategories[0].id : data.imagemenucategories.id);
+                setName(data?.category?.name);
+                setNameGroup(data?.nameGroup || "");
+                setIDImage(data?.imagemenucategories ? data?.imagemenucategories[0]?.id : data?.imagemenucategories?.id);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -119,7 +135,7 @@ const EditItem: React.FC = () => {
             const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get('/listCategorysDisponivel');
-                setCategories(response.data || []);
+                setCategories(response?.data || []);
             } catch (error) {
                 console.log(error);
             }
@@ -139,9 +155,7 @@ const EditItem: React.FC = () => {
 
             toast.success('Categoria atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadItemDate();
 
         } catch (error) {
             console.log(error);
@@ -158,9 +172,7 @@ const EditItem: React.FC = () => {
             } else {
                 await apiClient.put(`/updateOrderCategoryMenu?menuCategory_id=${menuCategory_id}`, { order: Number(order) });
                 toast.success('Ordem da categoria no menu atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+                loadItemDate();
             }
         } catch (error) {
             console.log(error);
@@ -173,9 +185,7 @@ const EditItem: React.FC = () => {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStatusMenu?menuCategory_id=${menuCategory_id}`);
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadItemDate();
 
         } catch (error) {
             toast.error('Ops erro ao atualizar a disponibilidade do item categoria nesse menu.');
@@ -205,9 +215,7 @@ const EditItem: React.FC = () => {
 
             toast.success('Imagem cadastrada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadItemDate();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -245,9 +253,7 @@ const EditItem: React.FC = () => {
 
             toast.success('Imagem atualizada com sucesso.');
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadItemDate();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -528,6 +534,7 @@ const EditItem: React.FC = () => {
                     onRequestClose={handleCloseModalDeleteImagem}
                     /* @ts-ignore */
                     idImage={modalItemImagem}
+                    loadImage={loadItemDate}
                 />
             )}
         </>

@@ -348,7 +348,6 @@ const Configuracoes: React.FC = () => {
             data.append('link', link);/* @ts-ignore */
             data.append('order', Number(order));/* @ts-ignore */
             data.append('position', positionSelected);
-            data.append('store_id', admin.store_id);
 
             await apiClient.post(`/createSocialMedia`, data);
 
@@ -357,9 +356,6 @@ const Configuracoes: React.FC = () => {
             toast.success('Rede Social cadastrada com sucesso.');
 
             loadSocialMedia();
-
-            setNameRede("");
-            setLink("");
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);

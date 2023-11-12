@@ -127,9 +127,7 @@ const SubCategoria: React.FC = () => {
             } else {
                 await apiClient.put(`/updateOrderCategory?category_id=${id}`, { order: Number(orderUpdate) });
                 toast.success('Ordem da categoria atualizada com sucesso.');
-                setTimeout(() => {
-                    navigate(0);
-                }, 3000);
+                loadCategorys();
             }
         } catch (error) {
             console.log(error);
@@ -148,18 +146,12 @@ const SubCategoria: React.FC = () => {
 
         if (status === "Indisponivel") {
             toast.success(`A subcategoria se encontra ativa.`);
-            setTimeout(() => {
-                navigate(0);
-            }, 2000);
-            return;
+            loadCategorys();
         }
 
         if (status === "Disponivel") {
             toast.error(`A subcategoria se encontra desativada.`);
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
-            return;
+            loadCategorys();
         }
     }
 

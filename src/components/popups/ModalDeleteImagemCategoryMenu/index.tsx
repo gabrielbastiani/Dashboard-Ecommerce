@@ -12,9 +12,10 @@ interface DeleteItemImagem {
     isOpen: boolean;
     onRequestClose: () => void;
     idImage: DeleteImagemItem;
+    loadImage: () => void;
 }
 
-export function ModalDeleteImagemCategoryMenu({ isOpen, onRequestClose, idImage }: DeleteItemImagem) {
+export function ModalDeleteImagemCategoryMenu({ isOpen, onRequestClose, idImage, loadImage }: DeleteItemImagem) {
 
     const navigate = useNavigate();
 
@@ -40,9 +41,7 @@ export function ModalDeleteImagemCategoryMenu({ isOpen, onRequestClose, idImage 
 
             onRequestClose();
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadImage();
 
         } catch (error) {
             /* @ts-ignore */
