@@ -78,6 +78,8 @@ import EditTemplateOrderStatus from './pages/Pedidos/TemplateEmailOrderStatus/ed
 import TemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes';
 import NovoTemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes/novoTemplateEmailFretes';
 import EditTemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes/editTemplateEmailFretes';
+import EmailsTransacionais from './pages/Configuracoes/emailsTransacionais';
+import EditTemplateEmailTransacional from './pages/Configuracoes/emailsTransacionais/editTemplateEmailTransacional';
 
 
 const RoutesAuth: React.FC = () => {
@@ -171,6 +173,8 @@ const RoutesAuth: React.FC = () => {
             <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
             <Route path='/texto/:institutionalText_id' element={<Texto />} />
             <Route path='/configuracoes/loja' element={<Loja />} />
+            <Route path='/configuracoes/emailstransacionais' element={<EmailsTransacionais />} />
+            <Route path='/configuracoes/emailstransacionais/:emailTransacional' element={<EditTemplateEmailTransacional />} />
 
             <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
             <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />
