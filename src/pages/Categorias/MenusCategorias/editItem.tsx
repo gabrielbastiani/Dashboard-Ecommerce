@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
 import { ModalDeleteIDSCategoryMenu } from "../../../components/popups/ModalDeleteIDSCategoryMenu";
@@ -43,7 +43,6 @@ export type DeleteItens = {
 const EditItem: React.FC = () => {
 
     let { menuCategory_id } = useParams();
-    const navigate = useNavigate();
 
     const [nameGroup, setNameGroup] = useState("");
     const [categories, setCategories] = useState<any[]>([]);

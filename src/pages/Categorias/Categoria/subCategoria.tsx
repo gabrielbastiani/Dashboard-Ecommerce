@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Grid } from "../../Dashboard/styles";
 import MainHeader from "../../../components/MainHeader";
@@ -29,7 +29,6 @@ const SubCategoria: React.FC = () => {
 
     let { parentId } = useParams();
     const { admin } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     const [storeID] = useState(admin.store_id);
 
