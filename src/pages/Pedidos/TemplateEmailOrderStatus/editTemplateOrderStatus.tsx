@@ -129,7 +129,7 @@ const EditTemplateOrderStatus: React.FC = () => {
         }
     }
 
-    async function updateDateTemplate() {
+    async function updateSubjectTemplate() {
         try {
             const apiClient = setupAPIClient();
             if (subject === "") {
@@ -138,7 +138,6 @@ const EditTemplateOrderStatus: React.FC = () => {
             } else {
                 await apiClient.put(`/updateDateAllEmailOrderStatus?templateOrderEmail_id=${idTemplate}`,
                     {
-                        status_order: statusSelected,
                         subject: subject
                     });
 
@@ -146,6 +145,25 @@ const EditTemplateOrderStatus: React.FC = () => {
 
                 refreshConfig();
             }
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Ops erro ao atualizar o dados do template.');
+        }
+    }
+
+    async function updateStatusTemplate() {
+        try {
+            const apiClient = setupAPIClient();
+
+            await apiClient.put(`/updateDateAllEmailOrderStatus?templateOrderEmail_id=${idTemplate}`,
+                {
+                    status_order: statusSelected
+                });
+
+            toast.success('Status do pedido atualizado com sucesso.');
+
+            refreshConfig();
+
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
             toast.error('Ops erro ao atualizar o dados do template.');
@@ -240,7 +258,7 @@ const EditTemplateOrderStatus: React.FC = () => {
                                         value={subject}
                                         /* @ts-ignore */
                                         onChange={(e) => setSubject(e.target.value)}
-                                        handleSubmit={updateDateTemplate}
+                                        handleSubmit={updateSubjectTemplate}
                                     />
                                 }
                             />
@@ -270,7 +288,7 @@ const EditTemplateOrderStatus: React.FC = () => {
                                                 { label: "Pedido Cancelado", value: "CANCELLED" }
                                             ]
                                         }
-                                        handleSubmit={updateDateTemplate}
+                                        handleSubmit={updateStatusTemplate}
                                     />
                                 }
                             />

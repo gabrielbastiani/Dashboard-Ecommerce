@@ -170,9 +170,15 @@ const Pedido: React.FC = () => {
     const [codeTracking, setCodeTracking] = useState("");
 
     const [statusSelected, setStatusSelected] = useState();
+    const [orderStatusID, setOrderStatusID] = useState("");
+    const [statusOrderSelected, setStatusOrderSelected] = useState();
 
     function handleChangeStatus(e: any) {
         setStatusSelected(e.target.value);
+    }
+
+    function handleChangeStatusOrder(e: any) {
+        setStatusOrderSelected(e.target.value);
     }
 
     const [active, setActive] = useState('Nao');
@@ -246,6 +252,7 @@ const Pedido: React.FC = () => {
                 setKeyPix(data?.payment?.key_payment_pix || "");
                 setKeyPixQRCode(data?.payment?.qr_code_pix || "");
                 setOrderStatus(data?.statusOrder[0]?.status_order || "");
+                setOrderStatusID(data?.statusOrder[0]?.id || "");
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -253,6 +260,18 @@ const Pedido: React.FC = () => {
         }
         loadorderdata();
     }, [order_id]);
+
+    async function loadOrderData() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/exactOrder?order_id=${order_id}`);
+
+            setOrderStatus(data?.statusOrder[0]?.status_order || "");
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
     /* @ts-ignore */
     const idShips = String(order?.shipmentsTrackings[0]?.id);
@@ -272,6 +291,22 @@ const Pedido: React.FC = () => {
         }
         loadRastreio();
     }, [idShips]);
+
+    async function updateStatusOrder() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/updateStatusOrder?statusOrder_id=${orderStatusID}`, {
+                status_order: statusOrderSelected
+            });
+
+            loadOrderData();
+            toast.success("Status do pedido alterado com sucesso");
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error("OPS... Erro ao alterar o status do pedido");
+        }
+    }
 
     async function loadRastreio() {
         const apiClient = setupAPIClient();
@@ -302,7 +337,6 @@ const Pedido: React.FC = () => {
 
             setCodeTracking("");
             showTracking();
-
             loadRastreio();
 
             await apiClient.get(`/sendEmailOrderFreteStatus?order_id=${order_id}&status_frete=postado`);
@@ -386,9 +420,7 @@ const Pedido: React.FC = () => {
             });
 
             toast.success("Comentários adicionado com sucesso");
-
             setCommentOrder("");
-
             loadCommentsOrder();
 
         } catch (error) {/* @ts-ignore */
@@ -467,6 +499,28 @@ const Pedido: React.FC = () => {
                         null
                     }
 
+                    {orderStatus === "RECEIVED" ?
+                        <StatusTop style={{
+                            backgroundColor: 'orange',
+                            color: 'white'
+                        }}>
+                            Saldo creditado
+                        </StatusTop>
+                        :
+                        null
+                    }
+
+                    {orderStatus === "OVERDUE" ?
+                        <StatusTop style={{
+                            backgroundColor: 'blue',
+                            color: 'white'
+                        }}>
+                            Cobrança vencida
+                        </StatusTop>
+                        :
+                        null
+                    }
+
                     {orderStatus === "CANCELLED" ?
                         <StatusTop style={{
                             backgroundColor: 'red',
@@ -495,6 +549,28 @@ const Pedido: React.FC = () => {
                             color: 'black'
                         }}>
                             Estornado
+                        </StatusTop>
+                        :
+                        null
+                    }
+
+                    {orderStatus === "REFUND_REQUESTED" ?
+                        <StatusTop style={{
+                            backgroundColor: 'gray',
+                            color: 'white'
+                        }}>
+                            Estorno Solicitado
+                        </StatusTop>
+                        :
+                        null
+                    }
+
+                    {orderStatus === "REFUND_IN_PROGRESS" ?
+                        <StatusTop style={{
+                            backgroundColor: 'violet',
+                            color: 'white'
+                        }}>
+                            Estorno em processo
                         </StatusTop>
                         :
                         null
@@ -551,6 +627,36 @@ const Pedido: React.FC = () => {
                     }
 
                 </BoxTopStatusGeral>
+                <br />
+                <br />
+                <Block
+                    style={{ width: '20%' }}
+                >
+                    <Etiqueta>Alterar status do pedido</Etiqueta>
+                    <Select
+                        value={statusOrderSelected}
+                        opcoes={
+                            [
+                                { label: "Pendente", value: "PENDING" },
+                                { label: "Aprovado", value: "CONFIRMED" },
+                                { label: "Recebida (saldo já creditado na conta)", value: "RECEIVED" },
+                                { label: "Cobrança Vencida", value: "OVERDUE" },
+                                { label: "Cobrança Estornada", value: "REFUNDED" },
+                                { label: "Estorno Solicitado", value: "REFUND_REQUESTED" },
+                                { label: "Estorno em processamento (liquidação já está agendada, cobrança será estornada após executar a liquidação)", value: "REFUND_IN_PROGRESS" },
+                                { label: "Pagamento em análise", value: "AWAITING_RISK_ANALYSIS" },
+                                { label: "Pedido Cancelado", value: "CANCELLED" }
+                            ]
+                        }/* @ts-ignore */
+                        onChange={handleChangeStatusOrder}
+                    />
+
+                    <Button
+                        onClick={updateStatusOrder}
+                    >
+                        Alterar
+                    </Button>
+                </Block>
 
                 <GridOrder>
                     <Card>
@@ -638,7 +744,6 @@ const Pedido: React.FC = () => {
                                     >
                                         Cadastrar
                                     </Button>
-
                                 </Block>
 
                                 <DivisorHorizontal />
