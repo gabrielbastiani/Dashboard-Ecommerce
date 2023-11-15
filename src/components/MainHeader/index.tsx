@@ -2,16 +2,19 @@ import React, { useContext, useMemo, useState } from 'react';
 import Toggle from '../Toggle';
 import emojis from '../../utils/emojis';
 import { useTheme } from '../../contexts/theme';
-import { 
-    Container, 
-    Profile, 
-    Welcome, 
+import {
+    Container,
+    Profile,
+    Welcome,
     UserName,
     LojaFront,
-    ToggleDesktop
-}  from './styles';
+    ToggleDesktop,
+    NotificationBell,
+    BoxProfile
+} from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
+import { FaBell, FaRegBell } from 'react-icons/fa';
 
 
 const MainHeader: React.FC = () => {
@@ -29,7 +32,7 @@ const MainHeader: React.FC = () => {
     const emoji = useMemo(() => {
         const indice = Math.floor(Math.random() * emojis.length);
         return emojis[indice];
-    },[]);
+    }, []);
 
     return (
         <Container>
@@ -42,11 +45,17 @@ const MainHeader: React.FC = () => {
                     onChange={handleChangeTheme}
                 />
             </ToggleDesktop>
-            
 
             <Profile>
-                <Welcome>Olá, {emoji}</Welcome>
-                <UserName href='/perfil'>{admin?.name}</UserName>
+                <BoxProfile>
+                    <Welcome>Olá, {emoji}</Welcome>
+                    <UserName href='/perfil'>{admin?.name}</UserName>
+                </BoxProfile>
+
+                <NotificationBell>
+                    <FaRegBell size={20} />
+                    <FaBell size={20} />
+                </NotificationBell>
             </Profile>
         </Container>
     );

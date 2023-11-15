@@ -39,9 +39,24 @@ export const Container = styled.div`
 
 export const Profile = styled.div`
   color: ${(props) => props.theme.colors.white};
+  display: flex;
+  align-items: center;
 
   @media (max-width: 600px) {
     margin-left: 200px;
+  }
+`;
+
+export const BoxProfile = styled.div``;
+
+export const NotificationBell = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 20px;
+
+  svg {
+    color: ${(props) => props.theme.colors.white};
+    cursor: pointer;
   }
 `;
 

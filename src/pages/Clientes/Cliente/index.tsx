@@ -262,7 +262,7 @@ const Cliente: React.FC = () => {
             "Pedido": item.id_order_store,
             "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.cart.map((car: { total: any; }) => car.total).reduce((acumulador: any, valorAtual: any) => acumulador + valorAtual, 0)),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Situação": item.shipmentsTrackings[0].delivery_history,
+            "Situação": item.statusOrder[0].status_order === "PENDING" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Reprovado ou Cancelado",
             "botaoDetalhes": `/cliente/pedido/${item.id}`
         });
     });
