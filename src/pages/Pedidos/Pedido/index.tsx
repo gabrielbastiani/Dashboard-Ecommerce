@@ -352,7 +352,8 @@ const Pedido: React.FC = () => {
         try {
             await apiClient.post(`/codeTrackingShipping`, {
                 shippingTracking_id: idShips,
-                status_frete: statusSelected
+                status_frete: statusSelected,
+                code_tracking: trackingHistory[0].code_tracking
             });
 
             toast.success("Rastreio atualizado com sucesso...");
