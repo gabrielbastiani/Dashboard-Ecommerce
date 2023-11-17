@@ -72,7 +72,9 @@ export const Title = styled.h2`
   margin-bottom: 25px;
 `
 
-export const LinkNotification = styled.a``
+export const LinkNotification = styled.a`
+  color: inherit;
+`
 
 export const DropDownContent = styled.div`
   height: 58vh;
