@@ -72,6 +72,8 @@ export const Title = styled.h2`
   margin-bottom: 25px;
 `
 
+export const LinkNotification = styled.a``
+
 export const DropDownContent = styled.div`
   height: 58vh;
   overflow-y: auto;

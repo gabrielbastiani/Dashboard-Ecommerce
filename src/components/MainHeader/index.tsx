@@ -18,7 +18,8 @@ import {
     Block,
     Title,
     ClockBlock,
-    BoxIcons
+    BoxIcons,
+    LinkNotification
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
@@ -102,20 +103,22 @@ const MainHeader: React.FC = () => {
                         <>
                             {notifications.slice(0, 20).map((item, index) => {
                                 return (
-                                    <BlockNotification key={index}>
-                                        <BoxIcons>
-                                            <FaCartPlus size={28} />
-                                        </BoxIcons>
-                                        <Block>
-                                            <Menssages
-                                                dangerouslySetInnerHTML={{ __html: item.message }}
-                                            ></Menssages>
-                                            <ClockBlock>
-                                                <FaRegClock size={20} />
-                                                <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
-                                            </ClockBlock>
-                                        </Block>
-                                    </BlockNotification>
+                                    <LinkNotification href={item.link}>
+                                        <BlockNotification key={index}>
+                                            <BoxIcons>
+                                                <FaCartPlus size={28} />
+                                            </BoxIcons>
+                                            <Block>
+                                                <Menssages
+                                                    dangerouslySetInnerHTML={{ __html: item.message }}
+                                                ></Menssages>
+                                                <ClockBlock>
+                                                    <FaRegClock size={20} />
+                                                    <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
+                                                </ClockBlock>
+                                            </Block>
+                                        </BlockNotification>
+                                    </LinkNotification>
                                 )
                             })}
                         </>
