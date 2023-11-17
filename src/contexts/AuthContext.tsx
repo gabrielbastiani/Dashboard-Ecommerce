@@ -9,6 +9,7 @@ type AuthContextData = {
     isAuthenticated: boolean;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
     signOut: () => void;
+    refreshNotifications: () => void;
 }
 
 type AdminProps = {
@@ -110,8 +111,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
+    async function refreshNotifications() {
+        try {
+            await api.get('/notificationPainelAdmin');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (/* @ts-ignore */
-        <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut }}>
+        <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut, refreshNotifications }}>
             {children}
         </AuthContext.Provider>
     )
