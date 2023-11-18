@@ -67,17 +67,17 @@ const Warnings: React.FC = () => {
                 </TextWarning>
             </Container>
 
-            <Container style={{ display: configAbandonedCart.length === 0 ? 'block' : 'none' }}>
-                <TextWarning>
-                    <Warn>ATENÇÃO!!!</Warn> Não deixe de cadastrar configurações de disparo para e-mails de carrinho abandonado aos seus clientes&nbsp;
-                    <LinkPage href='/configuracoes/novo'>CLIQUE AQUI</LinkPage>
-                </TextWarning>
-            </Container>
-
             <Container style={{ display: templateAbandonedCartEmail.length === 0 ? 'block' : 'none' }}>
                 <TextWarning>
                     <Warn>ATENÇÃO!!!</Warn> Não deixe de cadastrar templates de e-mails para os carrinhos abandonados&nbsp;
                     <LinkPage href='/carrinho/templateEmail/novo'>CLIQUE AQUI</LinkPage>
+                </TextWarning>
+            </Container>
+
+            <Container style={{ display: configAbandonedCart.length === 0 ? 'block' : 'none' }}>
+                <TextWarning>
+                    <Warn>ATENÇÃO!!!</Warn> Não deixe de cadastrar configurações de disparo para e-mails de carrinho abandonado aos seus clientes&nbsp;
+                    <LinkPage href='/carrinho/configuracoes/novo'>CLIQUE AQUI</LinkPage>
                 </TextWarning>
             </Container>
 

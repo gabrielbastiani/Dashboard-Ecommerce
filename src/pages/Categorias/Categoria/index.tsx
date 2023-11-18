@@ -80,12 +80,12 @@ const Categoria: React.FC = () => {
         async function refreshCategoryLoad() {
             const apiClient = setupAPIClient();
             const response = await apiClient.get(`/finduniqueCategory?category_id=${category_id}`);
-            setName(response.data.name || "");
-            setStatus(response.data.status || "");
-            setDescription(response.data.description || "");
-            setImageCategories(response.data.imagecategories[0].image);
-            setCategoryImageUpload(response.data.imagecategories[0].image);
-            setIDImage(response.data.imagecategories[0].id);
+            setName(response?.data?.name || "");
+            setStatus(response?.data?.status || "");
+            setDescription(response?.data?.description || "");
+            setImageCategories(response?.data?.imagecategories[0]?.image);
+            setCategoryImageUpload(response?.data?.imagecategories[0]?.image);
+            setIDImage(response?.data?.imagecategories[0]?.id);
         }
         refreshCategoryLoad();
     }, [category_id]);

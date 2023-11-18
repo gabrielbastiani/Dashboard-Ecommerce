@@ -104,6 +104,16 @@ const Atributo: React.FC = () => {
         loadAllAttributeType();
     }, [type]);
 
+    async function loadAllAttributeType() {
+        try {
+            const apiClient = setupAPIClient();
+            const { data } = await apiClient.get(`/allValuesTypeAttribute?type=${type}`);
+            setLoadValueType(data || []);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function updateType() {
         try {
             const apiClient = setupAPIClient();
@@ -142,9 +152,7 @@ const Atributo: React.FC = () => {
 
             setValue("");
 
-            setTimeout(() => {
-                navigate(0);
-            }, 3000);
+            loadAllAttributeType();
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
