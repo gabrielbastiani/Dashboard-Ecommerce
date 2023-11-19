@@ -25,7 +25,8 @@ import {
     ClearNotifications,
     BlockButtonsNotification,
     ButtonAllNotifications,
-    BoxButtonAll
+    BoxButtonAll,
+    AmountItens
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
@@ -43,6 +44,8 @@ const MainHeader: React.FC = () => {
     const { toggleTheme, theme } = useTheme();
     const [notifications, setNotifications] = useState<any[]>([]);
     const [openNotification, setOpenNotification] = useState(true);
+    const [viewd, setViewd] = useState<any[]>([]);
+    const [newFalse, setNewFalse] = useState(Number);
 
     const handleNotificationOpen = () => {
         setOpenNotification(!openNotification);
@@ -61,12 +64,28 @@ const MainHeader: React.FC = () => {
     }, []);
 
     useEffect(() => {
+        function loadNumberNotifications() {
+            const booleanArray = viewd.map(fal => fal.viewed);
+            const falseValues = booleanArray.filter(value => value === false);
+            setNewFalse(falseValues.length);
+        }
+        loadNumberNotifications();
+    }, [viewd]);
+
+    function loadNumberNotifications() {
+        const booleanArray = viewd.map(fal => fal.viewed);
+        const falseValues = booleanArray.filter(value => value === false);
+        setNewFalse(falseValues.length);
+    }
+
+    useEffect(() => {
         async function findNotificationsAdmin() {
             try {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/notificationPainelAdmin`);
 
                 setNotifications(data.slice(0, 15));
+                setViewd(data);
 
             } catch (error) {
                 console.error(error);
@@ -91,6 +110,7 @@ const MainHeader: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateViewdNotification?notificationAdmin_id=${id}`);
+            loadNumberNotifications();
             findNotificationsAdmin();
         } catch (error) {
             console.error(error);
@@ -101,6 +121,7 @@ const MainHeader: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateAllViewdNotification`);
+            loadNumberNotifications();
             findNotificationsAdmin();
         } catch (error) {
             console.error(error);
@@ -111,12 +132,14 @@ const MainHeader: React.FC = () => {
         try {
             const apiClient = setupAPIClient();
             await apiClient.put(`/clearAllNotificationsAdmin`);
+            loadNumberNotifications();
             findNotificationsAdmin();
         } catch (error) {
             console.error(error);
         }
     }
 
+    
 
 
     return (
@@ -137,9 +160,17 @@ const MainHeader: React.FC = () => {
                     <UserName href='/perfil'>{admin?.name}</UserName>
                 </BoxProfile>
 
-                <NotificationBell>
-                    <FaRegBell size={20} />
-                    <FaBell size={20} onClick={handleNotificationOpen} />
+                <NotificationBell onClick={handleNotificationOpen}>
+                    {newFalse === 0 ?
+                        <FaRegBell size={20} />
+                    :
+                        <>
+                            <AmountItens>
+                                <span>{newFalse}</span>
+                            </AmountItens>
+                            <FaBell size={20} />
+                        </>
+                    }
                 </NotificationBell>
             </Profile>
 

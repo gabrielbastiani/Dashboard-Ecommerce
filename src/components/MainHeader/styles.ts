@@ -53,10 +53,10 @@ export const NotificationBell = styled.div`
   display: flex;
   align-items: center;
   margin: 20px;
+  cursor: pointer;
 
   svg {
     color: ${(props) => props.theme.colors.white};
-    cursor: pointer;
   }
 `;
 
@@ -139,6 +139,7 @@ export const BlockButtonsNotification = styled.div`
 
 export const AllViewd = styled.button`
   background: transparent;
+  color: ${(props) => props.theme.colors.black};
 `;
 
 export const ClearNotifications = styled.button`
@@ -158,3 +159,17 @@ export const ButtonAllNotifications = styled.a`
   font-weight: bold;
   background: transparent;
 `;
+
+export const AmountItens = styled.div`
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 99;
+  margin-top: 10px;
+  margin-left: -8px;
+`
