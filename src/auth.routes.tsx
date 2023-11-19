@@ -80,6 +80,7 @@ import NovoTemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes/novoTem
 import EditTemplateEmailFretes from './pages/Pedidos/TemplateEmailFretes/editTemplateEmailFretes';
 import EmailsTransacionais from './pages/Configuracoes/emailsTransacionais';
 import EditTemplateEmailTransacional from './pages/Configuracoes/emailsTransacionais/editTemplateEmailTransacional';
+import Notificacoes from './pages/Configuracoes/Notificacoes';
 
 
 const RoutesAuth: React.FC = () => {
@@ -175,6 +176,7 @@ const RoutesAuth: React.FC = () => {
             <Route path='/configuracoes/loja' element={<Loja />} />
             <Route path='/configuracoes/emailstransacionais' element={<EmailsTransacionais />} />
             <Route path='/configuracoes/emailstransacionais/:emailTransacional' element={<EditTemplateEmailTransacional />} />
+            <Route path='/configuracoes/notificacoes' element={<Notificacoes />} />
 
             <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
             <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />

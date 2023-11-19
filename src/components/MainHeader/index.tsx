@@ -19,7 +19,13 @@ import {
     Title,
     ClockBlock,
     BoxIcons,
-    LinkNotification
+    LinkNotification,
+    Viewed,
+    AllViewd,
+    ClearNotifications,
+    BlockButtonsNotification,
+    ButtonAllNotifications,
+    BoxButtonAll
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
@@ -27,6 +33,7 @@ import { FaBell, FaCartPlus, FaRegBell, FaRegClock } from 'react-icons/fa';
 import { setupAPIClient } from '../../services/api';
 import moment from 'moment';
 import { Avisos } from '../Avisos';
+import { MdOutlineDashboard } from 'react-icons/md';
 
 
 const MainHeader: React.FC = () => {
@@ -59,7 +66,7 @@ const MainHeader: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/notificationPainelAdmin`);
 
-                setNotifications(data);
+                setNotifications(data.slice(0, 15));
 
             } catch (error) {
                 console.error(error);
@@ -67,6 +74,50 @@ const MainHeader: React.FC = () => {
         }
         findNotificationsAdmin();
     }, []);
+
+    async function findNotificationsAdmin() {
+        try {
+            const apiClient = setupAPIClient();
+            const { data } = await apiClient.get(`/notificationPainelAdmin`);
+
+            setNotifications(data.slice(0, 15));
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function notificationsViewd(id: string) {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateViewdNotification?notificationAdmin_id=${id}`);
+            findNotificationsAdmin();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function notificationsAllViewd() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateAllViewdNotification`);
+            findNotificationsAdmin();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function clearAllnotifications() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/clearAllNotificationsAdmin`);
+            findNotificationsAdmin();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
 
     return (
         <Container>
@@ -97,32 +148,64 @@ const MainHeader: React.FC = () => {
                 :
                 <DropDownContent>
                     <Title>Notificações</Title>
+                    <BlockButtonsNotification>
+                        <AllViewd
+                            onClick={notificationsAllViewd}
+                        >
+                            Marcar todas como lidas
+                        </AllViewd>
+                        <ClearNotifications
+                            onClick={clearAllnotifications}
+                        >
+                            Limpar todas notificações
+                        </ClearNotifications>
+                    </BlockButtonsNotification>
+
                     {notifications.length === 0 ?
                         <Avisos texto='Sem notificações ainda...' />
                         :
                         <>
-                            {notifications.slice(0, 20).map((item, index) => {
+                            {notifications.map((item, index) => {
                                 return (
-                                    <LinkNotification href={item.link}>
-                                        <BlockNotification key={index}>
-                                            <BoxIcons>
-                                                <FaCartPlus size={28} />
-                                            </BoxIcons>
-                                            <Block>
-                                                <Menssages
-                                                    dangerouslySetInnerHTML={{ __html: item.message }}
-                                                ></Menssages>
-                                                <ClockBlock>
-                                                    <FaRegClock size={20} />
-                                                    <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
-                                                </ClockBlock>
-                                            </Block>
-                                        </BlockNotification>
-                                    </LinkNotification>
+                                    <>
+                                        {item.block_bell === true ?
+                                            <LinkNotification
+                                                key={index}
+                                                href={item.link}
+                                                onClick={() => notificationsViewd(item.id)}
+                                            >
+                                                <BlockNotification style={{ background: item.viewed === true ? '#ff000052' : 'unset' }}>
+                                                    <BoxIcons>
+                                                        <FaCartPlus size={28} />
+                                                    </BoxIcons>
+                                                    <Block>
+                                                        {item.viewed === true ? <Viewed>VISUALIZADA</Viewed> : null}
+                                                        <Menssages
+                                                            dangerouslySetInnerHTML={{ __html: item.message }}
+                                                        ></Menssages>
+                                                        <ClockBlock>
+                                                            <FaRegClock size={20} />
+                                                            <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
+                                                        </ClockBlock>
+                                                    </Block>
+                                                </BlockNotification>
+                                            </LinkNotification>
+                                            :
+                                            null
+                                        }
+                                    </>
                                 )
                             })}
                         </>
                     }
+                    <BoxButtonAll>
+                        <ButtonAllNotifications
+                            href='/configuracoes/notificacoes'
+                        >
+                            <MdOutlineDashboard size={25} />
+                            VER TUDO
+                        </ButtonAllNotifications>
+                    </BoxButtonAll>
                 </DropDownContent>
             }
         </Container>

@@ -152,7 +152,7 @@ const Avaliacao: React.FC = () => {
 
                         <BlockDados>
                             <Perfil
-                                href={`/cliente/${slugCliente}/${customer_id}`}
+                                href={`/cliente/${customer_id}`}
                             >
                                 Ver Perfil do Cliente
                             </Perfil>

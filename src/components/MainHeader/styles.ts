@@ -60,7 +60,9 @@ export const NotificationBell = styled.div`
   }
 `;
 
-export const Welcome = styled.h3``;
+export const Welcome = styled.h3`
+  color: ${(props) => props.theme.colors.white};
+`;
 
 export const UserName = styled.a`
   text-decoration: none;
@@ -70,11 +72,11 @@ export const UserName = styled.a`
 export const Title = styled.h2`
   color: ${(props) => props?.theme?.colors?.black};
   margin-bottom: 25px;
-`
+`;
 
 export const LinkNotification = styled.a`
   color: inherit;
-`
+`;
 
 export const DropDownContent = styled.div`
   height: 58vh;
@@ -96,7 +98,7 @@ export const Block = styled.div`
   padding: 10px;
 `;
 
-export const BoxIcons = styled.div``
+export const BoxIcons = styled.div``;
 
 export const BlockNotification = styled.div`
   border: 1px solid ${(props) => props?.theme?.colors?.black};
@@ -111,11 +113,48 @@ export const BlockNotification = styled.div`
 
 export const Menssages = styled.span`
   padding-bottom: 12px;
+  color: ${(props) => props.theme.colors.black};
 `;
 
-export const DataNotification = styled.span``;
+export const DataNotification = styled.span`
+  color: ${(props) => props.theme.colors.black};
+`;
 
 export const ClockBlock = styled.div`
   display: flex;
   align-items: center;
-`
+`;
+
+export const Viewed = styled.strong`
+  color: ${(props) => props.theme.colors.warning};
+  font-style: italic;
+  padding-bottom: 7px;
+`;
+
+export const BlockButtonsNotification = styled.div`
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const AllViewd = styled.button`
+  background: transparent;
+`;
+
+export const ClearNotifications = styled.button`
+  background-color: ${(props) => props.theme.colors.warning};
+  color: ${(props) => props.theme.colors.white};
+  padding: 8px;
+`;
+
+export const BoxButtonAll = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const ButtonAllNotifications = styled.a`
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  background: transparent;
+`;

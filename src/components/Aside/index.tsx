@@ -299,6 +299,11 @@ const Aside: React.FC = () => {
                             <MdPlayArrow />
                             Configurações na loja
                         </SubMenuItemLink>
+
+                        <SubMenuItemLink href='/configuracoes/notificacoes' >
+                            <MdPlayArrow />
+                            Central de notificações
+                        </SubMenuItemLink>
                     </>
                     : null}
 
