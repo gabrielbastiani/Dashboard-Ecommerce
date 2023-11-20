@@ -22,6 +22,7 @@ const Loja: React.FC = () => {
 
     const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
     const [countDownShow, setCountDownShow] = useState(false);
+    const [configs, setConfigs] = useState(false);
 
     const [text_promotion, setText_promotion] = useState("");
     const [link_button, setLink_button] = useState("");
@@ -32,8 +33,16 @@ const Loja: React.FC = () => {
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
 
+    const [whatsApp, setWhatsApp] = useState("");
+    const [code_google_analytics, setCode_google_analytics] = useState("");
+    const [code_live_chat_tawkTo, setCode_live_chat_tawkTo] = useState("");
+
     const showCountDown = () => {
-        setCountDownShow(!countDownShow)
+        setCountDownShow(!countDownShow);
+    }
+
+    const showConfigs = () => {
+        setConfigs(!configs);
     }
 
     useEffect(() => {
@@ -82,7 +91,13 @@ const Loja: React.FC = () => {
             try {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+
                 setDatasConfigs(data || []);
+
+                setWhatsApp(data[0].number_whatsapp);
+                setCode_google_analytics(data[0].code_google_analytics);
+                setCode_live_chat_tawkTo(data[0].code_live_chat_tawkTo);
+
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
             }
@@ -119,6 +134,9 @@ const Loja: React.FC = () => {
             const apiClient = setupAPIClient();
             const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
             setDatasConfigs(data || []);
+            setWhatsApp(data[0].number_whatsapp);
+            setCode_google_analytics(data[0].code_google_analytics);
+            setCode_live_chat_tawkTo(data[0].code_live_chat_tawkTo);
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
         }
@@ -133,6 +151,22 @@ const Loja: React.FC = () => {
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
             toast.error("Erro ao atualizar o status.");
+        }
+    }
+
+    async function handleConfigs() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/configExtraStore`, {
+                number_whatsapp: whatsApp,
+                code_google_analytics: code_google_analytics,
+                code_live_chat_tawkTo: code_live_chat_tawkTo
+            });
+            toast.success("Configuração alterada com sucesso");
+            reloadsConfigs();
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error("Erro ao atualizar a configuração.");
         }
     }
 
@@ -180,6 +214,22 @@ const Loja: React.FC = () => {
                                 onClick={showCountDown}
                             >
                                 Cronômetro regressivo
+                            </Button>
+                        }
+                    </BlockDados>
+                    <br />
+                    <BlockDados>
+                        {configs ?
+                            <Button
+                                onClick={showConfigs}
+                            >
+                                Fechar
+                            </Button>
+                            :
+                            <Button
+                                onClick={showConfigs}
+                            >
+                                Configurações extras
                             </Button>
                         }
                     </BlockDados>
@@ -324,6 +374,60 @@ const Loja: React.FC = () => {
                                             value={minute}
                                             onChange={(e) => setMinute(e.target.value)}
                                             handleSubmit={updatePromotionDates}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+                        </Card>
+                        :
+                        null
+                    }
+                    <br />
+                    {configs ?
+                        <Card>
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Número de WhatsApp (OBS: Digite apenas os numeros incluindo o DDD)"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={whatsApp}
+                                            type="text"
+                                            placeholder={whatsApp}
+                                            value={whatsApp}
+                                            onChange={(e) => setWhatsApp(e.target.value)}
+                                            handleSubmit={handleConfigs}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Código do Google Analystics"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={code_google_analytics}
+                                            type="text"
+                                            placeholder={code_google_analytics}
+                                            value={code_google_analytics}
+                                            onChange={(e) => setCode_google_analytics(e.target.value)}
+                                            handleSubmit={handleConfigs}
+                                        />
+                                    }
+                                />
+                            </BlockDados>
+
+                            <BlockDados>
+                                <TextoDados
+                                    chave={"Código do Live Chat TAWK.TO"}
+                                    dados={
+                                        <InputUpdate
+                                            dado={code_live_chat_tawkTo}
+                                            type="text"
+                                            placeholder={code_live_chat_tawkTo}
+                                            value={code_live_chat_tawkTo}
+                                            onChange={(e) => setCode_live_chat_tawkTo(e.target.value)}
+                                            handleSubmit={handleConfigs}
                                         />
                                     }
                                 />
@@ -565,6 +669,19 @@ const Loja: React.FC = () => {
                                                 dado={item.count_down_timer}
                                                 handleSubmit={() => handleUpdateStatusComponent("count_down_timer")}
                                                 showElement={item.count_down_timer}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Componente chat whatsapp"}
+                                        dados={
+                                            <ButtonSelect
+                                                dado={item.chat_whatsapp}
+                                                handleSubmit={() => handleUpdateStatusComponent("chat_whatsapp")}
+                                                showElement={item.chat_whatsapp}
                                             />
                                         }
                                     />
