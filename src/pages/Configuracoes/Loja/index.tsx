@@ -387,7 +387,7 @@ const Loja: React.FC = () => {
                         <Card>
                             <BlockDados>
                                 <TextoDados
-                                    chave={"Número de WhatsApp (OBS: Digite apenas os numeros incluindo o DDD)"}
+                                    chave={"Número de WhatsApp (OBS: Digite apenas os numeros incluindo o DDD - EX: 00000000000)"}
                                     dados={
                                         <InputUpdate
                                             dado={whatsApp}
