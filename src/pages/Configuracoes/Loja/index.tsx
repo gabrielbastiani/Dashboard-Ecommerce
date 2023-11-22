@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Aside from "../../../components/Aside";
 import { Card } from "../../../components/Content/styles";
 import { IMaskInput } from "react-imask";
 import MainHeader from "../../../components/MainHeader";
 import Titulos from "../../../components/Titulos";
 import { setupAPIClient } from "../../../services/api";
-import { Container } from "../../Categorias/styles";
+import { Block, Container, Etiqueta } from "../../Categorias/styles";
 import { Grid } from "../../Dashboard/styles";
 import { BlockDados } from "../../Categorias/Categoria/styles";
 import { TextoDados } from "../../../components/TextoDados";
@@ -16,6 +16,7 @@ import { Button } from "../../../components/ui/Button";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import CountdownTimer from "../../../components/CountdownTimer";
 import Warnings from "../../../components/Warnings";
+import { Editor } from "@monaco-editor/react";
 
 
 const Loja: React.FC = () => {
@@ -35,7 +36,7 @@ const Loja: React.FC = () => {
 
     const [whatsApp, setWhatsApp] = useState("");
     const [code_google_analytics, setCode_google_analytics] = useState("");
-    const [code_live_chat_tawkTo, setCode_live_chat_tawkTo] = useState("");
+    const [code_live_chat_tawkTo, setCode_live_chat_tawkTo] = useState<string>("");
 
     const showCountDown = () => {
         setCountDownShow(!countDownShow);
@@ -43,6 +44,10 @@ const Loja: React.FC = () => {
 
     const showConfigs = () => {
         setConfigs(!configs);
+    }
+
+    function handleValueEditor(value: SetStateAction<string>, event: any) {
+        setCode_live_chat_tawkTo(value)
     }
 
     useEffect(() => {
@@ -417,21 +422,27 @@ const Loja: React.FC = () => {
                                 />
                             </BlockDados>
 
-                            <BlockDados>
-                                <TextoDados
-                                    chave={"Código do Live Chat TAWK.TO"}
-                                    dados={
-                                        <InputUpdate
-                                            dado={code_live_chat_tawkTo}
-                                            type="text"
-                                            placeholder={code_live_chat_tawkTo}
-                                            value={code_live_chat_tawkTo}
-                                            onChange={(e) => setCode_live_chat_tawkTo(e.target.value)}
-                                            handleSubmit={handleConfigs}
-                                        />
-                                    }
+                            <Block
+                                style={{ width: '100%' }}
+                            >
+                                <Etiqueta>Código do Live Chat TAWK.TO</Etiqueta>
+                                <br />
+                                <Button
+                                    onClick={handleConfigs}
+                                >
+                                    Atualizar
+                                </Button>
+                                <br />
+                                <Editor
+                                    height="30vh"
+                                    width="100%"
+                                    theme="vs-dark"
+                                    defaultLanguage="html"
+                                    value={code_live_chat_tawkTo}/* @ts-ignore */
+                                    onChange={handleValueEditor}
                                 />
-                            </BlockDados>
+                            </Block>
+
                         </Card>
                         :
                         null
