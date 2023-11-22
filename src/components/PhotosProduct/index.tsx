@@ -16,7 +16,6 @@ import {
 } from './styles';
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import Modal from 'react-modal';
 import { ModalDeletePhotoProduct } from '../popups/ModalDeletePhotoProduct/index';

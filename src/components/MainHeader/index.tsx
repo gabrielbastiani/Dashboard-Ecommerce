@@ -41,6 +41,8 @@ const MainHeader: React.FC = () => {
 
     const { admin } = useContext(AuthContext);
 
+    console.log(admin)
+
     const { toggleTheme, theme } = useTheme();
     const [notifications, setNotifications] = useState<any[]>([]);
     const [openNotification, setOpenNotification] = useState(true);

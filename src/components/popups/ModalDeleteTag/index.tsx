@@ -3,7 +3,6 @@ import { FiX } from 'react-icons/fi';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 import { DeleteTags } from '../../TagsProduct';
 
@@ -16,8 +15,6 @@ interface TagDelete {
 }
 
 export function ModalDeleteTag({ isOpen, onRequestClose, reloadTags, relation }: TagDelete) {
-
-    const navigate = useNavigate();
 
     const customStyles = {
         content: {

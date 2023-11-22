@@ -4,7 +4,6 @@ import { DeletePhotoProduct } from '../../PhotosProduct';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { ButtonClose, ContainerContent, ContainerButton, TextModal } from './styles';
 
 
@@ -16,8 +15,6 @@ interface ModalPhotoDelete {
 }
 
 export function ModalDeletePhotoProduct({ isOpen, onRequestClose, reloadPhotos, photos }: ModalPhotoDelete) {
-
-    const navigate = useNavigate();
 
     const customStyles = {
         content: {

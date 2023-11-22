@@ -33,7 +33,6 @@ const Avaliacao: React.FC = () => {
 
     const [customer_id, setCustomer_id] = useState('');
     const [clientName, setClientName] = useState('');
-    const [slugCliente, setSlugCliente] = useState('');
     const [email, setEmail] = useState("");
     const [description, setDescription] = useState('');
     const [pontuacao, setPontuacao] = useState('');
@@ -55,7 +54,6 @@ const Avaliacao: React.FC = () => {
 
                 setCustomer_id(response.data.customer.id || "");
                 setClientName(response.data.customer.name || "");
-                setSlugCliente(response.data.customer.slug || "");
                 setEmail(response.data.customer.email || "");
                 setPontuacao(response.data.point || "");
                 setStatus(response.data.status || "");

@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
@@ -39,8 +38,6 @@ interface CategoriesRequest {
 }
 
 const CategoriesProduct = ({ product_id }: CategoriesRequest) => {
-
-    const navigate = useNavigate();
 
     const { admin } = useContext(AuthContext);
     const [store_id] = useState(admin.store_id);
