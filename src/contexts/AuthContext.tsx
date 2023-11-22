@@ -91,8 +91,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             toast.success('Logado com sucesso!');
 
-            return redirect('/');
-
         } catch (err) {
             toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
             /* @ts-ignore */
@@ -111,7 +109,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
-
+    console.log(admin)
 
     return (/* @ts-ignore */
         <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut }}>
