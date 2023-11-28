@@ -55,14 +55,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 })
 
             })
-                .catch(() => {
-                    signOut();
-                })
 
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cookies]);
+    }, []);
 
     async function signInAdmin({ email, password }: SignInProps) {
         try {
@@ -109,7 +106,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
-    console.log(admin)
+    
 
     return (/* @ts-ignore */
         <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut }}>
