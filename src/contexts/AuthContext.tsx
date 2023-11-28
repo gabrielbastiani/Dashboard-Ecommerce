@@ -54,7 +54,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     store_id
                 })
 
-            })
+            });
 
         }
 
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
-    
+
 
     return (/* @ts-ignore */
         <AuthContext.Provider value={{ admin, isAuthenticated, signInAdmin, signOut }}>
