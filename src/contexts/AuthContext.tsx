@@ -9,7 +9,6 @@ type AuthContextData = {
     isAuthenticated: boolean;
     signInAdmin: (credentials: SignInProps) => Promise<void>;
     signOut: () => void;
-    refreshNotifications: () => void;
 }
 
 type AdminProps = {
