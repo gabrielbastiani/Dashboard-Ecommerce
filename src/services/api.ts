@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 
@@ -26,7 +26,7 @@ export function setupAPIClient() {
 
   api.interceptors.response.use(
     (response) => response,
-    (error: AxiosError) => {
+    (error) => {
       if (error.response?.status === 401) {
         signOut();
         window.location.href = '/loginAdmin';
