@@ -48,8 +48,6 @@ const MainHeader: React.FC = () => {
     const [newFalse, setNewFalse] = useState(Number);
     const [newEmployee, setNewEmployee] = useState(Number);
 
-    console.log(newEmployee)
-
     const handleNotificationOpen = () => {
         setOpenNotification(!openNotification);
     }
