@@ -6,6 +6,7 @@ function signOut() {
   try {
     let remove_cookie_user = new Cookies();
     remove_cookie_user.remove('@storebuilder.token', { path: '/' });
+    remove_cookie_user.remove('@idAdmin', { path: '/' });
     toast.success('Usuario deslogado com sucesso!');
   } catch (error) {
     toast.error("OPS... Erro ao deslogar");

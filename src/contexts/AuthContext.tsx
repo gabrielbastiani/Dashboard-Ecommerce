@@ -33,32 +33,10 @@ export const AuthContext = createContext({} as AuthContextData);
 export function AuthProvider({ children }: AuthProviderProps) {
 
     const [cookies, setCookie, removeCookie] = useCookies(['@storebuilder.token']);
+    const [cookiesId, setCookieId, removeCookieId] = useCookies(['@idAdmin']);
 
     const [admin, setAdmin] = useState<AdminProps>();
     const isAuthenticated = !!admin;
-
-    useEffect(() => {
-
-        let token = cookies['@storebuilder.token'];
-
-        if (token) {
-            api.get('/admin/me').then(response => {
-                const { id, name, email, role, store_id } = response.data;
-
-                setAdmin({
-                    id,
-                    name,
-                    email,
-                    role,
-                    store_id
-                })
-
-            });
-
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     async function signInAdmin({ email, password }: SignInProps) {
         try {
@@ -67,19 +45,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 password
             });
 
-            const { id, name, store_id, role, token } = response.data;
+            const { id, token } = response.data;
 
             setCookie('@storebuilder.token', token, {
-                maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
-                path: "/" // Quais caminhos terao acesso ao cookie
+                maxAge: 60 * 60 * 24 * 30,
+                path: "/"
             });
 
-            setAdmin({
-                id,
-                name,
-                email,
-                role,
-                store_id
+            setCookieId('@idAdmin', id, {
+                maxAge: 60 * 60 * 24 * 30,
+                path: "/"
             });
 
             //Passar para proximas requisiçoes o nosso token
@@ -95,9 +70,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
+    useEffect(() => {
+
+        let token = cookies['@storebuilder.token'];
+        let adminid = cookiesId['@idAdmin'];
+
+        if (token) {
+
+            api.get(`/admin/me?admin_id=${adminid}`).then(response => {
+
+                const { id, name, email, role, store_id } = response.data;
+
+                setAdmin({
+                    id,
+                    name,
+                    email,
+                    role,
+                    store_id
+                })
+
+            });
+
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cookiesId]);
+
     function signOut() {
         try {
             removeCookie('@storebuilder.token', { path: '/' });
+            removeCookieId('@idAdmin', { path: '/' });
             toast.success('Usuario deslogado com sucesso!');
             return redirect('/loginAdmin');
         } catch (error) {
