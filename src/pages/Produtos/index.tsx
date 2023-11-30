@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
@@ -28,10 +28,12 @@ import Select from "../../components/ui/Select";
 import { Avisos } from "../../components/Avisos";
 import { ImgRedes } from "../Configuracoes/styles";
 import Warnings from "../../components/Warnings";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 const Produtos: React.FC = () => {
 
+    const { admin } = useContext(AuthContext);
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
 
@@ -122,7 +124,7 @@ const Produtos: React.FC = () => {
             "Produto": item.name,
             "Qtd. de Categorias": item.productcategories ? String(item.productcategories.length) : "Sem categoria",
             "Status": item.status,
-            "botaoDetalhes": `/produto/${item.slug}/${item.id}`
+            "botaoDetalhes": admin.role === "EMPLOYEE" ? null : `/produto/${item.slug}/${item.id}`
         });
     });
 
@@ -168,12 +170,16 @@ const Produtos: React.FC = () => {
                         </SectionTop>
                     }
 
-                    <AddButton>
-                        <AiOutlinePlusCircle />
-                        <Link to="/produto/novo" >
-                            <SpanText>Novo Produto</SpanText>
-                        </Link>
-                    </AddButton>
+                    {admin.role === "EMPLOYEE" ?
+                        null
+                        :
+                        <AddButton>
+                            <AiOutlinePlusCircle />
+                            <Link to="/produto/novo" >
+                                <SpanText>Novo Produto</SpanText>
+                            </Link>
+                        </AddButton>
+                    }
 
                     {dados.length < 1 ? (
                         <>

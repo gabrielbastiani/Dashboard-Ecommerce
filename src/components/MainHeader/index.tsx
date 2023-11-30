@@ -139,7 +139,7 @@ const MainHeader: React.FC = () => {
         }
     }
 
-    
+    console.log(notifications)
 
 
     return (
@@ -163,7 +163,7 @@ const MainHeader: React.FC = () => {
                 <NotificationBell onClick={handleNotificationOpen}>
                     {newFalse === 0 ?
                         <FaRegBell size={20} />
-                    :
+                        :
                         <>
                             <AmountItens>
                                 <span>{newFalse}</span>
@@ -177,67 +177,118 @@ const MainHeader: React.FC = () => {
             {openNotification ?
                 null
                 :
-                <DropDownContent>
-                    <Title>Notificações</Title>
-                    <BlockButtonsNotification>
-                        <AllViewd
-                            onClick={notificationsAllViewd}
-                        >
-                            Marcar todas como lidas
-                        </AllViewd>
-                        <ClearNotifications
-                            onClick={clearAllnotifications}
-                        >
-                            Limpar todas notificações
-                        </ClearNotifications>
-                    </BlockButtonsNotification>
+                <>
+                    {admin.role === "EMPLOYEE" ?
+                        <>
+                            <DropDownContent>
 
-                    {notifications.length === 0 ?
-                        <Avisos texto='Sem notificações ainda...' />
+                                <Title>Notificações</Title>
+
+                                {notifications.length === 0 ?
+                                    <Avisos texto='Sem notificações ainda...' />
+                                    :
+                                    <>
+                                        {notifications.map((item, index) => {
+                                            return (
+                                                <>
+                                                    {item.block_bell === true && item.user === "EMPLOYEE" ?
+                                                        <LinkNotification
+                                                            key={index}
+                                                            href={item.link}
+                                                            onClick={() => notificationsViewd(item.id)}
+                                                        >
+                                                            <BlockNotification style={{ background: item.viewed === true ? '#ff000052' : 'unset' }}>
+                                                                <BoxIcons>
+                                                                    <FaCartPlus size={28} />
+                                                                </BoxIcons>
+                                                                <Block>
+                                                                    {item.viewed === true ? <Viewed>VISUALIZADA</Viewed> : null}
+                                                                    <Menssages
+                                                                        dangerouslySetInnerHTML={{ __html: item.message }}
+                                                                    ></Menssages>
+                                                                    <ClockBlock>
+                                                                        <FaRegClock size={20} />
+                                                                        <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
+                                                                    </ClockBlock>
+                                                                </Block>
+                                                            </BlockNotification>
+                                                        </LinkNotification>
+                                                        :
+                                                        null
+                                                    }
+                                                </>
+                                            )
+                                        })}
+                                    </>
+                                }
+                            </DropDownContent>
+                        </>
                         :
                         <>
-                            {notifications.map((item, index) => {
-                                return (
+                            <DropDownContent>
+                                <Title>Notificações</Title>
+                                <BlockButtonsNotification>
+                                    <AllViewd
+                                        onClick={notificationsAllViewd}
+                                    >
+                                        Marcar todas como lidas
+                                    </AllViewd>
+                                    <ClearNotifications
+                                        onClick={clearAllnotifications}
+                                    >
+                                        Limpar todas notificações
+                                    </ClearNotifications>
+                                </BlockButtonsNotification>
+
+                                {notifications.length === 0 ?
+                                    <Avisos texto='Sem notificações ainda...' />
+                                    :
                                     <>
-                                        {item.block_bell === true ?
-                                            <LinkNotification
-                                                key={index}
-                                                href={item.link}
-                                                onClick={() => notificationsViewd(item.id)}
-                                            >
-                                                <BlockNotification style={{ background: item.viewed === true ? '#ff000052' : 'unset' }}>
-                                                    <BoxIcons>
-                                                        <FaCartPlus size={28} />
-                                                    </BoxIcons>
-                                                    <Block>
-                                                        {item.viewed === true ? <Viewed>VISUALIZADA</Viewed> : null}
-                                                        <Menssages
-                                                            dangerouslySetInnerHTML={{ __html: item.message }}
-                                                        ></Menssages>
-                                                        <ClockBlock>
-                                                            <FaRegClock size={20} />
-                                                            <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
-                                                        </ClockBlock>
-                                                    </Block>
-                                                </BlockNotification>
-                                            </LinkNotification>
-                                            :
-                                            null
-                                        }
+                                        {notifications.map((item, index) => {
+                                            return (
+                                                <>
+                                                    {item.block_bell === true ?
+                                                        <LinkNotification
+                                                            key={index}
+                                                            href={item.link}
+                                                            onClick={() => notificationsViewd(item.id)}
+                                                        >
+                                                            <BlockNotification style={{ background: item.viewed === true ? '#ff000052' : 'unset' }}>
+                                                                <BoxIcons>
+                                                                    <FaCartPlus size={28} />
+                                                                </BoxIcons>
+                                                                <Block>
+                                                                    {item.viewed === true ? <Viewed>VISUALIZADA</Viewed> : null}
+                                                                    <Menssages
+                                                                        dangerouslySetInnerHTML={{ __html: item.message }}
+                                                                    ></Menssages>
+                                                                    <ClockBlock>
+                                                                        <FaRegClock size={20} />
+                                                                        <DataNotification>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DataNotification>
+                                                                    </ClockBlock>
+                                                                </Block>
+                                                            </BlockNotification>
+                                                        </LinkNotification>
+                                                        :
+                                                        null
+                                                    }
+                                                </>
+                                            )
+                                        })}
                                     </>
-                                )
-                            })}
+                                }
+                                <BoxButtonAll>
+                                    <ButtonAllNotifications
+                                        href='/configuracoes/notificacoes'
+                                    >
+                                        <MdOutlineDashboard size={25} />
+                                        VER TUDO
+                                    </ButtonAllNotifications>
+                                </BoxButtonAll>
+                            </DropDownContent>
                         </>
                     }
-                    <BoxButtonAll>
-                        <ButtonAllNotifications
-                            href='/configuracoes/notificacoes'
-                        >
-                            <MdOutlineDashboard size={25} />
-                            VER TUDO
-                        </ButtonAllNotifications>
-                    </BoxButtonAll>
-                </DropDownContent>
+                </>
             }
         </Container>
     );

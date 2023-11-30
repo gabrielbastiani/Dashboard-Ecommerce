@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { Grid } from "../Dashboard/styles";
 import MainHeader from "../../components/MainHeader";
 import Aside from "../../components/Aside";
@@ -24,10 +24,12 @@ import moment from 'moment';
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Warnings from "../../components/Warnings";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 const Coupoms: React.FC = () => {
 
+    const { admin } = useContext(AuthContext);
     const [coupoms, setCoupoms] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
@@ -75,7 +77,7 @@ const Coupoms: React.FC = () => {
             "Data Inicio": item.startDate ? moment(item.startDate).format('DD/MM/YYYY - HH:mm') : "Sem data",
             "Data Fim": item.startDate ? moment(item.endDate).format('DD/MM/YYYY - HH:mm') : "Sem data",
             "Ativado?": item.active,
-            "botaoDetalhes": `/cupom/${item.id}`
+            "botaoDetalhes": admin.role === "EMPLOYEE" ? null : `/cupom/${item.id}`
         });
     });
 
@@ -93,12 +95,16 @@ const Coupoms: React.FC = () => {
                         />
                     </BlockTop>
 
+                    {admin.role === "EMPLOYEE" ?
+                        null
+                    :
                     <AddButton>
-                        <AiOutlinePlusCircle />
-                        <Link to="/cupom/novo" >
-                            <SpanText>Novo Cupom</SpanText>
-                        </Link>
-                    </AddButton>
+                    <AiOutlinePlusCircle />
+                    <Link to="/cupom/novo" >
+                        <SpanText>Novo Cupom</SpanText>
+                    </Link>
+                </AddButton>
+                    }
 
                     {dados.length < 1 ? (
                         <>

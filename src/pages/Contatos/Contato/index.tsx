@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { ModalDeleteContato } from "../../../components/popups/ModalDeleteContato";
 import { setupAPIClient } from '../../../services/api';
@@ -18,10 +18,12 @@ import { SectionDate } from '../../Configuracoes/styles';
 import { Mensagem, LabelMensagem, SendEmail } from './styles';
 import { RiMailSendLine } from 'react-icons/ri';
 import Warnings from '../../../components/Warnings';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 
 const Contato: React.FC = () => {
 
+    const { admin } = useContext(AuthContext);
     let { contact_id } = useParams();
 
     const [name, setName] = useState('');
@@ -81,14 +83,19 @@ const Contato: React.FC = () => {
                                 titulo={"Contato - " + name}
                             />
 
-                            <Button
-                                type="submit"
-                                style={{ backgroundColor: '#FB451E' }}
-                                /* @ts-ignore */
-                                onClick={() => handleOpenModalDelete(contact_id)}
-                            >
-                                Remover
-                            </Button>
+                            {admin.role === "EMPLOYEE" ?
+                                null
+                                :
+                                <Button
+                                    type="submit"
+                                    style={{ backgroundColor: '#FB451E' }}
+                                    /* @ts-ignore */
+                                    onClick={() => handleOpenModalDelete(contact_id)}
+                                >
+                                    Remover
+                                </Button>
+                            }
+
                         </BlockTop>
                         <br />
                         <br />

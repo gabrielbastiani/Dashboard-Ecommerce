@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
@@ -26,12 +26,14 @@ import { Avisos } from "../../../components/Avisos";
 import Select from "../../../components/ui/Select";
 import moment from "moment";
 import Warnings from "../../../components/Warnings";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 
 
 const Cliente: React.FC = () => {
 
     let { customer_id } = useParams();
+    const { admin } = useContext(AuthContext);
 
     const [nameCompletes, setNameCompletes] = useState('');
     const [cpfs, setCpfs] = useState('');
@@ -295,12 +297,17 @@ const Cliente: React.FC = () => {
                                     titulo={`Cliente = ${nameCompletes}`}
                                 />
 
-                                <Button
-                                    style={{ backgroundColor: '#FB451E' }}
-                                    onClick={handleOpenModalDelete}
-                                >
-                                    Deletar
-                                </Button>
+                                {admin.role === "EMPLOYEE" ?
+                                    null
+                                    :
+                                    <Button
+                                        style={{ backgroundColor: '#FB451E' }}
+                                        onClick={handleOpenModalDelete}
+                                    >
+                                        Deletar
+                                    </Button>
+                                }
+
                             </BlockTop>
 
                             <GridDate>

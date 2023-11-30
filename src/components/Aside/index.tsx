@@ -103,6 +103,8 @@ const Aside: React.FC = () => {
         }, 2500);
     }
 
+    
+
     return (
         <Container menuIsOpen={toggleMenuIsOpened}>
             <Header>
@@ -139,15 +141,21 @@ const Aside: React.FC = () => {
                             Pedidos
                         </SubMenuItemLink>
 
-                        <SubMenuItemLink href="/pedidos/emailStausOrder" >
-                            <MdPlayArrow />
-                            E-mail status pedidos
-                        </SubMenuItemLink>
+                        {admin.role === "EMPLOYEE" ?
+                            null
+                            :
+                            <>
+                                <SubMenuItemLink href="/pedidos/emailStausOrder" >
+                                    <MdPlayArrow />
+                                    E-mail status pedidos
+                                </SubMenuItemLink>
 
-                        <SubMenuItemLink href="/pedidos/emailFretes" >
-                            <MdPlayArrow />
-                            E-mail fretes pedidos
-                        </SubMenuItemLink>
+                                <SubMenuItemLink href="/pedidos/emailFretes" >
+                                    <MdPlayArrow />
+                                    E-mail fretes pedidos
+                                </SubMenuItemLink>
+                            </>
+                        }
                     </>
                 ) : null}
 
@@ -170,24 +178,30 @@ const Aside: React.FC = () => {
                     </>
                 ) : null}
 
-                <MenuItemLink onClick={handleSubMenu2} style={{ cursor: 'pointer' }} >
-                    <MdOutlineCategory />
-                    Categorias
-                </MenuItemLink>
-
-                {submenu2 ? (
+                {admin.role === "EMPLOYEE" ?
+                    null
+                    :
                     <>
-                        <SubMenuItemLink href="/categorias" >
-                            <MdPlayArrow />
+                        <MenuItemLink onClick={handleSubMenu2} style={{ cursor: 'pointer' }} >
+                            <MdOutlineCategory />
                             Categorias
-                        </SubMenuItemLink>
+                        </MenuItemLink>
 
-                        <SubMenuItemLink href='/menus' >
-                            <MdPlayArrow />
-                            Menus de categorias
-                        </SubMenuItemLink>
+                        {submenu2 ? (
+                            <>
+                                <SubMenuItemLink href="/categorias" >
+                                    <MdPlayArrow />
+                                    Categorias
+                                </SubMenuItemLink>
+
+                                <SubMenuItemLink href='/menus' >
+                                    <MdPlayArrow />
+                                    Menus de categorias
+                                </SubMenuItemLink>
+                            </>
+                        ) : null}
                     </>
-                ) : null}
+                }
 
                 <MenuItemLink onClick={handleSubMenu1} style={{ cursor: 'pointer' }} >
                     <MdOutlineProductionQuantityLimits />
@@ -196,19 +210,25 @@ const Aside: React.FC = () => {
 
                 {submenu1 ? (
                     <>
+                        {admin.role === "EMPLOYEE" ?
+                            null
+                            :
+                            <>
+                                <SubMenuItemLink href='/atributos' >
+                                    <MdPlayArrow />
+                                    Atributos
+                                </SubMenuItemLink>
+
+                                <SubMenuItemLink href="/compreJunto" >
+                                    <MdPlayArrow />
+                                    Compre junto
+                                </SubMenuItemLink>
+                            </>
+                        }
+
                         <SubMenuItemLink href="/produtos" >
                             <MdPlayArrow />
                             Produtos
-                        </SubMenuItemLink>
-
-                        <SubMenuItemLink href='/atributos' >
-                            <MdPlayArrow />
-                            Atributos
-                        </SubMenuItemLink>
-
-                        <SubMenuItemLink href="/compreJunto" >
-                            <MdPlayArrow />
-                            Compre junto
                         </SubMenuItemLink>
 
                         <SubMenuItemLink href='/avaliacoes' >
@@ -236,22 +256,32 @@ const Aside: React.FC = () => {
                             Métricas
                         </SubMenuItemLink>
 
-                        <SubMenuItemLink href="/carrinho/emails" >
-                            <MdPlayArrow />
-                            Templates e-mails
-                        </SubMenuItemLink>
+                        {admin.role === "EMPLOYEE" ?
+                            null
+                            :
+                            <>
+                                <SubMenuItemLink href="/carrinho/emails" >
+                                    <MdPlayArrow />
+                                    Templates e-mails
+                                </SubMenuItemLink>
 
-                        <SubMenuItemLink href="/carrinho/configuracoes" >
-                            <MdPlayArrow />
-                            Configurações
-                        </SubMenuItemLink>
+                                <SubMenuItemLink href="/carrinho/configuracoes" >
+                                    <MdPlayArrow />
+                                    Configurações
+                                </SubMenuItemLink>
+                            </>
+                        }
                     </>
                 ) : null}
 
-                <MenuItemLink href='/filterGrupos' >
-                    <FaFilter />
-                    Filtros
-                </MenuItemLink>
+                {admin.role === "EMPLOYEE" ?
+                    null
+                    :
+                    <MenuItemLink href='/filterGrupos' >
+                        <FaFilter />
+                        Filtros
+                    </MenuItemLink>
+                }
 
                 <MenuItemLink href='/banners'>
                     <BsImages />
@@ -268,44 +298,50 @@ const Aside: React.FC = () => {
                     Contatos
                 </MenuItemLink>
 
-                <MenuItemLink onClick={handleSubMenu} style={{ cursor: 'pointer' }} >
-                    <MdSettingsSuggest />
-                    Configurações
-                </MenuItemLink>
-
-                {submenu ?
+                {admin.role === "EMPLOYEE" ?
+                    null
+                    :
                     <>
-                        <SubMenuItemLink href='/configuracoes' >
-                            <MdPlayArrow />
-                            Dados da loja
-                        </SubMenuItemLink>
+                        <MenuItemLink onClick={handleSubMenu} style={{ cursor: 'pointer' }} >
+                            <MdSettingsSuggest />
+                            Configurações
+                        </MenuItemLink>
 
-                        <SubMenuItemLink href='/textosInstitucionais' >
-                            <MdPlayArrow />
-                            Textos institucionais
-                        </SubMenuItemLink>
+                        {submenu ?
+                            <>
+                                <SubMenuItemLink href='/configuracoes' >
+                                    <MdPlayArrow />
+                                    Dados da loja
+                                </SubMenuItemLink>
 
-                        <SubMenuItemLink href='/imagensInstitucionais' >
-                            <MdPlayArrow />
-                            Imagens institucionais
-                        </SubMenuItemLink>
+                                <SubMenuItemLink href='/textosInstitucionais' >
+                                    <MdPlayArrow />
+                                    Textos institucionais
+                                </SubMenuItemLink>
 
-                        <SubMenuItemLink href='/configuracoes/emailstransacionais' >
-                            <MdPlayArrow />
-                            E-mails transacionais
-                        </SubMenuItemLink>
+                                <SubMenuItemLink href='/imagensInstitucionais' >
+                                    <MdPlayArrow />
+                                    Imagens institucionais
+                                </SubMenuItemLink>
 
-                        <SubMenuItemLink href='/configuracoes/loja' >
-                            <MdPlayArrow />
-                            Configurações na loja
-                        </SubMenuItemLink>
+                                <SubMenuItemLink href='/configuracoes/emailstransacionais' >
+                                    <MdPlayArrow />
+                                    E-mails transacionais
+                                </SubMenuItemLink>
 
-                        <SubMenuItemLink href='/configuracoes/notificacoes' >
-                            <MdPlayArrow />
-                            Central de notificações
-                        </SubMenuItemLink>
+                                <SubMenuItemLink href='/configuracoes/loja' >
+                                    <MdPlayArrow />
+                                    Configurações na loja
+                                </SubMenuItemLink>
+
+                                <SubMenuItemLink href='/configuracoes/notificacoes' >
+                                    <MdPlayArrow />
+                                    Central de notificações
+                                </SubMenuItemLink>
+                            </>
+                            : null}
                     </>
-                    : null}
+                }
 
                 {admin.role === "ADMIN" ? (
                     <>
