@@ -46,6 +46,9 @@ const MainHeader: React.FC = () => {
     const [openNotification, setOpenNotification] = useState(true);
     const [viewd, setViewd] = useState<any[]>([]);
     const [newFalse, setNewFalse] = useState(Number);
+    const [newEmployee, setNewEmployee] = useState(Number);
+
+    console.log(newEmployee)
 
     const handleNotificationOpen = () => {
         setOpenNotification(!openNotification);
@@ -70,6 +73,15 @@ const MainHeader: React.FC = () => {
             setNewFalse(falseValues.length);
         }
         loadNumberNotifications();
+    }, [viewd]);
+
+    useEffect(() => {
+        function loadNumberNotificationsEmployee() {
+            const booleanArray = viewd.map(fal => fal);
+            const falseValues = booleanArray.filter(value => value.viewed === false && value.user === "EMPLOYEE");
+            setNewEmployee(falseValues.length);
+        }
+        loadNumberNotificationsEmployee();
     }, [viewd]);
 
     function loadNumberNotifications() {
@@ -139,7 +151,7 @@ const MainHeader: React.FC = () => {
         }
     }
 
-    console.log(notifications)
+
 
 
     return (
@@ -160,18 +172,34 @@ const MainHeader: React.FC = () => {
                     <UserName href='/perfil'>{admin?.name}</UserName>
                 </BoxProfile>
 
-                <NotificationBell onClick={handleNotificationOpen}>
-                    {newFalse === 0 ?
-                        <FaRegBell size={20} />
-                        :
-                        <>
-                            <AmountItens>
-                                <span>{newFalse}</span>
-                            </AmountItens>
-                            <FaBell size={20} />
-                        </>
-                    }
-                </NotificationBell>
+                {admin.role === "EMPLOYEE" ?
+                    <NotificationBell onClick={handleNotificationOpen}>
+                        {newEmployee === 0 ?
+                            <FaRegBell size={20} />
+                            :
+                            <>
+                                <AmountItens>
+                                    <span>{newEmployee}</span>
+                                </AmountItens>
+                                <FaBell size={20} />
+                            </>
+                        }
+                    </NotificationBell>
+                    :
+                    <NotificationBell onClick={handleNotificationOpen}>
+                        {newFalse === 0 ?
+                            <FaRegBell size={20} />
+                            :
+                            <>
+                                <AmountItens>
+                                    <span>{newFalse}</span>
+                                </AmountItens>
+                                <FaBell size={20} />
+                            </>
+                        }
+                    </NotificationBell>
+                }
+
             </Profile>
 
             {openNotification ?

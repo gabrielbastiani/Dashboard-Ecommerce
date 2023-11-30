@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { setupAPIClient } from "../../services/api";
 import moment from "moment";
 import { Grid } from "../Dashboard/styles";
@@ -25,10 +25,12 @@ import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
 import { BlockExport, ButtonExit } from "../Newsletters/styles";
 import Warnings from "../../components/Warnings";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 const Pedidos: React.FC = () => {
 
+    const { admin } = useContext(AuthContext);
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
 
@@ -155,34 +157,40 @@ const Pedidos: React.FC = () => {
                             />
                         }
 
-                        {dados.length < 1 ? (
+                        {admin.role === "EMPLOYEE" ?
                             null
-                        ) :
+                            :
                             <>
-                                {showElement ?
-                                    <BlockExport>
-                                        <Button
-                                            type="submit"
-                                            /* @ts-ignore */
-                                            loading={loading}
-                                            onClick={handleExportOrdersCustomers}
-                                        >
-                                            Exportar arquivo para o seu email
-                                        </Button>
-                                        <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
-                                    </BlockExport>
-                                    :
-                                    <BlockExport>
-                                        <Button
-                                            style={{ backgroundColor: 'green' }}
-                                            type="submit"
-                                            /* @ts-ignore */
-                                            loading={loading}
-                                            onClick={handleExportorders}
-                                        >
-                                            Gerar arquivo para exportar clientes
-                                        </Button>
-                                    </BlockExport>
+                                {dados.length < 1 ? (
+                                    null
+                                ) :
+                                    <>
+                                        {showElement ?
+                                            <BlockExport>
+                                                <Button
+                                                    type="submit"
+                                                    /* @ts-ignore */
+                                                    loading={loading}
+                                                    onClick={handleExportOrdersCustomers}
+                                                >
+                                                    Exportar arquivo para o seu email
+                                                </Button>
+                                                <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
+                                            </BlockExport>
+                                            :
+                                            <BlockExport>
+                                                <Button
+                                                    style={{ backgroundColor: 'green' }}
+                                                    type="submit"
+                                                    /* @ts-ignore */
+                                                    loading={loading}
+                                                    onClick={handleExportorders}
+                                                >
+                                                    Gerar arquivo para exportar pedidos
+                                                </Button>
+                                            </BlockExport>
+                                        }
+                                    </>
                                 }
                             </>
                         }

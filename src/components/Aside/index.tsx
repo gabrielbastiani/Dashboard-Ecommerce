@@ -103,7 +103,7 @@ const Aside: React.FC = () => {
         }, 2500);
     }
 
-    
+
 
     return (
         <Container menuIsOpen={toggleMenuIsOpened}>
@@ -166,10 +166,14 @@ const Aside: React.FC = () => {
 
                 {submenu3 ? (
                     <>
-                        <SubMenuItemLink href="/clientes" >
-                            <MdPlayArrow />
-                            Clientes
-                        </SubMenuItemLink>
+                        {admin.role === "EMPLOYEE" ?
+                            null
+                            :
+                            <SubMenuItemLink href="/clientes" >
+                                <MdPlayArrow />
+                                Clientes
+                            </SubMenuItemLink>
+                        }
 
                         <SubMenuItemLink href="/contrapropostas" >
                             <MdPlayArrow />

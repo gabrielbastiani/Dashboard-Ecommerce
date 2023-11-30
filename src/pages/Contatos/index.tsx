@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { setupAPIClient } from "../../services/api";
 import moment from "moment";
 import { Grid } from "../Dashboard/styles";
@@ -25,9 +25,12 @@ import { BlockExport, ButtonExit } from './styles';
 import { toast } from "react-toastify";
 import { FaTimesCircle } from "react-icons/fa";
 import Warnings from "../../components/Warnings";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 const Contatos: React.FC = () => {
+
+    const { admin } = useContext(AuthContext);
 
     const [initialFilter, setInitialFilter] = useState();
     const [search, setSearch] = useState<any[]>([]);
@@ -151,34 +154,40 @@ const Contatos: React.FC = () => {
                             />
                         }
 
-                        {dados.length < 1 ? (
+                        {admin.role === "EMPLOYEE" ?
                             null
-                        ) :
+                            :
                             <>
-                                {showElement ?
-                                    <BlockExport>
-                                        <Button
-                                            type="submit"
-                                            /* @ts-ignore */
-                                            loading={loading}
-                                            onClick={handleExportContactEmail}
-                                        >
-                                            Exportar arquivo para o seu email
-                                        </Button>
-                                        <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
-                                    </BlockExport>
-                                    :
-                                    <BlockExport>
-                                        <Button
-                                            style={{ backgroundColor: 'green' }}
-                                            type="submit"
-                                            /* @ts-ignore */
-                                            loading={loading}
-                                            onClick={handleExportContacts}
-                                        >
-                                            Gerar arquivo para exportar contatos
-                                        </Button>
-                                    </BlockExport>
+                                {dados.length < 1 ? (
+                                    null
+                                ) :
+                                    <>
+                                        {showElement ?
+                                            <BlockExport>
+                                                <Button
+                                                    type="submit"
+                                                    /* @ts-ignore */
+                                                    loading={loading}
+                                                    onClick={handleExportContactEmail}
+                                                >
+                                                    Exportar arquivo para o seu email
+                                                </Button>
+                                                <ButtonExit onClick={showOrHide}><FaTimesCircle />Cancelar exportação</ButtonExit>
+                                            </BlockExport>
+                                            :
+                                            <BlockExport>
+                                                <Button
+                                                    style={{ backgroundColor: 'green' }}
+                                                    type="submit"
+                                                    /* @ts-ignore */
+                                                    loading={loading}
+                                                    onClick={handleExportContacts}
+                                                >
+                                                    Gerar arquivo para exportar contatos
+                                                </Button>
+                                            </BlockExport>
+                                        }
+                                    </>
                                 }
                             </>
                         }
