@@ -420,6 +420,10 @@ const Pedido: React.FC = () => {
                 active: active
             });
 
+            if (active === "Sim") {
+                await apiClient.post(`/createNotificationCustomerComment?customer_id=${customerDate?.id}&id_order_store=${idOrder}`);
+            }
+
             toast.success("Comentários adicionado com sucesso");
             setCommentOrder("");
             loadCommentsOrder();
