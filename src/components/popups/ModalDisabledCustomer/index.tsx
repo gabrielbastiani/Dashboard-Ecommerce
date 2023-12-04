@@ -13,7 +13,7 @@ interface ModalDeleteCupomRequest {
     customerID: string;
 }
 
-export function ModalDeleteCustomer({ isOpen, onRequestClose, customerID }: ModalDeleteCupomRequest) {
+export function ModalDisabledCustomer({ isOpen, onRequestClose, customerID }: ModalDeleteCupomRequest) {
 
     const navigate = useNavigate();
 
@@ -31,12 +31,12 @@ export function ModalDeleteCustomer({ isOpen, onRequestClose, customerID }: Moda
     };
 
 
-    async function handleDeleteCustomer() {
+    async function handleDisabledCustomer() {
         try {
             const apiClient = setupAPIClient();
 
-            await apiClient.delete(`/customer/deleteCustomer?customer_id=${customerID}`);
-            toast.success(`Cliente deletado com sucesso.`);
+            await apiClient.put(`/customer/activeOrDesactiveCustomer?customer_id=${customerID}`);
+            toast.success(`Cliente desativado com sucesso.`);
 
             navigate('/clientes');
 
@@ -48,7 +48,7 @@ export function ModalDeleteCustomer({ isOpen, onRequestClose, customerID }: Moda
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
-            toast.error('Ops erro ao deletar o cliente!');
+            toast.error('Ops erro ao desativar o cliente!');
         }
     }
 
@@ -75,7 +75,7 @@ export function ModalDeleteCustomer({ isOpen, onRequestClose, customerID }: Moda
                 <ContainerButton>
                     <Button
                         style={{ width: '40%', fontWeight: "bold", fontSize: '1.2rem' }}
-                        onClick={handleDeleteCustomer}
+                        onClick={handleDisabledCustomer}
                     >
                         Deletar
                     </Button>

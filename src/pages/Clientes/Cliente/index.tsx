@@ -19,7 +19,7 @@ import { TextNews } from "./styles";
 import { InuptCheck } from "../../../components/ui/InuptCheck";
 import { GridDate } from "../../Perfil/styles";
 import { SectionDate } from "../../Configuracoes/styles";
-import { ModalDeleteCustomer } from "../../../components/popups/ModalDeleteCustomer";
+import { ModalDisabledCustomer } from "../../../components/popups/ModalDisabledCustomer";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import TabelaSimples from "../../../components/Tabelas";
 import { Avisos } from "../../../components/Avisos";
@@ -27,6 +27,7 @@ import Select from "../../../components/ui/Select";
 import moment from "moment";
 import Warnings from "../../../components/Warnings";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 
 
 
@@ -52,6 +53,7 @@ const Cliente: React.FC = () => {
     const [estadoSelected, setEstadoSelected] = useState();
     const [ceps, setCeps] = useState('');
     const [newslatters, setNewslatters] = useState("");
+    const [statusCustomer, setStatusCustomer] = useState(Boolean);
 
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
@@ -85,6 +87,7 @@ const Cliente: React.FC = () => {
             setCeps(data?.cep || "");
             setGeneros(data?.gender || "");
             setNewslatters(data?.newslatter || "");
+            setStatusCustomer(data?.authenticated);
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
@@ -114,6 +117,7 @@ const Cliente: React.FC = () => {
                 setCeps(data?.cep || "");
                 setGeneros(data?.gender || "");
                 setNewslatters(data?.newslatter || "");
+                setStatusCustomer(data?.authenticated);
 
             } catch (error) {/* @ts-ignore */
                 console.log(error.response.data);
@@ -222,7 +226,6 @@ const Cliente: React.FC = () => {
     }
 
     const [search, setSearch] = useState<any[]>([]);
-
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(10);
     const [pages, setPages] = useState<any[]>([]);
@@ -251,6 +254,29 @@ const Cliente: React.FC = () => {
         }
         allOrders();
     }, [currentPage, limit, total, customer_id]);
+
+    async function updateStatusCustomer() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/customer/activeOrDesactiveCustomer?customer_id=${customer_id}`);
+
+            refreshUser();
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o status do cliente.');
+        }
+
+        if (statusCustomer === false) {
+            toast.success(`O cliente se encontra Disponivel.`);
+            return;
+        }
+
+        if (statusCustomer === true) {
+            toast.error(`O cliente se encontra Indisponivel.`);
+            return;
+        }
+    }
 
     /* @ts-ignore */
     const limits = useCallback((e) => {
@@ -304,7 +330,7 @@ const Cliente: React.FC = () => {
                                         style={{ backgroundColor: '#FB451E' }}
                                         onClick={handleOpenModalDelete}
                                     >
-                                        Deletar
+                                        Desativar cliente
                                     </Button>
                                 }
 
@@ -312,6 +338,19 @@ const Cliente: React.FC = () => {
 
                             <GridDate>
                                 <SectionDate>
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Ativar ou desativar cliente"}
+                                        dados={
+                                            <ButtonSelect
+                                                dado={statusCustomer === true ? "Ativado" : "Desativado"}
+                                                handleSubmit={updateStatusCustomer}
+                                                showElement={statusCustomer === true ? "Ativado" : "Desativado"}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
                                     <BlockDados>
                                         <TextoDados
                                             chave={"Nome"}
@@ -723,7 +762,7 @@ const Cliente: React.FC = () => {
                 </Container>
             </Grid>
             {modalVisible && (
-                <ModalDeleteCustomer
+                <ModalDisabledCustomer
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
                     /* @ts-ignore */

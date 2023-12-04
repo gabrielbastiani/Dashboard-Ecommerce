@@ -238,6 +238,7 @@ const Loja: React.FC = () => {
                             </Button>
                         }
                     </BlockDados>
+
                     {countDownShow ?
                         <Card>
 
@@ -427,6 +428,7 @@ const Loja: React.FC = () => {
                             >
                                 <Etiqueta>Código do Live Chat TAWK.TO</Etiqueta>
                                 <br />
+                                <Etiqueta>"Retire as TAG´s SCRIPT do inicio e do fim do código."</Etiqueta>
                                 <Button
                                     onClick={handleConfigs}
                                 >
