@@ -31,35 +31,39 @@ const Dashboard: React.FC = () => {
     }, []);
 
     const datesFilter = totalPayments.map(item => item.payment);
+    const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
 
-    console.log("Array de dados", datesFilter)
-
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [filteredData, setFilteredData] = useState([...datesFilter]);
-
-    const handleStartDateChange = (selectedDate: React.SetStateAction<string>) => {
-        setStartDate(selectedDate);
-        filterData(selectedDate, endDate);
-    };
-
-    const handleEndDateChange = (selectedDate: React.SetStateAction<string>) => {
-        setEndDate(selectedDate);
-        filterData(startDate, selectedDate);
-    };
-
-    const filterData = (start: number | React.SetStateAction<string>, end: number | React.SetStateAction<string>) => {
-        const filteredList = datesFilter.filter(item => moment(item.created_at).format('YYYY-MM-DD') >= start && moment(item.created_at).format('YYYY-MM-DD') <= end);
-        setFilteredData(filteredList);
-    };
-
-    const payments = filteredData.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
-
-    const totalfaturamento = payments.reduce((acumulador, objeto) => {
+    const totalfaturamentopayments: number = paymentsTotal.reduce((acumulador, objeto) => {
         return acumulador + objeto
     }, 0);
 
-    
+    const [data, setData] = useState<any []>([]);
+
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
+    const filterData = () => {
+        const startDateObj = new Date(startDate);
+        const endDateObj = new Date(endDate);
+
+        const filteredData = datesFilter.filter((item) => {
+            const itemDate = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+            return itemDate >= startDateObj && itemDate <= endDateObj;
+        });
+
+        setData(filteredData);
+    };
+
+    const payments = data.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
+
+    const totalfaturamento: number = payments.reduce((acumulador, objeto) => {
+        return acumulador + objeto
+    }, 0);
+
+    console.log("Array de dados", datesFilter)
+    console.log("Filtrado", datesFilter)
+
+
 
 
     return (
@@ -76,21 +80,19 @@ const Dashboard: React.FC = () => {
                         />
 
                         <div>
-                        <label htmlFor="startDateFilter">Data Inicial:</label>
-                        <input
-                            type="date"
-                            id="startDateFilter"
-                            value={startDate}
-                            onChange={(e) => handleStartDateChange(e.target.value)}
-                        />
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                            />
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
 
-                        <label htmlFor="endDateFilter">Data Final:</label>
-                        <input
-                            type="date"
-                            id="endDateFilter"
-                            value={endDate}
-                            onChange={(e) => handleEndDateChange(e.target.value)}
-                        />
+                            <button onClick={filterData}>Filtrar</button>
+
                         </div>
 
                     </BlockTop>
@@ -99,7 +101,7 @@ const Dashboard: React.FC = () => {
                         <WalletBox
                             title="Faturamento total"
                             color="#5faf40"
-                            amount={totalfaturamento}
+                            amount={totalfaturamento === 0 ? totalfaturamentopayments : totalfaturamento}
                             footerlabel="faturamento total da loja"
                         />
 
@@ -118,13 +120,6 @@ const Dashboard: React.FC = () => {
                         />
                     </Content>
 
-                    <div>
-                        <ul>
-                            {filteredData.map(item => (
-                                <li key={item}>{item.id}</li>
-                            ))}
-                        </ul>
-                    </div>
                 </Card>
             </Container>
         </Grid>
