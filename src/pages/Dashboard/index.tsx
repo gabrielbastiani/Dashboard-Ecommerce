@@ -30,6 +30,8 @@ const Dashboard: React.FC = () => {
         loadDates();
     }, []);
 
+    // VALORES TOTAIS
+
     const datesFilter = totalPayments.map(item => item.payment);
     const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
 
@@ -38,7 +40,6 @@ const Dashboard: React.FC = () => {
     }, 0);
 
     const [data, setData] = useState<any []>([]);
-
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -60,7 +61,25 @@ const Dashboard: React.FC = () => {
         return acumulador + objeto
     }, 0);
 
+    // VALORES DIA
+
+    const dayAtual = moment(new Date()).format('DD/MM/YYYY');
+    const startDateObjDay = new Date(moment().format('YYYY-MM-DD'));
+    const endDateObjDay = new Date(moment().format('YYYY-MM-DD'));
+
+    const filteredDataDay = datesFilter.filter((item) => {
+        const itemDateDay = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= startDateObjDay && itemDateDay <= endDateObjDay;
+    });
+
+    const paymentsDay = filteredDataDay.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
+
+    const totalfaturamentoDay: number = paymentsDay.reduce((acumulador, objeto) => {
+        return acumulador + objeto
+    }, 0);
+
     console.log("Array de dados", datesFilter)
+    console.log("Filtro mês", filteredDataDay)
     console.log("Filtrado", datesFilter)
 
 
@@ -108,14 +127,14 @@ const Dashboard: React.FC = () => {
                         <WalletBox
                             title="Faturamento do mês"
                             color="#F7931B"
-                            amount={2223367}
+                            amount={11111111111}
                             footerlabel="faturamento total do mês"
                         />
 
                         <WalletBox
-                            title="Faturamento do dia"
+                            title={`Faturamento do dia ${dayAtual}`}
                             color="#4E41F0"
-                            amount={5545}
+                            amount={totalfaturamentoDay}
                             footerlabel="faturamento total do dia"
                         />
                     </Content>
