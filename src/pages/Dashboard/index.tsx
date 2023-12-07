@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
 import { Content, Grid } from "./styles";
 import MainHeader from "../../components/MainHeader";
+import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 import Aside from "../../components/Aside";
 import Warnings from "../../components/Warnings";
 import { BlockTop, Container } from "../Categorias/styles";
@@ -9,11 +10,21 @@ import { Card } from "../../components/Content/styles";
 import Titulos from "../../components/Titulos";
 import WalletBox from "../../components/WalletBox";
 import moment from 'moment';
+import dolarImg from '../../assets/dolar.svg';
+import WalletBoxDate from "../../components/WalletBoxDate";
+import cart from '../../assets/cart.svg';
+import orders from '../../assets/orders.svg';
+import productsImg from '../../assets/products.svg';
+import usersVisited from '../../assets/user.svg';
+import taxConvert from '../../assets/tax.svg';
+import WalletBoxTax from "../../components/WalletBoxTax";
 
 
 const Dashboard: React.FC = () => {
 
-    const [totalPayments, setTotalPayments] = useState<any[]>([]);
+    const [totalPaymentsStatus, setTotalPaymentsStatus] = useState<any[]>([]);
+    const [products, setProducts] = useState<any[]>([]);
+    const [visited, setVisited] = useState<any[]>([]);
 
     useEffect(() => {
         async function loadDates() {
@@ -21,7 +32,9 @@ const Dashboard: React.FC = () => {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/totalStorePayments`);
 
-                setTotalPayments(data);
+                setProducts(data?.product);
+                setTotalPaymentsStatus(data?.statusOrder);
+                setVisited(data?.visitedUser);
 
             } catch (error) {
                 console.error(error);
@@ -30,10 +43,12 @@ const Dashboard: React.FC = () => {
         loadDates();
     }, []);
 
+
+
     // VALORES TOTAIS
 
-    const datesFilter = totalPayments.map(item => item.payment);
-    const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
+    /* const datesFilter = totalPayments.map(item => item); */
+    /* const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
 
     const totalfaturamentopayments: number = paymentsTotal.reduce((acumulador, objeto) => {
         return acumulador + objeto
@@ -59,7 +74,7 @@ const Dashboard: React.FC = () => {
 
     const totalfaturamento: number = payments.reduce((acumulador, objeto) => {
         return acumulador + objeto
-    }, 0);
+    }, 0); */
 
     // VALORES DIA
 
@@ -67,20 +82,53 @@ const Dashboard: React.FC = () => {
     const startDateObjDay = new Date(moment().format('YYYY-MM-DD'));
     const endDateObjDay = new Date(moment().format('YYYY-MM-DD'));
 
-    const filteredDataDay = datesFilter.filter((item) => {
-        const itemDateDay = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+    const filteredDataDay = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
         return itemDateDay >= startDateObjDay && itemDateDay <= endDateObjDay;
     });
 
-    const paymentsDay = filteredDataDay.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
+    const filteredDataDayConfirmed = totalPaymentsStatus.filter((item) => {
+        const itemDateDayConfirmed = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDayConfirmed >= startDateObjDay && itemDateDayConfirmed <= endDateObjDay;
+    });
 
-    const totalfaturamentoDay: number = paymentsDay.reduce((acumulador, objeto) => {
+    const paymentsDayTotal = filteredDataDayConfirmed.map(item => item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment);
+
+    const paymentsDay = filteredDataDay.map(item => item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment);
+
+    const totalfaturamentoDayTotal: number = paymentsDayTotal.reduce((acumulador, objeto) => {
         return acumulador + objeto
     }, 0);
 
-    console.log("Array de dados", datesFilter)
-    console.log("Filtro mês", filteredDataDay)
-    console.log("Filtrado", datesFilter)
+    const totalfaturamentoDayConfirmed: number = paymentsDay.reduce((acumulador, objeto) => {
+        return acumulador + objeto
+    }, 0);
+
+    const ticketDay = (filteredDataDay.length / totalfaturamentoDayConfirmed) * 100;
+
+
+    // PRODUTOS
+
+
+    const valuesProducts: number = products.reduce((acumulador, objeto) => {
+        return acumulador + objeto.promotion
+    }, 0);
+
+
+    // VISITANTES NA LOJA
+
+
+    const visitedStore = visited.filter((item) => {
+        const visitedItem = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return visitedItem >= startDateObjDay && visitedItem <= endDateObjDay;
+    });
+
+    const visitedUser: number = visitedStore.reduce((acumulador, objeto) => {
+        return acumulador + objeto.visited
+    }, 0);
+
+    const convert_users: number = (filteredDataDay.length / visitedUser) * 100;
+
 
 
 
@@ -94,11 +142,11 @@ const Dashboard: React.FC = () => {
                 <Card>
                     <BlockTop>
                         <Titulos
-                            tipo="h1"
-                            titulo="Dashboard"
+                            tipo="h2"
+                            titulo="Dados do dia"
                         />
 
-                        <div>
+                        {/* <div>
                             <input
                                 type="date"
                                 value={startDate}
@@ -112,31 +160,94 @@ const Dashboard: React.FC = () => {
 
                             <button onClick={filterData}>Filtrar</button>
 
-                        </div>
+                        </div> */}
 
                     </BlockTop>
                     <br />
                     <Content>
-                        <WalletBox
-                            title="Faturamento total"
+
+                        <WalletBoxDate
+                            title={`Qtd. pedidos hoje ${dayAtual}`}
+                            color="#e0232a"
+                            amount={filteredDataDayConfirmed.length}
+                            footerlabel="todos os pedidos do dia"
+                            image={cart}
+                        />
+
+                        <WalletBoxDate
+                            title={`Qtd. pedidos confirmados hoje ${dayAtual}`}
                             color="#5faf40"
-                            amount={totalfaturamento === 0 ? totalfaturamentopayments : totalfaturamento}
-                            footerlabel="faturamento total da loja"
+                            amount={filteredDataDay.length}
+                            footerlabel="todos os pedidos pagos e confirmados do dia"
+                            image={orders}
                         />
 
                         <WalletBox
-                            title="Faturamento do mês"
-                            color="#F7931B"
-                            amount={11111111111}
-                            footerlabel="faturamento total do mês"
-                        />
-
-                        <WalletBox
-                            title={`Faturamento do dia ${dayAtual}`}
+                            title={`Valores total do dia ${dayAtual}`}
                             color="#4E41F0"
-                            amount={totalfaturamentoDay}
-                            footerlabel="faturamento total do dia"
+                            amount={totalfaturamentoDayTotal}
+                            footerlabel="valor total do dia"
+                            image={dolarImg}
                         />
+
+                        <WalletBox
+                            title={`Faturamento confirmado do dia ${dayAtual}`}
+                            color="#F7931B"
+                            amount={totalfaturamentoDayConfirmed}
+                            footerlabel="faturamento total do dia confirmado"
+                            image={dolarImg}
+                        />
+
+                        <WalletBoxDate
+                            title={`Visitantes do dia ${dayAtual}`}
+                            color="#c9cc00"
+                            amount={visitedUser}
+                            footerlabel="total de visitantes na loja virtual"
+                            image={usersVisited}
+                        />
+
+                        <WalletBox
+                            title={`Ticket médio do dia ${dayAtual}`}
+                            color="#5faf40"
+                            amount={ticketDay}
+                            footerlabel="ticket médio de faturamento"
+                            image={dolarImg}
+                        />
+
+                        <WalletBoxTax
+                            title={`Taxa de conversão do dia ${dayAtual}`}
+                            color="#4E41F0"
+                            amount={convert_users}
+                            footerlabel="total de convertido"
+                            image={taxConvert}
+                        />
+                    </Content>
+
+                    <DivisorHorizontal />
+
+                    <Titulos
+                        tipo="h2"
+                        titulo="Dados de produtos"
+                    />
+                    <br />
+                    <Content>
+
+                        <WalletBoxDate
+                            title="Total de produtos"
+                            color="#5faf40"
+                            amount={products.length}
+                            footerlabel="Todos produtos cadastrados na loja"
+                            image={productsImg}
+                        />
+
+                        <WalletBox
+                            title="Valor em produtos"
+                            color="#F7931B"
+                            amount={valuesProducts}
+                            footerlabel="Valor total monetario em produtos"
+                            image={dolarImg}
+                        />
+
                     </Content>
 
                 </Card>

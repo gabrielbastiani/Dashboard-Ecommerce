@@ -1,5 +1,4 @@
 import React from 'react';
-import CountUp from 'react-countup';
 import { Container }  from './styles';
 
 interface IWalletBoxProps {
@@ -10,7 +9,7 @@ interface IWalletBoxProps {
     image: string;
 }
 
-const WalletBox: React.FC<IWalletBoxProps> = ({
+const WalletBoxDate: React.FC<IWalletBoxProps> = ({
     title,
     amount,
     footerlabel,
@@ -22,13 +21,7 @@ const WalletBox: React.FC<IWalletBoxProps> = ({
         <Container color={color}>
             <span>{title}</span>
             <h1>
-                <strong>R$ </strong>
-                <CountUp 
-                    end={amount}
-                    separator="."
-                    decimal=","
-                    decimals={2}                                    
-                />
+                <strong>{amount}</strong>
             </h1>
             <small>{footerlabel}</small>
             <img src={image} alt={title} />
@@ -36,4 +29,4 @@ const WalletBox: React.FC<IWalletBoxProps> = ({
     );
 }
 
-export default WalletBox;
+export default WalletBoxDate;

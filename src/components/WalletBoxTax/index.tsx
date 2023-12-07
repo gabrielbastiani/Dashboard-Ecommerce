@@ -10,7 +10,7 @@ interface IWalletBoxProps {
     image: string;
 }
 
-const WalletBox: React.FC<IWalletBoxProps> = ({
+const WalletBoxTax: React.FC<IWalletBoxProps> = ({
     title,
     amount,
     footerlabel,
@@ -22,13 +22,12 @@ const WalletBox: React.FC<IWalletBoxProps> = ({
         <Container color={color}>
             <span>{title}</span>
             <h1>
-                <strong>R$ </strong>
                 <CountUp 
                     end={amount}
-                    separator="."
                     decimal=","
                     decimals={2}                                    
                 />
+                <strong>%</strong>
             </h1>
             <small>{footerlabel}</small>
             <img src={image} alt={title} />
@@ -36,4 +35,4 @@ const WalletBox: React.FC<IWalletBoxProps> = ({
     );
 }
 
-export default WalletBox;
+export default WalletBoxTax;
