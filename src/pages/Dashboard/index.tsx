@@ -8,6 +8,7 @@ import Warnings from "../../components/Warnings";
 import { BlockTop, Container } from "../Categorias/styles";
 import { Card } from "../../components/Content/styles";
 import Titulos from "../../components/Titulos";
+import WalletBoxTax from "../../components/WalletBoxTax";
 import WalletBox from "../../components/WalletBox";
 import moment from 'moment';
 import dolarImg from '../../assets/dolar.svg';
@@ -17,7 +18,8 @@ import orders from '../../assets/orders.svg';
 import productsImg from '../../assets/products.svg';
 import usersVisited from '../../assets/user.svg';
 import taxConvert from '../../assets/tax.svg';
-import WalletBoxTax from "../../components/WalletBoxTax";
+import fretes from "../../assets/frete.svg";
+import stock from "../../assets/stock.svg";
 
 
 const Dashboard: React.FC = () => {
@@ -25,6 +27,7 @@ const Dashboard: React.FC = () => {
     const [totalPaymentsStatus, setTotalPaymentsStatus] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const [visited, setVisited] = useState<any[]>([]);
+    const [customersDate, setCustomersDate] = useState<any[]>([]);
 
     useEffect(() => {
         async function loadDates() {
@@ -35,6 +38,7 @@ const Dashboard: React.FC = () => {
                 setProducts(data?.product);
                 setTotalPaymentsStatus(data?.statusOrder);
                 setVisited(data?.visitedUser);
+                setCustomersDate(data?.customer);
 
             } catch (error) {
                 console.error(error);
@@ -92,9 +96,21 @@ const Dashboard: React.FC = () => {
         return itemDateDayConfirmed >= startDateObjDay && itemDateDayConfirmed <= endDateObjDay;
     });
 
+    const customersDay = customersDate.filter((item) => {
+        const itemDateDayConfirmed = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDayConfirmed >= startDateObjDay && itemDateDayConfirmed <= endDateObjDay;
+    });
+
+    const visitedStore = visited.filter((item) => {
+        const visitedItem = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return visitedItem >= startDateObjDay && visitedItem <= endDateObjDay;
+    });
+
     const paymentsDayTotal = filteredDataDayConfirmed.map(item => item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment);
 
     const paymentsDay = filteredDataDay.map(item => item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment);
+
+    const fretesDay = filteredDataDay.map(item => item.order.frete_cupom === 0 ? item.order.frete : item.order.frete_cupom);
 
     const totalfaturamentoDayTotal: number = paymentsDayTotal.reduce((acumulador, objeto) => {
         return acumulador + objeto
@@ -104,7 +120,26 @@ const Dashboard: React.FC = () => {
         return acumulador + objeto
     }, 0);
 
+    const totalfreteDayTotal: number = fretesDay.reduce((acumulador, objeto) => {
+        return acumulador + objeto
+    }, 0);
+
+    const visitedUser: number = visitedStore.reduce((acumulador, objeto) => {
+        return acumulador + objeto.visited
+    }, 0);
+
     const ticketDay = (filteredDataDay.length / totalfaturamentoDayConfirmed) * 100;
+
+    const convert_users: number = (filteredDataDay.length / visitedUser) * 100;
+
+
+    // CLIENTES
+
+
+    const customers = customersDate.filter((item) => {
+        const itemCustomer = item.authenticated === true;
+        return itemCustomer;
+    });
 
 
     // PRODUTOS
@@ -114,20 +149,10 @@ const Dashboard: React.FC = () => {
         return acumulador + objeto.promotion
     }, 0);
 
-
-    // VISITANTES NA LOJA
-
-
-    const visitedStore = visited.filter((item) => {
-        const visitedItem = new Date(moment(item.created_at).format('YYYY-MM-DD'));
-        return visitedItem >= startDateObjDay && visitedItem <= endDateObjDay;
+    const stockAll = products.filter((item) => {
+        const itemDateDayConfirmed = item.stock === 0;
+        return itemDateDayConfirmed;
     });
-
-    const visitedUser: number = visitedStore.reduce((acumulador, objeto) => {
-        return acumulador + objeto.visited
-    }, 0);
-
-    const convert_users: number = (filteredDataDay.length / visitedUser) * 100;
 
 
 
@@ -165,13 +190,13 @@ const Dashboard: React.FC = () => {
                     </BlockTop>
                     <br />
                     <Content>
-
                         <WalletBoxDate
                             title={`Qtd. pedidos hoje ${dayAtual}`}
                             color="#e0232a"
                             amount={filteredDataDayConfirmed.length}
                             footerlabel="todos os pedidos do dia"
                             image={cart}
+                            width={32}
                         />
 
                         <WalletBoxDate
@@ -180,6 +205,7 @@ const Dashboard: React.FC = () => {
                             amount={filteredDataDay.length}
                             footerlabel="todos os pedidos pagos e confirmados do dia"
                             image={orders}
+                            width={32}
                         />
 
                         <WalletBox
@@ -198,12 +224,21 @@ const Dashboard: React.FC = () => {
                             image={dolarImg}
                         />
 
+                        <WalletBox
+                            title={`Valores em frete do dia ${dayAtual}`}
+                            color="#1595eb"
+                            amount={totalfreteDayTotal}
+                            footerlabel="total em fretes dos pedidos neste dia"
+                            image={fretes}
+                        />
+
                         <WalletBoxDate
                             title={`Visitantes do dia ${dayAtual}`}
                             color="#c9cc00"
                             amount={visitedUser}
                             footerlabel="total de visitantes na loja virtual"
                             image={usersVisited}
+                            width={32}
                         />
 
                         <WalletBox
@@ -221,6 +256,42 @@ const Dashboard: React.FC = () => {
                             footerlabel="total de convertido"
                             image={taxConvert}
                         />
+
+                        <WalletBoxDate
+                            title={`Novos clientes do dia ${dayAtual}`}
+                            color="#e0232a"
+                            amount={customersDay.length}
+                            footerlabel="clientes cadastrados"
+                            image={usersVisited}
+                            width={32}
+                        />
+                    </Content>
+
+                    <DivisorHorizontal />
+
+                    <Titulos
+                        tipo="h2"
+                        titulo="Clientes"
+                    />
+                    <br />
+                    <Content>
+                        <WalletBoxDate
+                            title="Total de clientes"
+                            color="#1595eb"
+                            amount={customersDate.length}
+                            footerlabel="total de clientes da loja"
+                            image={usersVisited}
+                            width={49}
+                        />
+
+                        <WalletBoxDate
+                            title="Clientes ativos"
+                            color="#5faf40"
+                            amount={customers.length}
+                            footerlabel="total de clientes ativos na loja"
+                            image={usersVisited}
+                            width={49}
+                        />
                     </Content>
 
                     <DivisorHorizontal />
@@ -231,24 +302,33 @@ const Dashboard: React.FC = () => {
                     />
                     <br />
                     <Content>
-
                         <WalletBoxDate
                             title="Total de produtos"
                             color="#5faf40"
                             amount={products.length}
-                            footerlabel="Todos produtos cadastrados na loja"
+                            footerlabel="todos produtos cadastrados na loja"
                             image={productsImg}
+                            width={32}
+                        />
+
+                        <WalletBoxDate
+                            title="Estoque de produtos"
+                            color="#1595eb"
+                            amount={stockAll.length}
+                            footerlabel="produtos faltantes de estoque"
+                            image={stock}
+                            width={32}
                         />
 
                         <WalletBox
                             title="Valor em produtos"
                             color="#F7931B"
                             amount={valuesProducts}
-                            footerlabel="Valor total monetario em produtos"
+                            footerlabel="valor total monetario em produtos"
                             image={dolarImg}
                         />
-
                     </Content>
+                    <br />
 
                 </Card>
             </Container>

@@ -7,6 +7,7 @@ interface IWalletBoxProps {
     footerlabel: string;
     color: string;
     image: string;
+    width: number;
 }
 
 const WalletBoxDate: React.FC<IWalletBoxProps> = ({
@@ -14,11 +15,12 @@ const WalletBoxDate: React.FC<IWalletBoxProps> = ({
     amount,
     footerlabel,
     color,
+    width,
     image
 }) => {
 
     return (
-        <Container color={color}>
+        <Container color={color} width={width}>
             <span>{title}</span>
             <h1>
                 <strong>{amount}</strong>
