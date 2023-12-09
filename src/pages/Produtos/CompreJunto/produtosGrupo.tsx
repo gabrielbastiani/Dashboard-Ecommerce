@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Modal from 'react-modal';
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
@@ -37,7 +37,6 @@ const ProdutosGrupo: React.FC = () => {
     let { buyTogether_id } = useParams();
 
     const { admin } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     const [store_id] = useState(admin.store_id);
 

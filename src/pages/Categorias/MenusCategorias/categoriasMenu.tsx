@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import noImage from '../../../assets/semfoto.png';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { setupAPIClient } from "../../../services/api";
 import { toast } from "react-toastify";
@@ -27,7 +27,6 @@ const CategoriasMenu: React.FC = () => {
 
     let { menuCategory_id } = useParams();
     const { admin } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     const [store_id] = useState(admin.store_id);
 

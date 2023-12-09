@@ -3,7 +3,6 @@ import { FiX } from 'react-icons/fi';
 import { Button } from '../../ui/Button/index';
 import { setupAPIClient } from '../../../services/api'
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { ContainerContent, ContainerButton, TextModal, ButtonClose } from './styles';
 import { DeleteBuy } from '../../../pages/Produtos/CompreJunto/produtosGrupo';
 
@@ -16,8 +15,6 @@ interface DeleteRequest {
 }
 
 export function ModalDeleteBuyTogether({ isOpen, onRequestClose, relation, reloadBuyTogheter }: DeleteRequest) {
-
-    const navigate = useNavigate();
 
     const customStyles = {
         content: {

@@ -103,6 +103,7 @@ const Cupom: React.FC = () => {
             }
         }
         loadConditional();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cupon_id]);
 
     useEffect(() => {
@@ -115,6 +116,7 @@ const Cupom: React.FC = () => {
             }
         }
         loadProductsInCupoms();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cupon_id]);
 
     useEffect(() => {
@@ -127,6 +129,7 @@ const Cupom: React.FC = () => {
             }
         }
         loadProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleChangeProduct(e: any) {
@@ -151,6 +154,7 @@ const Cupom: React.FC = () => {
             }
         }
         loadCupom();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cupon_id]);
 
     async function loadCupom() {
