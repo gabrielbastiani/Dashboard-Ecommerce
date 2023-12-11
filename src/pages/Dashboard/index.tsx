@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { setupAPIClient } from "../../services/api";
 import { Content, Grid } from "./styles";
 import MainHeader from "../../components/MainHeader";
@@ -28,6 +29,33 @@ const Dashboard: React.FC = () => {
     const [products, setProducts] = useState<any[]>([]);
     const [visited, setVisited] = useState<any[]>([]);
     const [customersDate, setCustomersDate] = useState<any[]>([]);
+
+    const dataAtual = new Date();
+    let dataDoMesPassado = new Date(dataAtual);
+    dataDoMesPassado.setMonth(dataAtual.getMonth() - 1);
+
+    const formatedAtual = dataAtual.toISOString().slice(0, 10);
+    const formatedPassed = dataDoMesPassado.toISOString().slice(0, 10);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const atual_formated = new Date(formatedAtual);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const passed_formated = new Date(formatedPassed);
+
+    const filterMonth = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= passed_formated && itemDateDay <= atual_formated;
+    });
+
+    const dados: any = [];
+    (filterMonth || []).forEach((item) => {
+        dados.push({
+            "data": moment(item.created_at).format('DD/MM/YYYY'),
+        });
+    });
+
+    console.log(dados)
+
 
     useEffect(() => {
         async function loadDates() {
@@ -271,6 +299,34 @@ const Dashboard: React.FC = () => {
 
                     <Titulos
                         tipo="h2"
+                        titulo="Números do mês"
+                    />
+
+                    <ResponsiveContainer width="100%" aspect={2}>
+                        <AreaChart
+                            width={500}
+                            height={400}
+                            data={dados}
+                            margin={{
+                                top: 10,
+                                right: 30,
+                                left: 0,
+                                bottom: 0
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="10 10" />
+                            <XAxis dataKey="data" />
+                            <YAxis />
+                            <Tooltip />
+                            <Area type="monotone" dataKey="age" stackId="1" stroke='#8884d8' fill="#8884d8" />
+                            <Area type="monotone" dataKey="weight" stackId="1" stroke='#82caed' fill="#fad3cf" />
+                        </AreaChart>
+                    </ResponsiveContainer>
+
+                    <DivisorHorizontal />
+
+                    <Titulos
+                        tipo="h2"
                         titulo="Clientes"
                     />
                     <br />
@@ -328,7 +384,8 @@ const Dashboard: React.FC = () => {
                             image={dolarImg}
                         />
                     </Content>
-                    <br />
+
+
 
                 </Card>
             </Container>
