@@ -346,7 +346,6 @@ const Dashboard: React.FC = () => {
                             <XAxis dataKey="dia" />
                             <YAxis />
                             <Tooltip />
-                            {/* <Area type="monotone" dataKey="faturamento" stackId="1" stroke='#8884d8' fill="#8884d8" /> */}
                             <Area type="monotone" dataKey="somatorioDia" stackId="1" stroke='#82caed' fill="#fad3cf" />
                         </AreaChart>
                     </ResponsiveContainer>
