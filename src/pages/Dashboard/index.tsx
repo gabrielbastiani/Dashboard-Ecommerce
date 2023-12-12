@@ -47,14 +47,41 @@ const Dashboard: React.FC = () => {
         return itemDateDay >= passed_formated && itemDateDay <= atual_formated;
     });
 
+    // Filtrar os dados do mês específico
+    const dadosDoMes = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= passed_formated && itemDateDay <= atual_formated;
+    });
+
+    // Agrupar os dados por dia
+    const dadosAgrupados = dadosDoMes.reduce((acc, item) => {
+        const dia = moment(item.created_at).format('DD/MM/YYYY');
+        acc[dia] = acc[dia] || [];
+        acc[dia].push(item);
+        return acc;
+    }, {});
+
+    // Calcular o somatório para cada dia
+    const somatoriosPorDia = Object.keys(dadosAgrupados).map(dia => {
+        const somatorioDia = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment, 0);
+        return { dia, somatorioDia };
+    });
+
+    const dias = somatoriosPorDia.map((item) => { return ( item.somatorioDia ) });
+
+
     const dados: any = [];
     (filterMonth || []).forEach((item) => {
         dados.push({
-            "data": moment(item.created_at).format('DD/MM/YYYY'),
+            "dias_do_mes": moment(item.created_at).format('DD/MM/YYYY'),
+            "faturamento_do_dia": dias,
+            "faturamento": item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment
         });
     });
 
-    console.log(dados)
+
+    console.log(somatoriosPorDia)
+
 
 
     useEffect(() => {
@@ -81,29 +108,29 @@ const Dashboard: React.FC = () => {
 
     /* const datesFilter = totalPayments.map(item => item); */
     /* const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
-
+ 
     const totalfaturamentopayments: number = paymentsTotal.reduce((acumulador, objeto) => {
         return acumulador + objeto
     }, 0);
-
+ 
     const [data, setData] = useState<any []>([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-
+ 
     const filterData = () => {
         const startDateObj = new Date(startDate);
         const endDateObj = new Date(endDate);
-
+ 
         const filteredData = datesFilter.filter((item) => {
             const itemDate = new Date(moment(item.created_at).format('YYYY-MM-DD'));
             return itemDate >= startDateObj && itemDate <= endDateObj;
         });
-
+ 
         setData(filteredData);
     };
-
+ 
     const payments = data.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
-
+ 
     const totalfaturamento: number = payments.reduce((acumulador, objeto) => {
         return acumulador + objeto
     }, 0); */
@@ -301,12 +328,13 @@ const Dashboard: React.FC = () => {
                         tipo="h2"
                         titulo="Números do mês"
                     />
-
+                    <br />
+                    <br />
                     <ResponsiveContainer width="100%" aspect={2}>
                         <AreaChart
                             width={500}
-                            height={400}
-                            data={dados}
+                            height={200}
+                            data={somatoriosPorDia}
                             margin={{
                                 top: 10,
                                 right: 30,
@@ -315,11 +343,11 @@ const Dashboard: React.FC = () => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="10 10" />
-                            <XAxis dataKey="data" />
+                            <XAxis dataKey="dia" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="age" stackId="1" stroke='#8884d8' fill="#8884d8" />
-                            <Area type="monotone" dataKey="weight" stackId="1" stroke='#82caed' fill="#fad3cf" />
+                            {/* <Area type="monotone" dataKey="faturamento" stackId="1" stroke='#8884d8' fill="#8884d8" /> */}
+                            <Area type="monotone" dataKey="somatorioDia" stackId="1" stroke='#82caed' fill="#fad3cf" />
                         </AreaChart>
                     </ResponsiveContainer>
 
