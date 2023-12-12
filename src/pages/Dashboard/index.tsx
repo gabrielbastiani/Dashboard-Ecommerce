@@ -342,7 +342,7 @@ const Dashboard: React.FC = () => {
                                 bottom: 0
                             }}
                         >
-                            <CartesianGrid strokeDasharray="10 10" />
+                            <CartesianGrid strokeDasharray="31 31" />
                             <XAxis dataKey="dia" />
                             <YAxis />
                             <Tooltip />
