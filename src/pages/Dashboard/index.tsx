@@ -67,17 +67,16 @@ const Dashboard: React.FC = () => {
         return { dia, somatorioDia };
     });
 
-    /* const dados: any = [];
-    (filterMonth || []).forEach((item) => {
-        dados.push({
-            "dias_do_mes": moment(item.created_at).format('DD/MM/YYYY'),
-            "faturamento_do_dia": dias,
-            "faturamento": item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment
+    const dados_do_mes: any = [];
+    (somatoriosPorDia || []).forEach((item) => {
+        dados_do_mes.push({
+            "Dia do mes": item.dia,
+            "Faturamento do dia": item.somatorioDia
         });
-    }); */
+    });
 
 
-    console.log(somatoriosPorDia)
+    console.log(dados_do_mes)
 
 
 
@@ -331,7 +330,7 @@ const Dashboard: React.FC = () => {
                         <AreaChart
                             width={500}
                             height={200}
-                            data={somatoriosPorDia}
+                            data={dados_do_mes}
                             margin={{
                                 top: 10,
                                 right: 30,
@@ -340,10 +339,10 @@ const Dashboard: React.FC = () => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="31 31" />
-                            <XAxis dataKey="dia" />
+                            <XAxis dataKey="Dia do mes" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="somatorioDia" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="Faturamento do dia" stackId="1" stroke='#82caed' fill="#5faf40" />
                         </AreaChart>
                     </ResponsiveContainer>
 
