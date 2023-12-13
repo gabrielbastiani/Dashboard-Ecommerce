@@ -124,7 +124,7 @@ const Pedidos: React.FC = () => {
         dados.push({
             "Pedido": item.id_order_store,
             "Cliente": item.customer.name,
-            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
+            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "Situação": item.statusOrder[0].status_order === "PENDING" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Processando ou Cancelado",
             "botaoDetalhes": `/pedido/${item.id}`

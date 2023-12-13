@@ -63,21 +63,18 @@ const Dashboard: React.FC = () => {
 
     // Calcular o somatório para cada dia
     const somatoriosPorDia = Object.keys(dadosAgrupados).map(dia => {
-        const somatorioDia = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment, 0);
+        const somatorioDia = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
         return { dia, somatorioDia };
     });
 
-    const dias = somatoriosPorDia.map((item) => { return ( item.somatorioDia ) });
-
-
-    const dados: any = [];
+    /* const dados: any = [];
     (filterMonth || []).forEach((item) => {
         dados.push({
             "dias_do_mes": moment(item.created_at).format('DD/MM/YYYY'),
             "faturamento_do_dia": dias,
             "faturamento": item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment
         });
-    });
+    }); */
 
 
     console.log(somatoriosPorDia)
@@ -161,9 +158,9 @@ const Dashboard: React.FC = () => {
         return visitedItem >= startDateObjDay && visitedItem <= endDateObjDay;
     });
 
-    const paymentsDayTotal = filteredDataDayConfirmed.map(item => item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment);
+    const paymentsDayTotal = filteredDataDayConfirmed.map(item => item.order.payment.total_payment);
 
-    const paymentsDay = filteredDataDay.map(item => item.order.payment.total_payment_juros ? item.order.payment.total_payment_juros : item.order.payment.total_payment);
+    const paymentsDay = filteredDataDay.map(item => item.order.payment.total_payment);
 
     const fretesDay = filteredDataDay.map(item => item.order.frete_cupom === 0 ? item.order.frete : item.order.frete_cupom);
 

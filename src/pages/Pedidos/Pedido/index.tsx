@@ -111,7 +111,6 @@ interface PaymentProps {
     flag_credit_card: string;
     installment: number;
     installment_amount: number;
-    total_payment_juros: number;
     total_payment: number;
     status: string;
 }
@@ -197,7 +196,7 @@ const Pedido: React.FC = () => {
     const [modalVisibleQRCode, setModalVisibleQRCode] = useState(false);
 
     const payFrete = Number(order?.frete);
-    const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
+    const totalPay = Number(orderPayment?.total_payment);
     const payInstallment = Number(orderPayment?.installment_amount);
 
     const telefone = String(customerDate?.phone);
