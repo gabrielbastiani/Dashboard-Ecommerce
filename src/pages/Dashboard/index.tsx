@@ -30,22 +30,14 @@ const Dashboard: React.FC = () => {
     const [visited, setVisited] = useState<any[]>([]);
     const [customersDate, setCustomersDate] = useState<any[]>([]);
 
-    const dataAtual = new Date();
-    let dataDoMesPassado = new Date(dataAtual);
-    dataDoMesPassado.setMonth(dataAtual.getMonth() - 1);
-
-    const formatedAtual = dataAtual.toISOString().slice(0, 10);
-    const formatedPassed = dataDoMesPassado.toISOString().slice(0, 10);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const atual_formated = new Date(formatedAtual);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const passed_formated = new Date(formatedPassed);
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 
     // Filtrar os dados do mês específico
     const dadosDoMes = totalPaymentsStatus.filter((item) => {
         const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
-        return itemDateDay >= passed_formated && itemDateDay <= atual_formated;
+        return itemDateDay >= firstDayOfMonth && itemDateDay <= lastDayOfMonth;
     });
 
     // Agrupar os dados por dia
@@ -58,20 +50,66 @@ const Dashboard: React.FC = () => {
 
     // Calcular o somatório para cada dia
     const somatoriosPorDia = Object.keys(dadosAgrupados).map(dia => {
-        const somatorioDia = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
-        return { dia, somatorioDia };
+        const faturamento_do_dia = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { dia, faturamento_do_dia };
     });
 
     const dados_do_mes: any = [];
     (somatoriosPorDia || []).forEach((item) => {
         dados_do_mes.push({
-            "Dia do mes": item.dia,
-            "Faturamento do dia": item.somatorioDia
+            "Dia_do_mes": item.dia,
+            "Faturamento_do_dia": item.faturamento_do_dia
         });
     });
 
+    // DADOS DO MES PASSADO
 
-    console.log(dados_do_mes)
+    const [primeiroDia, setPrimeiroDia] = useState(Date);
+    const [ultimoDia, setUltimoDia] = useState(Date);
+
+    useEffect(() => {
+        const dataAtual = new Date();
+        const primeiroDiaMesPassado = new Date(dataAtual.getFullYear(), dataAtual.getMonth() - 1, 1);
+        const ultimoDiaMesPassado = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 0);
+        setPrimeiroDia(primeiroDiaMesPassado.toISOString().split('T')[0]);
+        setUltimoDia(ultimoDiaMesPassado.toISOString().split('T')[0]);
+    }, []);
+
+    // Filtrar os dados do mês específico
+    const dadosDoMesPassado = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= new Date(primeiroDia) && itemDateDay <= new Date(ultimoDia);
+    });
+
+    // Agrupar os dados por dia
+    const dadosAgrupadosPassado = dadosDoMesPassado.reduce((acc, item) => {
+        const dia = moment(item.created_at).format('DD/MM/YYYY');
+        acc[dia] = acc[dia] || [];
+        acc[dia].push(item);
+        return acc;
+    }, {});
+
+    // Calcular o somatório para cada dia
+    const somatoriosPorDiaPassado = Object.keys(dadosAgrupadosPassado).map(dia_mes_passado => {
+        const faturamento_do_dia_mes_passado = dadosAgrupadosPassado[dia_mes_passado].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { dia_mes_passado, faturamento_do_dia_mes_passado };
+    });
+    /* @ts-ignore */
+    const past_and_last = somatoriosPorDiaPassado.concat(somatoriosPorDia)
+
+    /* const dados_do_mes_passado: any = [];
+    (past_and_last || []).forEach((item) => {
+        dados_do_mes_passado.push({
+            "Dia do mes passado": item.dia,
+            "Faturamento do dia passado": item.somatorioDia,
+            "Dia do mes": item
+            "Faturamento do dia": item.Faturamento_do_dia
+        });
+    }); */
+
+    console.log(past_and_last)
+
+
 
 
 
@@ -333,11 +371,32 @@ const Dashboard: React.FC = () => {
                                 bottom: 0
                             }}
                         >
-                            <CartesianGrid strokeDasharray="31 31" />
-                            <XAxis dataKey="Dia do mes" />
+                            <CartesianGrid strokeDasharray="1" />
+                            <XAxis dataKey="Dia_do_mes" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="Faturamento do dia" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="Faturamento_do_dia" stackId="1" stroke='#82caed' fill="#5faf40" />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                    <br />
+                    <ResponsiveContainer width="100%" aspect={3}>
+                        <AreaChart
+                            width={500}
+                            height={200}
+                            data={past_and_last}
+                            margin={{
+                                top: 10,
+                                right: 30,
+                                left: 0,
+                                bottom: 0
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="dia" />
+                            <YAxis />
+                            <Tooltip />
+                            <Area type="monotone" dataKey="faturamento_do_dia" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="faturamento_do_dia_mes_passado" stackId="1" stroke='#82caed' fill="#ffc658" />
                         </AreaChart>
                     </ResponsiveContainer>
 
