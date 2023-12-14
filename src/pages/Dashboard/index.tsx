@@ -42,11 +42,6 @@ const Dashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const passed_formated = new Date(formatedPassed);
 
-    const filterMonth = totalPaymentsStatus.filter((item) => {
-        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
-        return itemDateDay >= passed_formated && itemDateDay <= atual_formated;
-    });
-
     // Filtrar os dados do mês específico
     const dadosDoMes = totalPaymentsStatus.filter((item) => {
         const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
