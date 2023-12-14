@@ -326,7 +326,7 @@ const Dashboard: React.FC = () => {
                     />
                     <br />
                     <br />
-                    <ResponsiveContainer width="100%" aspect={2}>
+                    <ResponsiveContainer width="100%" aspect={3}>
                         <AreaChart
                             width={500}
                             height={200}
