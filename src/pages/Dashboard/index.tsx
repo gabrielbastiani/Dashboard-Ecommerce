@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { setupAPIClient } from "../../services/api";
 import { Content, Grid } from "./styles";
 import MainHeader from "../../components/MainHeader";
@@ -50,15 +50,15 @@ const Dashboard: React.FC = () => {
 
     // Calcular o somatório para cada dia
     const somatoriosPorDia = Object.keys(dadosAgrupados).map(dia => {
-        const faturamento_do_dia = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
-        return { dia, faturamento_do_dia };
+        const faturamento = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { dia, faturamento };
     });
 
     const dados_do_mes: any = [];
     (somatoriosPorDia || []).forEach((item) => {
         dados_do_mes.push({
             "Dia_do_mes": item.dia,
-            "Faturamento_do_dia": item.faturamento_do_dia
+            "Faturamento_do_dia": item.faturamento
         });
     });
 
@@ -90,9 +90,9 @@ const Dashboard: React.FC = () => {
     }, {});
 
     // Calcular o somatório para cada dia
-    const somatoriosPorDiaPassado = Object.keys(dadosAgrupadosPassado).map(dia_mes_passado => {
-        const faturamento_do_dia_mes_passado = dadosAgrupadosPassado[dia_mes_passado].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
-        return { dia_mes_passado, faturamento_do_dia_mes_passado };
+    const somatoriosPorDiaPassado = Object.keys(dadosAgrupadosPassado).map(dia => {
+        const faturamento = dadosAgrupadosPassado[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { dia, faturamento };
     });
     /* @ts-ignore */
     const past_and_last = somatoriosPorDiaPassado.concat(somatoriosPorDia)
@@ -376,6 +376,7 @@ const Dashboard: React.FC = () => {
                             <YAxis />
                             <Tooltip />
                             <Area type="monotone" dataKey="Faturamento_do_dia" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
                     <br />
@@ -391,12 +392,13 @@ const Dashboard: React.FC = () => {
                                 bottom: 0
                             }}
                         >
-                            <CartesianGrid strokeDasharray="3 3" />
+                            <CartesianGrid strokeDasharray="2 2" />
                             <XAxis dataKey="dia" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="faturamento_do_dia" stackId="1" stroke='#82caed' fill="#5faf40" />
-                            <Area type="monotone" dataKey="faturamento_do_dia_mes_passado" stackId="1" stroke='#82caed' fill="#ffc658" />
+                            <Area type="monotone" dataKey="faturamento" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="faturamento" stackId="1" stroke='#82caed' fill="#ffc658" />
+                            <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
 
