@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Legend, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { setupAPIClient } from "../../services/api";
 import { Content, Grid } from "./styles";
 import MainHeader from "../../components/MainHeader";
@@ -24,93 +24,11 @@ import stock from "../../assets/stock.svg";
 
 
 const Dashboard: React.FC = () => {
-
+      
     const [totalPaymentsStatus, setTotalPaymentsStatus] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const [visited, setVisited] = useState<any[]>([]);
     const [customersDate, setCustomersDate] = useState<any[]>([]);
-
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
-    // Filtrar os dados do mês específico
-    const dadosDoMes = totalPaymentsStatus.filter((item) => {
-        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
-        return itemDateDay >= firstDayOfMonth && itemDateDay <= lastDayOfMonth;
-    });
-
-    // Agrupar os dados por dia
-    const dadosAgrupados = dadosDoMes.reduce((acc, item) => {
-        const dia = moment(item.created_at).format('DD/MM/YYYY');
-        acc[dia] = acc[dia] || [];
-        acc[dia].push(item);
-        return acc;
-    }, {});
-
-    // Calcular o somatório para cada dia
-    const somatoriosPorDia = Object.keys(dadosAgrupados).map(dia => {
-        const faturamento = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
-        return { dia, faturamento };
-    });
-
-    const dados_do_mes: any = [];
-    (somatoriosPorDia || []).forEach((item) => {
-        dados_do_mes.push({
-            "Dia_do_mes": item.dia,
-            "Faturamento_do_dia": item.faturamento
-        });
-    });
-
-    // DADOS DO MES PASSADO
-
-    const [primeiroDia, setPrimeiroDia] = useState(Date);
-    const [ultimoDia, setUltimoDia] = useState(Date);
-
-    useEffect(() => {
-        const dataAtual = new Date();
-        const primeiroDiaMesPassado = new Date(dataAtual.getFullYear(), dataAtual.getMonth() - 1, 1);
-        const ultimoDiaMesPassado = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 0);
-        setPrimeiroDia(primeiroDiaMesPassado.toISOString().split('T')[0]);
-        setUltimoDia(ultimoDiaMesPassado.toISOString().split('T')[0]);
-    }, []);
-
-    // Filtrar os dados do mês específico
-    const dadosDoMesPassado = totalPaymentsStatus.filter((item) => {
-        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
-        return itemDateDay >= new Date(primeiroDia) && itemDateDay <= new Date(ultimoDia);
-    });
-
-    // Agrupar os dados por dia
-    const dadosAgrupadosPassado = dadosDoMesPassado.reduce((acc, item) => {
-        const dia = moment(item.created_at).format('DD/MM/YYYY');
-        acc[dia] = acc[dia] || [];
-        acc[dia].push(item);
-        return acc;
-    }, {});
-
-    // Calcular o somatório para cada dia
-    const somatoriosPorDiaPassado = Object.keys(dadosAgrupadosPassado).map(dia => {
-        const faturamento = dadosAgrupadosPassado[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
-        return { dia, faturamento };
-    });
-    /* @ts-ignore */
-    const past_and_last = somatoriosPorDiaPassado.concat(somatoriosPorDia)
-
-    /* const dados_do_mes_passado: any = [];
-    (past_and_last || []).forEach((item) => {
-        dados_do_mes_passado.push({
-            "Dia do mes passado": item.dia,
-            "Faturamento do dia passado": item.somatorioDia,
-            "Dia do mes": item
-            "Faturamento do dia": item.Faturamento_do_dia
-        });
-    }); */
-
-    console.log(past_and_last)
-
-
-
 
 
     useEffect(() => {
@@ -132,39 +50,8 @@ const Dashboard: React.FC = () => {
     }, []);
 
 
-
-    // VALORES TOTAIS
-
-    /* const datesFilter = totalPayments.map(item => item); */
-    /* const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
- 
-    const totalfaturamentopayments: number = paymentsTotal.reduce((acumulador, objeto) => {
-        return acumulador + objeto
-    }, 0);
- 
-    const [data, setData] = useState<any []>([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
- 
-    const filterData = () => {
-        const startDateObj = new Date(startDate);
-        const endDateObj = new Date(endDate);
- 
-        const filteredData = datesFilter.filter((item) => {
-            const itemDate = new Date(moment(item.created_at).format('YYYY-MM-DD'));
-            return itemDate >= startDateObj && itemDate <= endDateObj;
-        });
- 
-        setData(filteredData);
-    };
- 
-    const payments = data.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
- 
-    const totalfaturamento: number = payments.reduce((acumulador, objeto) => {
-        return acumulador + objeto
-    }, 0); */
-
     // VALORES DIA
+
 
     const dayAtual = moment(new Date()).format('DD/MM/YYYY');
     const startDateObjDay = new Date(moment().format('YYYY-MM-DD'));
@@ -217,6 +104,136 @@ const Dashboard: React.FC = () => {
     const convert_users: number = (filteredDataDay.length / visitedUser) * 100;
 
 
+    // DADOS DO MES ATUAL
+
+
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+    const dadosDoMes = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= firstDayOfMonth && itemDateDay <= lastDayOfMonth;
+    });
+
+    const dadosAgrupados = dadosDoMes.reduce((acc, item) => {
+        const dia = moment(item.created_at).format('DD/MM/YYYY');
+        acc[dia] = acc[dia] || [];
+        acc[dia].push(item);
+        return acc;
+    }, {});
+
+    const somatoriosPorDia = Object.keys(dadosAgrupados).map(dia => {
+        const faturamento = dadosAgrupados[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { dia, faturamento };
+    });
+
+    const dados_do_mes: any = [];
+    (somatoriosPorDia || []).forEach((item) => {
+        dados_do_mes.push({
+            "Dia_do_mes": item.dia,
+            "Faturamento_do_dia": item.faturamento
+        });
+    });
+
+
+    // DADOS DO MES PASSADO COMPARATIVO COM O MES ATUAL
+
+
+    const [primeiroDia, setPrimeiroDia] = useState(Date);
+    const [ultimoDia, setUltimoDia] = useState(Date);
+
+    useEffect(() => {
+        const dataAtual = new Date();
+        const primeiroDiaMesPassado = new Date(dataAtual.getFullYear(), dataAtual.getMonth() - 1, 1);
+        const ultimoDiaMesPassado = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 0);
+        setPrimeiroDia(primeiroDiaMesPassado.toISOString().split('T')[0]);
+        setUltimoDia(ultimoDiaMesPassado.toISOString().split('T')[0]);
+    }, []);
+
+    const dadosDoMesPassado = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= new Date(primeiroDia) && itemDateDay <= new Date(ultimoDia);
+    });
+
+    const dadosAgrupadosPassado = dadosDoMesPassado.reduce((acc, item) => {
+        const dia = moment(item.created_at).format('DD/MM/YYYY');
+        acc[dia] = acc[dia] || [];
+        acc[dia].push(item);
+        return acc;
+    }, {});
+
+    const somatoriosPorDiaPassado = Object.keys(dadosAgrupadosPassado).map(dia => {
+        const faturamento = dadosAgrupadosPassado[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { dia, faturamento };
+    });
+    
+    const past_and_last = somatoriosPorDiaPassado.concat(somatoriosPorDia);
+
+    const dados_do_mes_passado: any = [];
+    (past_and_last || []).forEach((item) => {
+        dados_do_mes_passado.push({
+            "dia": item.dia.substring(0, 2),
+            "faturamento": item.faturamento
+        });
+    });
+
+    const dadosAgrupadosPassadoFilter = dados_do_mes_passado.reduce((acc: any, item: any) => {
+        const dia = item.dia.substring(0, 2);
+        acc[dia] = acc[dia] || [];
+        acc[dia].push(item);
+        return acc;
+    }, {});
+
+    const somatoriosPorDiaPassadoFilter = Object.keys(dadosAgrupadosPassadoFilter).map(dia => {
+        const faturamento = dadosAgrupadosPassadoFilter[dia]
+        return { dia, faturamento };
+    });
+
+    const dados_do_mes_comparativos: any = [];
+    (somatoriosPorDiaPassadoFilter || []).forEach((item) => {
+        dados_do_mes_comparativos.push({
+            "dia": item.dia,
+            "faturamento": item.faturamento.map((item: { faturamento: any; }) => item.faturamento)
+        });
+    });
+
+
+
+    // VALORES TOTAIS
+
+    /* const datesFilter = totalPayments.map(item => item); */
+    /* const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
+ 
+    const totalfaturamentopayments: number = paymentsTotal.reduce((acumulador, objeto) => {
+        return acumulador + objeto
+    }, 0);
+ 
+    const [data, setData] = useState<any []>([]);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+ 
+    const filterData = () => {
+        const startDateObj = new Date(startDate);
+        const endDateObj = new Date(endDate);
+ 
+        const filteredData = datesFilter.filter((item) => {
+            const itemDate = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+            return itemDate >= startDateObj && itemDate <= endDateObj;
+        });
+ 
+        setData(filteredData);
+    };
+ 
+    const payments = data.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
+ 
+    const totalfaturamento: number = payments.reduce((acumulador, objeto) => {
+        return acumulador + objeto
+    }, 0); */
+
+    
+
+
     // CLIENTES
 
 
@@ -237,8 +254,6 @@ const Dashboard: React.FC = () => {
         const itemDateDayConfirmed = item.stock === 0;
         return itemDateDayConfirmed;
     });
-
-
 
 
 
@@ -371,7 +386,7 @@ const Dashboard: React.FC = () => {
                                 bottom: 0
                             }}
                         >
-                            <CartesianGrid strokeDasharray="1" />
+                            <CartesianGrid strokeDasharray="10 10" />
                             <XAxis dataKey="Dia_do_mes" />
                             <YAxis />
                             <Tooltip />
@@ -384,7 +399,7 @@ const Dashboard: React.FC = () => {
                         <AreaChart
                             width={500}
                             height={200}
-                            data={past_and_last}
+                            data={dados_do_mes_comparativos}
                             margin={{
                                 top: 10,
                                 right: 30,
@@ -392,12 +407,12 @@ const Dashboard: React.FC = () => {
                                 bottom: 0
                             }}
                         >
-                            <CartesianGrid strokeDasharray="2 2" />
+                            <CartesianGrid strokeDasharray="10 10" />
                             <XAxis dataKey="dia" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="faturamento" stackId="1" stroke='#82caed' fill="#5faf40" />
-                            <Area type="monotone" dataKey="faturamento" stackId="1" stroke='#82caed' fill="#ffc658" />
+                            <Area type="monotone" dataKey="faturamento[0]" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="faturamento[1]" stackId="1" stroke='#82caed' fill="#d08d29" />
                             <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
