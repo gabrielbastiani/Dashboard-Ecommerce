@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
     (somatoriosPorDia || []).forEach((item) => {
         dados_do_mes.push({
             "Dia_do_mes": item.dia,
-            "Faturamento_do_dia": item.faturamento
+            "Faturamento": item.faturamento
         });
     });
 
@@ -194,7 +194,8 @@ const Dashboard: React.FC = () => {
     (somatoriosPorDiaPassadoFilter || []).forEach((item) => {
         dados_do_mes_comparativos.push({
             "dia": item.dia,
-            "faturamento": item.faturamento.map((item: { faturamento: any; }) => item.faturamento)
+            "Faturamento anterior": item.faturamento[0].faturamento,
+            "Faturamento atual": item.faturamento[1].faturamento,
         });
     });
 
@@ -390,7 +391,7 @@ const Dashboard: React.FC = () => {
                             <XAxis dataKey="Dia_do_mes" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="Faturamento_do_dia" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="Faturamento" stackId="1" stroke='#82caed' fill="#5faf40" />
                             <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
@@ -411,8 +412,8 @@ const Dashboard: React.FC = () => {
                             <XAxis dataKey="dia" />
                             <YAxis />
                             <Tooltip />
-                            <Area type="monotone" dataKey="faturamento[0]" stackId="1" stroke='#82caed' fill="#5faf40" />
-                            <Area type="monotone" dataKey="faturamento[1]" stackId="1" stroke='#82caed' fill="#d08d29" />
+                            <Area type="monotone" dataKey="Faturamento anterior" stackId="1" stroke='#82caed' fill="#5faf40" />
+                            <Area type="monotone" dataKey="Faturamento atual" stackId="1" stroke='#82caed' fill="#d08d29" />
                             <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
