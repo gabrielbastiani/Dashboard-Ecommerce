@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, Legend, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { setupAPIClient } from "../../services/api";
 import { Content, Grid } from "./styles";
 import MainHeader from "../../components/MainHeader";
@@ -24,7 +24,7 @@ import stock from "../../assets/stock.svg";
 
 
 const Dashboard: React.FC = () => {
-      
+
     const [totalPaymentsStatus, setTotalPaymentsStatus] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const [visited, setVisited] = useState<any[]>([]);
@@ -136,6 +136,41 @@ const Dashboard: React.FC = () => {
         });
     });
 
+    // --------------------------------------------------------------
+
+    const meios_pagamentos: any = [];
+    (dadosDoMes || []).forEach((item) => {
+        meios_pagamentos.push({
+            "Pagamento": item.order.payment.type_payment
+        });
+    });
+
+    console.log(dadosDoMes)
+
+    console.log(meios_pagamentos)
+
+    const data = [
+        { name: 'Group A', value: 400 },
+        { name: 'Group B', value: 300 },
+        { name: 'Group C', value: 300 },
+        { name: 'Group D', value: 200 },
+    ];
+
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+    const RADIAN = Math.PI / 180;
+    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
+        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+        return (
+            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+                {`${(percent * 100).toFixed(0)}%`}
+            </text>
+        );
+    };
+
 
     // DADOS DO MES PASSADO COMPARATIVO COM O MES ATUAL
 
@@ -167,7 +202,7 @@ const Dashboard: React.FC = () => {
         const faturamento = dadosAgrupadosPassado[dia].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
         return { dia, faturamento };
     });
-    
+
     const past_and_last = somatoriosPorDiaPassado.concat(somatoriosPorDia);
 
     const dados_do_mes_passado: any = [];
@@ -193,7 +228,7 @@ const Dashboard: React.FC = () => {
     const dados_do_mes_comparativos: any = [];
     (somatoriosPorDiaPassadoFilter || []).forEach((item) => {
         dados_do_mes_comparativos.push({
-            "dia": item.dia,
+            "dia": `Dia ${item.dia}`,
             "Faturamento anterior": item.faturamento[0].faturamento,
             "Faturamento atual": item.faturamento[1].faturamento,
         });
@@ -232,7 +267,7 @@ const Dashboard: React.FC = () => {
         return acumulador + objeto
     }, 0); */
 
-    
+
 
 
     // CLIENTES
@@ -395,6 +430,38 @@ const Dashboard: React.FC = () => {
                             <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
+                    <br />
+                    <br />
+                    <Titulos
+                        tipo="h2"
+                        titulo="Formas de pagamento"
+                    />
+
+                    <PieChart width={400} height={400}>
+                        <Pie
+                            data={data}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={renderCustomizedLabel}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                        >
+                            {data.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                    </PieChart>
+                    <br />
+                    <br />
+                    <Titulos
+                        tipo="h2"
+                        titulo="Comparativos mês passado e mês atual"
+                    />
+                    <br />
                     <br />
                     <ResponsiveContainer width="100%" aspect={3}>
                         <AreaChart
