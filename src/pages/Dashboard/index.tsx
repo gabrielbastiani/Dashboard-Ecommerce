@@ -145,10 +145,6 @@ const Dashboard: React.FC = () => {
         });
     });
 
-    console.log(dadosDoMes)
-
-    console.log(meios_pagamentos)
-
     const data = [
         { name: 'Group A', value: 400 },
         { name: 'Group B', value: 300 },
@@ -230,9 +226,11 @@ const Dashboard: React.FC = () => {
         dados_do_mes_comparativos.push({
             "dia": `Dia ${item.dia}`,
             "Faturamento anterior": item.faturamento[0].faturamento,
-            "Faturamento atual": item.faturamento[1].faturamento,
+            "Faturamento atual": item.faturamento[1].faturamento ? item.faturamento[1].faturamento : []
         });
     });
+
+    console.log(dados_do_mes_comparativos)
 
 
 
