@@ -26,6 +26,11 @@ import { FaTimesCircle } from "react-icons/fa";
 import { BlockExport, ButtonExit } from "../Newsletters/styles";
 import Warnings from "../../components/Warnings";
 import { AuthContext } from "../../contexts/AuthContext";
+import pix from '../../assets/pix.png';
+import boleto from '../../assets/boleto.png';
+import cartao from '../../assets/credit-card.png';
+import { ImgPayment } from "./styles";
+
 
 
 const Pedidos: React.FC = () => {
@@ -126,6 +131,7 @@ const Pedidos: React.FC = () => {
             "Cliente": item.customer.name,
             "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
+            "Forma de Pagamento": item.payment.type_payment === "Cartão de Crédito" ? <ImgPayment src={cartao} /> : item.payment.type_payment === "PIX" ? <ImgPayment src={pix} /> : item.payment.type_payment === "Boleto bancário" ? <ImgPayment src={boleto} /> : null,
             "Situação": item.statusOrder[0].status_order === "PENDING" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Processando ou Cancelado",
             "botaoDetalhes": `/pedido/${item.id}`
         });
@@ -215,7 +221,7 @@ const Pedidos: React.FC = () => {
                                 />
 
                                 <TabelaSimples
-                                    cabecalho={["Pedido", "Cliente", "Valor Total", "Data", "Situação"]}
+                                    cabecalho={["Pedido", "Cliente", "Valor Total", "Data", "Forma de Pagamento", "Situação"]}
                                     dados={dados}
                                     textbutton={"Detalhes"}
                                 />
