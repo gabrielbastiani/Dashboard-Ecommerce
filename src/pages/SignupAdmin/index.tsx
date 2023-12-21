@@ -145,7 +145,6 @@ const SignupAdmin: React.FC = () => {
                     </>
                 }
 
-
                 <Formulario onSubmit={handleRegister}>
 
                     <Input
