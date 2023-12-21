@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { AuthContext } from './contexts/AuthContext';
 
 import Dashboard from './pages/Dashboard';
 import Painel from './pages/Painel';
@@ -85,106 +86,147 @@ import Notificacoes from './pages/Configuracoes/Notificacoes';
 
 const RoutesAuth: React.FC = () => {
 
+    const { admin } = useContext(AuthContext);
+
     return (
         <Routes>
-            <Route path='/' element={<Dashboard />} />
-            <Route path='/painel' element={<Painel />} />
 
-            <Route path='/pedidos' element={<Pedidos />} />
-            <Route path='/pedido/:order_id' element={<Pedido />} />
-            <Route path='/pedidos/emailStausOrder' element={<TemplateEmailOrderStatus />} />
-            <Route path='/pedidos/TemplateEmailOrderStatus/novo' element={<NovoTemplateStatusOrder />} />
-            <Route path='/pedidos/templateEmailOrderStatus/:slug_name_file_email' element={<EditTemplateOrderStatus />} />
-            <Route path='/pedidos/emailFretes' element={<TemplateEmailFretes />} />
-            <Route path='/pedidos/TemplateEmailFretes/novo' element={<NovoTemplateEmailFretes />} />
-            <Route path='/pedidos/templateEmailFreteStatus/:slug_name_file_email' element={<EditTemplateEmailFretes />} />
+            {admin.role === "ADMIN" ?
+                <>
+                    <Route path='/' element={<Dashboard />} />
+                    <Route path='/painel' element={<Painel />} />
 
-            <Route path='/clientes' element={<Clientes />} />
-            <Route path='/cliente/:customer_id' element={<Cliente />} />
-            <Route path='/cliente/pedido/:order_id' element={<Pedido />} />
-            <Route path='/contrapropostas' element={<Contrapropostas />} />
-            <Route path='/contraproposta/:counterproposal_id' element={<Contraproposta />} />
+                    <Route path='/pedidos' element={<Pedidos />} />
+                    <Route path='/pedido/:order_id' element={<Pedido />} />
+                    <Route path='/pedidos/emailStausOrder' element={<TemplateEmailOrderStatus />} />
+                    <Route path='/pedidos/TemplateEmailOrderStatus/novo' element={<NovoTemplateStatusOrder />} />
+                    <Route path='/pedidos/templateEmailOrderStatus/:slug_name_file_email' element={<EditTemplateOrderStatus />} />
+                    <Route path='/pedidos/emailFretes' element={<TemplateEmailFretes />} />
+                    <Route path='/pedidos/TemplateEmailFretes/novo' element={<NovoTemplateEmailFretes />} />
+                    <Route path='/pedidos/templateEmailFreteStatus/:slug_name_file_email' element={<EditTemplateEmailFretes />} />
 
-            <Route path='/categorias' element={<Categorias />} />
-            <Route path='/categoria/nova' element={<NovaCategoria />} />
-            <Route path='/categoria/:category_id' element={<Categoria />} />
-            <Route path='/categoria/subCategoria/:parentId' element={<SubCategoria />} />
-            <Route path='/categoria/subCategoria/edit/:category_id' element={<Categoria />} />
+                    <Route path='/clientes' element={<Clientes />} />
+                    <Route path='/cliente/:customer_id' element={<Cliente />} />
+                    <Route path='/cliente/pedido/:order_id' element={<Pedido />} />
+                    <Route path='/contrapropostas' element={<Contrapropostas />} />
+                    <Route path='/contraproposta/:counterproposal_id' element={<Contraproposta />} />
 
-            <Route path='/menus' element={<MenusCategorias />} />
-            <Route path='/menu/novo' element={<NovoMenu />} />
-            <Route path='/menu/edit/:menuCategory_id' element={<EditMenu />} />
-            <Route path='/menu/:menuCategory_id' element={<CategoriasMenu />} />
-            <Route path='/menu/categoriaMenu/edit/:menuCategory_id' element={<EditItem />} />
+                    <Route path='/categorias' element={<Categorias />} />
+                    <Route path='/categoria/nova' element={<NovaCategoria />} />
+                    <Route path='/categoria/:category_id' element={<Categoria />} />
+                    <Route path='/categoria/subCategoria/:parentId' element={<SubCategoria />} />
+                    <Route path='/categoria/subCategoria/edit/:category_id' element={<Categoria />} />
 
-            <Route path='/produtos' element={<Produtos />} />
-            <Route path='/produto/novo' element={<NovoProduto />} />
-            <Route path='/produto/:slug/:product_id' element={<Produto />} />
-            <Route path='/produto/descricao/nova/:slug/:product_id' element={<ProductDescription />} />
-            <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
-            <Route path='/avaliacao/:slug/:avalietion_id' element={<Avaliacao />} />
-            <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
+                    <Route path='/menus' element={<MenusCategorias />} />
+                    <Route path='/menu/novo' element={<NovoMenu />} />
+                    <Route path='/menu/edit/:menuCategory_id' element={<EditMenu />} />
+                    <Route path='/menu/:menuCategory_id' element={<CategoriasMenu />} />
+                    <Route path='/menu/categoriaMenu/edit/:menuCategory_id' element={<EditItem />} />
 
-            <Route path='/coupoms' element={<Coupoms />} />
-            <Route path='/cupom/novo' element={<NovoCupom />} />
-            <Route path='/cupom/:cupon_id' element={<Cupom />} />
+                    <Route path='/produtos' element={<Produtos />} />
+                    <Route path='/produto/novo' element={<NovoProduto />} />
+                    <Route path='/produto/:slug/:product_id' element={<Produto />} />
+                    <Route path='/produto/descricao/nova/:slug/:product_id' element={<ProductDescription />} />
+                    <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
+                    <Route path='/avaliacao/:slug/:avalietion_id' element={<Avaliacao />} />
+                    <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
 
-            <Route path='/carrinho/metricas' element={<Metricas />} />
-            <Route path='/carrinho/metricas/:slug_day' element={<MetricaDetalhes />} />
-            <Route path='/carrinho/metricas/detalhes/:abandonedCart_id' element={<DetalheCarrinhoAbandonado />} />
-            <Route path='/carrinho/configuracoes' element={<CarrinhoAbandonado />} />
-            <Route path='/carrinho/configuracoes/novo' element={<NovaConfiguracao />} />
-            <Route path='/carrinho/configuracoes/:configAbandonedCart_id' element={<EditConfiguracao />} />
-            <Route path='/carrinho/emails' element={<TemplatesEmailAbandonedCart />} />
-            <Route path='/carrinho/templateEmail/novo' element={<NovoTemplate />} />
-            <Route path='/carrinho/templateEmail/:slug_name_file_email' element={<EditTemplate />} />
+                    <Route path='/coupoms' element={<Coupoms />} />
+                    <Route path='/cupom/novo' element={<NovoCupom />} />
+                    <Route path='/cupom/:cupon_id' element={<Cupom />} />
 
-            <Route path='/atributos' element={<Atributos />} />
-            <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />
-            <Route path='/tipoAtributo/edit/:typeAttribute_id' element={<Atributo />} />
+                    <Route path='/carrinho/metricas' element={<Metricas />} />
+                    <Route path='/carrinho/metricas/:slug_day' element={<MetricaDetalhes />} />
+                    <Route path='/carrinho/metricas/detalhes/:abandonedCart_id' element={<DetalheCarrinhoAbandonado />} />
+                    <Route path='/carrinho/configuracoes' element={<CarrinhoAbandonado />} />
+                    <Route path='/carrinho/configuracoes/novo' element={<NovaConfiguracao />} />
+                    <Route path='/carrinho/configuracoes/:configAbandonedCart_id' element={<EditConfiguracao />} />
+                    <Route path='/carrinho/emails' element={<TemplatesEmailAbandonedCart />} />
+                    <Route path='/carrinho/templateEmail/novo' element={<NovoTemplate />} />
+                    <Route path='/carrinho/templateEmail/:slug_name_file_email' element={<EditTemplate />} />
 
-            <Route path='/compreJunto' element={<CompreJunto />} />
-            <Route path='/compreJunto/grupo/novo' element={<NovoGrupoCompreJunto />} />
-            <Route path='/compreJunto/grupo/edit/:buyTogether_id' element={<EditGrupoCompreJunto />} />
-            <Route path='/compreJunto/grupo/:buyTogether_id' element={<ProdutosGrupo />} />
+                    <Route path='/atributos' element={<Atributos />} />
+                    <Route path='/tipoAtributo/novo' element={<NovoAtributo />} />
+                    <Route path='/tipoAtributo/edit/:typeAttribute_id' element={<Atributo />} />
 
-            <Route path='/filterGrupos' element={<Filtros />} />
-            <Route path='/grupoFiltro/atributos/novo' element={<NovoGrupoFiltroAtributo />} />
-            <Route path='/grupoFiltro/categorias/novo' element={<NovoGrupoFiltroCategoria />} />
-            <Route path='/grupoFiltro/categorias/:groupFilter_id' element={<CategoryFiltro />} />
-            <Route path='/filtroCategory/edit/:filterCategory_id' element={<EditCategoryFiltro />} />
-            <Route path='/grupoFiltroAtributo/edit/:groupFilter_id' element={<EditGroupFiltroAtributo />} />
-            <Route path='/grupoFiltroCategoria/edit/:groupFilter_id' element={<EditGroupFiltroCategory />} />
-            <Route path='/grupoFiltro/atributos/:groupFilter_id' element={<AtributoFiltro />} />
-            <Route path='/filtroAtributo/edit/:filterAttribute_id' element={<EditAtributoFiltro />} />
+                    <Route path='/compreJunto' element={<CompreJunto />} />
+                    <Route path='/compreJunto/grupo/novo' element={<NovoGrupoCompreJunto />} />
+                    <Route path='/compreJunto/grupo/edit/:buyTogether_id' element={<EditGrupoCompreJunto />} />
+                    <Route path='/compreJunto/grupo/:buyTogether_id' element={<ProdutosGrupo />} />
 
-            <Route path='/banners' element={<Banners />} />
-            <Route path='/banners/novo' element={<NovoBanner />} />
-            <Route path='/banner/:banner_id' element={<Banner />} />
+                    <Route path='/filterGrupos' element={<Filtros />} />
+                    <Route path='/grupoFiltro/atributos/novo' element={<NovoGrupoFiltroAtributo />} />
+                    <Route path='/grupoFiltro/categorias/novo' element={<NovoGrupoFiltroCategoria />} />
+                    <Route path='/grupoFiltro/categorias/:groupFilter_id' element={<CategoryFiltro />} />
+                    <Route path='/filtroCategory/edit/:filterCategory_id' element={<EditCategoryFiltro />} />
+                    <Route path='/grupoFiltroAtributo/edit/:groupFilter_id' element={<EditGroupFiltroAtributo />} />
+                    <Route path='/grupoFiltroCategoria/edit/:groupFilter_id' element={<EditGroupFiltroCategory />} />
+                    <Route path='/grupoFiltro/atributos/:groupFilter_id' element={<AtributoFiltro />} />
+                    <Route path='/filtroAtributo/edit/:filterAttribute_id' element={<EditAtributoFiltro />} />
 
-            <Route path='/newsletters' element={<Newsletters />} />
-            <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
+                    <Route path='/banners' element={<Banners />} />
+                    <Route path='/banners/novo' element={<NovoBanner />} />
+                    <Route path='/banner/:banner_id' element={<Banner />} />
 
-            <Route path='/contatos' element={<Contatos />} />
-            <Route path='/contato/:contact_id' element={<Contato />} />
+                    <Route path='/newsletters' element={<Newsletters />} />
+                    <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
 
-            <Route path='/configuracoes' element={<Configuracoes />} />
-            <Route path='/rede/:socialMedia_id' element={<Rede />} />
-            <Route path='/textosInstitucionais' element={<TextosInstitucionais />} />
-            <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
-            <Route path='/texto/:institutionalText_id' element={<Texto />} />
-            <Route path='/configuracoes/loja' element={<Loja />} />
-            <Route path='/configuracoes/emailstransacionais' element={<EmailsTransacionais />} />
-            <Route path='/configuracoes/emailstransacionais/:emailTransacional' element={<EditTemplateEmailTransacional />} />
-            <Route path='/configuracoes/notificacoes' element={<Notificacoes />} />
+                    <Route path='/contatos' element={<Contatos />} />
+                    <Route path='/contato/:contact_id' element={<Contato />} />
 
-            <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
-            <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />
-            <Route path='/imagem/:imageStore_id' element={<Imagem />} />
+                    <Route path='/configuracoes' element={<Configuracoes />} />
+                    <Route path='/rede/:socialMedia_id' element={<Rede />} />
+                    <Route path='/textosInstitucionais' element={<TextosInstitucionais />} />
+                    <Route path='/textosInstitucionais/novo' element={<NovoTexto />} />
+                    <Route path='/texto/:institutionalText_id' element={<Texto />} />
+                    <Route path='/configuracoes/loja' element={<Loja />} />
+                    <Route path='/configuracoes/emailstransacionais' element={<EmailsTransacionais />} />
+                    <Route path='/configuracoes/emailstransacionais/:emailTransacional' element={<EditTemplateEmailTransacional />} />
+                    <Route path='/configuracoes/notificacoes' element={<Notificacoes />} />
 
-            <Route path='/perfil' element={<Perfil />} />
-            <Route path='/usuarios' element={<Usuarios />} />
-            <Route path='/usuarios/usuario/:admin_id' element={<Usuario />} />
+                    <Route path='/imagensInstitucionais' element={<ImagensLoja />} />
+                    <Route path='/imagensInstitucionais/nova' element={<NovaImagem />} />
+                    <Route path='/imagem/:imageStore_id' element={<Imagem />} />
+
+                    <Route path='/perfil' element={<Perfil />} />
+                    <Route path='/usuarios' element={<Usuarios />} />
+                    <Route path='/usuarios/usuario/:admin_id' element={<Usuario />} />
+                </>
+                :
+                <>
+                    <Route path='/' element={<Dashboard />} />
+
+                    <Route path='/pedidos' element={<Pedidos />} />
+                    <Route path='/pedido/:order_id' element={<Pedido />} />
+
+                    <Route path='/contrapropostas' element={<Contrapropostas />} />
+                    <Route path='/contraproposta/:counterproposal_id' element={<Contraproposta />} />
+
+                    <Route path='/produtos' element={<Produtos />} />
+                    <Route path='/produto/avaliacoes/:slug/:product_id' element={<Avaliacoes />} />
+                    <Route path='/avaliacao/:slug/:avalietion_id' element={<Avaliacao />} />
+                    <Route path='/avaliacoes' element={<TodasAvaliacoes />} />
+
+                    <Route path='/coupoms' element={<Coupoms />} />
+
+                    <Route path='/carrinho/metricas' element={<Metricas />} />
+                    <Route path='/carrinho/metricas/:slug_day' element={<MetricaDetalhes />} />
+                    <Route path='/carrinho/metricas/detalhes/:abandonedCart_id' element={<DetalheCarrinhoAbandonado />} />
+
+                    <Route path='/banners' element={<Banners />} />
+                    <Route path='/banners/novo' element={<NovoBanner />} />
+                    <Route path='/banner/:banner_id' element={<Banner />} />
+
+                    <Route path='/newsletters' element={<Newsletters />} />
+                    <Route path='/newsletter/:newsletter_id' element={<Newsletter />} />
+
+                    <Route path='/contatos' element={<Contatos />} />
+                    <Route path='/contato/:contact_id' element={<Contato />} />
+
+                    <Route path='/perfil' element={<Perfil />} />
+                </>
+            }
+
         </Routes>
     );
 }
