@@ -249,6 +249,50 @@ const Produto: React.FC = () => {
         }
     }
 
+    async function updatePriceProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (numberPrice === "") {
+                toast.error('Não deixe a promoção do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updatePriceProduct?product_id=${product_id}`,
+                    {
+                        price: Number(numberPrice)
+                    });
+
+                toast.success('Valor do preço do produto atualizado com sucesso.');
+
+                refreshProduct();
+            }
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Ops erro ao atualizar o preço do produto.');
+        }
+    }
+
+    async function updatePromotionProduct() {
+        try {
+            const apiClient = setupAPIClient();
+            if (numberPromotion === "") {
+                toast.error('Não deixe a promoção do produto em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/updatePromotionProduct?product_id=${product_id}`,
+                    {
+                        promotion: Number(numberPromotion),
+                    });
+
+                toast.success('Valor da promoção atualizada com sucesso.');
+
+                refreshProduct();
+            }
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+            toast.error('Ops erro ao atualizar a promoção do produto.');
+        }
+    }
+
     async function updateProductData() {
         try {
             const apiClient = setupAPIClient();
@@ -259,8 +303,6 @@ const Produto: React.FC = () => {
                 await apiClient.put(`/updateAllDateProduct?product_id=${product_id}`,
                     {
                         name: name,
-                        price: Number(numberPrice),
-                        promotion: Number(numberPromotion),
                         sku: sku,
                         weight: peso,
                         width: width,
@@ -391,7 +433,7 @@ const Produto: React.FC = () => {
             const response = await apiClient.get(`/allVariationProduct?product_id=${product_id}`);
 
             setVariation(response.data || []);
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -533,15 +575,10 @@ const Produto: React.FC = () => {
                                             <InputUpdate
                                                 /* @ts-ignore */
                                                 dado={new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}
-                                                type="text"
                                                 maxLength={9}
-                                                /* @ts-ignore */
-                                                placeholder={price}
-                                                /* @ts-ignore */
-                                                value={priceFormated}
-                                                /* @ts-ignore */
+                                                value={priceFormated}/* @ts-ignore */
                                                 onChange={(e) => setPrice(e.target.value)}
-                                                handleSubmit={updateProductData}
+                                                handleSubmit={updatePriceProduct}
                                             />
                                         }
                                     />
@@ -555,14 +592,9 @@ const Produto: React.FC = () => {
                                                 /* @ts-ignore */
                                                 dado={new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}
                                                 maxLength={9}
-                                                type="text"
-                                                /* @ts-ignore */
-                                                placeholder={promotion}
-                                                /* @ts-ignore */
-                                                value={promotionFormated}
-                                                /* @ts-ignore */
+                                                value={promotionFormated}/* @ts-ignore */
                                                 onChange={(e) => setPromotion(e.target.value)}
-                                                handleSubmit={updateProductData}
+                                                handleSubmit={updatePromotionProduct}
                                             />
                                         }
                                     />
