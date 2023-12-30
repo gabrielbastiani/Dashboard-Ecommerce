@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
     const [products, setProducts] = useState<any[]>([]);
     const [visited, setVisited] = useState<any[]>([]);
     const [customersDate, setCustomersDate] = useState<any[]>([]);
+    const [typesPayments, setTypesPayments] = useState<any[]>([]);
 
 
     useEffect(() => {
@@ -41,6 +42,7 @@ const Dashboard: React.FC = () => {
                 setTotalPaymentsStatus(data?.statusOrder);
                 setVisited(data?.visitedUser);
                 setCustomersDate(data?.customer);
+                setTypesPayments(data?.typespayment);
 
             } catch (error) {
                 console.error(error);
@@ -137,21 +139,56 @@ const Dashboard: React.FC = () => {
     });
 
     // --------------------------------------------------------------
+    // Formas de pagamentos do mês
+
+    const typesPaymentMonth = typesPayments.filter((item) => {
+        const itemDateDay = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= firstDayOfMonth && itemDateDay <= lastDayOfMonth;
+    });
+
+    const agrupadosPaymentTypes = typesPaymentMonth.reduce((acc, item) => {
+        const dia = moment(item.created_at).format('DD/MM/YYYY');
+        acc[dia] = acc[dia] || [];
+        acc[dia].push(item);
+        return acc;
+    }, {});
+
+    const somatoriosPorDiaTypesPayment = Object.keys(agrupadosPaymentTypes).map(dia => {
+        const boleto = agrupadosPaymentTypes[dia].reduce((total: any, item: any) => total + item.qtd_type_boleto, 0);
+        const cartao = agrupadosPaymentTypes[dia].reduce((total: any, item: any) => total + item.qtd_type_cartao, 0);
+        const pix = agrupadosPaymentTypes[dia].reduce((total: any, item: any) => total + item.qtd_type_pix, 0);
+        return { dia, boleto, cartao, pix };
+    });
 
     const meios_pagamentos: any = [];
-    (dadosDoMes || []).forEach((item) => {
+    (somatoriosPorDiaTypesPayment || []).forEach((item) => {
         meios_pagamentos.push({
-            "Pagamento": item.order.payment.type_payment
+            "boleto": item.boleto,
+            "cartao": item.cartao,
+            "pix": item.pix
         });
     });
 
-    console.log(meios_pagamentos)
+    const propriedadeParaSomarBoleto = 'boleto';
+    const propriedadeParaSomarCartao = 'cartao';
+    const propriedadeParaSomarPix = 'pix';
 
-    const data = [
-        { name: 'Group A', value: 400 },
-        { name: 'Group B', value: 300 },
-        { name: 'Group C', value: 300 },
-        { name: 'Group D', value: 200 },
+    const soma_boleto = meios_pagamentos
+        .map((objeto: { [x: string]: any; }) => objeto[propriedadeParaSomarBoleto])
+        .reduce((acumulador: any, boleto: any) => acumulador + boleto, 0)
+
+    const soma_cartao = meios_pagamentos
+        .map((objeto: { [x: string]: any; }) => objeto[propriedadeParaSomarCartao])
+        .reduce((acumulador: any, cartao: any) => acumulador + cartao, 0)
+
+    const soma_pix = meios_pagamentos
+        .map((objeto: { [x: string]: any; }) => objeto[propriedadeParaSomarPix])
+        .reduce((acumulador: any, pix: any) => acumulador + pix, 0)
+
+    const meios_pagamentos_total = [
+        { name: "Boleto", quantidade: soma_boleto },
+        { name: "Cartao", quantidade: soma_cartao },
+        { name: "Pix", quantidade: soma_pix }
     ];
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -432,21 +469,21 @@ const Dashboard: React.FC = () => {
                     <br />
                     <Titulos
                         tipo="h2"
-                        titulo="Formas de pagamento"
+                        titulo="Formas de pagamento do mês"
                     />
 
                     <PieChart width={400} height={400}>
                         <Pie
-                            data={data}
+                            data={meios_pagamentos_total}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
                             label={renderCustomizedLabel}
                             outerRadius={80}
                             fill="#8884d8"
-                            dataKey="value"
+                            dataKey="quantidade"
                         >
-                            {data.map((entry, index) => (
+                            {meios_pagamentos.map((entry: any, index: number) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>
