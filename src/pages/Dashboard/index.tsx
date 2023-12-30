@@ -101,7 +101,7 @@ const Dashboard: React.FC = () => {
         return acumulador + objeto.visited
     }, 0);
 
-    const ticketDay = (filteredDataDay.length / totalfaturamentoDayConfirmed) * 100;
+    const ticketDay = totalfaturamentoDayConfirmed / filteredDataDay.length;
 
     const convert_users: number = (filteredDataDay.length / visitedUser) * 100;
 
@@ -137,6 +137,23 @@ const Dashboard: React.FC = () => {
             "Faturamento": item.faturamento
         });
     });
+
+    const total_mes: number = dados_do_mes.reduce(function (acumulador: any, objetoAtual: { Faturamento: any; }) {
+        return acumulador + objetoAtual.Faturamento;
+    }, 0);
+
+    const visitedStoreMonth = visited.filter((item) => {
+        const itemDateDay = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= firstDayOfMonth && itemDateDay <= lastDayOfMonth;
+    });
+
+    const visitedUserMonth: number = visitedStoreMonth.reduce((acumulador, objeto) => {
+        return acumulador + objeto.visited
+    }, 0);
+
+    const ticketMonth = total_mes / dadosDoMes.length;
+
+    const convert_users_month: number = (dadosDoMes.length / visitedUserMonth) * 100;
 
     // --------------------------------------------------------------
     // Formas de pagamentos do mês
@@ -384,6 +401,7 @@ const Dashboard: React.FC = () => {
                             amount={totalfaturamentoDayTotal}
                             footerlabel="valor total do dia"
                             image={dolarImg}
+                            width={32}
                         />
 
                         <WalletBox
@@ -392,6 +410,7 @@ const Dashboard: React.FC = () => {
                             amount={totalfaturamentoDayConfirmed}
                             footerlabel="faturamento total do dia confirmado"
                             image={dolarImg}
+                            width={32}
                         />
 
                         <WalletBox
@@ -400,6 +419,7 @@ const Dashboard: React.FC = () => {
                             amount={totalfreteDayTotal}
                             footerlabel="total em fretes dos pedidos neste dia"
                             image={fretes}
+                            width={32}
                         />
 
                         <WalletBoxDate
@@ -417,6 +437,7 @@ const Dashboard: React.FC = () => {
                             amount={ticketDay}
                             footerlabel="ticket médio de faturamento"
                             image={dolarImg}
+                            width={32}
                         />
 
                         <WalletBoxTax
@@ -425,6 +446,7 @@ const Dashboard: React.FC = () => {
                             amount={convert_users}
                             footerlabel="total de convertido"
                             image={taxConvert}
+                            width={32}
                         />
 
                         <WalletBoxDate
@@ -444,6 +466,52 @@ const Dashboard: React.FC = () => {
                         titulo="Números do mês"
                     />
                     <br />
+                    <br />
+                    <Content>
+                        <WalletBox
+                            title="Vendas do mês"
+                            color="#1595eb"
+                            amount={total_mes}
+                            footerlabel="vendas totais desse mês"
+                            image={dolarImg}
+                            width={49}
+                        />
+
+                        <WalletBoxDate
+                            title="Pedidos do mês"
+                            color="#5faf40"
+                            amount={dadosDoMes.length}
+                            footerlabel="total de pedidos desse mês"
+                            image={cart}
+                            width={49}
+                        />
+                        <WalletBoxDate
+                            title="Acessos do mês"
+                            color="#c9cc00"
+                            amount={visitedStoreMonth.length}
+                            footerlabel="total de acessos desse mês"
+                            image={usersVisited}
+                            width={49}
+                        />
+
+                        <WalletBoxTax
+                            title="Taxa de conversão do mês"
+                            color="#F7931B"
+                            amount={convert_users_month}
+                            footerlabel="total de conversões de pedidos desse mês"
+                            image={taxConvert}
+                            width={49}
+                        />
+
+                        <WalletBox
+                            title="Ticket médio do mês"
+                            color="#e0232a"
+                            amount={ticketMonth}
+                            footerlabel="montante médio relativo desse mês"
+                            image={dolarImg}
+                            width={100}
+                        />
+                    </Content>
                     <br />
                     <ResponsiveContainer width="100%" aspect={3}>
                         <AreaChart
@@ -579,11 +647,9 @@ const Dashboard: React.FC = () => {
                             amount={valuesProducts}
                             footerlabel="valor total monetario em produtos"
                             image={dolarImg}
+                            width={32}
                         />
                     </Content>
-
-
-
                 </Card>
             </Container>
         </Grid>

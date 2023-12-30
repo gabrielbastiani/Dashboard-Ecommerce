@@ -8,6 +8,7 @@ interface IWalletBoxProps {
     footerlabel: string;
     color: string;
     image: string;
+    width: number;
 }
 
 const WalletBoxTax: React.FC<IWalletBoxProps> = ({
@@ -15,11 +16,12 @@ const WalletBoxTax: React.FC<IWalletBoxProps> = ({
     amount,
     footerlabel,
     color,
+    width,
     image
 }) => {
 
     return (
-        <Container color={color}>
+        <Container color={color} width={width}>
             <span>{title}</span>
             <h1>
                 <CountUp 

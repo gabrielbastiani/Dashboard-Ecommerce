@@ -2,6 +2,7 @@ import styled, {keyframes} from 'styled-components';
 
 interface IContainerProps {
     color: string;
+    width: number;
 }
 
 const animate = keyframes`
@@ -19,7 +20,7 @@ const animate = keyframes`
 `;
 
 export const Container = styled.div<IContainerProps>`
-    width: 32%;
+    width: ${props => props.width}%;
     height: 150px;
 
     margin: 10px 0;
