@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { setupAPIClient } from "../../services/api";
-import { Content, Grid } from "./styles";
+import { BoxFilterData, ButtonFilterData, Content, Grid, InputData } from "./styles";
 import MainHeader from "../../components/MainHeader";
 import { DivisorHorizontal } from "../../components/ui/DivisorHorizontal";
 import Aside from "../../components/Aside";
@@ -227,11 +227,16 @@ const Dashboard: React.FC = () => {
     };
 
 
-    // DADOS DO MES PASSADO COMPARATIVO COM O MES ATUAL
+    // COMPARATIVOS ENTRE MESES
+    // Filtro
 
-
+    const [startDate_months, setStartDate_months] = useState('');
+    const [end_date_months, setEnd_date_months] = useState('');
     const [primeiroDia, setPrimeiroDia] = useState(Date);
     const [ultimoDia, setUltimoDia] = useState(Date);
+
+    const star_data = startDate_months === "" ? primeiroDia : startDate_months;
+    const end_data = end_date_months === "" ? ultimoDia : end_date_months;
 
     useEffect(() => {
         const dataAtual = new Date();
@@ -243,7 +248,7 @@ const Dashboard: React.FC = () => {
 
     const dadosDoMesPassado = totalPaymentsStatus.filter((item) => {
         const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
-        return itemDateDay >= new Date(primeiroDia) && itemDateDay <= new Date(ultimoDia);
+        return itemDateDay >= new Date(star_data) && itemDateDay <= new Date(end_data);
     });
 
     const dadosAgrupadosPassado = dadosDoMesPassado.reduce((acc, item) => {
@@ -363,60 +368,52 @@ const Dashboard: React.FC = () => {
 
 
     // DADOS TOTAIS DA LOJA
-    
+    // Filtro
 
-    const total_date = totalPaymentsStatus.filter((item) => {
-        const item_total = item.status_order === "CONFIRMED"
+    const datesFilter = totalPaymentsStatus.map(item => item);
+
+    const [data_total, setData_total] = useState<any[]>([]);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
+    const filterData = () => {
+        const startDateObj = new Date(startDate);
+        const endDateObj = new Date(endDate);
+
+        const filteredData = datesFilter.filter((item) => {
+            const itemDate = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+            return itemDate >= startDateObj && itemDate <= endDateObj;
+        });
+
+        setData_total(filteredData);
+    };
+
+    const total_date = data_total.length === 0 ? totalPaymentsStatus : data_total.filter((item) => {
+        const item_total = item.status_order === "CONFIRMED";
         return item_total;
+    });
+
+    const visitedStoreAll = visited.filter((item) => {
+        const visitedItem = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return visitedItem >= new Date(startDate) && visitedItem <= new Date(endDate);
     });
 
     const total_faturamento: number = total_date.reduce(function (acumulador, objetoAtual) {
         return acumulador + objetoAtual.order.payment.total_payment;
     }, 0);
 
-    const total_boleto = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_boleto, 0);
-    const total_cartao = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_cartao, 0);
-    const total_pix = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_pix, 0);
-   
-    
+    const typesPaymentFilter: any[] = typesPayments.filter((item) => {
+        const itemDateDay = new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay >= new Date(startDate) && itemDateDay <= new Date(endDate);
+    });
 
+    const total_boleto_sem_filtro = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_boleto, 0);
+    const total_cartao_sem_filtro = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_cartao, 0);
+    const total_pix_sem_filtro = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_pix, 0);
 
-    
-
-    
-
-    // VALORES TOTAIS
-
-    /* const datesFilter = totalPayments.map(item => item); */
-    /* const paymentsTotal = datesFilter.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
- 
-    const totalfaturamentopayments: number = paymentsTotal.reduce((acumulador, objeto) => {
-        return acumulador + objeto
-    }, 0);
- 
-    const [data, setData] = useState<any []>([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
- 
-    const filterData = () => {
-        const startDateObj = new Date(startDate);
-        const endDateObj = new Date(endDate);
- 
-        const filteredData = datesFilter.filter((item) => {
-            const itemDate = new Date(moment(item.created_at).format('YYYY-MM-DD'));
-            return itemDate >= startDateObj && itemDate <= endDateObj;
-        });
- 
-        setData(filteredData);
-    };
- 
-    const payments = data.map(item => item.total_payment_juros ? item.total_payment_juros : item.total_payment);
- 
-    const totalfaturamento: number = payments.reduce((acumulador, objeto) => {
-        return acumulador + objeto
-    }, 0); */
-
-
+    const total_boleto = typesPaymentFilter.reduce((total: any, item: any) => total + item.qtd_type_boleto, 0);
+    const total_cartao = typesPaymentFilter.reduce((total: any, item: any) => total + item.qtd_type_cartao, 0);
+    const total_pix = typesPaymentFilter.reduce((total: any, item: any) => total + item.qtd_type_pix, 0);
 
 
     // CLIENTES
@@ -454,22 +451,6 @@ const Dashboard: React.FC = () => {
                             tipo="h2"
                             titulo="Dados do dia"
                         />
-
-                        {/* <div>
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
-
-                            <button onClick={filterData}>Filtrar</button>
-
-                        </div> */}
 
                     </BlockTop>
                     <br />
@@ -658,10 +639,25 @@ const Dashboard: React.FC = () => {
                     </ResponsiveContainer>
                     <br />
                     <br />
-                    <Titulos
-                        tipo="h2"
-                        titulo="Comparativos mês passado e mês atual"
-                    />
+                    <BlockTop>
+                        <Titulos
+                            tipo="h2"
+                            titulo="Comparativos entre meses"
+                        />
+
+                        <BoxFilterData>
+                            <InputData
+                                type="date"
+                                value={startDate_months}
+                                onChange={(e) => setStartDate_months(e.target.value)}
+                            />
+                            <InputData
+                                type="date"
+                                value={end_date_months}
+                                onChange={(e) => setEnd_date_months(e.target.value)}
+                            />
+                        </BoxFilterData>
+                    </BlockTop>
                     <br />
                     <br />
                     <ResponsiveContainer width="100%" aspect={3}>
@@ -717,10 +713,27 @@ const Dashboard: React.FC = () => {
 
                     <DivisorHorizontal />
 
-                    <Titulos
-                        tipo="h2"
-                        titulo="Números totais"
-                    />
+                    <BlockTop>
+                        <Titulos
+                            tipo="h2"
+                            titulo="Números totais"
+                        />
+
+                        <BoxFilterData>
+                            <InputData
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                            />
+                            <InputData
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
+
+                            <ButtonFilterData onClick={filterData}>Filtrar</ButtonFilterData>
+                        </BoxFilterData>
+                    </BlockTop>
                     <br />
                     <br />
                     <Content>
@@ -744,7 +757,7 @@ const Dashboard: React.FC = () => {
                         <WalletBoxDate
                             title="Acessos totais"
                             color="#c9cc00"
-                            amount={visited.length}
+                            amount={visitedStoreAll.length === 0 ? visited.length : visitedStoreAll.length}
                             footerlabel="quantidade total de acessos na loja"
                             image={usersVisited}
                             width={32}
@@ -753,7 +766,7 @@ const Dashboard: React.FC = () => {
                         <WalletBoxDate
                             title="Pagamentos por boleto bancario"
                             color="#F7931B"
-                            amount={total_boleto}
+                            amount={total_boleto === 0 ? total_boleto_sem_filtro : total_boleto}
                             footerlabel="total de pagamentos feitos com boletos bancarios"
                             image={boleto}
                             width={32}
@@ -762,7 +775,7 @@ const Dashboard: React.FC = () => {
                         <WalletBoxDate
                             title="Pagamentos por cartão de crédito"
                             color="#e0232a"
-                            amount={total_cartao}
+                            amount={total_cartao === 0 ? total_cartao_sem_filtro : total_cartao}
                             footerlabel="total de pagamentos feitos com cartão de crédito"
                             image={cartao}
                             width={32}
@@ -771,7 +784,7 @@ const Dashboard: React.FC = () => {
                         <WalletBoxDate
                             title="Pagamentos por PIX"
                             color="#1595eb"
-                            amount={total_pix}
+                            amount={total_pix === 0 ? total_pix_sem_filtro : total_pix}
                             footerlabel="total de pagamentos feitos com pix"
                             image={pix}
                             width={32}
