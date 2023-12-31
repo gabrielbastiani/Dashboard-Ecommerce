@@ -288,7 +288,7 @@ const Dashboard: React.FC = () => {
 
 
     // Faturamentos de cada mês
-    
+
 
     const dados_dos_mes = totalPaymentsStatus.filter((item) => {
         const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
@@ -662,10 +662,15 @@ const Dashboard: React.FC = () => {
                             <Legend />
                         </AreaChart>
                     </ResponsiveContainer>
-
-                    <DivisorHorizontal />
-
-                    <ResponsiveContainer width="100%" aspect={3}>
+                    <br />
+                    <br />
+                    <Titulos
+                        tipo="h2"
+                        titulo="Faturamentos totais por cada mês"
+                    />
+                    <br />
+                    <br />
+                    <ResponsiveContainer width="100%" aspect={4}>
                         <BarChart
                             width={500}
                             height={500}
