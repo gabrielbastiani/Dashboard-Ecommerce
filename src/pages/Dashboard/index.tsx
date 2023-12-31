@@ -21,6 +21,9 @@ import usersVisited from '../../assets/user.svg';
 import taxConvert from '../../assets/tax.svg';
 import fretes from "../../assets/frete.svg";
 import stock from "../../assets/stock.svg";
+import boleto from '../../assets/boleto.png';
+import cartao from '../../assets/credit-card.png';
+import pix from '../../assets/pix.png';
 
 
 const Dashboard: React.FC = () => {
@@ -359,8 +362,28 @@ const Dashboard: React.FC = () => {
     const agrupados_mes = somarAgruparPorMes(agrupados);
 
 
+    // DADOS TOTAIS DA LOJA
+    
+
+    const total_date = totalPaymentsStatus.filter((item) => {
+        const item_total = item.status_order === "CONFIRMED"
+        return item_total;
+    });
+
+    const total_faturamento: number = total_date.reduce(function (acumulador, objetoAtual) {
+        return acumulador + objetoAtual.order.payment.total_payment;
+    }, 0);
+
+    const total_boleto = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_boleto, 0);
+    const total_cartao = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_cartao, 0);
+    const total_pix = typesPayments.reduce((total: any, item: any) => total + item.qtd_type_pix, 0);
+   
+    
 
 
+    
+
+    
 
     // VALORES TOTAIS
 
@@ -556,7 +579,7 @@ const Dashboard: React.FC = () => {
                             color="#5faf40"
                             amount={dadosDoMes.length}
                             footerlabel="total de pedidos desse mês"
-                            image={cart}
+                            image={orders}
                             width={49}
                         />
                         <WalletBoxDate
@@ -688,9 +711,72 @@ const Dashboard: React.FC = () => {
                             <Tooltip />
                             <Legend />
                             <CartesianGrid strokeDasharray="3 3" />
-                            <Bar dataKey="faturamento_total" fill="#8884d8" background={{ fill: '#eee' }} />
+                            <Bar dataKey="faturamento_total" fill="#d08d29" background={{ fill: '#eee' }} />
                         </BarChart>
                     </ResponsiveContainer>
+
+                    <DivisorHorizontal />
+
+                    <Titulos
+                        tipo="h2"
+                        titulo="Números totais"
+                    />
+                    <br />
+                    <br />
+                    <Content>
+                        <WalletBox
+                            title="Faturamento total"
+                            color="#1595eb"
+                            amount={total_faturamento}
+                            footerlabel="faturamento total da loja"
+                            image={dolarImg}
+                            width={32}
+                        />
+
+                        <WalletBoxDate
+                            title="Total de pedidos"
+                            color="#5faf40"
+                            amount={total_date.length}
+                            footerlabel="todos os pedidos efetivados na loja"
+                            image={orders}
+                            width={32}
+                        />
+                        <WalletBoxDate
+                            title="Acessos totais"
+                            color="#c9cc00"
+                            amount={visited.length}
+                            footerlabel="quantidade total de acessos na loja"
+                            image={usersVisited}
+                            width={32}
+                        />
+
+                        <WalletBoxDate
+                            title="Pagamentos por boleto bancario"
+                            color="#F7931B"
+                            amount={total_boleto}
+                            footerlabel="total de pagamentos feitos com boletos bancarios"
+                            image={boleto}
+                            width={32}
+                        />
+
+                        <WalletBoxDate
+                            title="Pagamentos por cartão de crédito"
+                            color="#e0232a"
+                            amount={total_cartao}
+                            footerlabel="total de pagamentos feitos com cartão de crédito"
+                            image={cartao}
+                            width={32}
+                        />
+
+                        <WalletBoxDate
+                            title="Pagamentos por PIX"
+                            color="#1595eb"
+                            amount={total_pix}
+                            footerlabel="total de pagamentos feitos com pix"
+                            image={pix}
+                            width={32}
+                        />
+                    </Content>
 
                     <DivisorHorizontal />
 
