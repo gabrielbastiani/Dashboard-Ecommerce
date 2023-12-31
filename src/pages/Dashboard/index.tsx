@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { setupAPIClient } from "../../services/api";
 import { Content, Grid } from "./styles";
 import MainHeader from "../../components/MainHeader";
@@ -287,6 +287,80 @@ const Dashboard: React.FC = () => {
     });
 
 
+    // Faturamentos de cada mês
+    
+
+    const dados_dos_mes = totalPaymentsStatus.filter((item) => {
+        const itemDateDay = item.status_order === "CONFIRMED" && new Date(moment(item.created_at).format('YYYY-MM-DD'));
+        return itemDateDay;
+    });
+
+    const mes_agrupados = dados_dos_mes.reduce((acc, item) => {
+        const mes = moment(item.created_at).format('YYYY-MM-DD');
+        acc[mes] = acc[mes] || [];
+        acc[mes].push(item);
+        return acc;
+    }, {});
+
+    const somatorio_mes = Object.keys(mes_agrupados).map(mes => {
+        const faturamento = mes_agrupados[mes].reduce((total: any, item: { order: any; valor: any; }) => total + item.order.payment.total_payment, 0);
+        return { mes, faturamento };
+    });
+
+    const meses_dados: any = [];
+    (somatorio_mes || []).forEach((item) => {
+        meses_dados.push(
+            { valor: item.faturamento, data: item.mes }
+        );
+    });
+
+    function agruparPorMes(meses_dados: any[]) {
+        const dadosAgrupados: any = {};
+
+        meses_dados.forEach(obj => {
+            const [ano, mes] = obj.data.split('-');
+
+            const chave = `${ano}-${mes}`;
+
+            if (!dadosAgrupados[chave]) {
+                dadosAgrupados[chave] = [];
+            }
+            dadosAgrupados[chave].push(obj);
+        });
+        /* @ts-ignore */
+        const resultadoFinal = [].concat(...Object.values(dadosAgrupados));
+
+        return resultadoFinal;
+    }
+
+    const agrupados = agruparPorMes(meses_dados);
+
+    function somarAgruparPorMes(agrupados: any[]) {
+        const dadosAgrupados: any = {};
+
+        agrupados.forEach(obj => {
+            const [ano, mes] = obj.data.split('-');
+            const chave = `${ano}-${mes}`;
+
+            if (!dadosAgrupados[chave]) {
+                dadosAgrupados[chave] = {
+                    mes: mes,
+                    ano: ano,
+                    faturamento_total: 0,
+                    agrupados: [],
+                };
+            }
+            dadosAgrupados[chave].faturamento_total += obj.valor;
+            dadosAgrupados[chave].agrupados.push(obj);
+        });
+        return Object.values(dadosAgrupados);
+    }
+
+    const agrupados_mes = somarAgruparPorMes(agrupados);
+
+
+
+
 
     // VALORES TOTAIS
 
@@ -539,25 +613,26 @@ const Dashboard: React.FC = () => {
                         tipo="h2"
                         titulo="Formas de pagamento do mês"
                     />
-
-                    <PieChart width={400} height={400}>
-                        <Pie
-                            data={meios_pagamentos_total}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={renderCustomizedLabel}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="quantidade"
-                        >
-                            {meios_pagamentos.map((entry: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend />
-                    </PieChart>
+                    <ResponsiveContainer width="100%" aspect={3}>
+                        <PieChart width={400} height={400}>
+                            <Pie
+                                data={meios_pagamentos_total}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                label={renderCustomizedLabel}
+                                outerRadius={80}
+                                fill="#8884d8"
+                                dataKey="quantidade"
+                            >
+                                {meios_pagamentos.map((entry: any, index: number) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                            <Legend />
+                        </PieChart>
+                    </ResponsiveContainer>
                     <br />
                     <br />
                     <Titulos
@@ -586,6 +661,30 @@ const Dashboard: React.FC = () => {
                             <Area type="monotone" dataKey="Faturamento atual" stackId="1" stroke='#82caed' fill="#d08d29" />
                             <Legend />
                         </AreaChart>
+                    </ResponsiveContainer>
+
+                    <DivisorHorizontal />
+
+                    <ResponsiveContainer width="100%" aspect={3}>
+                        <BarChart
+                            width={500}
+                            height={500}
+                            data={agrupados_mes}
+                            margin={{
+                                top: 5,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
+                            }}
+                            barSize={20}
+                        >
+                            <XAxis dataKey="mes" scale="point" padding={{ left: 10, right: 10 }} />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <Bar dataKey="faturamento_total" fill="#8884d8" background={{ fill: '#eee' }} />
+                        </BarChart>
                     </ResponsiveContainer>
 
                     <DivisorHorizontal />
