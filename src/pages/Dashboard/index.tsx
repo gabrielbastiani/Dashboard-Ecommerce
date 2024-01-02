@@ -161,6 +161,7 @@ const Dashboard: React.FC = () => {
     // --------------------------------------------------------------
     // Formas de pagamentos do mês
 
+
     const typesPaymentMonth = typesPayments.filter((item) => {
         const itemDateDay = new Date(moment(item.created_at).format('YYYY-MM-DD'));
         return itemDateDay >= firstDayOfMonth && itemDateDay <= lastDayOfMonth;
@@ -210,6 +211,10 @@ const Dashboard: React.FC = () => {
         { name: "Cartao", quantidade: soma_cartao },
         { name: "Pix", quantidade: soma_pix }
     ];
+
+
+    console.log(meios_pagamentos_total)
+
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -613,11 +618,14 @@ const Dashboard: React.FC = () => {
                     </ResponsiveContainer>
                     <br />
                     <br />
-                    <Titulos
-                        tipo="h2"
-                        titulo="Formas de pagamento do mês"
-                    />
-                    <ResponsiveContainer width="100%" aspect={3}>
+                    <BlockTop>
+                        <Titulos
+                            tipo="h2"
+                            titulo="Formas de pagamento do mês"
+                        />
+                    </BlockTop>
+
+                    <ResponsiveContainer width="100%" aspect={4}>
                         <PieChart width={400} height={400}>
                             <Pie
                                 data={meios_pagamentos_total}
