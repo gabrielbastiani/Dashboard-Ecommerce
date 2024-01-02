@@ -34,14 +34,6 @@ import MenusCategorias from './pages/Categorias/MenusCategorias';
 import NovoMenu from './pages/Categorias/MenusCategorias/novoMenu';
 import CategoriasMenu from './pages/Categorias/MenusCategorias/categoriasMenu';
 import EditMenu from './pages/Categorias/MenusCategorias/editMenu';
-import Filtros from './pages/Filtros';
-import NovoGrupoFiltroAtributo from './pages/Filtros/novoGrupoFiltroAtributo';
-import AtributoFiltro from './pages/Filtros/AtributoFiltro';
-import EditAtributoFiltro from './pages/Filtros/AtributoFiltro/editAtributoFiltro';
-import EditGroupFiltroAtributo from './pages/Filtros/editGroupFiltroAtributo';
-import NovoGrupoFiltroCategoria from './pages/Filtros/novoGrupoFiltroCategoria';
-import CategoryFiltro from './pages/Filtros/CategoryFiltro';
-import EditCategoryFiltro from './pages/Filtros/CategoryFiltro/editCategoryFiltro';
 import EditItem from './pages/Categorias/MenusCategorias/editItem';
 import Atributos from './pages/Produtos/Atributos';
 import Atributo from './pages/Produtos/Atributos/atributo';
@@ -51,7 +43,6 @@ import CompreJunto from './pages/Produtos/CompreJunto';
 import NovoGrupoCompreJunto from './pages/Produtos/CompreJunto/novoGrupoCompreJunto';
 import ProdutosGrupo from './pages/Produtos/CompreJunto/produtosGrupo';
 import EditGrupoCompreJunto from './pages/Produtos/CompreJunto/editGrupoCompreJunto';
-import EditGroupFiltroCategory from './pages/Filtros/editGroupFiltroCategory';
 import Contrapropostas from './pages/Clientes/Contrapropostas';
 import Contraproposta from './pages/Clientes/Contrapropostas/contraproposta';
 import Usuarios from './pages/Perfil/Usuarios';
@@ -153,16 +144,6 @@ const RoutesAuth: React.FC = () => {
                     <Route path='/compreJunto/grupo/novo' element={<NovoGrupoCompreJunto />} />
                     <Route path='/compreJunto/grupo/edit/:buyTogether_id' element={<EditGrupoCompreJunto />} />
                     <Route path='/compreJunto/grupo/:buyTogether_id' element={<ProdutosGrupo />} />
-
-                    <Route path='/filterGrupos' element={<Filtros />} />
-                    <Route path='/grupoFiltro/atributos/novo' element={<NovoGrupoFiltroAtributo />} />
-                    <Route path='/grupoFiltro/categorias/novo' element={<NovoGrupoFiltroCategoria />} />
-                    <Route path='/grupoFiltro/categorias/:groupFilter_id' element={<CategoryFiltro />} />
-                    <Route path='/filtroCategory/edit/:filterCategory_id' element={<EditCategoryFiltro />} />
-                    <Route path='/grupoFiltroAtributo/edit/:groupFilter_id' element={<EditGroupFiltroAtributo />} />
-                    <Route path='/grupoFiltroCategoria/edit/:groupFilter_id' element={<EditGroupFiltroCategory />} />
-                    <Route path='/grupoFiltro/atributos/:groupFilter_id' element={<AtributoFiltro />} />
-                    <Route path='/filtroAtributo/edit/:filterAttribute_id' element={<EditAtributoFiltro />} />
 
                     <Route path='/banners' element={<Banners />} />
                     <Route path='/banners/novo' element={<NovoBanner />} />

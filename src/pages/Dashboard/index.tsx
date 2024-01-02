@@ -212,10 +212,6 @@ const Dashboard: React.FC = () => {
         { name: "Pix", quantidade: soma_pix }
     ];
 
-
-    console.log(meios_pagamentos_total)
-
-
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
     const RADIAN = Math.PI / 180;
